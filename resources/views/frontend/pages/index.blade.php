@@ -84,7 +84,7 @@
 
           <ul class="space-y-2 text-center md:space-y-0 mt-2 md:mt-0 md:gap-6">
             <li>
-              <a href="{{url('/')}}/login" class="text-white text-lg"> System login </a>
+              <a href="{{url('/')}}/login" class="text-white text-lg"> Admin Login </a>
             </li>
           <!--  <li>
             <a
@@ -115,7 +115,7 @@
                 </a>
           </li>
           <li>
-            <a href="{{url('/')}}/login" class="inline-flex items-center gap-2 text-white">
+            <a href="{{ route('people.login') }}" class="inline-flex items-center gap-2 text-white">
               <span class="inline-flex h-7 w-7 items-center justify-center text-red-600" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
                   <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
@@ -166,7 +166,7 @@
           >
             হোম
           </a>
-          <a href="{{url('/')}}/login" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded">
+          <a href="{{ route('people.login') }}" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded">
             <span class="inline-flex h-5 w-5 items-center justify-center text-red-600" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                 <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
@@ -215,8 +215,34 @@
 
 
 
-        <div class="mx-auto mt-8 max-w-5xl md:mt-10">
-          <div class="grid grid-cols-1 gap-6 lg:grid-cols-4 lg:gap-4">
+        <div class="mx-auto mt-8 max-w-6xl md:mt-10">
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+            <article class="mx-auto w-full max-w-[290px] text-center text-black">
+              <div
+                class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#f59e0b] md:h-28 md:w-28"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="h-14 w-14 md:h-16 md:w-16 text-white"
+                  aria-hidden="true"
+                >
+                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
+                </svg>
+              </div>
+              <h3 class="mt-5 text-lg font-semibold leading-tight md:text-xl">নাগরিক লগইন</h3>
+              <div class="mx-auto mt-3 h-px w-full max-w-[520px] bg-black/30"></div>
+              <p class="mx-auto mt-1 max-w-sm text-sm leading-6 text-black md:text-base">
+              আপনার পোর্টাল লগইন করুন।
+              </p>
+              <a
+                href="{{ route('people.login') }}"
+                class="mt-5 inline-flex items-center justify-center gap-1.5 rounded-md bg-[#f59e0b] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#d97706] md:text-base"
+              >
+                লগইন করুন
+              </a>
+            </article>
             <article class="mx-auto w-full max-w-[290px] text-center text-black">
               <div
                 class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#0ea5d9] md:h-28 md:w-28"

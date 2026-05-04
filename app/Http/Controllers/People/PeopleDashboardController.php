@@ -20,7 +20,9 @@ class PeopleDashboardController extends Controller
     public function index()
     {
         $people = Auth::guard('people')->user();
-        return view('people.dashboard.index', compact('people'));
+        $mainMenu = 'Dashboard';
+        $subMenu = 'dashboard';
+        return view('people.dashboard.index', compact('people', 'mainMenu', 'subMenu'));
     }
 
     /**
@@ -29,7 +31,9 @@ class PeopleDashboardController extends Controller
     public function profile()
     {
         $people = Auth::guard('people')->user()->load('user.addressInfo', 'user.familyInfo');
-        return view('people.dashboard.profile', compact('people'));
+        $mainMenu = 'Profile';
+        $subMenu = 'profile';
+        return view('people.dashboard.profile', compact('people', 'mainMenu', 'subMenu'));
     }
 
     /**
@@ -37,7 +41,9 @@ class PeopleDashboardController extends Controller
      */
     public function showChangePassword()
     {
-        return view('people.dashboard.change-password');
+        $mainMenu = 'Security';
+        $subMenu = 'password.change';
+        return view('people.dashboard.change-password', compact('mainMenu', 'subMenu'));
     }
 
     /**

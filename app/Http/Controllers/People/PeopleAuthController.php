@@ -40,8 +40,25 @@ class PeopleAuthController extends Controller
 
         $credentials = $request->only('login_id', 'password');
 
+        // Try login with login_id (email)
         if (Auth::guard('people')->attempt($credentials)) {
             $people = Auth::guard('people')->user();
+        } 
+        // If failed, try login with approved_id (User ID)
+        else {
+            $approvedCredentials = [
+                'approved_id' => $request->login_id,
+                'password' => $request->password
+            ];
+            
+            if (Auth::guard('people')->attempt($approvedCredentials)) {
+                $people = Auth::guard('people')->user();
+            } else {
+                $people = null;
+            }
+        }
+
+        if ($people) {
 
             if ($people->login_status === 'suspended') {
                 Auth::guard('people')->logout();

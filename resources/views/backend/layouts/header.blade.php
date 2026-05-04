@@ -6,7 +6,13 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{route('home')}}" class="nav-link">{{user_institute_name(Auth::user()->institute_id)}}</a>
+        <a href="{{route('home')}}" class="nav-link">
+            @if(Auth::guard('web')->check())
+                {{user_institute_name(Auth::user()->institute_id)}}
+            @elseif(Auth::guard('people')->check())
+                CSMCRS Citizen Portal
+            @endif
+        </a>
       </li>
     </ul>
 

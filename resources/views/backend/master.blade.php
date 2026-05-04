@@ -53,11 +53,15 @@ width:100%!important;
   @stack('style')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
-    @auth()
+    @if(Auth::guard('web')->check())
         <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
             @csrf
         </form>
-    @endauth
+    @elseif(Auth::guard('people')->check())
+        <form id="logoutForm" action="{{ route('people.logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @endif
 <div class="wrapper">
 
   <!-- Preloader -->

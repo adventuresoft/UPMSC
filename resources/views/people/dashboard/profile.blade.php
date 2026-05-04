@@ -1,55 +1,108 @@
-@extends('people.layouts.portal')
+@extends('backend.master')
 
 @section('title', 'My Profile')
-@section('page_title', 'Account Information')
 
 @section('content')
-<div class="row g-4">
-    <div class="col-lg-12">
-        <div class="premium-card">
-            <div class="card-body-premium">
-                <div class="row align-items-center mb-4">
-                    <div class="col-auto">
-                        <div style="width: 120px; height: 120px; border-radius: 24px; overflow: hidden; border: 4px solid #f1f5f9;">
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">My Profile</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('people.dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Profile</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
                             @if($people->image)
-                                <img src="{{ asset($people->image) }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img class="profile-user-img img-fluid img-circle" src="{{ asset($people->image) }}" alt="User profile picture">
                             @else
-                                <div class="bg-primary text-white d-flex align-items-center justify-content-center h-100 fs-1">
+                                <div class="profile-user-img img-fluid img-circle bg-primary d-flex align-items-center justify-content-center text-white" style="height: 100px; width: 100px; font-size: 40px;">
                                     {{ strtoupper(substr($people->name, 0, 1)) }}
                                 </div>
                             @endif
                         </div>
-                    </div>
-                    <div class="col">
-                        <h2 class="mb-1">{{ $people->name }}</h2>
-                        <p class="text-muted mb-0"><i class="fas fa-map-marker-alt me-1"></i> {{ $people->user->addressInfo->presentDistrict->name ?? '—' }}, Bangladesh</p>
+
+                        <h3 class="profile-username text-center">{{ $people->name }}</h3>
+                        <p class="text-muted text-center">Verified Citizen</p>
                     </div>
                 </div>
 
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <h5 class="border-bottom pb-2 mb-3">Personal Details</h5>
-                        <table class="table table-borderless">
-                            <tr><td class="text-muted ps-0" width="40%">Full Name</td><td class="fw-medium">{{ $people->name }}</td></tr>
-                            <tr><td class="text-muted ps-0">Name (Bengla)</td><td class="fw-medium">{{ $people->bn_name ?? '—' }}</td></tr>
-                            <tr><td class="text-muted ps-0">Gender</td><td class="fw-medium">{{ people_constant_option('gender')[$people->gender ?? ''] ?? '—' }}</td></tr>
-                            <tr><td class="text-muted ps-0">Date of Birth</td><td class="fw-medium">{{ $people->date_of_birth ? \Carbon\Carbon::parse($people->date_of_birth)->format('d M, Y') : '—' }}</td></tr>
-                            <tr><td class="text-muted ps-0">Blood Group</td><td class="fw-medium">{{ people_constant_option('blood_group')[$people->blood_group ?? ''] ?? '—' }}</td></tr>
-                        </table>
+                <!-- About Me Box -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Identification</h3>
                     </div>
-                    <div class="col-md-6">
-                        <h5 class="border-bottom pb-2 mb-3">Identification</h5>
-                        <table class="table table-borderless">
-                            <tr><td class="text-muted ps-0" width="40%">People ID</td><td class="fw-bold text-primary">{{ $people->approved_id }}</td></tr>
-                            <tr><td class="text-muted ps-0">National ID</td><td class="fw-medium">{{ $people->nid ?? '—' }}</td></tr>
-                            <tr><td class="text-muted ps-0">Birth Certificate</td><td class="fw-medium">{{ $people->birth_certificate ?? '—' }}</td></tr>
-                            <tr><td class="text-muted ps-0">Mobile</td><td class="fw-medium">{{ $people->mobile }}</td></tr>
-                            <tr><td class="text-muted ps-0">Email</td><td class="fw-medium">{{ $people->email }}</td></tr>
-                        </table>
+                    <div class="card-body">
+                        <strong><i class="fas fa-id-card mr-1"></i> National ID</strong>
+                        <p class="text-muted">{{ $people->nid ?? 'N/A' }}</p>
+                        <hr>
+                        <strong><i class="fas fa-id-badge mr-1"></i> People ID</strong>
+                        <p class="text-muted">{{ $people->approved_id }}</p>
+                        <hr>
+                        <strong><i class="fas fa-phone mr-1"></i> Mobile</strong>
+                        <p class="text-muted">{{ $people->mobile }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" href="#personal" data-toggle="tab">Personal Details</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="personal">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th style="width: 30%">Full Name</th>
+                                            <td>{{ $people->name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Name (Bengali)</th>
+                                            <td>{{ $people->bn_name ?? '—' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Gender</th>
+                                            <td>{{ people_constant_option('gender')[$people->gender ?? ''] ?? '—' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date of Birth</th>
+                                            <td>{{ $people->date_of_birth ? \Carbon\Carbon::parse($people->date_of_birth)->format('d M, Y') : '—' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Blood Group</th>
+                                            <td>{{ people_constant_option('blood_group')[$people->blood_group ?? ''] ?? '—' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>District</th>
+                                            <td>{{ $people->user->addressInfo->presentDistrict->name ?? '—' }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 @endsection

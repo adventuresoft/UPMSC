@@ -335,16 +335,16 @@
                     @endif
 
                     <div class="form-group">
-                        <label for="email">User ID</label>
+                        <label for="login_id">User ID</label>
                         <div class="input-wrapper">
                             <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="User ID"
+                                type="text"
+                                id="login_id"
+                                name="login_id"
+                                placeholder="User ID / Email"
                                 class="form-control"
                                 required
-                                value="{{ old('email') }}"
+                                value="{{ old('login_id') }}"
                             >
                         </div>
                     </div>
@@ -368,6 +368,11 @@
 
                     <button type="submit" class="btn-login">Login</button>
                 </form>
+
+                <div class="mt-3 text-center">
+                    <p class="text-muted small">Are you a Citizen? <a href="{{ route('people.login') }}" class="text-primary font-weight-bold">Login to Citizen Portal</a></p>
+                </div>
+
 
                 <div class="form-footer">
                     <a href="#" class="forgot-password">Forgot password?</a>

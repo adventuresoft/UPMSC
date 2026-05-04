@@ -20,7 +20,7 @@
                     <li><a href="{{ URL::to('/profile') }}"><i class="fa fa-user"></i> {{Auth::user()->name}}</a></li>
                     <li><a role="button" class="btn btn-link" onclick="logoutUser()" style="color: #f00;">Log out</a></li>
                     @else
-                    <li><a href="{{ URL::to('/login') }}">System Login</a></li>
+                    <li><a href="{{ URL::to('/login') }}">Admin Login</a></li>
                     <li></li>
                     <!--<li><a href="{{ url('/register') }}" style="color: #f00;">রেজিষ্ট্রশন</a></li>-->
                     @endif
