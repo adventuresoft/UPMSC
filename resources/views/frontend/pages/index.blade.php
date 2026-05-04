@@ -191,254 +191,118 @@
             মনিটরিং লগইন
           </a>
 
-
         </div>
       </div>
     </nav>
 
     <main>
-      <section class="bg-[#d3d9e4] pt-10 pb-8 md:pt-16 md:pb-10">
+      <section class="bg-gradient-to-b from-[#d3d9e4] to-[#e8ecf2] pt-10 pb-14 md:pt-16 md:pb-20">
         <div class="container mx-auto max-w-screen-xl px-4">
-        <div class="mx-auto max-w-5xl text-center">
-          <h2
-            class="-mt-8 text-xl font-bold tracking-tight text-black sm:-mt-10 sm:text-2xl lg:text-3xl"
-          >
-            সিটিজেন সার্ভিস ম্যানেজমেন্ট এন্ড সেন্ট্রাল রিপোর্টিং সিস্টেম
-          </h2>
-          <p
-            class="mx-auto mt-7 max-w-4xl text-base leading-relaxed text-black sm:mt-2 sm:text-lg md:text-xl"
-          >
-            এই প্ল্যাটফর্মে আপনি আপনার প্রয়োজনীয় সেবাগুলো পেতে পারেন।
-          </p>
-        </div>
+          <div class="mx-auto max-w-3xl text-center">
+            <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl">
+              সিটিজেন সার্ভিস ম্যানেজমেন্ট এন্ড সেন্ট্রাল রিপোর্টিং সিস্টেম
+            </h2>
+            <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-gray-600 sm:text-lg">
+              নাগরিক পোর্টালে প্রবেশ করতে প্রথমে আবেদন করুন। আবেদন অনুমোদনের পর লগইন করে সকল সেবা গ্রহণ করুন।
+            </p>
+          </div>
 
+          <!-- 3-Step Flow -->
+          <div class="mx-auto mt-12 max-w-4xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-0 relative">
+              <!-- Connector Lines (desktop only) -->
+              <div class="hidden md:block absolute top-10 left-[calc(16.66%+24px)] right-[calc(16.66%+24px)] h-0.5 bg-[#046307]/20 z-0"></div>
 
-
-
-        <div class="mx-auto mt-8 max-w-6xl md:mt-10">
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-5 lg:gap-4">
-            <article class="mx-auto w-full max-w-[290px] text-center text-black">
-              <div
-                class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#f59e0b] md:h-28 md:w-28"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="h-14 w-14 md:h-16 md:w-16 text-white"
-                  aria-hidden="true"
-                >
-                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
-                </svg>
+              <!-- Step 1 -->
+              <div class="relative z-10 flex flex-col items-center text-center px-4 py-4">
+                <div class="flex items-center justify-center w-16 h-16 rounded-full bg-[#046307] text-white text-2xl font-black shadow-lg ring-4 ring-white">
+                  ১
+                </div>
+                <h4 class="mt-4 text-base font-bold text-gray-800">আবেদন করুন</h4>
+                <p class="mt-1 text-sm text-gray-500 leading-relaxed">নাগরিক পোর্টালের জন্য আবেদন ফরম পূরণ করুন।</p>
               </div>
-              <h3 class="mt-5 text-lg font-semibold leading-tight md:text-xl">নাগরিক লগইন</h3>
-              <div class="mx-auto mt-3 h-px w-full max-w-[520px] bg-black/30"></div>
-              <p class="mx-auto mt-1 max-w-sm text-sm leading-6 text-black md:text-base">
-              আপনার পোর্টাল লগইন করুন।
-              </p>
-              <a
-                href="{{ route('people.login') }}"
-                class="mt-5 inline-flex items-center justify-center gap-1.5 rounded-md bg-[#f59e0b] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#d97706] md:text-base"
-              >
-                লগইন করুন
-              </a>
-            </article>
-            <article class="mx-auto w-full max-w-[290px] text-center text-black">
-              <div
-                class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#0ea5d9] md:h-28 md:w-28"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  class="h-14 w-14 md:h-16 md:w-16"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M7 3.5h8l3 3V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"
-                    fill="#f4f4f5"
-                  />
-                  <path d="M15 3.5v3h3" fill="#d4d4d8" />
-                  <path d="M9 8h6M9 11h6M9 14h4" stroke="#b3b3b8" stroke-width="1.4" stroke-linecap="round" />
-                  <path
-                    d="m12.5 16.2 2.3 2.2 4.5-4.8"
-                    stroke="#10b981"
-                    stroke-width="1.9"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+              <!-- Step 2 -->
+              <div class="relative z-10 flex flex-col items-center text-center px-4 py-4">
+                <div class="flex items-center justify-center w-16 h-16 rounded-full bg-[#f59e0b] text-white text-2xl font-black shadow-lg ring-4 ring-white">
+                  ২
+                </div>
+                <h4 class="mt-4 text-base font-bold text-gray-800">অনুমোদন পান</h4>
+                <p class="mt-1 text-sm text-gray-500 leading-relaxed">আবেদন যাচাই হলে SMS-এ লগইন তথ্য পাবেন।</p>
               </div>
-              <h3 class="mt-5 text-lg font-semibold leading-tight md:text-xl">আবেদন ফরম</h3>
-              <div class="mx-auto mt-3 h-px w-full max-w-[520px] bg-black/30"></div>
-              <p class="mx-auto mt-1 max-w-sm text-sm leading-6 text-black md:text-base">
-              আবেদন করতে ক্লিক করুন ।
-              </p>
-              <a
-                href="{{ route('application.create') }}"
-                class="mt-5 inline-flex items-center justify-center gap-1.5 rounded-md bg-[#2d88c7] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1f75b3] md:text-base"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  class="h-6 w-6"
-                  aria-hidden="true"
-                >
-                  <path d="M12 20h9" />
-                  <path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L8 18l-4 1 1-4 11.5-11.5Z" />
-                </svg>
-                আবেদন
-              </a>
-            </article>
-
-            <article class="mx-auto w-full max-w-[290px] text-center text-black">
-              <div
-                class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#45caa2] md:h-28 md:w-28"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  class="h-14 w-14 md:h-16 md:w-16"
-                  aria-hidden="true"
-                >
-                  <rect x="3" y="5" width="18" height="13" rx="1.5" fill="#f4f4f5" />
-                  <path d="M6.5 8h10M6.5 11h10" stroke="#b3b3b8" stroke-width="1.4" stroke-linecap="round" />
-                  <path d="M6.5 14h5" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round" />
-                  <circle cx="16.5" cy="14.5" r="3.5" fill="#fbbf24" />
-                  <circle cx="16.5" cy="14.5" r="1.8" fill="#f59e0b" />
-                  <path d="m15.2 17.4-.2 2.8 1.5-1 1.5 1-.2-2.8" fill="#ef4444" />
-                </svg>
+              <!-- Step 3 -->
+              <div class="relative z-10 flex flex-col items-center text-center px-4 py-4">
+                <div class="flex items-center justify-center w-16 h-16 rounded-full bg-[#0ea5d9] text-white text-2xl font-black shadow-lg ring-4 ring-white">
+                  ৩
+                </div>
+                <h4 class="mt-4 text-base font-bold text-gray-800">লগইন ও সেবা</h4>
+                <p class="mt-1 text-sm text-gray-500 leading-relaxed">পোর্টালে লগইন করে সনদ, কর, ও অন্যান্য সেবা নিন।</p>
               </div>
-              <h3 class="mt-5 text-lg font-semibold leading-tight md:text-xl">সনদপত্র যাচাই</h3>
-              <div class="mx-auto mt-3 h-px w-full max-w-[520px] bg-black/30"></div>
-              <p class="mx-auto mt-1 max-w-sm text-sm leading-6 text-black md:text-base">
-                সনদপত্র যাচাই করতে ক্লিক করুন ।
-              </p>
-              <a
-                href="{{ route('certificate.verify') }}"
-                class="mt-5 inline-flex items-center justify-center gap-1.5 rounded-md bg-[#2d88c7] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1f75b3] md:text-base"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.3"
-                  class="h-6 w-6"
-                  aria-hidden="true"
-                >
-                  <circle cx="11" cy="11" r="6.5" />
-                  <path d="m16 16 4.2 4.2" stroke-linecap="round" />
-                </svg>
-                যাচাই
+            </div>
+          </div>
+
+          <!-- Action Cards -->
+          <div class="mx-auto mt-14 max-w-5xl">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+              <!-- Card: নাগরিক আবেদন -->
+              <a href="{{ route('application.create') }}" class="group block bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="h-2 bg-gradient-to-r from-[#046307] to-[#0a8a0e]"></div>
+                <div class="p-7 text-center">
+                  <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-green-50 text-[#046307] group-hover:bg-[#046307] group-hover:text-white transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-10 w-10">
+                      <path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L8 18l-4 1 1-4 11.5-11.5Z" />
+                    </svg>
+                  </div>
+                  <h3 class="mt-5 text-lg font-bold text-gray-800">নাগরিক আবেদন</h3>
+                  <p class="mt-2 text-sm text-gray-500 leading-relaxed">নাগরিক পোর্টালে প্রবেশের জন্য আবেদন ফরম পূরণ করুন।</p>
+                  <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-[#046307] group-hover:gap-3 transition-all">
+                    আবেদন করুন
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                  </span>
+                </div>
               </a>
-            </article>
 
-            <article class="mx-auto w-full max-w-[290px] text-center text-black">
-              <div
-                class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#0ea5d9] md:h-28 md:w-28"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  class="h-14 w-14 md:h-16 md:w-16"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M7 3.5h8l3 3V20a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"
-                    fill="#f4f4f5"
-                  />
-                  <path d="M15 3.5v3h3" fill="#d4d4d8" />
-                  <path d="M9 8h6M9 11h6M9 14h4" stroke="#b3b3b8" stroke-width="1.4" stroke-linecap="round" />
-                  <path
-                    d="m12.5 16.2 2.3 2.2 4.5-4.8"
-                    stroke="#10b981"
-                    stroke-width="1.9"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-              <h3 class="mt-5 text-lg font-semibold leading-tight md:text-xl">ট্রেড লাইসেন্সের আবেদন</h3>
-              <div class="mx-auto mt-3 h-px w-full max-w-[520px] bg-black/30"></div>
-              <p class="mx-auto mt-1 max-w-sm text-sm leading-6 text-black md:text-base">
-                ট্রেড লাইসেন্সের আবেদন করুন।
-              </p>
-              <a
-                href="{{ route('application.create') }}"
-                class="mt-5 inline-flex items-center justify-center gap-1.5 rounded-md bg-[#2d88c7] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1f75b3] md:text-base"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  class="h-6 w-6"
-                  aria-hidden="true"
-                >
-                  <path d="M12 20h9" />
-                  <path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L8 18l-4 1 1-4 11.5-11.5Z" />
-                </svg>
-                আবেদন
+              <!-- Card: নাগরিক লগইন -->
+              <a href="{{ route('people.login') }}" class="group block bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="h-2 bg-gradient-to-r from-[#f59e0b] to-[#d97706]"></div>
+                <div class="p-7 text-center">
+                  <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-amber-50 text-[#f59e0b] group-hover:bg-[#f59e0b] group-hover:text-white transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-10 w-10">
+                      <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
+                    </svg>
+                  </div>
+                  <h3 class="mt-5 text-lg font-bold text-gray-800">নাগরিক লগইন</h3>
+                  <p class="mt-2 text-sm text-gray-500 leading-relaxed">অনুমোদিত নাগরিকরা পোর্টালে লগইন করে সেবা নিন।</p>
+                  <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-[#f59e0b] group-hover:gap-3 transition-all">
+                    লগইন করুন
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                  </span>
+                </div>
               </a>
-            </article>
 
-
-
-            <article class="mx-auto w-full max-w-[290px] text-center text-black">
-              <div
-                class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#45caa2] md:h-28 md:w-28"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  class="h-14 w-14 md:h-16 md:w-16"
-                  aria-hidden="true"
-                >
-                  <rect x="3" y="5" width="18" height="13" rx="1.5" fill="#f4f4f5" />
-                  <path d="M6.5 8h10M6.5 11h10" stroke="#b3b3b8" stroke-width="1.4" stroke-linecap="round" />
-                  <path d="M6.5 14h5" stroke="#3b82f6" stroke-width="1.4" stroke-linecap="round" />
-                  <circle cx="16.5" cy="14.5" r="3.5" fill="#fbbf24" />
-                  <circle cx="16.5" cy="14.5" r="1.8" fill="#f59e0b" />
-                  <path d="m15.2 17.4-.2 2.8 1.5-1 1.5 1-.2-2.8" fill="#ef4444" />
-                </svg>
-              </div>
-              <h3 class="mt-5 text-lg font-semibold leading-tight md:text-xl">ট্রেড লাইসেন্স যাচাই</h3>
-              <div class="mx-auto mt-3 h-px w-full max-w-[520px] bg-black/30"></div>
-              <p class="mx-auto mt-1 max-w-sm text-sm leading-6 text-black md:text-base">
-                ট্রেড লাইসেন্স যাচাই করতে ক্লিক করুন।
-              </p>
-              <a
-                href="{{ route('certificate.verify') }}"
-                class="mt-5 inline-flex items-center justify-center gap-1.5 rounded-md bg-[#2d88c7] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#1f75b3] md:text-base"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  class="h-6 w-6"
-                  aria-hidden="true"
-                >
-                    <circle cx="11" cy="11" r="6.5" />
-                  <path d="m16 16 4.2 4.2" stroke-linecap="round" />
-                </svg>
-                যাচাই
+              <!-- Card: সনদপত্র যাচাই -->
+              <a href="{{ route('certificate.verify') }}" class="group block bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="h-2 bg-gradient-to-r from-[#0ea5d9] to-[#0284c7]"></div>
+                <div class="p-7 text-center">
+                  <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-sky-50 text-[#0ea5d9] group-hover:bg-[#0ea5d9] group-hover:text-white transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-10 w-10">
+                      <circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.2 4.2" stroke-linecap="round" />
+                    </svg>
+                  </div>
+                  <h3 class="mt-5 text-lg font-bold text-gray-800">সনদপত্র যাচাই</h3>
+                  <p class="mt-2 text-sm text-gray-500 leading-relaxed">সনদপত্র নম্বর দিয়ে সনদের সত্যতা যাচাই করুন।</p>
+                  <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-[#0ea5d9] group-hover:gap-3 transition-all">
+                    যাচাই করুন
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                  </span>
+                </div>
               </a>
-            </article>
 
+            </div>
           </div>
         </div>
-      </div>
       </section>
+
 
 
       <section class="bg-[#efefef] py-12 md:py-16">

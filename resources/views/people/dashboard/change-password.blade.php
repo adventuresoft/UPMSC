@@ -2,118 +2,148 @@
 
 @section('title', 'Account Security')
 
+@push('style')
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .content-wrapper { background: #f3f4f6 !important; }
+</style>
+@endpush
+
 @section('content')
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Account Security</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('people.dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Security</li>
-                </ol>
-            </div>
-        </div>
+<div class="content-header px-6 py-4 bg-white border-b border-gray-200">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">অ্যাকাউন্ট নিরাপত্তা</h1>
+      <nav class="text-sm text-gray-500 mt-0.5">
+        <a href="{{ route('people.dashboard') }}" class="hover:text-[#046307]">ড্যাশবোর্ড</a>
+        <span class="mx-2">/</span>
+        <span>নিরাপত্তা</span>
+      </nav>
     </div>
+  </div>
 </div>
 
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Update Password</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <!-- form start -->
-                    <form action="{{ route('people.password.update') }}" method="POST">
-                        @csrf
-                        <div class="card-body">
-                            @if(session('success'))
-                                <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                    <h5><i class="icon fas fa-check"></i> Success!</h5>
-                                    {{ session('success') }}
-                                </div>
-                            @endif
+<section class="p-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                            @if($errors->any())
-                                <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                    <h5><i class="icon fas fa-ban"></i> Error!</h5>
-                                    <ul class="mb-0">
-                                        @foreach($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+    <!-- Password Form -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-gradient-to-r from-[#046307] to-[#0a8a0e] px-6 py-4">
+        <h3 class="text-white font-bold text-base flex items-center gap-2">
+          <i class="fas fa-key"></i>
+          পাসওয়ার্ড পরিবর্তন করুন
+        </h3>
+      </div>
+      <div class="p-6">
 
-                            <div class="form-group">
-                                <label for="current_password">Current Password</label>
-                                <input type="password" name="current_password" class="form-control" id="current_password" placeholder="Current Password" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">New Password</label>
-                                <input type="password" name="password" class="form-control" id="password" placeholder="New Password" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password_confirmation">Confirm New Password</label>
-                                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Confirm New Password" required>
-                            </div>
-                        </div>
-                        <!-- /.card-body -->
+        @if(session('success'))
+          <div class="mb-5 flex items-start gap-3 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
+            <i class="fas fa-check-circle text-green-500 mt-0.5"></i>
+            <p class="text-sm text-green-700 font-medium">{{ session('success') }}</p>
+          </div>
+        @endif
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Update Security Credentials</button>
-                        </div>
-                    </form>
-                </div>
+        @if($errors->any())
+          <div class="mb-5 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+            <div class="flex items-center gap-2 text-red-700 font-bold text-sm mb-2">
+              <i class="fas fa-exclamation-circle"></i> ত্রুটি পাওয়া গেছে
             </div>
+            <ul class="list-disc list-inside text-sm text-red-600 space-y-1">
+              @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
 
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Recent Login Activity</h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body p-0">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Status</th>
-                                    <th>IP Address</th>
-                                    <th>Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse(Auth::guard('people')->user()->loginLogs()->latest()->take(5)->get() as $log)
-                                    <tr>
-                                        <td>
-                                            @if($log->status === 'success')
-                                                <span class="badge badge-success">Successful</span>
-                                            @else
-                                                <span class="badge badge-danger">Failed</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $log->ip_address }}</td>
-                                        <td>{{ $log->created_at->format('d M, h:i A') }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="3" class="text-center text-muted">No recent activity found.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
+        <form action="{{ route('people.password.update') }}" method="POST" class="space-y-5">
+          @csrf
+
+          <div>
+            <label for="current_password" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">বর্তমান পাসওয়ার্ড</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                <i class="fas fa-lock text-sm"></i>
+              </span>
+              <input type="password" name="current_password" id="current_password"
+                     class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#046307] focus:border-transparent outline-none transition text-sm"
+                     placeholder="বর্তমান পাসওয়ার্ড লিখুন" required>
             </div>
-        </div>
+          </div>
+
+          <div>
+            <label for="password" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">নতুন পাসওয়ার্ড</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                <i class="fas fa-shield-alt text-sm"></i>
+              </span>
+              <input type="password" name="password" id="password"
+                     class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#046307] focus:border-transparent outline-none transition text-sm"
+                     placeholder="নতুন পাসওয়ার্ড লিখুন (কমপক্ষে ৮ অক্ষর)" required>
+            </div>
+          </div>
+
+          <div>
+            <label for="password_confirmation" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">পাসওয়ার্ড নিশ্চিত করুন</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                <i class="fas fa-check-circle text-sm"></i>
+              </span>
+              <input type="password" name="password_confirmation" id="password_confirmation"
+                     class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#046307] focus:border-transparent outline-none transition text-sm"
+                     placeholder="পাসওয়ার্ড পুনরায় লিখুন" required>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 bg-[#046307] text-white font-bold rounded-xl hover:bg-[#0a8a0e] transition shadow-lg active:scale-95">
+            <i class="fas fa-save mr-2"></i> পাসওয়ার্ড আপডেট করুন
+          </button>
+        </form>
+      </div>
     </div>
+
+    <!-- Recent Login Activity -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="bg-gray-700 px-6 py-4">
+        <h3 class="text-white font-bold text-base flex items-center gap-2">
+          <i class="fas fa-history"></i>
+          সাম্প্রতিক লগইন কার্যক্রম
+        </h3>
+      </div>
+      <div class="divide-y divide-gray-50">
+        @forelse(Auth::guard('people')->user()->loginLogs()->latest()->take(5)->get() as $log)
+          <div class="flex items-center justify-between px-6 py-4">
+            <div class="flex items-center gap-3">
+              @if($log->status === 'success')
+                <span class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                  <i class="fas fa-check text-xs"></i>
+                </span>
+                <div>
+                  <p class="text-sm font-bold text-green-700">সফল লগইন</p>
+                  <p class="text-xs text-gray-500">{{ $log->ip_address }}</p>
+                </div>
+              @else
+                <span class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                  <i class="fas fa-times text-xs"></i>
+                </span>
+                <div>
+                  <p class="text-sm font-bold text-red-700">ব্যর্থ লগইন</p>
+                  <p class="text-xs text-gray-500">{{ $log->ip_address }}</p>
+                </div>
+              @endif
+            </div>
+            <span class="text-xs text-gray-400">{{ $log->created_at->format('d M, h:i A') }}</span>
+          </div>
+        @empty
+          <div class="px-6 py-10 text-center">
+            <i class="fas fa-history text-3xl text-gray-200 mb-3"></i>
+            <p class="text-sm text-gray-400">কোনো সাম্প্রতিক কার্যক্রম পাওয়া যায়নি।</p>
+          </div>
+        @endforelse
+      </div>
+    </div>
+
+  </div>
 </section>
 @endsection
+

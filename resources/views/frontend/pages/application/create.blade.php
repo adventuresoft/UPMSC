@@ -1,551 +1,418 @@
-@extends('frontend.master')
-@section('title', 'SUKTAIL UNION PARISHAD - APPLICATION')
-@push('style')
-@endpush
-@section('content')
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h4>আবেদন</h4>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Application</li>
-                        </ol>
-                    </div>
-                </div>
-            </div><!-- /.container-fluid -->
-        </section>
-
-        <!-- Main content -->
-        <section class="content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header p-2">
-                                <ul class="nav">
-                                    <li class="nav-item"><a class="nav-link active" href="{{ route('application.create') }}"
-                                            data-toggle="tab">আবেদন ফরম</a></li>
-                                </ul>
-                            </div><!-- /.card-header -->
-                            <div class="card-body mb-5">
-                                <div class="tab-content">
-
-                                    <div class="active tab-pane" id="application_form">
-                                        <form class="form-horizontal" id="applicationForm" enctype="multipart/form-data">
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="name">নাম <span class="text-danger" title="Required"
-                                                            data-toggle="tooltip">*</span></label>
-                                                    <input type="text" required value="" class="form-control"
-                                                        name="name" id="name" placeholder="Name English">
-                                                    <small class="error name-error text-danger"></small>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="bn_name">নাম (বাংলায়) <span class="text-danger"
-                                                            title="Required" data-toggle="tooltip">*</span></label>
-                                                    <input type="text" required value="" class="form-control"
-                                                        name="bn_name" id="bn_name" placeholder="Name In Bangla">
-                                                    <small class="error bn_name-error text-danger"></small>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="nid_no">এনআইডি নম্বর</label>
-                                                    <input type="text" value="" class="form-control" name="nid"
-                                                        id="nid_no" placeholder="NID NO.">
-                                                    <small class="error nid_no-error text-danger"></small>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="birth_reg">জন্ম নিবন্ধন নম্বর</label>
-                                                    <input type="text" value="" class="form-control"
-                                                        name="birth_certificate" id="birth_reg" placeholder="Birth Reg.">
-                                                    <small class="error birth_reg-error text-danger"></small>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <div class="col-md-5">
-                                                    <label for="date_of_birth">জন্ম তারিখ</label>
-                                                    <input type="date" required value="" name="date_of_birth"
-                                                        class="form-control" id="date_of_birth">
-                                                    <small class="error date_of_birth-error text-danger"></small>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="age">বয়স</label>
-                                                    <input type="text" class="form-control" id="age" readonly
-                                                        placeholder="Auto calculated">
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <label for="birth_place">জন্মস্থান</label>
-                                                    <select name="birth_place" class="form-control" id="birth_place" required>
-                                                        <option value="">Select Birth Place</option>
-                                                        @if (!empty($districts))
-                                                            @foreach ($districts as $district)
-                                                                <option value="{{ $district->id }}">{{ $district->name }}</option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                    <small class="error birth_place-error text-danger"></small>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="father_name">পিতার নাম ইংরেজিতে</label>
-                                                    <input type="text" value="" class="form-control"
-                                                        name="father_name" id="father_name" placeholder="Fathers' Name">
-                                                    <small class="error father_name-error text-danger"></small>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="father_name_bn">পিতার নাম বাংলায়</label>
-                                                    <input type="text" value="" class="form-control"
-                                                        name="father_name_bn" id="father_name_bn"
-                                                        placeholder="Fathers' Name In Bangla">
-                                                    <small class="error father_name_bn-error text-danger"></small>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="mother_name">মাতার নাম ইংরেজিতে</label>
-                                                    <input type="text" value="" class="form-control"
-                                                        name="mother_name" id="mother_name" placeholder="Mothers' Name">
-                                                    <small class="error mother_name-error text-danger"></small>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="mother_name_bn">মাতার নাম বাংলায়</label>
-                                                    <input type="text" value="" class="form-control"
-                                                        name="mother_name_bn" id="mother_name_bn"
-                                                        placeholder="Mothers' Name In Bangla">
-                                                    <small class="error mother_name_bn-error text-danger"></small>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="mobile">মোবাইল নম্বর ইংরেজিতে <span class="text-danger"
-                                                            title="Required" data-toggle="tooltip">*</span></label>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text" id="basic-addon1">+88</span>
-                                                        </div>
-                                                        <input type="tel" pattern="(01){1}[3-9]{1}\d{8}"
-                                                            title="Mobile number with 01 and remaing 9 digit with 0-9"
-                                                            placeholder="01........." required name="mobile"
-                                                            class="form-control" id="mobile">
-                                                        <small class="error mobile-error text-danger"></small>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="email">ই-মেইল</label>
-                                                    <input type="email" value="" name="email"
-                                                        placeholder="E-mail" class="form-control" id="email">
-                                                    <small class="error email-error text-danger"></small>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="gender">লিঙ্গ</label>
-                                                    <select name="gender" class="form-control" id="gender">
-                                                        <option value="">Select Gender</option>
-                                                        @if (count((array) people_constant_option('gender')))
-                                                            @foreach (people_constant_option('gender') as $key => $item)
-                                                                <option value="{{ $key }}">{{ $item }}
-                                                                </option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                    <small class="error gender-error text-danger"></small>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="marital_status"> বৈবাহিক অবস্থা</label>
-                                                    <select name="marital_status" class="form-control" id="marital_status">
-                                                        <option value="">Select Marital Status</option>
-                                                        @foreach (family_constant_option('marital_status') as $key => $marital_status)
-                                                <option value="{{$key}}" >{{$marital_status}}</option>
-                                            @endforeach
-                                                        <!--<option value="1">Single</option>-->
-                                                        <!--<option value="2">Married</option>-->
-                                                        <!--<option value="3">Widowed</option>-->
-                                                        <!--<option value="4">Divorced</option>-->
-                                                        <!--<option value="5">Separated</option>-->
-                                                        <!--<option value="6">Engaged</option>-->
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="religion">ধর্ম</label>
-                                                    <select name="religion" class="form-control" id="religion">
-                                                        <option value="">Select Religion</option>
-                                                        @if (!empty($religions))
-                                                            @foreach ($religions as $religion)
-                                                                <option value="{{ $religion->id }}">{{ $religion->name }}</option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                    <small class="error religion-error text-danger"></small>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="user-image">আবেদনকারীর ছবি</label>
-                                                    <input type="file"  accept="image/*" class="form-control" name="image">
-                                                </div>
-                                            </div>
-
-
-                                            <div class="form-gorup row" style="background:azure !important">
-                                                <div class="col-md-12">
-                                                    <p>স্থায়ী ঠিকানা</p>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="permanent_division">বিভাগ</label>
-                                                        <select name="permanent_division" class="form-control"
-                                                            id="permanent_division">
-                                                            <option value="">Select Permanent Division</option>
-                                                            @if (count($divisions ?? []))
-                                                                @foreach ($divisions as $division)
-                                                                    <option value="{{ $division->id }}">
-                                                                        {{ $division->name }}</option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="permanent_district">জেলা</label>
-                                                    <select name="permanent_district" class="form-control" id="permanent_district">
-                                                        <option value="">Select Permanent District</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="permanent_thana">উপজেলা</label>
-                                                    <select name="permanent_thana" class="form-control" id="permanent_thana">
-                                                        <option value="">Select Permanent Thana</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="permanent_union">ইউনিয়ন পরিষদ</label>
-                                                    <select name="permanent_union" class="form-control" id="permanent_union">
-                                                        <option value="">Select Permanent Union</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row"><div class="col-md-6">
-                                                    <label for="permanent_post_office_id">ডাকঘর</label>
-                                                    <select name="permanent_post_office_id" class="form-control" id="permanent_post_office_id">
-                                                        <option value="">Select Post Office</option>
-                                                        @foreach ($permanent_post_offices as $post_office)
-                                                            <option value="{{$post_office->id}}">{{$post_office->bn_name}} <!--- {{$post_office->postal_code}}--></option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="permanent_ward">ওয়ার্ড নম্বর </label>
-                                                    <select name="permanent_ward" class="form-control" id="permanent_ward">
-                                                        <option value="">Select Permanent Ward</option>
-                                                        @if (count($wards ?? []))
-                                                            @foreach ($wards as $ward)
-                                                                <option value="{{ $ward->id }}">{{ $ward->en_ward_no }}
-                                                                </option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="permanent_village">গ্রাম</label>
-                                                    <select id="permanent_village" class="form-control" name="permanent_village">
-                                                        <option value="">Select Village</option>
-                                                        @if (!empty($permanent_villages))
-                                                            @foreach ($permanent_villages as $village)
-                                                                <option value="{{ $village->id }}">{{ $village->bn_name }}</option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="permanent_road">রাস্তা</label>
-                                                    <!--<select id="permanent_road" class="form-control" name="permanent_road">-->
-                                                    <!--    <option value="">Select Road</option>-->
-                                                    <!--    @if (!empty($permanent_roads))-->
-                                                    <!--        @foreach ($permanent_roads as $road)-->
-                                                    <!--            <option value="{{ $road->id }}">{{ $road->name }}</option>-->
-                                                    <!--        @endforeach-->
-                                                    <!--    @endif-->
-                                                    <!--</select>-->
-                                                     <input id="permanent_road" class="form-control" type="text" placeholder="Permanent road" name="permanent_road">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
-                                                    <label for="permanent_house_no">হোল্ডিং নম্বর (বাংলায়)</label>
-                                                    <input id="permanent_house_no" class="form-control" type="text" placeholder="House No" name="permanent_house_no">
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="permanent_house_no">হোল্ডিং নম্বর (ইংরেজীতে)</label>
-                                                    <input id="permanent_house_no" class="form-control" type="text" placeholder="House No" name="permanent_house_no">
-                                                </div>
-                                            </div>
-
-
-
-                                            <div class="form-group row " style="background-color:azure !important">
-                                                <div class="col-md-6" style="background-color:azure !important">
-                                                    <p>বর্তমান ঠিকানা</p>
-                                                </div>
-                                                <div class="col-md-6" style="background-color:azure !important">
-                                                    <label>Same as permanent address? <input type="checkbox"
-                                                            name="same_present_addres"
-                                                            id="same_as_present_address" /></label>
-                                                </div>
-                                            </div>
-
-                                            <div id="same-as-permanent-address-section">
-
-
-
-                                                <div class="form-group row">
-                                                    <div class="col-md-6">
-                                                        <label for="present_division">বিভাগ</label>
-                                                        <select name="present_division" class="form-control"
-                                                            id="present_division">
-                                                            <option value="">Select Present Division</option>
-                                                            @if (count($divisions ?? []))
-                                                                @foreach ($divisions as $division)
-                                                                    <option value="{{ $division->id }}">
-                                                                        {{ $division->name }}</option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="present_district">জেলা</label>
-                                                        <select name="present_district" class="form-control"
-                                                            id="present_district">
-                                                            <option value="">Select Present District</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="form-group row">
-                                                    <div class="col-md-6">
-                                                        <label for="present_thana">উপজেলা</label>
-                                                        <select name="present_thana" class="form-control"
-                                                            id="present_thana">
-                                                            <option value="">Select Present Thana</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="present_union_name">ইউনিয়ন পরিষদ</label>
-                                                        <select name="present_union_name" class="form-control"
-                                                            id="present_union">
-                                                            <option value="">Select Present Union</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="present_post_office_id">ডাকঘর</label>
-                                                        <select name="present_post_office_id" class="form-control" id="present_post_office_id">
-                                                        <option value="">Select Post Office</option>
-                                                        @foreach ($permanent_post_offices as $post_office)
-                                                            <option value="{{$post_office->id}}">{{$post_office->bn_name}} <!-- - {{$post_office->postal_code}}--></option>
-                                                        @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="present_ward">ওয়ার্ড নম্বর </label>
-                                                        <select name="present_ward" class="form-control" id="present_ward">
-                                                        <option value="">Select Permanent Ward</option>
-                                                        @if (count($wards ?? []))
-                                                            @foreach ($wards as $ward)
-                                                                <option value="{{ $ward->id }}">{{ $ward->en_ward_no }}
-                                                                </option>
-                                                            @endforeach
-                                                        @endif
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <label for="present_village">গ্রাম</label>
-                                                        <select id="present_village" class="form-control" name="present_village">
-                                                            <option value="">Select Village</option>
-                                                            @if (!empty($permanent_villages))
-                                                                @foreach ($permanent_villages as $village)
-                                                                    <option value="{{ $village->id }}">{{ $village->bn_name }}</option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="present_road">রাস্তা</label>
-                                                        <!--<select id="present_road" class="form-control" name="present_road">-->
-                                                        <!--    <option value="">Select Road</option>-->
-                                                        <!--    @if (!empty($present_roads))-->
-                                                        <!--        @foreach ($present_roads as $road)-->
-                                                        <!--            <option value="{{ $road->id }}">{{ $road->name }}</option>-->
-                                                        <!--        @endforeach-->
-                                                        <!--    @endif-->
-                                                        <!--</select>-->
-                                                         <input id="present_road" class="form-control" type="text" placeholder="Present Road" name="present_road">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-md-6">
-                                                        <label for="present_house_no">হোল্ডিং নম্বর (বাংলায়)</label>
-                                                        <input id="present_house_no" class="form-control" type="text" placeholder="House No" name="present_house_no">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label for="present_house_no">হোল্ডিং নম্বর (ইংরেজিতে)</label>
-                                                        <input id="present_house_no" class="form-control" type="text" placeholder="House No" name="present_house_no">
-                                                    </div>
-                                                </div>
-                                                </div>
-                                            </div>
-
-
-
-                                            @if (false)
-                                                <div class="form-group row " style="background-color:azure !important">
-                                                    <div class="col-md-6" style="background-color:azure !important">
-                                                        <p>Present Address: </p>
-                                                    </div>
-                                                    {{-- <div class="col-md-6" style="background-color:azure !important">
-                                                        <label for="same_as_present_address">Same as permanent address? <input type="checkbox" name="same_present_address" id="same_as_present_address" /></label>
-                                                    </div> --}}
-                                                </div>
-
-                                                <div id="same-as-permanent-address-section">
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <label for="present_division">Division</label>
-                                                            <select readonly name="present_division" class="form-control" id="present_division">
-                                                                <option value="6">Dhaka</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="present_district">District</label>
-                                                            <select readonly name="present_district" class="form-control"
-                                                                id="present_district">
-                                                                <option value="51">Gopalganj</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <label for="present_thana">Police Station</label>
-                                                            <select name="present_thana" readonly class="form-control"
-                                                                id="present_thana">
-                                                                <option value="385">Gopalganj Sadar</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="present_union">Post Office</label>
-                                                            <select name="present_union" readonly class="form-control"
-                                                                id="present_union">
-                                                                <option value="3503">Suktail</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <label for="union_name">UP</label>
-                                                            <input id="union_name" class="form-control" readonly value="No.3 Shuktail Union Parishad" type="text" placeholder="UP" name="union_name">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="village">Village</label>
-                                                            <input id="village" class="form-control" type="text" placeholder="Village" name="village">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <div class="col-md-6">
-                                                            <label for="present_ward">Present Ward</label>
-                                                            <select name="present_ward" class="form-control" id="present_ward">
-                                                                <option value="">Select Present Ward</option>
-                                                                @if (count($wards ?? []))
-                                                                    @foreach ($wards as $ward)
-                                                                        <option value="{{ $ward->id }}">
-                                                                            {{ $ward->en_ward_no }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                @endif
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-
-
-
-
-                                            <div class="text-center">
-                                                <input type="hidden" name="union_id" value="3503">
-                                                <a href="{{ url('/') }}" class="btn btn-secondary">Cancel</a>
-                                                <button type="reset" class="btn btn-danger">Reset</button>
-                                                <button type="submit" class="btn btn-success">Submit</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!-- /.tab-pane -->
-
-                                </div>
-                                <!-- /.tab-content -->
-                            </div><!-- /.card-body -->
-                        </div>
-                        <!-- /.card -->
-                    </div>
-                    <!-- /.col -->
-                </div>
-                <!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </section>
-        <!-- /.content -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UPMS | Nagorik Application</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <style>
+        .form-input {
+            @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#046307] focus:border-transparent outline-none transition duration-200;
+        }
+        .form-label {
+            @apply block text-sm font-semibold text-gray-700 mb-1;
+        }
+        .section-title {
+            @apply text-xl font-bold text-[#046307] border-b-2 border-[#046307] pb-2 mb-6 mt-8 flex items-center gap-2;
+        }
+        .select2-container--default .select2-selection--single {
+            height: 42px !important;
+            border: 1px solid #d1d5db !important;
+            border-radius: 0.375rem !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 40px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 40px !important;
+        }
+    </style>
+  </head>
+  <body class="bg-[#f3f4f6] font-inter">
+    <!-- top bar -->
+    <div class="top-bar">
+      <div class="container mx-auto md:px-4 px-2 max-w-screen-xl">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="flex flex-col md:flex-row items-center gap-10">
+            <img src="{{asset('assets/images/logo/govt-bd-logo.png')}}" class="govt-logo" alt="" />
+            <div class="text-black text-center md:text-left">
+              <h1 class="md:text-[25px] font-semibold">Citizen Service Management and Central Reporting System</h1>
+              <p>Local Government Division, Local Government Ministry, Bangladesh</p>
+            </div>
+          </div>
+          <div class="mt-4 md:mt-0">
+            <a href="{{url('/')}}/login" class="text-white text-lg font-medium hover:underline"> Admin Login </a>
+          </div>
+        </div>
+      </div>
     </div>
 
-@endsection
-@push('script')
+    <!-- Navigation -->
+    <nav class="bg-[#046307] shadow-md sticky top-0 z-50">
+      <div class="container mx-auto max-w-screen-xl">
+        <ul class="flex items-center gap-6 py-3 px-4">
+          <li>
+            <a href="{{url('/')}}" class="text-white hover:text-green-200 transition">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
+                <path d="M12 3.1 3 10.4c-.4.3-.5.9-.2 1.3.2.3.5.4.8.4h1.4V20c0 .6.4 1 1 1h4.8c.6 0 1-.4 1-1v-4.6h2.4V20c0 .6.4 1 1 1H20c.6 0 1-.4 1-1v-7.9h1.4c.6 0 1-.4 1-.9 0-.3-.1-.6-.4-.8L12 3.1Z" />
+              </svg>
+            </a>
+          </li>
+          <li><a href="{{ route('people.login') }}" class="text-white font-medium hover:text-green-200 transition">নাগরিক লগইন</a></li>
+          <li><a href="{{url('/')}}/login" class="text-white font-medium hover:text-green-200 transition">অ্যাডমিন লগইন</a></li>
+          <li><a href="{{url('/')}}/login" class="text-white font-medium hover:text-green-200 transition">মনিটরিং লগইন</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="py-10">
+      <div class="container mx-auto max-w-4xl px-4">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+          <div class="bg-gradient-to-r from-[#046307] to-[#0a8a0e] px-8 py-6 text-white text-center">
+            <h2 class="text-3xl font-bold">নাগরিক আবেদন ফরম</h2>
+            <p class="mt-2 text-green-100 italic">সঠিক তথ্য দিয়ে ফরমটি পূরণ করুন</p>
+          </div>
+
+          <form class="p-8" id="applicationForm" enctype="multipart/form-data">
+            @csrf
+            
+            <!-- Personal Information -->
+            <div class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+                ব্যক্তিগত তথ্য
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="form-label" for="name">নাম (ইংরেজিতে) <span class="text-red-500">*</span></label>
+                    <input type="text" required name="name" id="name" class="form-input" placeholder="Enter Full Name">
+                    <small class="error name-error text-red-500"></small>
+                </div>
+                <div>
+                    <label class="form-label" for="bn_name">নাম (বাংলায়) <span class="text-red-500">*</span></label>
+                    <input type="text" required name="bn_name" id="bn_name" class="form-input" placeholder="নাম বাংলায় লিখুন">
+                    <small class="error bn_name-error text-red-500"></small>
+                </div>
+                <div>
+                    <label class="form-label" for="nid_no">এনআইডি নম্বর</label>
+                    <input type="text" name="nid" id="nid_no" class="form-input" placeholder="NID Number">
+                </div>
+                <div>
+                    <label class="form-label" for="birth_reg">জন্ম নিবন্ধন নম্বর</label>
+                    <input type="text" name="birth_certificate" id="birth_reg" class="form-input" placeholder="Birth Certificate No">
+                </div>
+                <div>
+                    <label class="form-label" for="date_of_birth">জন্ম তারিখ <span class="text-red-500">*</span></label>
+                    <input type="date" required name="date_of_birth" id="date_of_birth" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label" for="age">বয়স (অটো ক্যালকুলেটেড)</label>
+                    <input type="text" id="age" class="form-input bg-gray-50 font-semibold text-[#046307]" readonly placeholder="--">
+                </div>
+                <div>
+                    <label class="form-label" for="birth_place">জন্মস্থান <span class="text-red-500">*</span></label>
+                    <select name="birth_place" id="birth_place" class="form-input" required>
+                        <option value="">জন্মস্থান নির্বাচন করুন</option>
+                        @foreach ($districts as $district)
+                            <option value="{{ $district->id }}">{{ $district->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="gender">লিঙ্গ <span class="text-red-500">*</span></label>
+                    <select name="gender" id="gender" class="form-input" required>
+                        <option value="">লিঙ্গ নির্বাচন করুন</option>
+                        @foreach (people_constant_option('gender') as $key => $item)
+                            <option value="{{ $key }}">{{ $item }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="religion">ধর্ম</label>
+                    <select name="religion" id="religion" class="form-input">
+                        <option value="">ধর্ম নির্বাচন করুন</option>
+                        @foreach ($religions as $religion)
+                            <option value="{{ $religion->id }}">{{ $religion->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="marital_status">বৈবাহিক অবস্থা</label>
+                    <select name="marital_status" id="marital_status" class="form-input">
+                        <option value="">বৈবাহিক অবস্থা নির্বাচন করুন</option>
+                        @foreach (family_constant_option('marital_status') as $key => $marital_status)
+                            <option value="{{$key}}" >{{$marital_status}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <!-- Parent Info -->
+            <div class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a5.97 5.97 0 0 0-.94 3.197m0 0a5.995 5.995 0 0 0 5.058 2.771ZM12 11.25a3.375 3.375 0 1 0 0-6.75 3.375 3.375 0 0 0 0 6.75ZM9.75 8.625a2.625 2.625 0 1 1 5.25 0 2.625 2.625 0 0 1-5.25 0Z" />
+                </svg>
+                পিতা-মাতার তথ্য
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="form-label" for="father_name">পিতার নাম (ইংরেজিতে)</label>
+                    <input type="text" name="father_name" id="father_name" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label" for="father_name_bn">পিতার নাম (বাংলায়)</label>
+                    <input type="text" name="father_name_bn" id="father_name_bn" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label" for="mother_name">মাতার নাম (ইংরেজিতে)</label>
+                    <input type="text" name="mother_name" id="mother_name" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label" for="mother_name_bn">মাতার নাম (বাংলায়)</label>
+                    <input type="text" name="mother_name_bn" id="mother_name_bn" class="form-input">
+                </div>
+            </div>
+
+            <!-- Contact & Image -->
+            <div class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                </svg>
+                যোগাযোগ ও ছবি
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="form-label" for="mobile">মোবাইল নম্বর <span class="text-red-500">*</span></label>
+                    <div class="flex">
+                        <span class="bg-gray-100 border border-r-0 border-gray-300 rounded-l-md px-3 py-2 flex items-center text-gray-600">+88</span>
+                        <input type="tel" required name="mobile" id="mobile" class="form-input rounded-l-none" placeholder="017XXXXXXXX">
+                    </div>
+                    <small class="error mobile-error text-red-500"></small>
+                </div>
+                <div>
+                    <label class="form-label" for="email">ই-মেইল</label>
+                    <input type="email" name="email" id="email" class="form-input" placeholder="example@mail.com">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="form-label" for="image">আবেদনকারীর ছবি</label>
+                    <input type="file" accept="image/*" name="image" id="image" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#046307] file:text-white hover:file:bg-[#0a8a0e] cursor-pointer">
+                </div>
+            </div>
+
+            <!-- Permanent Address -->
+            <div class="section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                </svg>
+                স্থায়ী ঠিকানা
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="form-label" for="permanent_division">বিভাগ</label>
+                    <select name="permanent_division" id="permanent_division" class="form-input select2">
+                        <option value="">বিভাগ নির্বাচন করুন</option>
+                        @foreach ($divisions as $division)
+                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="permanent_district">জেলা</label>
+                    <select name="permanent_district" id="permanent_district" class="form-input select2">
+                        <option value="">জেলা নির্বাচন করুন</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="permanent_thana">উপজেলা</label>
+                    <select name="permanent_thana" id="permanent_thana" class="form-input select2">
+                        <option value="">উপজেলা নির্বাচন করুন</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="permanent_union">ইউনিয়ন</label>
+                    <select name="permanent_union" id="permanent_union" class="form-input select2">
+                        <option value="">ইউনিয়ন নির্বাচন করুন</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="permanent_post_office_id">ডাকঘর</label>
+                    <select name="permanent_post_office_id" id="permanent_post_office_id" class="form-input select2">
+                        <option value="">ডাকঘর নির্বাচন করুন</option>
+                        @foreach ($permanent_post_offices as $post_office)
+                            <option value="{{$post_office->id}}">{{$post_office->bn_name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="permanent_ward">ওয়ার্ড নম্বর</label>
+                    <select name="permanent_ward" id="permanent_ward" class="form-input select2">
+                        <option value="">ওয়ার্ড নির্বাচন করুন</option>
+                        @foreach ($wards as $ward)
+                            <option value="{{ $ward->id }}">{{ $ward->en_ward_no }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="permanent_village">গ্রাম</label>
+                    <select id="permanent_village" name="permanent_village" class="form-input select2">
+                        <option value="">গ্রাম নির্বাচন করুন</option>
+                        @foreach ($permanent_villages as $village)
+                            <option value="{{ $village->id }}">{{ $village->bn_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="permanent_road">রাস্তা</label>
+                    <input type="text" name="permanent_road" id="permanent_road" class="form-input" placeholder="Road Name/No">
+                </div>
+                <div>
+                    <label class="form-label" for="permanent_house_no">হোল্ডিং নম্বর (বাংলায়)</label>
+                    <input type="text" name="permanent_house_no" id="permanent_house_no" class="form-input" placeholder="যেমন: ১২৩">
+                </div>
+                <div>
+                    <label class="form-label" for="permanent_house_no_en">হোল্ডিং নম্বর (ইংরেজিতে)</label>
+                    <input type="text" name="permanent_house_no_en" id="permanent_house_no_en" class="form-input" placeholder="Example: 123">
+                </div>
+            </div>
+
+            <!-- Present Address -->
+            <div class="flex items-center justify-between section-title">
+                <div class="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
+                    বর্তমান ঠিকানা
+                </div>
+                <div class="flex items-center gap-2 text-sm font-normal text-gray-600 bg-gray-100 px-3 py-1 rounded-full border border-gray-200">
+                    <input type="checkbox" name="same_present_addres" id="same_as_present_address" class="w-4 h-4 accent-[#046307]">
+                    <label for="same_as_present_address" class="cursor-pointer">স্থায়ী ঠিকানার মতই?</label>
+                </div>
+            </div>
+
+            <div id="same-as-permanent-address-section">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="form-label" for="present_division">বিভাগ</label>
+                        <select name="present_division" id="present_division" class="form-input select2">
+                            <option value="">বিভাগ নির্বাচন করুন</option>
+                            @foreach ($divisions as $division)
+                                <option value="{{ $division->id }}">{{ $division->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" for="present_district">জেলা</label>
+                        <select name="present_district" id="present_district" class="form-input select2">
+                            <option value="">জেলা নির্বাচন করুন</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" for="present_thana">উপজেলা</label>
+                        <select name="present_thana" id="present_thana" class="form-input select2">
+                            <option value="">উপজেলা নির্বাচন করুন</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" for="present_union_name">ইউনিয়ন</label>
+                        <select name="present_union_name" id="present_union" class="form-input select2">
+                            <option value="">ইউনিয়ন নির্বাচন করুন</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" for="present_post_office_id">ডাকঘর</label>
+                        <select name="present_post_office_id" id="present_post_office_id" class="form-input select2">
+                            <option value="">ডাকঘর নির্বাচন করুন</option>
+                            @foreach ($permanent_post_offices as $post_office)
+                                <option value="{{$post_office->id}}">{{$post_office->bn_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" for="present_ward">ওয়ার্ড নম্বর</label>
+                        <select name="present_ward" id="present_ward" class="form-input select2">
+                            <option value="">ওয়ার্ড নির্বাচন করুন</option>
+                            @foreach ($wards as $ward)
+                                <option value="{{ $ward->id }}">{{ $ward->en_ward_no }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" for="present_village">গ্রাম</label>
+                        <select id="present_village" name="present_village" class="form-input select2">
+                            <option value="">গ্রাম নির্বাচন করুন</option>
+                            @foreach ($permanent_villages as $village)
+                                <option value="{{ $village->id }}">{{ $village->bn_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" for="present_road">রাস্তা</label>
+                        <input type="text" name="present_road" id="present_road" class="form-input" placeholder="Road Name/No">
+                    </div>
+                    <div>
+                        <label class="form-label" for="present_house_no">হোল্ডিং নম্বর (বাংলায়)</label>
+                        <input type="text" name="present_house_no" id="present_house_no" class="form-input" placeholder="যেমন: ১২৩">
+                    </div>
+                    <div>
+                        <label class="form-label" for="present_house_no_en">হোল্ডিং নম্বর (ইংরেজিতে)</label>
+                        <input type="text" name="present_house_no_en" id="present_house_no_en" class="form-input" placeholder="Example: 123">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="mt-12 text-center bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
+                    <input type="hidden" name="union_id" value="3503">
+                    <a href="{{ url('/') }}" class="w-full md:w-32 text-center py-2.5 px-4 bg-gray-500 text-white font-bold rounded-md hover:bg-gray-600 transition shadow-sm">বাতিল</a>
+                    <button type="reset" class="w-full md:w-32 py-2.5 px-4 bg-red-500 text-white font-bold rounded-md hover:bg-red-600 transition shadow-sm">পুনরায় শুরু</button>
+                    <button type="submit" class="w-full md:w-48 py-2.5 px-6 bg-[#046307] text-white font-bold rounded-md hover:bg-[#0a8a0e] transition shadow-lg transform active:scale-95">আবেদন জমা দিন</button>
+                </div>
+                
+                <p class="text-gray-600 text-sm">
+                    আপনার কি ইতোমধ্যে অ্যাকাউন্ট আছে? 
+                    <a href="{{ route('people.login') }}" class="text-[#046307] font-bold hover:underline">এখানে লগইন করুন</a>
+                </p>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-gray-800 py-8 px-4 text-white">
+      <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm">
+        <p class="mb-4 md:mb-0">© 2024 All rights reserved by <span class="font-bold text-green-400">UPMS</span></p>
+        <p>Design & Maintained by <a href="https://adventuresoft.com.bd" class="text-green-400 hover:underline">Adventure Soft</a></p>
+      </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
+
     <script>
         $(document).ready(function() {
-            $('.select2').select2();
+            $('.select2').select2({
+                width: '100%'
+            });
 
             function calculateAge(dob) {
-                if (!dob) {
-                    return '';
-                }
-
+                if (!dob) return '';
                 let birthDate = new Date(dob);
-                if (Number.isNaN(birthDate.getTime())) {
-                    return '';
-                }
-
+                if (Number.isNaN(birthDate.getTime())) return '';
                 let today = new Date();
                 let age = today.getFullYear() - birthDate.getFullYear();
                 let monthDiff = today.getMonth() - birthDate.getMonth();
-
                 if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
                     age--;
                 }
-
                 return age;
             }
 
@@ -558,183 +425,88 @@
             $('#date_of_birth').on('change', function() {
                 setAgeFromDob($(this).val());
             });
-        });
 
-        $(document).on('submit', "#applicationForm", function(e) {
-            e.preventDefault();
-            let thisForm = $(this);
-            let _this_text = thisForm.find('button[type="submit"]').text();
-            $.ajax({
-                type: "POST",
-                url: "{{url('/')}}/api/application-store",
-                data: new FormData(this),
-                dataType: "json",
-                contentType: false,
-                cache: false,
-                processData: false,
-                beforeSend: function() {
-                    thisForm.find('button[type="submit"]').prop("disabled", true);
-                    thisForm.find('button[type="submit"]').text("Loading...");
-                },
-                success: function(response) {
-                    thisForm.find('button[type="submit"]').prop("disabled", false);
-                    thisForm.find('button[type="submit"]').text(_this_text);
-                    toastr.success(response.message);
-                    setTimeout(() => {
-                        location.href = response.redirect_url;
-                    }, 3000);
-                },
-                error: function(xhr, status, error) {
-                    thisForm.find('button[type="submit"]').prop("disabled", false);
-                    thisForm.find('button[type="submit"]').text(_this_text);
-
-                    var responseText = jQuery.parseJSON(xhr.responseText);
-                    toastr.error(responseText.message);
-
-                    $.each(responseText.errors, function(key, val) {
-                        thisForm.find("." + key + "-error").text(val[0]);
-                    });
+            $(document).on('change', '#same_as_present_address', function(e){
+                if ($(this).is(':checked')) {
+                    $("#same-as-permanent-address-section").slideUp();
+                } else {
+                    $("#same-as-permanent-address-section").slideDown();
                 }
-
             });
-        })
 
-        $(document).on('change', '#same_as_present_address', function(e){
-            e.preventDefault();
-            if ($(this).is(':checked')) {
-                $("#same-as-permanent-address-section").hide();
-            } else {
-                $("#same-as-permanent-address-section").show();
-            }
-        })
-
-        $(document).on('change',
-            "#permanent_division, #permanent_district, #permanent_thana, #permanent_union, #permanent_village, #permanent_ward, #permanent_road, #present_division, #present_district, #present_thana, #present_union, #present_village, #present_ward, #present_road",
-            function(e) {
+            $(document).on('submit', "#applicationForm", function(e) {
                 e.preventDefault();
+                let thisForm = $(this);
+                let _this_button = thisForm.find('button[type="submit"]');
+                let _original_text = _this_button.text();
+                
+                $.ajax({
+                    type: "POST",
+                    url: "{{url('/')}}/api/application-store",
+                    data: new FormData(this),
+                    dataType: "json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function() {
+                        _this_button.prop("disabled", true).text("অপেক্ষা করুন...");
+                    },
+                    success: function(response) {
+                        toastr.success(response.message);
+                        setTimeout(() => {
+                            location.href = response.redirect_url;
+                        }, 2000);
+                    },
+                    error: function(xhr) {
+                        _this_button.prop("disabled", false).text(_original_text);
+                        let responseText = jQuery.parseJSON(xhr.responseText);
+                        toastr.error(responseText.message || "ত্রুটি ঘটেছে!");
+                        $('.error').text('');
+                        $.each(responseText.errors, function(key, val) {
+                            $("." + key + "-error").text(val[0]);
+                        });
+                    }
+                });
+            });
+
+            // Dynamic Location Loading
+            $(document).on('change', "#permanent_division, #permanent_district, #permanent_thana, #present_division, #present_district, #present_thana", function() {
                 let _this = $(this);
-                let _this_attr = _this.attr('name');
-                let _this_prefix = _this_attr.split("_")[0];
-                let id = _this_prefix;
-                let ward = $("#" + _this_prefix + "_ward").val();
-                let village = $("#" + _this_prefix + "_village").val();
-                console.log(_this_prefix);
-                console.log(village);
-              //  findHouses(village, ward, id);
+                let _this_id = _this.attr('id');
+                let prefix = _this_id.split("_")[0];
+                let val = _this.val();
 
-                if (_this.is('#present_division, #permanent_division')) {
-                    findDistrict(_this.val(), id);
-                } else if (_this.is('#present_district, #permanent_district')) {
-                    findThana(_this.val(), id);
-                } else if (_this.is('#present_thana, #permanent_thana')) {
-                    findUnion(_this.val(), id);
-                } else if (_this.is('#present_union, #permanent_union')) {
-                    // findVillage(_this.val(), id);
+                if (_this_id.includes('division')) {
+                    findDistrict(val, prefix);
+                } else if (_this_id.includes('district')) {
+                    findThana(val, prefix);
+                } else if (_this_id.includes('thana')) {
+                    findUnion(val, prefix);
                 }
-            }
-        )
+            });
 
-        function findHouses(village = 1, ward = 1, id = "permanent") {
-            let default_option = "<option value=''>Select House</option>"
-            if (village && ward && id) {
-                $.ajax({
-                    type: "get",
-                    url: "{{ url('/house-options') }}/" + ward,
-                    data: {
-                        'id': id,
-                        "village": village
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        $('#' + id + "_house").html(response);
-                    }
+            function findDistrict(division, prefix) {
+                if (!division) return;
+                $.get("{{ url('/get-districts-by-division') }}/" + division, {id: prefix}, function(res) {
+                    $('#' + prefix + "_district").html(res).trigger('change');
                 });
-            } else {
-                $('#' + id + '_house').html(default_option);
             }
-        }
 
-        function findDistrict(division = 0, id = "present") {
-            findThana(0, id);
-            let default_option = "<option value=''>Select District</option>"
-            if (division) {
-                $.ajax({
-                    type: "get",
-                    url: "{{ url('/get-districts-by-division') }}/" + division,
-                    data: {
-                        'id': id
-                    },
-                    success: function(response) {
-                        $('#' + id + "_district").html(response);
-                    }
+            function findThana(district, prefix) {
+                if (!district) return;
+                $.get("{{ url('/get-thanas-by-district') }}/" + district, {id: prefix}, function(res) {
+                    $('#' + prefix + "_thana").html(res).trigger('change');
                 });
-            } else {
-                $('#' + id + '_district').html(default_option);
             }
-        }
 
-        function findThana(district = 0, id = "present") {
-            findUnion(0, id);
-
-            let default_option = "<option value=''>Select Thana</option>"
-            if (district) {
-                $.ajax({
-                    type: "get",
-                    url: "{{ url('/get-thanas-by-district') }}/" + district,
-                    data: {
-                        'id': id
-                    },
-                    success: function(response) {
-                        $('#' + id + "_thana").html(response);
-                    }
+            function findUnion(thana, prefix) {
+                if (!thana) return;
+                $.get("{{ url('/get-unions-by-thana') }}/" + thana, {id: prefix}, function(res) {
+                    $('#' + prefix + "_union").html(res);
                 });
-            } else {
-                $('#' + id + '_thana').html(default_option);
             }
-        }
-
-        function findUnion(thana = 0, id = "present") {
-            //findVillage(0, id);
-            let default_option = "<option value=''>Select Union</option>"
-            if (thana) {
-                $.ajax({
-                    type: "get",
-                    url: "{{ url('/get-unions-by-thana') }}/" + thana,
-                    data: {
-                        'id': id
-                    },
-                    success: function(response) {
-                        $('#' + id + "_union").html(response);
-                    }
-                });
-            } else {
-                $('#' + id + '_union').html(default_option);
-            }
-        }
-
-        function findVillage(union = 0, id = "present") {
-            let default_option = "<option value=''>Select Village</option>"
-            let default_road_option = "<option value=''>Select " + id.replace(/^./, str => str.toUpperCase()) +
-                " Road</option>"
-
-            let _this_village = $('#' + id + "_village");
-            let _this_road = $('#' + id + "_road");
-            if (union) {
-                $.ajax({
-                    type: "get",
-                    url: "{{ url('/get-villages-by-union') }}/" + union,
-                    data: {
-                        'id': id
-                    },
-                    success: function(response) {
-                        _this_village.html(response.villageOptions);
-                        _this_road.html(response.roadOptions);
-                    }
-                });
-            } else {
-                _this_village.html(default_option);
-                _this_road.html(default_road_option);
-            }
-        }
+        });
     </script>
-@endpush
+  </body>
+</html>
+

@@ -2,107 +2,133 @@
 
 @section('title', 'My Profile')
 
+@push('style')
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .content-wrapper { background: #f3f4f6 !important; }
+</style>
+@endpush
+
 @section('content')
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">My Profile</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('people.dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Profile</li>
-                </ol>
-            </div>
-        </div>
+<div class="content-header px-6 py-4 bg-white border-b border-gray-200">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">আমার প্রোফাইল</h1>
+      <nav class="text-sm text-gray-500 mt-0.5">
+        <a href="{{ route('people.dashboard') }}" class="hover:text-[#046307]">ড্যাশবোর্ড</a>
+        <span class="mx-2">/</span>
+        <span>প্রোফাইল</span>
+      </nav>
     </div>
+    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 text-xs font-bold rounded-full border border-green-200">
+      <i class="fas fa-check-circle text-green-500"></i> যাচাইকৃত নাগরিক
+    </span>
+  </div>
 </div>
 
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3">
-                <!-- Profile Image -->
-                <div class="card card-primary card-outline">
-                    <div class="card-body box-profile">
-                        <div class="text-center">
-                            @if($people->image)
-                                <img class="profile-user-img img-fluid img-circle" src="{{ asset($people->image) }}" alt="User profile picture">
-                            @else
-                                <div class="profile-user-img img-fluid img-circle bg-primary d-flex align-items-center justify-content-center text-white" style="height: 100px; width: 100px; font-size: 40px;">
-                                    {{ strtoupper(substr($people->name, 0, 1)) }}
-                                </div>
-                            @endif
-                        </div>
+<section class="p-6">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
-                        <h3 class="profile-username text-center">{{ $people->name }}</h3>
-                        <p class="text-muted text-center">Verified Citizen</p>
-                    </div>
-                </div>
-
-                <!-- About Me Box -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Identification</h3>
-                    </div>
-                    <div class="card-body">
-                        <strong><i class="fas fa-id-card mr-1"></i> National ID</strong>
-                        <p class="text-muted">{{ $people->nid ?? 'N/A' }}</p>
-                        <hr>
-                        <strong><i class="fas fa-id-badge mr-1"></i> People ID</strong>
-                        <p class="text-muted">{{ $people->approved_id }}</p>
-                        <hr>
-                        <strong><i class="fas fa-phone mr-1"></i> Mobile</strong>
-                        <p class="text-muted">{{ $people->mobile }}</p>
-                    </div>
-                </div>
+    <!-- Left: Avatar + ID Card -->
+    <div class="lg:col-span-1 space-y-5">
+      <!-- Avatar Card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden text-center">
+        <div class="bg-gradient-to-br from-[#046307] to-[#0a8a0e] py-8 px-6">
+          @if($people->image)
+            <img class="w-24 h-24 rounded-full mx-auto object-cover ring-4 ring-white ring-opacity-40 shadow-lg"
+                 src="{{ asset($people->image) }}" alt="Profile Picture">
+          @else
+            <div class="w-24 h-24 rounded-full mx-auto bg-white bg-opacity-20 flex items-center justify-center text-white text-4xl font-black ring-4 ring-white ring-opacity-30 shadow-lg">
+              {{ strtoupper(substr($people->name, 0, 1)) }}
             </div>
-
-            <div class="col-md-9">
-                <div class="card">
-                    <div class="card-header p-2">
-                        <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#personal" data-toggle="tab">Personal Details</a></li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="active tab-pane" id="personal">
-                                <table class="table table-bordered">
-                                    <tbody>
-                                        <tr>
-                                            <th style="width: 30%">Full Name</th>
-                                            <td>{{ $people->name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Name (Bengali)</th>
-                                            <td>{{ $people->bn_name ?? '—' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Gender</th>
-                                            <td>{{ people_constant_option('gender')[$people->gender ?? ''] ?? '—' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Date of Birth</th>
-                                            <td>{{ $people->date_of_birth ? \Carbon\Carbon::parse($people->date_of_birth)->format('d M, Y') : '—' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Blood Group</th>
-                                            <td>{{ people_constant_option('blood_group')[$people->blood_group ?? ''] ?? '—' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>District</th>
-                                            <td>{{ $people->user->addressInfo->presentDistrict->name ?? '—' }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          @endif
+          <h3 class="text-white font-bold text-lg mt-3">{{ $people->name }}</h3>
+          <p class="text-green-200 text-sm mt-0.5">{{ $people->bn_name ?? '' }}</p>
         </div>
+        <div class="py-4 px-5">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full">
+            <i class="fas fa-check-circle text-green-500 text-xs"></i> Verified Citizen
+          </span>
+        </div>
+      </div>
+
+      <!-- Identification Card -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-5 py-3 border-b border-gray-50">
+          <h4 class="text-sm font-bold text-gray-700 flex items-center gap-2">
+            <i class="fas fa-id-card text-[#046307]"></i>
+            পরিচয়পত্র
+          </h4>
+        </div>
+        <div class="p-5 space-y-4">
+          <div>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">জাতীয় পরিচয়পত্র</p>
+            <p class="text-sm font-medium text-gray-800 mt-0.5">{{ $people->nid ?? 'N/A' }}</p>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">পিপল আইডি</p>
+            <p class="text-sm font-mono font-bold text-[#046307] mt-0.5">{{ $people->approved_id ?? 'N/A' }}</p>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">মোবাইল</p>
+            <p class="text-sm font-medium text-gray-800 mt-0.5">{{ $people->mobile }}</p>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Right: Personal Details -->
+    <div class="lg:col-span-3">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-gray-50 border-b border-gray-100 px-6 py-4">
+          <h4 class="text-base font-bold text-gray-700 flex items-center gap-2">
+            <i class="fas fa-user text-[#046307]"></i>
+            ব্যক্তিগত তথ্য
+          </h4>
+        </div>
+
+        <div class="divide-y divide-gray-50">
+          @php
+            $rows = [
+              ['label' => 'পূর্ণ নাম (ইংরেজি)', 'icon' => 'fa-user', 'value' => $people->name],
+              ['label' => 'পূর্ণ নাম (বাংলা)', 'icon' => 'fa-user', 'value' => $people->bn_name ?? '—'],
+              ['label' => 'লিঙ্গ', 'icon' => 'fa-venus-mars', 'value' => people_constant_option('gender')[$people->gender ?? ''] ?? '—'],
+              ['label' => 'জন্ম তারিখ', 'icon' => 'fa-calendar-alt', 'value' => $people->date_of_birth ? \Carbon\Carbon::parse($people->date_of_birth)->format('d M, Y') : '—'],
+              ['label' => 'রক্তের গ্রুপ', 'icon' => 'fa-tint', 'value' => people_constant_option('blood_group')[$people->blood_group ?? ''] ?? '—'],
+              ['label' => 'জেলা', 'icon' => 'fa-map-marker-alt', 'value' => $people->user->addressInfo->presentDistrict->name ?? '—'],
+            ];
+          @endphp
+
+          @foreach($rows as $row)
+            <div class="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition">
+              <div class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
+                <i class="fas {{ $row['icon'] }} text-[#046307] text-sm"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ $row['label'] }}</p>
+                <p class="text-sm font-medium text-gray-800 mt-0.5">{{ $row['value'] }}</p>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      </div>
+
+      <!-- Action Links -->
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a href="{{ route('people.password.change') }}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#046307] text-white text-sm font-bold rounded-xl hover:bg-[#0a8a0e] transition shadow-sm">
+          <i class="fas fa-shield-alt"></i>
+          পাসওয়ার্ড পরিবর্তন
+        </a>
+        <a href="{{ route('people.dashboard') }}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-600 text-sm font-bold rounded-xl hover:bg-gray-50 transition shadow-sm">
+          <i class="fas fa-arrow-left"></i>
+          ড্যাশবোর্ডে ফিরুন
+        </a>
+      </div>
+    </div>
+
+  </div>
 </section>
 @endsection
+
