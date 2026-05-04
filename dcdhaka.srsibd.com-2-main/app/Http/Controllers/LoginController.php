@@ -173,13 +173,19 @@ class LoginController extends Controller
     public function loginCheck(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'login_id' => 'required|string',
             'password' => 'required',
         ]);
 
+        $login = $request->input('login_id');
+        $password = $request->input('password');
+
+        // Check if input is email or system_id
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'system_id';
+
         $credentials = [
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
+            $field => $login,
+            'password' => $password,
         ];
 
         if (Auth::attempt($credentials)) {

@@ -11,6 +11,34 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        
+        @if(Auth::guard('people')->check())
+        {{-- Citizen Specific Menus --}}
+        <li class="nav-item">
+          <a href="{{route('people.dashboard')}}" class="nav-link {{ request()->routeIs('people.dashboard') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>Citizen Dashboard</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{route('people.profile')}}" class="nav-link {{ request()->routeIs('people.profile') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-user-circle"></i>
+            <p>My Profile</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{route('people.password.change')}}" class="nav-link {{ request()->routeIs('people.password.change') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-shield-alt"></i>
+            <p>Account Security</p>
+          </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();" class="nav-link text-danger">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>Logout</p>
+            </a>
+        </li>
+        @else
         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 
         {{-- Dashboard --}}
@@ -1491,6 +1519,7 @@ menu-open
 
 
 
+        @endif
       </ul>
     </nav>
     <!-- /.sidebar-menu -->
