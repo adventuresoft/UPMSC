@@ -11,13 +11,13 @@
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <style>
         .form-input {
-            @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#046307] focus:border-transparent outline-none transition duration-200;
+            @apply w-full px-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#046307] focus:border-transparent outline-none transition duration-200 text-base h-[42px];
         }
         .form-label {
-            @apply block text-sm font-semibold text-gray-700 mb-1;
+            @apply block text-base font-semibold text-gray-700 mb-1.5;
         }
         .section-title {
-            @apply text-xl font-bold text-[#046307] border-b-2 border-[#046307] pb-2 mb-6 mt-8 flex items-center gap-2;
+            @apply text-2xl font-bold text-[#046307] border-b-2 border-[#046307] pb-2 mb-8 mt-10 flex items-center gap-2;
         }
         .select2-container--default .select2-selection--single {
             height: 42px !important;
@@ -26,6 +26,7 @@
         }
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 40px !important;
+            font-size: 16px !important;
         }
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 40px !important;
@@ -40,12 +41,12 @@
           <div class="flex flex-col md:flex-row items-center gap-10">
             <img src="{{asset('assets/images/logo/govt-bd-logo.png')}}" class="govt-logo" alt="" />
             <div class="text-black text-center md:text-left">
-              <h1 class="md:text-[25px] font-semibold">Citizen Service Management and Central Reporting System</h1>
-              <p>Local Government Division, Local Government Ministry, Bangladesh</p>
+              <h1 class="md:text-[18px] font-semibold md:whitespace-nowrap">Citizen Service Management and Central Reporting System</h1>
+              <p class="md:whitespace-nowrap text-xs">Local Government Division, Local Government Ministry, Bangladesh</p>
             </div>
           </div>
           <div class="mt-4 md:mt-0">
-            <a href="{{url('/')}}/login" class="text-white text-lg font-medium hover:underline"> Admin Login </a>
+            <a href="{{url('/')}}/login" class="text-white text-lg font-medium hover:underline"> System login </a>
           </div>
         </div>
       </div>
@@ -54,7 +55,7 @@
     <!-- Navigation -->
     <nav class="bg-[#046307] shadow-md sticky top-0 z-50">
       <div class="container mx-auto max-w-screen-xl">
-        <ul class="flex items-center gap-6 py-3 px-4">
+        <ul class="flex items-center gap-8 py-3 px-12">
           <li>
             <a href="{{url('/')}}" class="text-white hover:text-green-200 transition">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
@@ -62,19 +63,59 @@
               </svg>
             </a>
           </li>
-          <li><a href="{{ route('people.login') }}" class="text-white font-medium hover:text-green-200 transition">নাগরিক লগইন</a></li>
-          <li><a href="{{url('/')}}/login" class="text-white font-medium hover:text-green-200 transition">অ্যাডমিন লগইন</a></li>
-          <li><a href="{{url('/')}}/login" class="text-white font-medium hover:text-green-200 transition">মনিটরিং লগইন</a></li>
+          <li>
+            <a href="{{ route('people.login') }}" class="inline-flex items-center gap-2 text-white font-medium hover:text-green-200 transition">
+              <span class="inline-flex h-6 w-6 items-center justify-center text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
+                </svg>
+              </span>
+              নাগরিক লগইন
+            </a>
+          </li>
+          <li>
+            <a href="{{url('/')}}/login" class="inline-flex items-center gap-2 text-white font-medium hover:text-green-200 transition">
+              <span class="inline-flex h-6 w-6 items-center justify-center text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
+                </svg>
+              </span>
+              অ্যাডমিন লগইন
+            </a>
+          </li>
+          <li>
+            <a href="{{url('/')}}/login" class="inline-flex items-center gap-2 text-white font-medium hover:text-green-200 transition">
+              <span class="inline-flex h-6 w-6 items-center justify-center text-red-500">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
+                </svg>
+              </span>
+              মনিটরিং লগইন
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
 
-    <main class="py-10">
-      <div class="container mx-auto max-w-4xl px-4">
+    <main>
+      <section class="bg-gradient-to-b from-[#d3d9e4] to-[#e8ecf2] pt-10 pb-14 md:pt-12 md:pb-16 mb-10">
+        <div class="container mx-auto max-w-none px-4 text-center overflow-visible">
+          <div class="flex flex-col items-center justify-center">
+            <h2 class="inline-block whitespace-nowrap text-base md:text-lg lg:text-xl font-extrabold tracking-tight text-gray-900 mb-2">
+              সিটিজেন সার্ভিস ম্যানেজমেন্ট এন্ড সেন্ট্রাল রিপোর্টিং সিস্টেম
+            </h2>
+            <p class="inline-block whitespace-nowrap text-[10px] md:text-xs lg:text-sm text-gray-600">
+              নাগরিক পোর্টালে প্রবেশ করতে প্রথমে আবেদন করুন। আবেদন অনুমোদনের পর লগইন করে সকল সেবা গ্রহণ করুন।
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="container mx-auto max-w-6xl px-4 pb-20">
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-          <div class="bg-gradient-to-r from-[#046307] to-[#0a8a0e] px-8 py-6 text-white text-center">
-            <h2 class="text-3xl font-bold">নাগরিক আবেদন ফরম</h2>
-            <p class="mt-2 text-green-100 italic">সঠিক তথ্য দিয়ে ফরমটি পূরণ করুন</p>
+          <div class="bg-gray-50 border-b border-gray-200 px-8 py-6 text-center">
+            <h2 class="text-3xl font-bold text-[#046307]">নাগরিক আবেদন ফরম</h2>
+            <p class="mt-2 text-gray-600 italic">সঠিক তথ্য দিয়ে ফরমটি পূরণ করুন</p>
           </div>
 
           <form class="p-8" id="applicationForm" enctype="multipart/form-data">
