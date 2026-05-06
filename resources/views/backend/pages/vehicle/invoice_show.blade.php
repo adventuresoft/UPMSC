@@ -57,7 +57,7 @@
     }
 
     .union-title-bn {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
         color: #006600;
         margin: 0;
@@ -175,40 +175,28 @@
         color: #333;
     }
 
-    /* Info Box Layout from Screenshot */
-    .invoice-info-container {
-        width: 100%;
+    /* Simplified Info Layout */
+    .invoice-info-simple {
         margin-bottom: 25px;
-        border: 1px solid #ddd;
+        line-height: 1.8;
     }
     
-    .info-row {
+    .info-group {
         display: flex;
-        border-bottom: 1px solid #ddd;
+        margin-bottom: 8px;
+        align-items: flex-start;
     }
     
-    .info-row:last-child {
-        border-bottom: none;
-    }
-    
-    .info-label {
-        background: #343a40;
-        color: white;
-        padding: 10px 15px;
-        width: 180px;
+    .info-header {
         font-weight: bold;
-        font-size: 14px;
-        border-right: 1px solid #ddd;
-        display: flex;
-        align-items: center;
-    }
-    
-    .info-value {
-        padding: 10px 15px;
-        flex: 1;
         font-size: 15px;
-        font-weight: bold;
-        background: #fff;
+        white-space: nowrap;
+        margin-right: 5px;
+    }
+    
+    .info-body {
+        font-size: 14px;
+        flex: 1;
     }
 
     /* Fees Table from Screenshot */
@@ -219,16 +207,16 @@
     }
     
     .fees-table-new th {
-        background: #343a40;
-        color: white;
+        background: #dcdcdc;
+        color: black;
         padding: 8px;
         text-align: center;
-        border: 1px solid #444;
+        border: 1px solid #333;
         font-size: 14px;
     }
     
     .fees-table-new td {
-        border: 1px solid #ddd;
+        border: 1px solid #333;
         padding: 8px 12px;
         font-size: 13px;
         text-align: center;
@@ -239,18 +227,20 @@
         width: 50%;
     }
     
+    .fees-table-new td:nth-child(3),
     .fees-table-new td:nth-child(4) {
         text-align: right;
+        width: 20%;
     }
 
     .fees-footer {
-        background: #e9ecef;
+        background: #dcdcdc;
         font-weight: bold;
     }
     
     .total-final {
-        background: #6c757d;
-        color: white;
+        background: #dcdcdc;
+        color: black;
     }
 
     /* Print styles */
@@ -271,16 +261,18 @@
         .main-footer {
             display: none !important;
         }
-        .info-label, .fees-table-new th {
-            background-color: #343a40 !important;
+        .info-label {
+            background-color: transparent !important;
+            color: black !important;
+        }
+        .total-final, .fees-footer, .fees-table-new th {
+            background-color: #dcdcdc !important;
+            color: black !important;
             -webkit-print-color-adjust: exact;
         }
-        .total-final {
-            background-color: #6c757d !important;
-            -webkit-print-color-adjust: exact;
+        .fees-table-new th, .fees-table-new td {
+            border: 1px solid #333 !important;
         }
-        .fees-footer {
-            background-color: #e9ecef !important;
             -webkit-print-color-adjust: exact;
         }
     }
@@ -328,6 +320,11 @@
                 <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
                 <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>
                 <div class="union-title-en">{{ $headerUnion?->name ?? '' }}</div>
+                <p class="union-address">
+                    থানাঃ {{ $headerThana?->bn_name ?? $headerThana?->name ?? '' }},
+                    জেলাঃ {{ $headerDistrict?->bn_name ?? $headerDistrict?->name ?? '' }},
+                    বাংলাদেশ।
+                </p>
             </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Right Logo">
         </div>
@@ -340,35 +337,36 @@
         <div class="license-title">
             <h3>যানবাহন ফিস (Invoice)</h3>
             <div class="tax-year">
-                নবায়ন/নতুন<br>
+                     <!-- নবায়ন/নতুন  --> <br>
                 অর্থ বছর: {{ bnValue($fee->finance_year ?? 'N/A') }}<br>
-                <span style="font-size: 11px;">স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই ফিস নির্ধারণ করা হলো।</span>
+                <span style="font-size: 11px;">( স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই ফিস নির্ধারণ করা হলো )</span>
             </div>
         </div>
 
-        <!-- Info Section Matching Screenshot -->
-        <div class="invoice-info-container">
-            <div class="info-row">
-                <div class="info-label">
+        <!-- Simplified Info Section -->
+        <div class="invoice-info-simple">
+            <div class="info-group">
+                <div class="info-header">যানবাহন সংক্রান্ত তথ্য:</div>
+                <div class="info-body">
+                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}
+                    {{-- <br>ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }} --}}
+                </div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-header">
                     @if($vehicle->ownership_type === 'institutional')
                         প্রতিষ্ঠানের তথ্য:
                     @else
                         মালিকের তথ্য:
                     @endif
                 </div>
-                <div class="info-value">
+                <div class="info-body">
                     @if($vehicle->ownership_type === 'institutional')
                         ট্রেড লাইসেন্স নং- {{ $vehicle->trade_license ?? '--' }} , নাম: {{ $vehicle->institutional_name ?? 'N/A' }}
                     @else
                         আইডি নং- {{ bnValue($vehicle->owner_id ?? '') }} , নাম: {{ $vehicle->owner_name ?? 'N/A' }}
                     @endif
-                </div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">যানবাহন সংক্রান্ত তথ্য:</div>
-                <div class="info-value">
-                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}<br>
-                    ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }}
                 </div>
             </div>
         </div>

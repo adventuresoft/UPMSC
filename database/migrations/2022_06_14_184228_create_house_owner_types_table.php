@@ -13,6 +13,10 @@ class CreateHouseOwnerTypesTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('house_owner_types')) {
+            return;
+        }
+
         Schema::create('house_owner_types', function (Blueprint $table) {
             $table->id();
             $table->string('en_name');

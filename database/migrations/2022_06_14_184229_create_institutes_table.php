@@ -13,6 +13,10 @@ class CreateInstitutesTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('institutes')) {
+            return;
+        }
+
         Schema::create('institutes', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('institute_category_id');
