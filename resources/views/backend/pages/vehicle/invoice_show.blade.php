@@ -192,8 +192,8 @@
     }
     
     .info-label {
-        background: #343a40;
-        color: white;
+        background: transparent;
+        color: black;
         padding: 10px 15px;
         width: 180px;
         font-weight: bold;
@@ -219,16 +219,16 @@
     }
     
     .fees-table-new th {
-        background: #343a40;
-        color: white;
+        background: #dcdcdc;
+        color: black;
         padding: 8px;
         text-align: center;
-        border: 1px solid #444;
+        border: 1px solid #333;
         font-size: 14px;
     }
     
     .fees-table-new td {
-        border: 1px solid #ddd;
+        border: 1px solid #333;
         padding: 8px 12px;
         font-size: 13px;
         text-align: center;
@@ -239,18 +239,20 @@
         width: 50%;
     }
     
+    .fees-table-new td:nth-child(3),
     .fees-table-new td:nth-child(4) {
         text-align: right;
+        width: 20%;
     }
 
     .fees-footer {
-        background: #e9ecef;
+        background: #dcdcdc;
         font-weight: bold;
     }
     
     .total-final {
-        background: #6c757d;
-        color: white;
+        background: #dcdcdc;
+        color: black;
     }
 
     /* Print styles */
@@ -271,16 +273,18 @@
         .main-footer {
             display: none !important;
         }
-        .info-label, .fees-table-new th {
-            background-color: #343a40 !important;
+        .info-label {
+            background-color: transparent !important;
+            color: black !important;
+        }
+        .total-final, .fees-footer, .fees-table-new th {
+            background-color: #dcdcdc !important;
+            color: black !important;
             -webkit-print-color-adjust: exact;
         }
-        .total-final {
-            background-color: #6c757d !important;
-            -webkit-print-color-adjust: exact;
+        .fees-table-new th, .fees-table-new td {
+            border: 1px solid #333 !important;
         }
-        .fees-footer {
-            background-color: #e9ecef !important;
             -webkit-print-color-adjust: exact;
         }
     }
