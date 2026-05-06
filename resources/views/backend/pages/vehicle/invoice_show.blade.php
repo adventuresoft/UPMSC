@@ -175,40 +175,28 @@
         color: #333;
     }
 
-    /* Info Box Layout from Screenshot */
-    .invoice-info-container {
-        width: 100%;
+    /* Simplified Info Layout */
+    .invoice-info-simple {
         margin-bottom: 25px;
-        border: 1px solid #ddd;
+        line-height: 1.8;
     }
     
-    .info-row {
+    .info-group {
         display: flex;
-        border-bottom: 1px solid #ddd;
+        margin-bottom: 8px;
+        align-items: flex-start;
     }
     
-    .info-row:last-child {
-        border-bottom: none;
-    }
-    
-    .info-label {
-        background: transparent;
-        color: black;
-        padding: 10px 15px;
-        width: 180px;
+    .info-header {
         font-weight: bold;
-        font-size: 14px;
-        border-right: 1px solid #ddd;
-        display: flex;
-        align-items: center;
-    }
-    
-    .info-value {
-        padding: 10px 15px;
-        flex: 1;
         font-size: 15px;
-        font-weight: bold;
-        background: #fff;
+        white-space: nowrap;
+        margin-right: 5px;
+    }
+    
+    .info-body {
+        font-size: 14px;
+        flex: 1;
     }
 
     /* Fees Table from Screenshot */
@@ -355,25 +343,25 @@
             </div>
         </div>
 
-        <!-- Info Section Matching Screenshot -->
-        <div class="invoice-info-container">
-            <div class="info-row">
-                <div class="info-label">যানবাহন সংক্রান্ত তথ্য:</div>
-                <div class="info-value">
-                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}<br>
-                    ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }}
+        <!-- Simplified Info Section -->
+        <div class="invoice-info-simple">
+            <div class="info-group">
+                <div class="info-header">যানবাহন সংক্রান্ত তথ্য:</div>
+                <div class="info-body">
+                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}
+                    {{-- <br>ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }} --}}
                 </div>
             </div>
 
-            <div class="info-row">
-                <div class="info-label">
+            <div class="info-group">
+                <div class="info-header">
                     @if($vehicle->ownership_type === 'institutional')
                         প্রতিষ্ঠানের তথ্য:
                     @else
                         মালিকের তথ্য:
                     @endif
                 </div>
-                <div class="info-value">
+                <div class="info-body">
                     @if($vehicle->ownership_type === 'institutional')
                         ট্রেড লাইসেন্স নং- {{ $vehicle->trade_license ?? '--' }} , নাম: {{ $vehicle->institutional_name ?? 'N/A' }}
                     @else
