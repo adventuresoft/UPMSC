@@ -74,11 +74,11 @@ body {
 
 .top-bar {
   background: #20da1e;
-  padding-block: 10px;
+  padding-block: 4px;
 }
 
 .top-bar .govt-logo {
-  height: 6rem;
+  height: 4rem;
   width: auto;
   object-fit: cover;
 }

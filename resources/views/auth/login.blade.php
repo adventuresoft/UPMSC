@@ -1,413 +1,165 @@
 
-@extends('backend.layouts.login', ['title' => 'লগইন'])
-@push('style')
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UPMS | সিস্টেম লগইন</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-        }
-
-        .login-container {
-            height: 100vh;
-            display: flex;
-            background: white;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .login-card {
-            display: flex;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-            overflow: hidden;
-            width: 100%;
-            max-width: 680px;
-            height: auto;
-        }
-
-        .login-left {
-            flex: 0 0 auto;
-            background: linear-gradient(135deg, #98dcc3 0%, #b8e6d5 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 28px;
-            color: #333;
-            width: 260px;
-        }
-
-        .login-top {
-            text-align: left;
-            width: 100%;
-        }
-
-        .login-top h6 {
-            font-size: 12px;
-            font-weight: 400;
-            margin: 0;
-            letter-spacing: 0.5px;
-            color: #333;
-        }
-
-        .login-top h3 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1a3a7d;
-            margin: 6px 0 2px 0;
-        }
-
-        .login-top h4 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #e74c3c;
-            margin: 0;
-        }
-
-        .login-bottom {
-            text-align: center;
-            width: 100%;
-        }
-
-        .login-bottom h5 {
-            font-size: 12px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .login-bottom img {
-            max-width: 120px;
-            width: 100%;
-        }
-
-        .login-right {
-            flex: 1;
-            background: #f8f9fb;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
-            min-width: 320px;
-        }
-
-        .login-form-wrapper {
-            background: transparent;
-            border-radius: 0;
-            padding: 20px 30px;
-            width: 100%;
-            max-width: none;
-            box-shadow: none;
-        }
-
-        .login-form-header {
-            text-align: center;
-            margin-bottom: 16px;
-            padding: 0;
-        }
-
-        .login-form-header img {
-            height: 50px;
-            width: 50px;
-            margin-bottom: 8px;
-        }
-
-        .login-form-header h4 {
-            font-size: 13px;
-            font-weight: 600;
-            color: #1a9f5c;
-            letter-spacing: 0.3px;
-            margin: 8px 0 4px 0;
-        }
-
-        .login-form-header h5 {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1a3a7d;
-            margin: 0;
-        }
-
-        .form-group {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #333;
-            white-space: nowrap;
-            min-width: 70px;
-        }
-
-        .form-group .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            flex: 1;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #1a3a7d;
-            box-shadow: 0 0 0 2px rgba(26, 58, 125, 0.08);
-        }
-
-        .form-group input::placeholder {
-            color: #bbb;
-        }
-
-        .input-icon {
-            position: absolute;
-            right: 12px;
-            cursor: pointer;
-            color: #999;
-            font-size: 14px;
-            display: none;
-        }
-
-        .input-icon.show {
-            display: block;
-        }
-
-        .form-group.has-icon input {
-            padding-right: 35px;
-        }
-
-        .alert {
-            margin-bottom: 12px;
-            padding: 8px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .btn-login {
-            width: 100%;
-            padding: 8px;
-            background-color: #10b981;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 6px;
-        }
-
-        .btn-login:hover {
-            background-color: #059669;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-        }
-
-        .form-footer {
-            margin-top: 10px;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        .form-footer a {
-            color: #7a8fa8;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .form-footer a:hover {
-            color: #1a3a7d;
-        }
-
-        .forgot-password {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding-top: 8px;
-            border-top: 1px solid #eee;
-        }
-
-        @media (max-width: 1024px) {
-            .login-card {
-                max-width: 650px;
-            }
-
-            .login-left {
-                padding: 30px 25px;
-            }
-
-            .login-form-wrapper {
-                padding: 30px 25px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .login-card {
-                flex-direction: column;
-                max-width: 100%;
-            }
-
-            .login-left {
-                width: 100%;
-                padding: 25px;
-            }
-
-            .login-right {
-                padding: 25px;
-                flex: 1;
-            }
-
-            .login-form-wrapper {
-                max-width: 100%;
-                padding: 25px 20px;
-            }
-        }
+      body {
+        font-family: 'Inter', sans-serif;
+      }
     </style>
-@endpush
-@section('content')
-    <div class="login-container">
-        <div class="login-card">
-            <!-- Left Side -->
-            <div class="login-left">
-                <div class="login-top">
-                    <h6>Welcome to</h6>
-                    <h3>CSMCRS</h3>
-                    <h4></h4>
-                </div>
-                <div class="login-bottom">
-                    <h5>Powered by:</h5>
-                    <img src="{{ asset('frontend/img/adv_soft_logo.png') }}" alt="Adventure Soft">
-                </div>
-            </div>
-
-            <!-- Right Side -->
-            <div class="login-right">
-            <div class="login-form-wrapper">
-                <div class="login-form-header">
-                    <img src="{{ asset('frontend/img/govt-logo.png') }}" alt="Bangladesh Logo">
-                    <h4></h4>
-                    <h5>Login Panel</h5>
-                </div>
-
-                <form method="POST" action="{{ route('login.check') }}">
-                    @csrf
-
-                    @if (Session::has('success'))
-                        <div class="alert alert-success">
-                            {{ Session::get('success') }}
-                        </div>
-                    @endif
-                    @if (Session::has('error'))
-                        <div class="alert alert-danger">
-                            {{ Session::get('error') }}
-                        </div>
-                    @endif
-
-                    <div class="form-group">
-                        <label for="login_id">User ID</label>
-                        <div class="input-wrapper">
-                            <input
-                                type="text"
-                                id="login_id"
-                                name="login_id"
-                                placeholder="User ID / Email"
-                                class="form-control"
-                                required
-                                value="{{ old('login_id') }}"
-                            >
-                        </div>
-                    </div>
-
-                    <div class="form-group has-icon">
-                        <label for="password">Password</label>
-                        <div class="input-wrapper">
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                placeholder="Password"
-                                class="form-control"
-                                required
-                            >
-                            <span class="input-icon show" id="togglePassword" onclick="togglePasswordVisibility()">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-login">Login</button>
-                </form>
-
-                <div class="mt-3 text-center">
-                    <p class="text-muted small">Are you a Citizen? <a href="{{ route('people.login') }}" class="text-primary font-weight-bold">Login to Citizen Portal</a></p>
-                </div>
-
-
-                <div class="form-footer">
-                    <a href="#" class="forgot-password">Forgot password?</a>
-                    <div class="footer-links">
-                        <a href="#">Terms of use.</a>
-                        <a href="#">Privacy policy</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
+  </head>
+  <body class="bg-[#f3f4f6] min-h-screen flex flex-col">
+    <div class="fixed top-6 left-6 z-50">
+      <a href="{{ url('/') }}" class="group flex items-center gap-3 text-gray-600 hover:text-[#046307] transition-all">
+        <span class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 bg-white shadow-sm transition-all group-hover:border-[#046307] group-hover:bg-[#046307] group-hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+          </svg>
+        </span>
+        <span class="text-sm font-bold uppercase tracking-wider">ফিরে যান</span>
+      </a>
     </div>
 
+    <main class="flex-grow flex items-start justify-center min-h-screen pt-24 pb-12 px-4">
+      <div class="max-w-[680px] w-full bg-white rounded-[10px] shadow-[0_4px_20px_rgba(0,0,0,0.12)] overflow-hidden flex flex-col md:flex-row">
+        <!-- Left Side: Branding/Info -->
+        <div class="md:w-[260px] flex-shrink-0 bg-gradient-to-br from-[#046307] to-[#0a8a0e] p-6 text-white flex flex-col justify-between">
+          <div>
+            <h2 class="text-3xl font-black mb-2 uppercase tracking-tighter">CSMCRS</h2>
+            <h3 class="text-xl font-bold text-green-200">সিস্টেম পোর্টাল</h3>
+            <div class="h-1 w-12 bg-white mt-4 rounded-full"></div>
+          </div>
+          
+          <div class="mt-8 space-y-4 text-[12px] opacity-90">
+            <p class="flex items-start gap-3 leading-snug">
+              <i class="fas fa-shield-halved mt-1 text-green-300 text-[10px]"></i>
+              প্রশাসনিক ও মনিটরিং কার্যক্রম পরিচালনা করুন।
+            </p>
+            <p class="flex items-start gap-3 leading-snug">
+              <i class="fas fa-chart-line mt-1 text-green-300 text-[10px]"></i>
+              রিয়েল-টাইম রিপোর্ট এবং তথ্য বিশ্লেষণ করুন।
+            </p>
+            <p class="flex items-start gap-3 leading-snug">
+              <i class="fas fa-users-gear mt-1 text-green-300 text-[10px]"></i>
+              নাগরিক সেবা ও ইউজার ম্যানেজমেন্ট নিশ্চিত করুন।
+            </p>
+          </div>
+
+          <div class="mt-12">
+            <p class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2">Powered by</p>
+            <img src="{{ asset('frontend/img/adv_soft_logo.png') }}" class="h-6 brightness-0 invert opacity-80" alt="Adventure Soft">
+          </div>
+        </div>
+
+        <!-- Right Side: Login Form -->
+        <div class="flex-grow p-6 md:p-8 bg-[#f8f9fb]">
+          <div class="text-center mb-6">
+            <img src="{{ asset('assets/images/logo/govt-bd-logo.png') }}" class="h-10 w-10 mx-auto mb-3" alt="Govt Logo">
+            <h4 class="text-[10px] font-bold text-[#1a9f5c] uppercase tracking-wider mb-0.5">সিস্টেম প্যানেল</h4>
+            <h5 class="text-base font-bold text-[#1a3a7d]">লগইন করুন</h5>
+          </div>
+
+          <form method="POST" action="{{ route('login.check') }}" class="space-y-4">
+            @csrf
+
+            @if (Session::has('success'))
+              <div class="bg-green-100 border border-green-200 p-3 text-[11px] text-green-700 rounded">
+                {{ Session::get('success') }}
+              </div>
+            @endif
+            
+            @if (Session::has('error'))
+              <div class="bg-red-100 border border-red-200 p-3 text-[11px] text-red-700 rounded">
+                {{ Session::get('error') }}
+              </div>
+            @endif
+
+            @if ($errors->any())
+              <div class="bg-red-100 border border-red-200 p-3 text-[11px] text-red-700 rounded">
+                <ul class="list-disc list-inside">
+                  @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
+              </div>
+            @endif
+
+            <div class="flex flex-col gap-1.5">
+              <label for="login_id" class="text-[11px] font-bold text-gray-700 uppercase">ইউজার আইডি</label>
+              <input
+                type="text"
+                id="login_id"
+                name="login_id"
+                placeholder="User ID / Email"
+                class="w-full px-3 py-2 bg-white border border-gray-300 rounded focus:ring-1 focus:ring-[#1a3a7d] focus:border-[#1a3a7d] outline-none transition text-sm"
+                required
+                value="{{ old('login_id') }}"
+                autofocus
+              >
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <div class="flex justify-between items-center">
+                <label for="password" class="text-[11px] font-bold text-gray-700 uppercase">পাসওয়ার্ড</label>
+              </div>
+              <div class="relative">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  class="w-full px-3 py-2 pr-10 bg-white border border-gray-300 rounded focus:ring-1 focus:ring-[#1a3a7d] focus:border-[#1a3a7d] outline-none transition text-sm"
+                  required
+                >
+                <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                  <i class="fas fa-eye text-xs" id="eyeIcon"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-2 bg-[#046307] text-white font-bold rounded hover:bg-[#034d05] transition-all shadow-sm text-sm mt-1">
+              Login
+            </button>
+          </form>
+
+          <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+            <p class="text-gray-500 text-[11px]">নাগরিক হিসেবে প্রবেশ করতে চান? 
+              <a href="{{ route('people.login') }}" class="text-[#046307] font-bold hover:underline">নাগরিক পোর্টাল</a>
+            </p>
+          </div>
+          
+          <div class="mt-2 text-center">
+            <div class="flex justify-center gap-4 text-[10px] text-gray-400">
+              <a href="#" class="hover:underline">পাসওয়ার্ড ভুলে গেছেন?</a>
+              <span>|</span>
+              <a href="#" class="hover:underline">সহায়তা</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
     <script>
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('togglePassword');
+      function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
 
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.innerHTML = '<i class="fas fa-eye-slash"></i>';
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.innerHTML = '<i class="fas fa-eye"></i>';
-            }
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          eyeIcon.classList.remove('fa-eye');
+          eyeIcon.classList.add('fa-eye-slash');
+        } else {
+          passwordInput.type = 'password';
+          eyeIcon.classList.remove('fa-eye-slash');
+          eyeIcon.classList.add('fa-eye');
         }
+      }
     </script>
-@endsection
-
-@push('script')
-
-
-
-
-
-
-
-@endpush
+  </body>
+</html>
