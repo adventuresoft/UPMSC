@@ -328,6 +328,12 @@
                 <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
                 <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>
                 <div class="union-title-en">{{ $headerUnion?->name ?? '' }}</div>
+
+                <p class="union-address">
+                    থানাঃ {{ $headerThana?->bn_name ?? $headerThana?->name ?? '' }},
+                    জেলাঃ {{ $headerDistrict?->bn_name ?? $headerDistrict?->name ?? '' }},
+                    বাংলাদেশ।
+                </p>
             </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Right Logo">
         </div>
