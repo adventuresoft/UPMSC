@@ -357,7 +357,8 @@
             <div class="info-row">
                 <div class="info-label">যানবাহন সংক্রান্ত তথ্য:</div>
                 <div class="info-value">
-                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->id ?? '') }} , ধরন- {{ $vehicle->vehicle_type ?? '' }} , ক্যাটাগরি- {{ $vehicle->vehicle_category ?? '' }}
+                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}<br>
+                    ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }}
                 </div>
             </div>
 

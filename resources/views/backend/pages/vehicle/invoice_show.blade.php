@@ -57,7 +57,7 @@
     }
 
     .union-title-bn {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
         color: #006600;
         margin: 0;
@@ -328,6 +328,11 @@
                 <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
                 <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>
                 <div class="union-title-en">{{ $headerUnion?->name ?? '' }}</div>
+                <p class="union-address">
+                    থানাঃ {{ $headerThana?->bn_name ?? $headerThana?->name ?? '' }},
+                    জেলাঃ {{ $headerDistrict?->bn_name ?? $headerDistrict?->name ?? '' }},
+                    বাংলাদেশ।
+                </p>
             </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Right Logo">
         </div>
@@ -349,6 +354,14 @@
         <!-- Info Section Matching Screenshot -->
         <div class="invoice-info-container">
             <div class="info-row">
+                <div class="info-label">যানবাহন সংক্রান্ত তথ্য:</div>
+                <div class="info-value">
+                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}<br>
+                    ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }}
+                </div>
+            </div>
+
+            <div class="info-row">
                 <div class="info-label">
                     @if($vehicle->ownership_type === 'institutional')
                         প্রতিষ্ঠানের তথ্য:
@@ -362,13 +375,6 @@
                     @else
                         আইডি নং- {{ bnValue($vehicle->owner_id ?? '') }} , নাম: {{ $vehicle->owner_name ?? 'N/A' }}
                     @endif
-                </div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">যানবাহন সংক্রান্ত তথ্য:</div>
-                <div class="info-value">
-                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}<br>
-                    ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }}
                 </div>
             </div>
         </div>
