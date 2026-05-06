@@ -6,9 +6,11 @@ use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleFee;
 use App\Models\Organization\Organization;
+use App\Models\Institute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class VehicleController extends Controller
 {
@@ -82,7 +84,30 @@ class VehicleController extends Controller
                 return response(json_encode($data, JSON_PRETTY_PRINT), 422)->header('Content-Type', 'application/json');
             }
 
+            // Generate Registration ID: YY-UUUU-CCSSSS
+            $year = date('y');
+            $institute = Institute::whereNotNull('union_id')->first();
+            $unionId = $institute ? $institute->union_id : '1850'; // Fallback to 1850 as per example
+            $unionId = str_pad($unionId, 4, '0', STR_PAD_LEFT);
+
+            $categoryMap = [
+                'Rickshaw - রিকশা' => '01',
+                'Van - ভ্যান / ভ্যানগাড়ি' => '02',
+                'Thela Gari - ঠেলাগাড়ি' => '03',
+                'Gorur Gari - গরুর গাড়ি' => '04',
+            ];
+            $catCode = $categoryMap[$request->vehicle_category] ?? '00';
+
+            $prefix = "{$year}-{$unionId}-{$catCode}";
+            $registrationId = IdGenerator::generate([
+                'table' => 'vehicles',
+                'field' => 'registration_id',
+                'length' => 14, // YY-UUUU-CC (10) + SSSS (4) = 14
+                'prefix' => $prefix
+            ]);
+
             $payload = [
+                'registration_id' => $registrationId,
                 'vehicle_type' => $request->vehicle_type,
                 'vehicle_category' => $request->vehicle_category,
                 'vehicle_model' => $request->vehicle_model,
@@ -106,19 +131,17 @@ class VehicleController extends Controller
                 'color' => $request->color,
             ];
 
+            \Log::info("Vehicle Store Payload:", $payload);
+            
             $vehicle = new Vehicle();
-            $columns = Schema::getColumnListing($vehicle->getTable());
-
             foreach ($payload as $key => $value) {
-                if (in_array($key, $columns, true)) {
-                    $vehicle->{$key} = $value;
-                }
+                $vehicle->{$key} = $value;
             }
 
             if ($vehicle->save()) {
                 $data['status'] = true;
                 $data['message'] = "Vehicle Saved Successfully!";
-                $data['redirect_url'] = route('vehicle.index');
+                $data['redirect_url'] = route('vehicle.show', $vehicle->id);
                 return response(json_encode($data, JSON_PRETTY_PRINT), 200)->header('Content-Type', 'application/json');
             }
 
@@ -126,6 +149,7 @@ class VehicleController extends Controller
             $data['message'] = "Failed to save data!";
             return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
         } catch (\Throwable $th) {
+            \Log::error("Vehicle Store Error: " . $th->getMessage(), ['exception' => $th]);
             $data['status'] = false;
             $data['message'] = "Something went wrong! Please try again...";
             $data['errors'] = $th;
@@ -243,18 +267,16 @@ class VehicleController extends Controller
                 'color' => $request->color,
             ];
 
-            $columns = Schema::getColumnListing($vehicle->getTable());
+            \Log::info("Vehicle Update Payload:", $payload);
 
             foreach ($payload as $key => $value) {
-                if (in_array($key, $columns, true)) {
-                    $vehicle->{$key} = $value;
-                }
+                $vehicle->{$key} = $value;
             }
 
             if ($vehicle->save()) {
                 $data['status'] = true;
                 $data['message'] = "Vehicle Updated Successfully!";
-                $data['redirect_url'] = route('vehicle.index');
+                $data['redirect_url'] = route('vehicle.show', $vehicle->id);
                 return response(json_encode($data, JSON_PRETTY_PRINT), 200)->header('Content-Type', 'application/json');
             }
 
@@ -262,6 +284,7 @@ class VehicleController extends Controller
             $data['message'] = "Failed to update data!";
             return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
         } catch (\Throwable $th) {
+            \Log::error("Vehicle Update Error: " . $th->getMessage(), ['exception' => $th]);
             $data['status'] = false;
             $data['message'] = "Something went wrong! Please try again...";
             $data['errors'] = $th;

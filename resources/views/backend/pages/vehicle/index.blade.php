@@ -87,7 +87,7 @@
                             <table id="example1" class="table table-bordered table-striped">
                               <thead>
                                 <tr>
-                                    <th>Sl.</th>
+                                    <th>Vehicle ID</th>
                                     <th>Vehicle Name</th>
                                     <th>Type</th>
                                     <th>Category</th>
@@ -100,7 +100,7 @@
                                 @if (isset($vehicles) && count($vehicles))
                                     @foreach ($vehicles as $key => $vehicle)
                                         <tr>
-                                            <td>{{ ++$key }}</td>
+                                            <td>{{ $vehicle->registration_id ?? $vehicle->id }}</td>
                                             <td>{{ $vehicle->vehicle_model ?? '--' }}</td>
                                             <td>{{ $vehicle->vehicle_type ?? '--' }}</td>
                                             <td>{{ $vehicle->vehicle_category ?? '--' }}</td>
