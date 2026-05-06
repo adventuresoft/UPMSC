@@ -333,7 +333,7 @@
         </div>
         
         <div style="display: flex; justify-content: space-between; margin-bottom: -15px; position: relative; z-index: 10;">
-            <div>নম্বর: <strong>{{ bnValue($vehicle->id ?? '') }}</strong></div>
+            <div>নম্বর: <strong>{{ bnValue($vehicle->registration_id ?? $vehicle->id) }}</strong></div>
             <div>তারিখ: {{ bnValue(date('d/m/Y', strtotime($vehicle->created_at))) }}</div>
         </div>
 
@@ -367,7 +367,8 @@
             <div class="info-row">
                 <div class="info-label">যানবাহন সংক্রান্ত তথ্য:</div>
                 <div class="info-value">
-                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->id ?? '') }} , ধরন- {{ $vehicle->vehicle_type ?? '' }} , ক্যাটাগরি- {{ $vehicle->vehicle_category ?? '' }}
+                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}<br>
+                    ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }}
                 </div>
             </div>
         </div>

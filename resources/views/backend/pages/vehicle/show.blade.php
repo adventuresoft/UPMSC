@@ -292,9 +292,10 @@
         </div>
 
         <div class="section-header">Vehicle Information</div>
+        <!-- DEBUG: {{ json_encode($vehicle->getAttributes()) }} -->
         <div class="two-columns">
             <div class="col">
-                <div class="info-row"><span class="info-label">Vehicle ID :</span><span class="info-value">#{{ $vehicle->id }}</span></div>
+                <div class="info-row"><span class="info-label">Vehicle ID :</span><span class="info-value">{{ $vehicle->registration_id ?? $vehicle->id }}</span></div>
                 <div class="info-row"><span class="info-label">Vehicle Type :</span><span class="info-value">{{ $vehicle->vehicle_type ?? '--' }}</span></div>
                 <div class="info-row"><span class="info-label">Vehicle Category :</span><span class="info-value">{{ $vehicle->vehicle_category ?? '--' }}</span></div>
                 <div class="info-row"><span class="info-label">Vehicle Model :</span><span class="info-value">{{ $vehicle->vehicle_model ?? '--' }}</span></div>
