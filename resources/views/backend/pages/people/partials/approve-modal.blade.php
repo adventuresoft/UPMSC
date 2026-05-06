@@ -40,7 +40,7 @@ $(document).ready(function() {
     let currentPeopleId = null;
 
     // Handle modal trigger from table
-    $(document).on('click', '.btn-approve-people', function(e) {
+    $(document).on('click', '.btn-approve-people, .btn-approve-people-trigger', function(e) {
         e.preventDefault();
         currentPeopleId = $(this).data('id');
         $('#modalPeopleName').text($(this).data('name'));

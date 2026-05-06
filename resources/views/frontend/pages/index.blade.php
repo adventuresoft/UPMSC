@@ -22,6 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
       .font-bengali { font-family: 'Hind Siliguri', sans-serif; }
+      body { font-family: 'Inter', sans-serif; }
     </style>
 
   </head>
@@ -94,53 +95,20 @@
     <nav class="navbar md:block hidden bg-[#046307] shadow-md">
       <div class="container mx-auto max-w-screen-xl">
         <!-- Navigation Links -->
-        <ul class="nav-links flex items-center justify-center gap-6 py-2">
-
+        <ul class="nav-links flex items-center justify-center gap-6 py-2 text-xs font-bold uppercase tracking-wider">
           <li class="flex items-center">
-                <a href="{{url('/')}}" class="inline-flex items-center gap-2">
-
-            <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 text-white transition-all hover:bg-white/10" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
-                <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.432z" />
-              </svg>
-            </span>
-                </a>
-          </li>
-          <li>
-            <a href="{{ route('people.login') }}" class="inline-flex items-center gap-2 text-white">
-              <span class="inline-flex h-7 w-7 items-center justify-center text-red-600" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
+            <a href="{{url('/')}}" class="inline-flex items-center gap-2">
+              <span class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/30 text-white transition-all hover:bg-white/10" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-3.5 w-3.5">
+                  <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
+                  <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.432z" />
                 </svg>
               </span>
-              নাগরিক লগইন
             </a>
           </li>
-          <li>
-            <a href="{{url('/')}}/login" class="inline-flex items-center gap-2 text-white">
-              <span class="inline-flex h-7 w-7 items-center justify-center text-red-600" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
-                </svg>
-              </span>
-              অ্যাডমিন লগইন
-            </a>
-          </li>
-          <li>
-            <a href="{{url('/')}}/login" class="inline-flex items-center gap-2 text-white">
-              <span class="inline-flex h-7 w-7 items-center justify-center text-red-600" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
-                </svg>
-              </span>
-              মনিটরিং লগইন
-            </a>
-          </li>
-
-
-
-          <!--<li><a class="btn btn-outline-success application-link"  href="{{url('/')}}/application">আবেদন করুন</a></li>-->
+          <li><a href="{{ route('people.login') }}" class="text-white hover:opacity-80">নাগরিক লগইন</a></li>
+          <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80">অ্যাডমিন লগইন</a></li>
+          <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80">মনিটরিং লগইন</a></li>
         </ul>
       </div>
     </nav>

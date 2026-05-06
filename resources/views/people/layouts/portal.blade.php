@@ -82,10 +82,13 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
+            padding: 10px 16px;
             border-radius: 12px;
             color: var(--secondary);
-            font-weight: 500;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             transition: all 0.2s ease;
             margin-bottom: 4px;
         }

@@ -2,54 +2,239 @@
 
 @push('style')
 <style>
-    .citizen-id {
-        font-weight: bold;
-        color: black;
-        font-size: 15px;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    .card {
+        border-radius: 12px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+        border: 1px solid #edf2f7 !important;
+        font-family: 'Inter', sans-serif;
+        background: #fff !important;
     }
 
-    .table td {
+    .card-header {
+        background: #fff !important;
+        border-bottom: 1px solid #edf2f7 !important;
+        padding: 1rem 1.25rem !important;
+    }
+
+    .card-title {
+        font-size: 14px !important;
+        font-weight: 800 !important;
+        color: #1a202c !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .filter-bar {
+        background-color: #f8fafc;
+        padding: 1.25rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e2e8f0;
+    }
+
+    .table {
+        margin: 0 !important;
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+    }
+
+    .table thead th {
+        background-color: #f8fafc !important;
+        text-transform: uppercase;
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.05em;
+        color: #64748b !important;
+        border-top: 1px solid #e2e8f0 !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+        padding: 12px 10px !important;
+        white-space: nowrap;
         vertical-align: middle !important;
+        position: relative;
     }
 
-    .row.mb-3 input {
-        height: 32px;
-        font-size: 13px;
+    /* Fix DataTable sorting icon overlap */
+    table.dataTable thead .sorting:before,
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting_asc:before,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_desc:before,
+    table.dataTable thead .sorting_desc:after {
+        bottom: 0.5em !important;
     }
 
-    .row.mb-3 select {
-        height: 32px;
-        font-size: 13px;
+    .table thead th.sorting,
+    .table thead th.sorting_asc,
+    .table thead th.sorting_desc {
+        padding-right: 25px !important;
     }
 
-    /* hide datatable search */
-    .dataTables_filter {
-        display: none;
+    /* Specific fix for SL column */
+    .table thead th:first-child {
+        min-width: 60px !important;
+        text-align: center !important;
+        padding-right: 10px !important; /* Less padding since it's centered */
+    }
+    
+    .table thead th:first-child:before,
+    .table thead th:first-child:after {
+        display: none !important; /* Hide sort icons for SL to save space if needed */
     }
 
-    .empty-state {
-        text-align: center;
-        padding: 40px 20px;
-        color: #6c757d;
+    .table tbody td:first-child {
+        text-align: left !important;
+        padding-left: 30px !important; /* Compact space for button */
+        font-weight: 600;
+        color: #64748b;
+        position: relative;
     }
 
-    .img-circle {
-        border-radius: 50%;
-        object-fit: cover;
+    /* Standard Blue Circular Toggle (+) */
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
+        top: 50% !important;
+        left: 6px !important;
+        height: 16px !important;
+        width: 16px !important;
+        margin-top: -8px !important;
+        display: block !important;
+        position: absolute !important;
+        color: white !important;
+        border: 2px solid white !important;
+        border-radius: 50% !important;
+        box-shadow: 0 0 3px rgba(0,0,0,0.2) !important;
+        box-sizing: content-box !important;
+        text-align: center !important;
+        text-indent: 0 !important;
+        line-height: 16px !important;
+        content: '+' !important;
+        background-color: #3182ce !important; /* Standard blue */
+        font-family: inherit !important;
+        font-size: 14px !important;
     }
 
-    .table-action {
-        display: flex;
-        gap: 5px;
+    /* Compact SL column */
+    .table thead th:first-child {
+        min-width: 50px !important;
+        padding-left: 10px !important;
+    }
+
+    .table tbody td {
+        vertical-align: middle !important;
+        font-size: 12px !important;
+        color: #334155 !important;
+        padding: 10px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f8fafc !important;
+    }
+
+    /* Hide default DataTable elements we replaced */
+    .dataTables_filter, .dataTables_length {
+        display: none !important;
+    }
+
+    .citizen-id {
+        font-weight: 800;
+        color: #1e293b;
+        font-size: 11px;
+        background: #f1f5f9;
+        padding: 2px 8px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .form-control-sm {
+        height: 38px !important;
+        font-size: 12px !important;
+        border-radius: 8px !important;
+        border: 1px solid #e2e8f0 !important;
+        background-color: #ffffff !important;
+        padding: 0 12px !important;
+        color: #475569 !important;
+        transition: all 0.2s ease;
+    }
+
+    .form-control-sm:focus {
+        border-color: #046307 !important;
+        box-shadow: 0 0 0 3px rgba(4, 99, 7, 0.08) !important;
+        background-color: #fff !important;
     }
 
     .btn-action {
-        padding: 4px 8px;
-        font-size: 12px;
-        border-radius: 4px;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        justify-content: center;
+        transition: all 0.2s;
+        border: 1px solid transparent !important;
+        margin-right: 4px;
+    }
+
+    .btn-action i { font-size: 12px; }
+
+    .btn-approve-people { background-color: #f0fdf4 !important; color: #16a34a !important; border-color: #dcfce7 !important; }
+    .btn-edit { background-color: #eff6ff !important; color: #2563eb !important; border-color: #dbeafe !important; }
+    .btn-view { background-color: #f0f9ff !important; color: #0284c7 !important; border-color: #e0f2fe !important; }
+
+    .btn-action:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .img-table {
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid #e2e8f0;
+        padding: 1px;
+        background: #fff;
+    }
+
+    .badge-profession {
+        background-color: #f1f5f9;
+        color: #475569;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        display: inline-block;
+        margin: 1px;
+        border: 1px solid #e2e8f0;
+    }
+    .dataTables_info {
+        font-size: 11px !important;
+        color: #64748b !important;
+        font-weight: 500 !important;
+    }
+
+    .pagination {
+        margin-top: 1rem !important;
+    }
+
+    .page-link {
+        padding: 6px 12px !important;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        color: #475569 !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        margin: 0 2px !important;
+    }
+
+    .page-item.active .page-link {
+        background-color: #046307 !important;
+        border-color: #046307 !important;
+        color: #ffffff !important;
+    }
+
+    .page-link:hover {
+        background-color: #f1f5f9 !important;
+        color: #0f172a !important;
     }
 </style>
 @endpush
@@ -66,16 +251,20 @@
 
                 <div class="card card-info">
 
-                    <div class="card-header">
+                    <div class="card-header bg-white py-3 border-bottom">
                         <div class="row align-items-center">
                             <div class="col-md-6">
-                                <h3 class="card-title" style="font-size:24px; font-weight: semi-bold;">People Information</h3>
+                                <h3 class="card-title text-dark m-0" style="font-size: 14px;">Applicant Information</h3>
                             </div>
 
                             <div class="col-md-6 text-right">
                                 @if (create_permission())
-                                <a href="{{ route('people.create') }}" class="btn btn-primary">Create</a>
-                                <a href="{{ route('people.index') }}" class="btn btn-primary">List</a>
+                                <a href="{{ route('people.create') }}" class="btn btn-sm btn-primary font-weight-bold px-3">
+                                    <i class="fas fa-plus-circle mr-1"></i> CREATE
+                                </a>
+                                <a href="{{ route('people.index') }}" class="btn btn-sm btn-outline-primary font-weight-bold px-3">
+                                    <i class="fas fa-list mr-1"></i> LIST
+                                </a>
                                 @endif
                             </div>
                         </div>
@@ -84,66 +273,37 @@
                     <div class="card-body">
 
                         <!-- FILTER BAR -->
-                        <div class="row mb-3 align-items-center g-2">
-
-                            <!-- Show Entries -->
-                            <div class="col-md-1">
-                                <select id="tableLength" class="form-control form-control-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>
+                        <div class="filter-bar">
+                            <div class="row align-items-center g-3">
+                                <div class="col-md-2">
+                                    <select id="tableLength" class="form-control form-control-sm">
+                                        <option value="10">10 entries</option>
+                                        <option value="25">25 entries</option>
+                                        <option value="50">50 entries</option>
+                                        <option value="100">100 entries</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" id="search_name" class="form-control form-control-sm" placeholder="Search Name...">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" id="search_mobile" class="form-control form-control-sm" placeholder="Mobile No...">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" id="search_email" class="form-control form-control-sm" placeholder="Email Address...">
+                                </div>
+                                <div class="col-md-2">
+                                    <select id="search_gender" class="form-control form-control-sm">
+                                        <option value="">All Genders</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="text" id="search_global" class="form-control form-control-sm" placeholder="Global search...">
+                                </div>
                             </div>
-
-                            <!-- Name Filter -->
-                            <div class="col-md-2">
-                                <input type="text" id="search_name" class="form-control form-control-sm"
-                                    placeholder="Name">
-                            </div>
-
-                            <!-- Mobile Filter -->
-                            <div class="col-md-2">
-                                <input type="text" id="search_mobile" class="form-control form-control-sm"
-                                    placeholder="Mobile">
-                            </div>
-
-                            <!-- Email Filter -->
-                            <div class="col-md-2">
-                                <input type="text" id="search_email" class="form-control form-control-sm"
-                                    placeholder="Email">
-                            </div>
-
-                            <!-- Gender Filter -->
-                            <div class="col-md-2">
-                                <select id="search_gender" class="form-control form-control-sm">
-                                    <option value="">All Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-
-                            <!-- Institute Filter -->
-                            <!-- <div class="col-md-2">
-                                <input type="text" id="search_institute" class="form-control form-control-sm"
-                                    placeholder="Institute">
-                            </div> -->
-
-                            <!-- GLOBAL SEARCH -->
-                            <!-- <div class="col-md-2 mt-2">  -->
-                            <div class="col-md-2"> 
-                                <input type="text" id="search_global" class="form-control form-control-sm" 
-                                    placeholder="Search"> 
-                            </div>
-
-                            <!-- Reset Button -->
-                            <!-- <div class="col-md-2 mt-2">
-                                <button id="resetFilter" class="btn btn-secondary btn-sm w-100">
-                                    Reset
-                                </button>
-                            </div> -->
-
                         </div>
 
                         <!-- TABLE -->
@@ -179,9 +339,9 @@
                                                     : asset('default.png');
                                             @endphp
                                             <img src="{{ $imagePath }}"
-                                                width="45"
-                                                height="55"
-                                                class="img"
+                                                width="40"
+                                                height="50"
+                                                class="img-table"
                                                 onerror="this.src='{{ asset('default.png') }}'">
                                         </td>
 
@@ -212,7 +372,9 @@
                                         </td>
 
                                         <td>
-                                            {{ optional($user->professionalInfos)->pluck('designation')->implode(', ') }}
+                                            @foreach(optional($user->professionalInfos) as $info)
+                                                <span class="badge-profession">{{ $info->designation }}</span>
+                                            @endforeach
                                         </td>
 
                                         <td>
@@ -259,21 +421,21 @@ Permanent:</strong>
                                         <td>
                                             <div class="table-action">
                                                 @if(empty($user->people->approved_id))
-                                                    <button class="btn btn-success btn-sm btn-action btn-approve-people" 
+                                                    <button class="btn-action btn-approve-people btn-approve-people-trigger" 
                                                         data-id="{{ $user->people->id }}" 
                                                         data-name="{{ $user->name }}" 
                                                         title="Approve Applicant">
-                                                        <i class="fas fa-check-circle text-white"></i>
+                                                        <i class="fas fa-check"></i>
                                                     </button>
                                                 @endif
 
                                                 <a href="{{ route('people.edit', $user->id) }}" 
-                                                    class="btn btn-primary btn-sm btn-action" title="Edit">
+                                                    class="btn-action btn-edit" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
 
                                                 <a href="{{ route('people.show', $user->id) }}" 
-                                                    class="btn btn-info btn-sm btn-action" title="View">
+                                                    class="btn-action btn-view" title="View">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
 
