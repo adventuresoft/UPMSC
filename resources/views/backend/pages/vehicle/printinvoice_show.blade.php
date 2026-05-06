@@ -285,14 +285,23 @@
         <div class="license-title">
             <h3>যানবাহন ফিস (Invoice)</h3>
             <div class="tax-year">
-                নবায়ন/নতুন<br>
+                 <!--  নবায়ন/নতুন  --> <br>
                 অর্থ বছর: {{ bnValue($fee->finance_year ?? 'N/A') }}<br>
-                <span style="font-size: 11px;">স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই ফিস নির্ধারণ করা হলো।</span>
+                <span style="font-size: 11px;">( স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই ফিস নির্ধারণ করা হলো )</span>
             </div>
         </div>
 
         <!-- Info Section Matching Screenshot -->
         <div class="invoice-info-container">
+            <div class="info-row">
+                <div class="info-label">যানবাহন সংক্রান্ত তথ্য:</div>
+                <div class="info-value">
+                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}<br>
+                    ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }}
+                </div>
+            </div>
+
+
             <div class="info-row">
                 <div class="info-label">
                     @if($vehicle->ownership_type === 'institutional')
@@ -309,13 +318,7 @@
                     @endif
                 </div>
             </div>
-            <div class="info-row">
-                <div class="info-label">যানবাহন সংক্রান্ত তথ্য:</div>
-                <div class="info-value">
-                    যানবাহন আইডি নম্বর- {{ bnValue($vehicle->registration_id ?? $vehicle->id) }} , ধরন- {{ $vehicle->vehicle_category ?? $vehicle->vehicle_type ?? '' }}<br>
-                    ইঞ্জিন নম্বর- {{ bnValue($vehicle->engine_number ?? '') }} , চ্যাসিস নম্বর- {{ bnValue($vehicle->chassis_number ?? '') }} , রং- {{ $vehicle->color ?? '' }}
-                </div>
-            </div>
+            
         </div>
 
         <table class="fees-table-new">
