@@ -5,7 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
 
 use App\Http\Controllers\BasicSettings\CityCorporationWardController;
-use App\Http\Controllers\BasicSettings\CityCorporationController;
+use App\Http\Controllers\CityCorporationController;
 use App\Http\Controllers\BasicSettings\FamilyCategoryController;
 use App\Http\Controllers\BasicSettings\FamilySubCategoryController;
 use App\Http\Controllers\BasicSettings\FamilyTypeController;
@@ -38,7 +38,7 @@ use App\Http\Controllers\BasicSettings\VehicleSubCategoryController;
 use App\Http\Controllers\BasicSettings\VehicleTypeController;
 use App\Http\Controllers\BasicSettings\VillageController;
 use App\Http\Controllers\BasicSettings\VillageAreaController;
-use App\Http\Controllers\BasicSettings\UnionController as BasicUnionController;
+use App\Http\Controllers\UnionController as BasicUnionController;
 use App\Http\Controllers\BridgeController;
 use App\Http\Controllers\Certificate\BirthCertificateController;
 use App\Http\Controllers\Certificate\CharacterCertificateController;
@@ -111,7 +111,7 @@ use App\Http\Controllers\ThanaController;
 use App\Http\Controllers\UnionController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ChairmanController;
-use App\Http\Controllers\CouncilorController;
+use App\Http\Controllers\CounsilorController;
 use App\Http\Controllers\SuccessionController;
 use App\Http\Controllers\CertificateVerifyController;
 use App\Http\Controllers\People\PeopleAuthController;
@@ -410,8 +410,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     });
 
 
-    Route::resource('councilor', CouncilorController::class);
-    Route::controller(CouncilorController::class)->prefix('councilor')->name('councilor.')->group(function () {
+    Route::resource('councilor', CounsilorController::class);
+    Route::controller(CounsilorController::class)->prefix('councilor')->name('councilor.')->group(function () {
          Route::post('/personalstore', 'personalstore')->name('personalstore');
          Route::get('/family/{user_id}', 'family')->name('family');
          Route::post('/familyStore', 'familyStore')->name('familyStore');
