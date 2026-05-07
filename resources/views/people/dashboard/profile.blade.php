@@ -33,15 +33,27 @@
     <div class="lg:col-span-1 space-y-5">
       <!-- Avatar Card -->
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden text-center">
-        <div class="bg-gradient-to-br from-[#046307] to-[#0a8a0e] py-8 px-6">
-          @if($people->image)
-            <img class="w-24 h-24 rounded-full mx-auto object-cover ring-4 ring-white ring-opacity-40 shadow-lg"
-                 src="{{ asset($people->image) }}" alt="Profile Picture">
-          @else
-            <div class="w-24 h-24 rounded-full mx-auto bg-white bg-opacity-20 flex items-center justify-center text-white text-4xl font-black ring-4 ring-white ring-opacity-30 shadow-lg">
-              {{ strtoupper(substr($people->name, 0, 1)) }}
-            </div>
-          @endif
+        <div class="bg-gradient-to-br from-[#046307] to-[#0a8a0e] py-8 px-6 relative group">
+          <div class="relative inline-block">
+            @if($people->image)
+              <img class="w-24 h-24 rounded-full mx-auto object-cover ring-4 ring-white ring-opacity-40 shadow-lg"
+                   src="{{ asset($people->image) }}" alt="Profile Picture">
+            @else
+              <div class="w-24 h-24 rounded-full mx-auto bg-white bg-opacity-20 flex items-center justify-center text-white text-4xl font-black ring-4 ring-white ring-opacity-30 shadow-lg">
+                {{ strtoupper(substr($people->name, 0, 1)) }}
+              </div>
+            @endif
+            
+            <!-- Image Upload Trigger -->
+            <form action="{{ route('people.profile.image.update') }}" method="POST" enctype="multipart/form-data" id="imageUploadForm" class="absolute bottom-0 right-0">
+              @csrf
+              <label for="imageInput" class="w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center cursor-pointer hover:bg-gray-50 transition border border-gray-100">
+                <i class="fas fa-camera text-[#046307] text-xs"></i>
+              </label>
+              <input type="file" name="image" id="imageInput" class="hidden" accept="image/*" onchange="document.getElementById('imageUploadForm').submit()">
+            </form>
+          </div>
+
           <h3 class="text-white font-bold text-lg mt-3">{{ $people->name }}</h3>
           <p class="text-green-200 text-sm mt-0.5">{{ $people->bn_name ?? '' }}</p>
         </div>

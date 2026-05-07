@@ -117,6 +117,8 @@ use App\Http\Controllers\CertificateVerifyController;
 use App\Http\Controllers\People\PeopleAuthController;
 use App\Http\Controllers\People\PeopleDashboardController;
 use App\Http\Controllers\PeopleCredentialController;
+use App\Http\Controllers\People\PeopleApplicationController;
+use App\Http\Controllers\People\PeopleStatusController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -551,7 +553,18 @@ Route::prefix('people-portal')->name('people.')->group(function () {
     Route::middleware(['auth:people'])->group(function () {
         Route::get('/dashboard', [PeopleDashboardController::class, 'index'])->name('dashboard');
         Route::get('/profile', [PeopleDashboardController::class, 'profile'])->name('profile');
+        Route::post('/profile/update-image', [PeopleDashboardController::class, 'updateImage'])->name('profile.image.update');
         Route::get('/change-password', [PeopleDashboardController::class, 'showChangePassword'])->name('password.change');
         Route::post('/update-password', [PeopleDashboardController::class, 'updatePassword'])->name('password.update');
+        Route::post('/check-status', [PeopleStatusController::class, 'checkStatus'])->name('status.check');
+        
+        // Application Routes
+        Route::prefix('applications')->name('applications.')->group(function () {
+            Route::get('/certificate', [PeopleApplicationController::class, 'certificateCreate'])->name('certificate.create');
+            Route::get('/trade-license', [PeopleApplicationController::class, 'tradeLicenseCreate'])->name('trade-license.create');
+            Route::get('/vehicle', [PeopleApplicationController::class, 'vehicleCreate'])->name('vehicle.create');
+            Route::get('/tax', [PeopleApplicationController::class, 'taxCreate'])->name('tax.create');
+            Route::get('/grant', function() { return view('people.applications.grant'); })->name('grant.create');
+        });
     });
 });
