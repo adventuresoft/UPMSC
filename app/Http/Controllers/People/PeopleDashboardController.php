@@ -19,7 +19,16 @@ class PeopleDashboardController extends Controller
      */
     public function index()
     {
-        $people = Auth::guard('people')->user();
+        $people = Auth::guard('people')->user()->load([
+            'user.educationInfos', 
+            'user.professionalInfos', 
+            'user.financialInfos', 
+            'user.propertyInfos', 
+            'user.disabilityInfo', 
+            'user.freedomFighterInfo',
+            'user.familyInfo',
+            'user.addressInfo'
+        ]);
         $mainMenu = 'Dashboard';
         $subMenu = 'dashboard';
         return view('people.dashboard.index', compact('people', 'mainMenu', 'subMenu'));

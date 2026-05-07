@@ -90,7 +90,85 @@
     </div>
 
     <!-- Right: Personal Details -->
-    <div class="lg:col-span-3">
+    <div class="lg:col-span-3 space-y-6">
+
+      {{-- My Detailed Information Grid --}}
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-50 flex justify-between items-center">
+          <h4 class="text-base font-bold text-gray-700 flex items-center gap-2">
+            <i class="fas fa-id-card text-[#046307]"></i>
+            আমার বিস্তারিত তথ্যসমূহ
+          </h4>
+          <a href="{{ route('people.applications.registration.create') }}" class="text-xs font-bold text-[#046307] hover:underline">হালনাগাদ করুন →</a>
+        </div>
+        <div class="p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {{-- Education --}}
+          <a href="{{ route('people.applications.registration.education', $people->id) }}" class="p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-green-50 hover:border-green-200 transition group flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm mb-2 relative">
+              <i class="fas fa-graduation-cap text-[#046307] text-lg"></i>
+              @if(count($people->user->educationInfos ?? []))
+                <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+              @endif
+            </div>
+            <p class="text-[10px] font-bold text-gray-700">শিক্ষাগত তথ্য</p>
+          </a>
+
+          {{-- Profession --}}
+          <a href="{{ route('people.applications.registration.professional', $people->id) }}" class="p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-green-50 hover:border-green-200 transition group flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm mb-2 relative">
+              <i class="fas fa-briefcase text-[#046307] text-lg"></i>
+              @if(count($people->user->professionalInfos ?? []))
+                <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+              @endif
+            </div>
+            <p class="text-[10px] font-bold text-gray-700">পেশাগত তথ্য</p>
+          </a>
+
+          {{-- Financial --}}
+          <a href="{{ route('people.applications.registration.financial', $people->id) }}" class="p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-green-50 hover:border-green-200 transition group flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm mb-2 relative">
+              <i class="fas fa-wallet text-[#046307] text-lg"></i>
+              @if(count($people->user->financialInfos ?? []))
+                <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+              @endif
+            </div>
+            <p class="text-[10px] font-bold text-gray-700">আর্থিক তথ্য</p>
+          </a>
+
+          {{-- Property --}}
+          <a href="{{ route('people.applications.registration.property', $people->id) }}" class="p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-green-50 hover:border-green-200 transition group flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm mb-2 relative">
+              <i class="fas fa-building text-[#046307] text-lg"></i>
+              @if(count($people->user->propertyInfos ?? []))
+                <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+              @endif
+            </div>
+            <p class="text-[10px] font-bold text-gray-700">সম্পদ তথ্য</p>
+          </a>
+
+          {{-- Disability --}}
+          <a href="{{ route('people.applications.registration.disability', $people->id) }}" class="p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-green-50 hover:border-green-200 transition group flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm mb-2 relative">
+              <i class="fas fa-wheelchair text-[#046307] text-lg"></i>
+              @if(($people->user->disabilityInfo->is_disability ?? 0) == 1)
+                <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+              @endif
+            </div>
+            <p class="text-[10px] font-bold text-gray-700">প্রতিবন্ধিতা</p>
+          </a>
+
+          {{-- Freedom Fighter --}}
+          <a href="{{ route('people.applications.registration.freedom', $people->id) }}" class="p-3 rounded-xl border border-gray-100 bg-gray-50 hover:bg-green-50 hover:border-green-200 transition group flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm mb-2 relative">
+              <i class="fas fa-medal text-[#046307] text-lg"></i>
+              @if(($people->user->freedomFighterInfo->is_freedom_fighter ?? 0) == 1)
+                <span class="absolute top-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+              @endif
+            </div>
+            <p class="text-[10px] font-bold text-gray-700">মুক্তিযোদ্ধা</p>
+          </a>
+        </div>
+      </div>
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="bg-gray-50 border-b border-gray-100 px-6 py-4">
           <h4 class="text-base font-bold text-gray-700 flex items-center gap-2">

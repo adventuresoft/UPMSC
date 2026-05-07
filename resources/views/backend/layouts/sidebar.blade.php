@@ -42,6 +42,12 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
+              <a href="{{ route('people.applications.registration.create') }}" class="nav-link {{ request()->routeIs('people.applications.registration.*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>নতুন নাগরিক নিবন্ধন</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="{{ route('people.applications.certificate.create') }}" class="nav-link {{ request()->routeIs('people.applications.certificate.create') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>সনদপত্র আবেদন</p>

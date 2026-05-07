@@ -125,7 +125,7 @@ class User extends Authenticatable
 
     public function propertyInfos()
     {
-        return $this->hasOne(PropertyInfo::class, 'user_id', 'id');
+        return $this->hasMany(PropertyInfo::class, 'user_id', 'id');
     }
 
     public function citizenCertificate()
