@@ -53,6 +53,7 @@
                                                 <small class="error tax_year_id-error text-danger"></small>
                                             </th>
                                             <th>Organizaiton ID</th>
+                                            
                                             <th>
                                                 <div class="row input-group input-group-sm user_info">
                                                     <input type="text" name="system_id" id="system_id" placeholder="Search By Organization ID" required class="form-control system_id">
@@ -63,87 +64,98 @@
                                                 <span class="error system_id-error text-danger"></span>
                                             </th>
                                         </tr>
+                                        <input type="hidden" class="organization_id" name="organization_id">
 
-                                        <tr>
-                                            <td class="align-middle">Name:</td>
-                                            <td class="align-middle">
-                                                <strong class="organization_name"></strong>
-                                            </td>
-                                            <td class="align-middle">Address:</td>
-                                            <td class="align-middle">
-                                                <input type="hidden" class="organization_id" name="organization_id">
-                                                <strong class="organization_address"></strong>
-                                            </td>
-                                        </tr>
+                                        <!--<tr>-->
+                                        <!--    <td class="align-middle">Name:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <strong class="organization_name"></strong>-->
+                                        <!--    </td>-->
+                                        <!--    <td class="align-middle">Address:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <input type="hidden" class="organization_id" name="organization_id">-->
+                                        <!--        <strong class="organization_address"></strong>-->
+                                        <!--    </td>-->
+                                        <!--</tr>-->
 
-                                        {{-- New show-only fields start --}}
-                                        <tr>
-                                            <td class="align-middle">Applicant Name:</td>
-                                            <td class="align-middle">
-                                                <strong class="show_name"></strong>
-                                                <input type="hidden" name="name" class="input_name">
-                                            </td>
-                                            <td class="align-middle">Father Name:</td>
-                                            <td class="align-middle">
-                                                <strong class="show_father_name"></strong>
-                                                <input type="hidden" name="father_name" class="input_father_name">
-                                            </td>
-                                        </tr>
+                                       
+                                        <!--<tr>-->
+                                        <!--    <td class="align-middle">Applicant Name:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <strong class="show_name"></strong>-->
+                                        <!--        <input type="hidden" name="name" class="input_name">-->
+                                        <!--    </td>-->
+                                        <!--    <td class="align-middle">Father Name:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <strong class="show_father_name"></strong>-->
+                                        <!--        <input type="hidden" name="father_name" class="input_father_name">-->
+                                        <!--    </td>-->
+                                        <!--</tr>-->
 
-                                        <tr>
-                                            <td class="align-middle">Mother Name:</td>
-                                            <td class="align-middle">
-                                                <strong class="show_mother_name"></strong>
-                                                <input type="hidden" name="mother_name" class="input_mother_name">
-                                            </td>
-                                            <td class="align-middle">NID:</td>
-                                            <td class="align-middle">
-                                                <strong class="show_nid"></strong>
-                                                <input type="hidden" name="nid" class="input_nid">
-                                            </td>
-                                        </tr>
+                                        <!--<tr>-->
+                                        <!--    <td class="align-middle">Mother Name:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <strong class="show_mother_name"></strong>-->
+                                        <!--        <input type="hidden" name="mother_name" class="input_mother_name">-->
+                                        <!--    </td>-->
+                                        <!--    <td class="align-middle">NID:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <strong class="show_nid"></strong>-->
+                                        <!--        <input type="hidden" name="nid" class="input_nid">-->
+                                        <!--    </td>-->
+                                        <!--</tr>-->
 
-                                        <tr>
-                                            <td class="align-middle">Mobile:</td>
-                                            <td class="align-middle">
-                                                <strong class="show_mobile"></strong>
-                                                <input type="hidden" name="mobile" class="input_mobile">
-                                            </td>
-                                            <td class="align-middle">Email:</td>
-                                            <td class="align-middle">
-                                                <strong class="show_email"></strong>
-                                                <input type="hidden" name="email" class="input_email">
-                                            </td>
-                                        </tr>
+                                        <!--<tr>-->
+                                        <!--    <td class="align-middle">Mobile:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <strong class="show_mobile"></strong>-->
+                                        <!--        <input type="hidden" name="mobile" class="input_mobile">-->
+                                        <!--    </td>-->
+                                        <!--    <td class="align-middle">Email:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <strong class="show_email"></strong>-->
+                                        <!--        <input type="hidden" name="email" class="input_email">-->
+                                        <!--    </td>-->
+                                        <!--</tr>-->
 
-                                        <tr>
-                                            <td class="align-middle">Current Address:</td>
-                                            <td class="align-middle">
-                                                <strong class="show_current_address"></strong>
-                                                <input type="hidden" name="current_address" class="input_current_address">
-                                            </td>
-                                            <td class="align-middle">Permanent Address:</td>
-                                            <td class="align-middle">
-                                                <strong class="show_permanent_address"></strong>
-                                                <input type="hidden" name="permanent_address" class="input_permanent_address">
-                                            </td>
-                                        </tr>
+                                        <!--<tr>-->
+                                        <!--    <td class="align-middle">Current Address:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <strong class="show_current_address"></strong>-->
+                                        <!--        <input type="hidden" name="current_address" class="input_current_address">-->
+                                        <!--    </td>-->
+                                        <!--    <td class="align-middle">Permanent Address:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <strong class="show_permanent_address"></strong>-->
+                                        <!--        <input type="hidden" name="permanent_address" class="input_permanent_address">-->
+                                        <!--    </td>-->
+                                        <!--</tr>-->
 
-                                        <tr>
-                                            <td class="align-middle">PIC:</td>
-                                            <td class="align-middle">
-                                                <div class="mb-1">
-                                                    <img src="" class="show_pic" alt="PIC" style="max-width:100px; max-height:100px; display:none; border:1px solid #ddd; padding:2px;">
-                                                </div>
-                                                <input type="hidden" name="pic" class="input_pic">
-                                            </td>
-                                            <td class="align-middle"></td>
-                                            <td class="align-middle"></td>
-                                        </tr>
-                                        {{-- New show-only fields end --}}
+                                        <!--<tr>-->
+                                        <!--    <td class="align-middle">PIC:</td>-->
+                                        <!--    <td class="align-middle">-->
+                                        <!--        <div class="mb-1">-->
+                                        <!--            <img src="" class="show_pic" alt="PIC" style="max-width:100px; max-height:100px; display:none; border:1px solid #ddd; padding:2px;">-->
+                                        <!--        </div>-->
+                                        <!--        <input type="hidden" name="pic" class="input_pic">-->
+                                        <!--    </td>-->
+                                        <!--    <td class="align-middle"></td>-->
+                                        <!--    <td class="align-middle"></td>-->
+                                        <!--</tr>-->
+                                       
 
                                     </thead>
                                 </table>
+                                
+                                <table class="table table-bordered">
+    <tbody class="owner_data_area">
+        <tr>
+            <td colspan="4" class="text-center text-muted">
+                Please search organization
+            </td>
+        </tr>
+    </tbody>
+</table>
 
                                 <table class="table table-bordered text-center">
                                     <thead>
@@ -215,8 +227,108 @@
             });
         })
     });
-
+    
+    
     $(document).on('click', '.find_organization_info', function(e){
+    e.preventDefault();
+
+    $(".system_id-error").text("");
+    let _this_btn = $(this);
+    let system_id = $("#system_id").val();
+
+    if(system_id){
+
+        $.ajax({
+            type: "GET",
+            url: "{{ url('/') }}/get-organization-info-by-system-id/" + system_id,
+
+            beforeSend: function() {
+                _this_btn.prop("disabled", true);
+
+                $(".organization_name").text('');
+                $(".organization_address").text('');
+                $(".owner_data_area").html('');
+            },
+
+            success: function (response) {
+                _this_btn.prop("disabled", false);
+                toastr.success(response.message);
+
+                $(".organization_id").val(response.organization.id);
+                $(".organization_name").text(response.organization_name ?? '');
+                $(".organization_address").text(response.organization_address ?? '');
+
+                let html = '';
+
+                if(response.owners && response.owners.length > 0){
+
+                    response.owners.forEach(function(owner){
+
+                        html += `
+                        <tr>
+                            <td>Applicant Name:</td>
+                            <td><strong>${owner.name ?? '-'}</strong></td>
+                            <td>Father Name:</td>
+                            <td><strong>${owner.father_name ?? '-'}</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Mother Name:</td>
+                            <td><strong>${owner.mother_name ?? '-'}</strong></td>
+                            <td>NID:</td>
+                            <td><strong>${owner.nid ?? '-'}</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Mobile:</td>
+                            <td><strong>${owner.mobile ?? '-'}</strong></td>
+                            <td>Email:</td>
+                            <td><strong>${owner.email ?? '-'}</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>Current Address:</td>
+                            <td><strong>${owner.present_address ?? '-'}</strong></td>
+                            <td>Permanent Address:</td>
+                            <td><strong>${owner.permanent_address ?? '-'}</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td>PIC:</td>
+                            <td>
+                                ${owner.image ? `<img src="${owner.image}" style="max-width:100px; border:1px solid #ddd;">` : '-'}
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        <tr><td colspan="4"><hr></td></tr>
+                        `;
+                    });
+
+                } else {
+                    html = `<tr><td colspan="4" class="text-center text-muted">No owners found</td></tr>`;
+                }
+
+                $(".owner_data_area").html(html);
+
+                findFees(response.organization.id);
+            },
+
+            error: function(xhr) {
+                _this_btn.prop("disabled", false);
+                let res = JSON.parse(xhr.responseText);
+                toastr.error(res.message);
+            }
+        });
+
+    } else {
+        $(".system_id-error").text("Organization ID is required!");
+    }
+});
+
+
+    $(document).on('click', '.find_organization_info_2', function(e){
         e.preventDefault();
         $(".system_id-error").text("");
         let _this_btn = $(this);

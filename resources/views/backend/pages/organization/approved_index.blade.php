@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Organization', 'subMenu' =>'OrganizationList'])
+@extends('backend.master', ['mainMenu' => 'Organization', 'subMenu' =>'ApprovedOrganizationList'])
 @push('style')
 @endpush
 @section('title', 'Organization List')
@@ -81,6 +81,7 @@
                                 <tr>
                                     <th>Sl.</th>
                                     <th>Application ID</th>
+                                    <th>Approved ID</th>
                                     <th>Orgazition Name</th>
                                     <th>Owner Name</th>
                                     <th>Category</th>
@@ -96,6 +97,7 @@
                                     <tr>
                                         <td>{{++$key}}</td>
                                         <td>{{$organization->application_id}}</td>
+                                        <td>{{$organization->approved_id}}</td>
                                         <td>{{$organization->name}}</td>
                                         <td>
                                           @php
@@ -113,9 +115,7 @@
                                         <td>
                                           <div class="d-flex">
                                             @if (edit_permission())
-                                            @if( $organization->status==0)
                                                 <a href="{{ route('organization.edit', $organization->id) }}" title="Edit" class="btn btn-primary btn-sm mx-1"><i class="fa fa-edit"></i></a>
-                                                 @endif
                                             @endif
 
                                             @if (view_permission())

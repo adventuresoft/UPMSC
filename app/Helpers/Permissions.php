@@ -25,7 +25,7 @@ if(! function_exists('institute_permissions')){
 
 if(! function_exists('create_permission')){
     function create_permission(){
-        if (Auth::user()->role_id == 6 ) {
+        if (Auth::user()->role_id == 1  || Auth::user()->role_id == 4 || Auth::user()->role_id == 6 ) {
             return true;
         } else {
             return false;
@@ -36,7 +36,7 @@ if(! function_exists('create_permission')){
 
 if(! function_exists('edit_permission')){
     function edit_permission(){
-        if (Auth::user()->role_id == 6  ) {
+        if (Auth::user()->role_id == 1  || Auth::user()->role_id == 4 || Auth::user()->role_id == 6  ) {
             return true;
         } else {
             return false;
@@ -58,7 +58,7 @@ if(! function_exists('view_permission')){
 
 if(! function_exists('delete_permission')){
     function delete_permission(){
-        if (Auth::user()->role_id == 6 ) {
+        if (Auth::user()->role_id == 1  || Auth::user()->role_id == 4 || Auth::user()->role_id == 6 ) {
             return true;
         } else {
             return false;

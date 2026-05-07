@@ -57,8 +57,80 @@ class OrganizationController extends Controller
 
 public function getOrganizationBySystemId($system_id)
 {
+    $organization = Organization::with([
+        'house',
+        'road',
+        'villageArea',
+        'village',
+        'ownership.user.familyInfo',
+        'ownership.user.addressInfo'
+    ])
+    ->where('approved_id', $system_id)
+    ->first();
+
+    if (!$organization) {
+        return response()->json([
+            'status' => false,
+            'message' => "No data found!"
+        ], 404);
+    }
+
+    // Organization Address
+    $address = collect([
+        "House# " . ($organization->house->house ?? '--'),
+        "Road# " . ($organization->road->name ?? '--'),
+        "Area# " . ($organization->villageArea->en_name ?? '--'),
+        "Village# " . ($organization->village->en_name ?? '--'),
+    ])->implode(', ');
+
+    // Owners Data
+    $owners = [];
+
+    foreach ($organization->ownership ?? [] as $owner) {
+
+        $user = $owner->user;
+
+        $presentAddress = collect([
+            $user?->addressInfo?->present_house ? 'House# '.$user->addressInfo->present_house : '',
+            $user?->addressInfo?->present_road ? 'Road# '.$user->addressInfo->present_road : '',
+            $user?->addressInfo?->present_area ? 'Area# '.$user->addressInfo->present_area : '',
+            $user?->addressInfo?->present_address ?? ''
+        ])->filter()->implode(', ');
+
+        $permanentAddress = collect([
+            $user?->addressInfo?->permanent_house ? 'House# '.$user->addressInfo->permanent_house : '',
+            $user?->addressInfo?->permanent_road ? 'Road# '.$user->addressInfo->permanent_road : '',
+            $user?->addressInfo?->permanent_area ? 'Area# '.$user->addressInfo->permanent_area : '',
+        ])->filter()->implode(', ');
+
+        $owners[] = [
+            'name' => $user?->name ?? $owner->user_name ?? '-',
+            'designation' => $owner->designation ?? 'Owner',
+            'image' => $user?->image ? asset($user->image) : '',
+            'nid' => $user?->nid ?? '-',
+            'father_name' => $user?->familyInfo?->father_name ?? '-',
+            'mother_name' => $user?->familyInfo?->mother_name ?? '-',
+            'mobile' => $user?->mobile ?? '-',
+            'email' => $user?->email ?? '-',
+            'present_address' => $presentAddress ?: '-',
+            'permanent_address' => $permanentAddress ?: '-',
+        ];
+    }
+
+    return response()->json([
+        'status' => true,
+        'message' => "Loaded organization information!",
+        'organization' => $organization,
+        'organization_name' => $organization->name,
+        'organization_address' => $address,
+        'owners' => $owners
+    ], 200);
+}
+
+public function getOrganizationBySystemId_01_05_26($system_id)
+{
     $organization = Organization::with('house', 'road', 'villageArea', 'village')
-        ->where('system_id', $system_id)
+        ->where('approved_id', $system_id)
         ->first();
 
     if ($organization) {
@@ -68,7 +140,7 @@ public function getOrganizationBySystemId($system_id)
             ->toArray();
 
         $users = User::whereIn('id', $ownershipUserIds)->get();
-
+        
          $addressInfos = AddressInfo::whereIn('user_id', $ownershipUserIds)->get();
 
         $names = $users->pluck('name')->filter()->implode(', ');
@@ -123,7 +195,7 @@ public function getOrganizationBySystemId($system_id)
 
             return implode(', ', $parts);
         })->filter()->implode(', ');
-
+        
         $address = "";
         $address .= "House# " . ($organization->house->house ?? '--') . ", ";
         $address .= "Road# " . ($organization->road->name ?? '--') . ", ";
@@ -135,9 +207,9 @@ public function getOrganizationBySystemId($system_id)
         $data['organization'] = $organization;
         $data['organization_name'] = $organization->name;
         $data['organization_address'] = $address;
-
-
-
+        
+        
+        
 
         $data['name'] = $names ?: '--';
         $data['current_address'] = $currentAddresses ?: '--';
@@ -157,11 +229,18 @@ public function getOrganizationBySystemId($system_id)
         return response()->json($data, 404);
     }
 }
-
+    
     public function index()
     {
-        $data['organizations'] = Organization::with('category')->latest()->get();
+        $data['organizations'] = Organization::with('category')->where('status',0)->latest()->get();
         return view('backend.pages.organization.index', $data);
+    }
+
+    
+       public function approved_index()
+    {
+        $data['organizations'] = Organization::with('category')->where('status',1)->latest()->get();
+        return view('backend.pages.organization.approved_index', $data);
     }
 
 
@@ -173,8 +252,8 @@ public function getOrganizationBySystemId($system_id)
         $data['wards'] = UnionWard::where('status', true)->get();
         $data['roads'] = Road::where('institute_id', Auth::user()->institute_id)->get();
         $data['divisions'] = Division::where('status', true)->get();
-        // dd($data['divisions']);
-
+        // dd($data['divisions']);  
+         
        $data['post_officeses']=PostOffice::latest()->get();
         $institute = Institute::find(Auth::user()->institute_id);
         if($institute )
@@ -271,7 +350,7 @@ public function getOrganizationBySystemId($system_id)
     //             ]);
     //         }
 
-
+           
     //         $data['status'] = true;
     //         $data['message'] = "Organization saved successfully!";
     //         $data['result'] = $organization;
@@ -285,7 +364,7 @@ public function getOrganizationBySystemId($system_id)
     //         return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
     //     }
     // }
-
+    
     public function store(Request $request)
 {
     $validate = Validator::make($request->all(), [
@@ -319,16 +398,6 @@ public function getOrganizationBySystemId($system_id)
         'road' => 'nullable|max:190',
         'house' => 'nullable|max:190',
         'house_bn' => 'nullable|max:190',
-        'office_division_id' => 'nullable|integer',
-        'office_district_id' => 'nullable|integer',
-        'office_thana_id' => 'nullable|integer',
-        'office_post_office_id' => 'nullable|integer',
-        'office_village_id' => 'nullable|integer',
-        'office_ward_id' => 'nullable|integer',
-        'office_road' => 'nullable|max:190',
-        'office_house' => 'nullable|max:190',
-        'office_house_bn' => 'nullable|max:190',
-        'premises_ownership' => 'nullable|in:owned,rented',
 
         'status' => 'nullable|boolean',
     ]);
@@ -368,16 +437,6 @@ public function getOrganizationBySystemId($system_id)
             'road' => $request->road,
             'house' => $request->house,
             'house_bn' => $request->house_bn,
-            'office_division_id' => $request->office_division_id,
-            'office_district_id' => $request->office_district_id,
-            'office_thana_id' => $request->office_thana_id,
-            'office_post_office_id' => $request->office_post_office_id,
-            'office_village_id' => $request->office_village_id,
-            'office_ward_id' => $request->office_ward_id,
-            'office_road' => $request->office_road,
-            'office_house' => $request->office_house,
-            'office_house_bn' => $request->office_house_bn,
-            'premises_ownership' => $request->premises_ownership,
 
             'capital' => $request->capital,
             'establish_year' => $request->establish_year,
@@ -391,9 +450,9 @@ public function getOrganizationBySystemId($system_id)
             $organization = Organization::findOrFail($request->id);
             $organization->update($payload);
         } else {
-
+            
             $payload['institute_id'] = Auth::user()->institute_id;
-
+            
             $payload['application_id'] = $this->generateApplicationId();
             $organization = Organization::create($payload);
         }
@@ -402,7 +461,7 @@ public function getOrganizationBySystemId($system_id)
         $data['message'] = "Organization saved successfully!";
         $data['result'] = $organization;
         $data['code'] = 200;
-        $data['redirect_url'] = route('organization-ownership.edit', $organization->id, false);
+        $data['redirect_url'] = route('organization-ownership.edit', $organization->id);
 
         return response()->json($data, 200);
 
@@ -417,52 +476,8 @@ public function getOrganizationBySystemId($system_id)
 
     public function show($id)
     {
-        $data['organization'] = $organization = Organization::with([
-            'category',
-            'subcategory',
-            'type',
-            'Division',
-            'District',
-            'Thana',
-            'Union',
-            'Village',
-            'ownership.user.familyInfo',
-            'ownership.user.people',
-            'ownership.user.addressInfo.presentPostoffice',
-            'ownership.user.addressInfo.presentVillage',
-            'ownership.user.addressInfo.presentRoad',
-            'ownership.user.addressInfo.presentHouse',
-            'ownership.user.addressInfo.permanentDistrict',
-            'ownership.user.addressInfo.permanentThana',
-            'ownership.user.addressInfo.permanentPostOffice',
-            'ownership.user.addressInfo.permanentVillage',
-            'ownership.user.addressInfo.permanentRoad',
-            'ownership.user.addressInfo.permanentHouse',
-        ])->find($id);
-
-        if ($data['organization']) {
-            foreach ($data['organization']->ownership ?? [] as $owner) {
-                if (!$owner->user && !empty($owner->system_id)) {
-                    $resolvedUser = User::with([
-                        'familyInfo',
-                        'people',
-                        'addressInfo.presentPostoffice',
-                        'addressInfo.presentVillage',
-                        'addressInfo.presentRoad',
-                        'addressInfo.presentHouse',
-                        'addressInfo.permanentDistrict',
-                        'addressInfo.permanentThana',
-                        'addressInfo.permanentPostOffice',
-                        'addressInfo.permanentVillage',
-                        'addressInfo.permanentRoad',
-                        'addressInfo.permanentHouse',
-                    ])->where('system_id', $owner->system_id)->first();
-
-                    if ($resolvedUser) {
-                        $owner->setRelation('user', $resolvedUser);
-                    }
-                }
-            }
+         $data['organization'] = $organization=Organization::find($id);
+        if($data['organization'] ){
             $data['areas'] = OrganizationWorkArea::where('organization_subcategory_id', $data['organization']->organization_subcategory_id)->where('status', true)->latest()->get();
             $data['types'] = OrganizationType::where('organization_category_id', $data['organization']->organization_category_id)->where('status', true)->latest()->get();
             $data['categories'] = OrganizationCategory::where('status', true)->latest()->get();
@@ -500,11 +515,11 @@ public function getOrganizationBySystemId($system_id)
             // return response()->json($data, 200);
              $data['divisions'] = Division::where('status', true)->get();
              $data['districts'] = District::where('division_id',$organization->division_id)->where('status', true)->get();
-
+             
              $data['thanas'] = Thana::where('district_id',$organization->district_id)->where('status', true)->get();
              $data['ups'] = Union::where('thana_id',$organization->thana_id)->where('status', true)->get();
               $data['villages'] = Village::where('union_id', $organization->union_id )->get();
-        // dd($data['divisions']);
+        // dd($data['divisions']);  
        $data['post_officeses']=PostOffice::latest()->get();
 
             $institute = Institute::find(Auth::user()->institute_id);
@@ -519,7 +534,7 @@ public function getOrganizationBySystemId($system_id)
         } else {
             return "Not found";
         }
-
+       
     }
 
     public function update(Request $request, $id)
@@ -550,35 +565,72 @@ public function getOrganizationBySystemId($system_id)
             return response()->json($data, 404);
         }
     }
-
+    
     public function approve(Request $request)
     {
         $organization = Organization::findOrFail($request->id);
-
+        $approved_id = $this->generateApprovedId($organization);
+        $organization->approved_id = $approved_id;
         $organization->status = 1; // approved
         $organization->save();
-
+    
         return response()->json(['success' => true]);
     }
-
+    
     private function generateApplicationId()
-{
-    $datePart = Carbon::now()->format('ymd');
-
-    // আজকের last record
-    $last = Organization::whereDate('created_at', Carbon::today())
-        ->whereNotNull('application_id')
-        ->orderBy('id', 'desc')
-        ->first();
-
-    if ($last) {
-        $lastSerial = (int) substr($last->application_id, -5);
-        $newSerial = $lastSerial + 1;
-    } else {
-        $newSerial = 1;
+    {
+        $datePart = Carbon::now()->format('ymd');
+    
+        // আজকের last record
+        $last = Organization::whereDate('created_at', Carbon::today())
+            ->whereNotNull('application_id')
+            ->orderBy('id', 'desc')
+            ->first();
+    
+        if ($last) {
+            $lastSerial = (int) substr($last->application_id, -5);
+            $newSerial = $lastSerial + 1;
+        } else {
+            $newSerial = 1;
+        }
+    
+        return $datePart . str_pad($newSerial, 5, '0', STR_PAD_LEFT);
     }
-
-    return $datePart . str_pad($newSerial, 5, '0', STR_PAD_LEFT);
-}
+    
+    
+    private function generateApprovedId($organization)
+    {
+        $now = \Carbon\Carbon::now();
+    
+        // Date parts
+        $year  = $now->format('y');
+        $month = $now->format('m');
+        $date  = $now->format('d');
+    
+        // Format IDs
+        $union_id = str_pad($organization->union_id ?? 0, 4, '0', STR_PAD_LEFT);
+        $category_id = str_pad($organization->organization_category_id ?? 0, 2, '0', STR_PAD_LEFT);
+    
+        // Prefix
+        $prefix = "{$year}{$month}{$date}{$union_id}{$category_id}";
+    
+        // Get last serial
+        $lastRecord = Organization::where('approved_id', 'like', $prefix . '%')
+            ->orderBy('approved_id', 'desc')
+            ->lockForUpdate() // 🔥 prevent duplicate in concurrency
+            ->first();
+    
+        if ($lastRecord) {
+            $lastSerial = (int) substr($lastRecord->approved_id, -3);
+            $newSerial = $lastSerial + 1;
+        } else {
+            $newSerial = 1;
+        }
+    
+        // Format serial
+        $serial = str_pad($newSerial, 3, '0', STR_PAD_LEFT);
+    
+        return "{$prefix}{$serial}";
+    }
 
 }

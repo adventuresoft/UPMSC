@@ -378,6 +378,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     });
 
     Route::resource('organization', OrganizationController::class);
+    Route::get('orgapproved_index', [OrganizationController::class,'approved_index'])->name('orgapproved_index');
+
     Route::resource('chairman', ChairmanController::class);
 
     Route::post('/fromupdate', [ChairmanController::class,'fromupdate'])->name('chairman.fromupdate');
@@ -464,6 +466,9 @@ Route::post('/organization/trade-license/{id}/manual-payment/store', [TradeLicen
 
 Route::get('/organization/trade-license/{id}/online-payment', [TradeLicenseController::class, 'onlinePayment'])
     ->name('organizationA.trade-license.online-payment');
+Route::get('/organization/trade-license/{id}/payment/success', [TradeLicenseController::class, 'paymentSuccess'])
+    ->name('organizationA.trade-license.payment.success');
+  
     Route::get('peopleapprovedlist', [PeopleController::class, 'approvedlist'])
     ->name('peopleapprovedlist');
 

@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Organization', 'subMenu' =>'TradeLicense'])
+@extends('backend.master', ['mainMenu' => 'Organization', 'subMenu' =>'GetTradeLicense'])
 
 @push('style')
 
@@ -50,7 +50,7 @@
               </div>
 
               <div class="col-md-6 text-right">
-                <a href="{{route('organizationA.trade-license.create')}}" class="btn btn-primary">Create</a>
+                <!--<a href="{{route('organizationA.trade-license.create')}}" class="btn btn-primary">Create</a>-->
               </div>
 
             </div>
@@ -112,15 +112,11 @@
 
                   <td>
 
-                    @if ($license->status == 1)
+                    
 
-                    <label class="badge badge-info">Pending</label>
+                    <label class="badge badge-success">{{ucfirst($license->payment_status)}}</label>
 
-                    @elseif($license->status == 2)
-
-                    <label class="badge badge-success">Approved</label>
-
-                    @endif
+                    
 
                   </td>
 
@@ -128,18 +124,18 @@
 
                     <div class="table-action">
 
-                      <a href="{{route('organizationA.trade-license.confirmed', $license->id )}}"
-                        title="Confirmed"
-                        class="btn btn-sm btn-info">
-                        <i class="fa fa-hand-holding-usd"></i>
-                      </a>
+                      <!--<a href="{{route('organizationA.trade-license.confirmed', $license->id )}}"-->
+                      <!--  title="Confirmed"-->
+                      <!--  class="btn btn-sm btn-info">-->
+                      <!--  <i class="fa fa-hand-holding-usd"></i>-->
+                      <!--</a>-->
                       
                       
-                       <a href="{{route('organizationA.trade-license.show', $license->id )}}"
-                        title="Show"
-                        class="btn btn-sm btn-success">
-                        <i class="fa fa-eye"></i>
-                      </a>
+                      <!-- <a href="{{route('organizationA.trade-license.show', $license->id )}}"-->
+                      <!--  title="Show"-->
+                      <!--  class="btn btn-sm btn-success">-->
+                      <!--  <i class="fa fa-eye"></i>-->
+                      <!--</a>-->
                       
 
                       <a target="_blank"
