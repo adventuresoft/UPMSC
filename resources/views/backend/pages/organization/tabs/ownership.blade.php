@@ -44,20 +44,20 @@
 <div class="card-body">
 
     {{-- ================= UNION OPTION ================= --}}
-    <!--<div class="row mb-3">-->
-    <!--    <label class="col-sm-3 col-form-label fw-bold">Is this Union?</label>-->
-    <!--    <div class="col-sm-9">-->
-    <!--        <label class="me-3">-->
-    <!--            <input type="radio" name="is_union" value="no" > No-->
-    <!--        </label>-->
-    <!--        <label>-->
-    <!--            <input type="radio" name="is_union" value="yes"> Yes-->
-    <!--        </label>-->
-    <!--    </div>-->
-    <!--</div>-->
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label fw-bold">Is this Union?</label>
+        <div class="col-sm-9">
+            <label class="me-3">
+                <input type="radio" name="is_union" value="no" > No
+            </label>
+            <label>
+                <input type="radio" name="is_union" value="yes"> Yes
+            </label>
+        </div>
+    </div>
 
     {{-- ================= OWNERSHIP SECTION ================= --}}
-    <div id="ownership-section" style="display:none">
+    <div id="ownership-section" style="display:none;">
         <form class="form-horizontal"   id="organizationOwnershipForm" method="POST" enctype="multipart/form-data" >
 @csrf
 <input type="hidden" name="organization_id" value="{{$organization->id}}">
@@ -91,9 +91,9 @@
     </div>
 
     {{-- ================= UNION SEARCH ================= --}}
-    <div id="union-section" >
+    <div id="union-section" style="display:none;">
         <div class="row mb-3">
-            <form id="ownershipForm" class="form-horizontal" action="{{route('savenewownership')}}" method="POST" enctype="multipart/form-data">
+            <!--<form id="ownershipForm" class="form-horizontal" action="{{route('savenewownership')}}" method="POST" enctype="multipart/form-data">-->
             
             <form id="ownershipForm" class="form-horizontal" action="javascript:void(0);" style="width:100%">
                             @csrf
@@ -101,22 +101,270 @@
                             <input type="hidden" value="{{$organization->id}}" name="organization_id">
                             
                             <div class="card-body">
-                                 <!--Row 1: Name and Bangla Name -->
+                                <!-- Row 1: Name and Bangla Name -->
                                 <div class="form-group row">
                                     <div class="col-sm-6">
-                                        <label for="name">Owner Name <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
+                                        <label for="name">Name <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                         <input type="text" required value="" class="form-control" name="name" id="name" placeholder="Name English">
                                         <small class="error name-error text-danger"></small>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label for="bn_name">Owner Name Bangla <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
+                                        <label for="bn_name">Name Bangla <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                         <input type="text" required value="" class="form-control" name="bn_name" id="bn_name" placeholder="Name Bangla">
                                         <small class="error bn_name-error text-danger"></small>
                                     </div>
                                 </div>
                                 
                                 
-                                 <!-- Row 2: Date of Birth, Birth Reg., NID No. --> 
+                                <!-- Father Name -->
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label for="father_name">Father Name (English)
+                                            <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
+                                        </label>
+                                        <input type="text" required class="form-control" name="father_name" id="father_name" placeholder="Father Name English">
+                                        <small class="error father_name-error text-danger"></small>
+                                    </div>
+                                
+                                    <div class="col-sm-6">
+                                        <label for="father_name_bn">Father Name (Bangla)
+                                            <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
+                                        </label>
+                                        <input type="text" required class="form-control" name="father_name_bn" id="father_name_bn" placeholder="Father Name Bangla">
+                                        <small class="error father_name_bn-error text-danger"></small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Mother Name -->
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label for="mother_name">Mother Name (English)
+                                            <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
+                                        </label>
+                                        <input type="text" required class="form-control" name="mother_name" id="mother_name" placeholder="Mother Name English">
+                                        <small class="error mother_name-error text-danger"></small>
+                                    </div>
+                                
+                                    <div class="col-sm-6">
+                                        <label for="mother_name_bn">Mother Name (Bangla)
+                                            <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
+                                        </label>
+                                        <input type="text" required class="form-control" name="mother_name_bn" id="mother_name_bn" placeholder="Mother Name Bangla">
+                                        <small class="error mother_name_bn-error text-danger"></small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Permanent Address Section -->
+                            <div class="card-header">
+                                <h6 class="card-title p-0 m-0">Permanent Address</h6>
+                            </div>
+                            <div class="card-body p-0 m-0">
+                                 <!-- Row 3: Division, District, Thana -->
+                                <div class="form-group row">
+                                    <div class="col-sm-4">
+                                        <label for="permanent_division_id">Division</label>
+                                        <select name="permanent_division_id" class="form-control select2 select2bs4" id="permanent_division_id">
+                                            <option value="">Select Division</option>
+                                            @if ($divisions)
+                                                @foreach ($divisions as $division)
+                                                    <option value="{{ $division->id }}" >{{ $division->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <small class="text-danger error permanent_division_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="permanent_district_id">District</label>
+                                        <select name="permanent_district_id" class="form-control select2 select2bs4" id="permanent_district_id">
+                                            <option value="{{$user->addressInfo->permanent_district_id ?? ''}}">{{$user->addressInfo->permanentDistrict->name ?? 'Select District'}}</option>
+                                        </select>
+                                        <small class="text-danger error present_district_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="permanentt_thana_id">Thana</label>
+                                        <select name="permanent_thana_id" class="form-control select2 select2bs4" id="permanent_thana_id">
+                                            <option value="{{$user->addressInfo->permanent_thana_id ?? ''}}">{{$user->addressInfo->permanentThana->name ?? 'Select Thana'}}</option>
+                                        </select>
+                                        <small class="text-danger error permanent_thana_id_error"></small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Row 1: Village, Post Office, Permanent Ward -->
+                                <div class="form-group row">
+                                     <div class="col-sm-4">
+                                         <label for="permanent_post_office_id">Post Office</label>
+                                        <select name="permanent_post_office_id" class="form-control select2 select2bs4" id="permanent_post_office_id">
+                                            <option value="">Select Post Office</option>
+                                            @if ($post_officeses)
+                                                @foreach ($post_officeses as $post_officese)
+                                                    <option value="{{$post_officese->id}}" >{{$post_officese->bn_name}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <small class="text-danger error permanent_post_office_id_error"></small>
+                                    </div>
+                                    
+                                      <div class="col-sm-4">
+                                        <label for="permanent_union_id">UP (Union Parishad)</label>
+                                        <select name="permanent_union_id" class="form-control select2 select2bs4" id="permanent_union_id">
+                                            <option value="{{$user->addressInfo->permanent_union_id ?? ''}}">{{$user->addressInfo->permanentUnion->name ?? 'Select Union'}}</option>
+                                        </select>
+                                        <small class="text-danger error present_union_id_error"></small>
+                                    </div>
+                                    
+                                    
+                                    <div class="col-sm-4">
+                                        <label for="permanent_village_id">Village</label>
+                                        <select name="permanent_village_id" class="form-control select2 select2bs4" id="permanent_village_id">
+                                            <option value="">Select Village</option>
+                                            @if ($villages)
+                                                @foreach ($villages as $village)
+                                                    <option value="{{$village->id}}" >{{$village->en_name}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <small class="text-danger error permanent_village_id_error"></small>
+                                    </div>
+                                    </div>
+                                   <div class="form-group row">
+                                    <div class="col-sm-2">
+                                        <label for="permanent_ward_id">Permanent Ward</label>
+                                        <select name="permanent_ward_id" class="form-control select2 select2bs4" id="permanent_ward_id">
+                                            <option value="">Select Ward</option>
+                                            @if ($wards)
+                                                @foreach ($wards as $ward)
+                                                    <option value="{{$ward->id}}" >{{$ward->en_ward_no}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <small class="text-danger error permanent_ward_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="permanent_road">Road</label>
+                                        <input type="text" name="permanent_road" class="form-control" id="permanent_road"
+                                            value="{{ $user->addressInfo->permanent_road ?? '' }}" placeholder="Permanent Road">
+                                        <small class="text-danger error permanent_road_error"></small>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="permanent_house">House</label>
+                                        <input type="text" name="permanent_house" class="form-control" id="permanent_house"
+                                            value="{{ $user->addressInfo->permanent_house ?? '' }}" placeholder="Permanent House">
+                                        <small class="text-danger error permanent_house_error"></small>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="permanent_house_bn">House (Bangla)</label>
+                                        <input type="text" name="permanent_house_bn" class="form-control" id="permanent_house_bn"
+                                            value="{{ $user->addressInfo->permanent_house_bn ?? '' }}" placeholder="স্থায়ী বাড়ি">
+                                        <small class="text-danger error permanent_house_bn_error"></small>
+                                    </div>
+                                </div>
+                                </div>
+
+                                <!-- Row 2:  -->
+                              
+                                    <div class="form-group row">
+                            </div>
+
+                            <!-- Present Address Section -->
+                            <div class="card-header">
+                                <h6 class="card-title p-0 m-0">Present Address</h6>
+                            </div>
+                            <div class="card-body p-0 m-0">
+                                <!-- Row 3: Division, District, Thana -->
+                                <div class="form-group row">
+                                    <div class="col-sm-4">
+                                        <label for="present_division_id">Division</label>
+                                        <select name="present_division_id" class="form-control select2 select2bs4" id="present_division_id">
+                                            <option value="">Select Division</option>
+                                            @if ($divisions)
+                                                @foreach ($divisions as $division)
+                                                    <option value="{{ $division->id }}" >{{ $division->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <small class="text-danger error present_division_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="present_district_id">District</label>
+                                        <select name="present_district_id" class="form-control select2 select2bs4" id="present_district_id">
+                                            <option value="{{$user->addressInfo->present_district_id ?? ''}}">{{$user->addressInfo->presentDistrict->name ?? 'Select District'}}</option>
+                                        </select>
+                                        <small class="text-danger error present_district_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="present_thana_id">Thana</label>
+                                        <select name="present_thana_id" class="form-control select2 select2bs4" id="present_thana_id">
+                                            <option value="{{$user->addressInfo->present_thana_id ?? ''}}">{{$user->addressInfo->presentThana->name ?? 'Select Thana'}}</option>
+                                        </select>
+                                        <small class="text-danger error present_thana_id_error"></small>
+                                    </div>
+                                </div>
+
+                                <!-- Row 4: Post Office, UP, Village -->
+                                <div class="form-group row">
+                                    <div class="col-sm-4">
+                                        <label for="present_post_office_id">Post Office</label>
+                                        <select name="present_post_office_id" class="form-control select2 select2bs4" id="present_post_office_id">
+                                            <option value="">Select Post Office</option>
+                                            @if ($post_officeses)
+                                                @foreach ($post_officeses as $post_officese)
+                                                    <option value="{{$post_officese->id}}" >{{$post_officese->bn_name}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <small class="text-danger error present_post_office_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="present_union_id">UP (Union Parishad)</label>
+                                        <select name="present_union_id" class="form-control select2 select2bs4" id="present_union_id">
+                                            <option value="{{$user->addressInfo->present_union_id ?? ''}}">{{$user->addressInfo->presentUnion->name ?? 'Select Union'}}</option>
+                                        </select>
+                                        <small class="text-danger error present_union_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="present_village_id">Village</label>
+                                        <select name="present_village_id" class="form-control select2 select2bs4" id="present_village_id">
+                                            <option value="{{$user->addressInfo->present_village_id ?? ''}}">{{$user->addressInfo->presentVillage->en_name ?? 'Select Village'}}</option>
+                                        </select>
+                                        <small class="text-danger error present_village_id_error"></small>
+                                    </div>
+                                </div>
+
+                                <!-- Row 5: Ward, Road, House -->
+                                <div class="form-group row">
+                                    <div class="col-sm-2">
+                                        <label for="present_ward_id">Ward</label>
+                                        <select name="present_ward_id" class="form-control select2 select2bs4" id="present_ward_id">
+                                            <option value="">Select Ward</option>
+                                            @if ($wards)
+                                                @foreach ($wards as $ward)
+                                                    <option value="{{$ward->id}}" >{{$ward->en_ward_no}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <small class="text-danger error present_ward_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="present_road">Road</label>
+                                        <input type="text" name="present_road" class="form-control" id="present_road"
+                                            value="{{ $user->addressInfo->present_road ?? '' }}" placeholder="Present Road">
+                                        <small class="text-danger error present_road_error"></small>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="present_house">House</label>
+                                        <input type="text" name="present_house" class="form-control" id="present_house"
+                                             placeholder="Present House">
+                                        <small class="text-danger error present_house_error"></small>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label for="present_house_bn">House (Bangla)</label>
+                                        <input type="text" name="present_house_bn" class="form-control" id="present_house_bn"
+                                            placeholder="বর্তমান বাড়ি">
+                                        <small class="text-danger error present_house_bn_error"></small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Row 2: Date of Birth, Birth Reg., NID No. -->
                                 <div class="form-group row">
                                     <div class="col-sm-4">
                                         <label for="date_of_birth">Date of Birth</label>
@@ -135,7 +383,7 @@
                                     </div>
                                 </div>
 
-                                 <!-- Row 3: Gender, Religion, Blood Group --> 
+                                <!-- Row 3: Gender, Religion, Blood Group -->
                                 <div class="form-group row">
                                     <div class="col-sm-4">
                                         <label for="gender">Gender</label>
@@ -175,7 +423,7 @@
                                     </div>
                                 </div>
 
-                                 <!-- Row 4: Mobile No., Email -->
+                                <!-- Row 4: Mobile No., Email -->
                                 <div class="form-group row">
                                     <div class="col-sm-6">
                                         <label for="mobile">Mobile No.</label>
@@ -188,257 +436,8 @@
                                         <small class="error email-error text-danger"></small>
                                     </div>
                                 </div>
-                                
-                                
-                                 <!-- Father Name -->
-                                <div class="form-group row">
-                                    <div class="col-sm-6">
-                                        <label for="father_name">Father Name (English)
-                                            <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
-                                        </label>
-                                        <input type="text" required class="form-control" name="father_name" id="father_name" placeholder="Father Name English">
-                                        <small class="error father_name-error text-danger"></small>
-                                    </div>
-                                
-                                    <div class="col-sm-6">
-                                        <label for="father_name_bn">Father Name (Bangla)
-                                            <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
-                                        </label>
-                                        <input type="text" required class="form-control" name="father_name_bn" id="father_name_bn" placeholder="Father Name Bangla">
-                                        <small class="error father_name_bn-error text-danger"></small>
-                                    </div>
-                                </div>
-                                
-                                 <!-- Mother Name -->
-                                <div class="form-group row">
-                                    <div class="col-sm-6">
-                                        <label for="mother_name">Mother Name (English)
-                                            <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
-                                        </label>
-                                        <input type="text" required class="form-control" name="mother_name" id="mother_name" placeholder="Mother Name English">
-                                        <small class="error mother_name-error text-danger"></small>
-                                    </div>
-                                
-                                    <div class="col-sm-6">
-                                        <label for="mother_name_bn">Mother Name (Bangla)
-                                            <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
-                                        </label>
-                                        <input type="text" required class="form-control" name="mother_name_bn" id="mother_name_bn" placeholder="Mother Name Bangla">
-                                        <small class="error mother_name_bn-error text-danger"></small>
-                                    </div>
-                                </div>
-                                
-                                 <!-- Permanent Address Section -->
-                            <div class="card-header">
-                                <h6 class="card-title p-0 m-0">Permanent Address</h6>
-                            </div>
-                            <div class="card-body p-0 m-0">
-                                  <!-- Row 3: Division, District, Thana -->
-                                <div class="form-group row">
-                                    <div class="col-sm-4">
-                                        <label for="permanent_division_id">Division</label>
-                                        <select name="permanent_division_id" class="form-control select2 select2bs4" id="permanent_division_id">
-                                            <option value="">Select Division</option>
-                                            @if ($divisions)
-                                                @foreach ($divisions as $division)
-                                                    <option value="{{ $division->id }}" >{{ $division->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <small class="text-danger error permanent_division_id_error"></small>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label for="permanent_district_id">District</label>
-                                        <select name="permanent_district_id" class="form-control select2 select2bs4" id="permanent_district_id">
-                                            <option value="{{$user->addressInfo->permanent_district_id ?? ''}}">{{$user->addressInfo->permanentDistrict->name ?? 'Select District'}}</option>
-                                        </select>
-                                        <small class="text-danger error present_district_id_error"></small>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label for="permanentt_thana_id">Thana</label>
-                                        <select name="permanent_thana_id" class="form-control select2 select2bs4" id="permanent_thana_id">
-                                            <option value="{{$user->addressInfo->permanent_thana_id ?? ''}}">{{$user->addressInfo->permanentThana->name ?? 'Select Thana'}}</option>
-                                        </select>
-                                        <small class="text-danger error permanent_thana_id_error"></small>
-                                    </div>
-                                </div>
-                                
-                                 <!-- Row 1: Village, Post Office, Permanent Ward --> 
-                                <div class="form-group row">
-                                     <div class="col-sm-4">
-                                         <label for="permanent_post_office_id">Post Office</label>
-                                        <select name="permanent_post_office_id" class="form-control select2 select2bs4" id="permanent_post_office_id">
-                                            <option value="">Select Post Office</option>
-                                            @if ($post_officeses)
-                                                @foreach ($post_officeses as $post_officese)
-                                                    <option value="{{$post_officese->id}}" >{{$post_officese->bn_name}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <small class="text-danger error permanent_post_office_id_error"></small>
-                                    </div>
-                                    
-                                      <!--<div class="col-sm-4">
-                                        <label for="permanent_union_id">UP (Union Parishad)</label>
-                                        <select name="permanent_union_id" class="form-control select2 select2bs4" id="permanent_union_id">
-                                            <option value="{{$user->addressInfo->permanent_union_id ?? ''}}">{{$user->addressInfo->permanentUnion->name ?? 'Select Union'}}</option>
-                                        </select>
-                                        <small class="text-danger error present_union_id_error"></small>
-                                    </div>-->
-                                    
-                                    
-                                    <div class="col-sm-4">
-                                        <label for="permanent_village_id">Village</label>
-                                        <select name="permanent_village_id" class="form-control select2 select2bs4" id="permanent_village_id">
-                                            <option value="">Select Village</option>
-                                            @if ($villages)
-                                                @foreach ($villages as $village)
-                                                    <option value="{{$village->id}}" >{{$village->en_name}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <small class="text-danger error permanent_village_id_error"></small>
-                                    </div>
-                                    </div>
-                                   <div class="form-group row">
-                                    <div class="col-sm-2">
-                                        <label for="permanent_ward_id">Permanent Ward</label>
-                                        <select name="permanent_ward_id" class="form-control select2 select2bs4" id="permanent_ward_id">
-                                            <option value="">Select Ward</option>
-                                            @if ($wards)
-                                                @foreach ($wards as $ward)
-                                                    <option value="{{$ward->id}}" >{{$ward->en_ward_no}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <small class="text-danger error permanent_ward_id_error"></small>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label for="permanent_road">Road</label>
-                                        <input type="text" name="permanent_road" class="form-control" id="permanent_road"
-                                            value="{{ $user->addressInfo->permanent_road ?? '' }}" placeholder="Permanent Road">
-                                        <small class="text-danger error permanent_road_error"></small>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <label for="permanent_house">Holding/House No.</label>
-                                        <input type="text" name="permanent_house" class="form-control" id="permanent_house"
-                                            value="{{ $user->addressInfo->permanent_house ?? '' }}" placeholder="Permanent House">
-                                        <small class="text-danger error permanent_house_error"></small>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <label for="permanent_house_bn">Holding/House No. (Bangla)</label>
-                                        <input type="text" name="permanent_house_bn" class="form-control" id="permanent_house_bn"
-                                            value="{{ $user->addressInfo->permanent_house_bn ?? '' }}" placeholder="স্থায়ী বাড়ি">
-                                        <small class="text-danger error permanent_house_bn_error"></small>
-                                    </div>
-                                </div>
-                                </div>
 
-                                 <!-- Row 2:  -->
-                              
-                                    <div class="form-group row">
-                            </div>
-
-                             <!-- Present Address Section -->
-                            <div class="card-header">
-                                <h6 class="card-title p-0 m-0">Present Address</h6>
-                            </div>
-                            <div class="card-body p-0 m-0">
-                                 <!--Row 3: Division, District, Thana -->
-                                <div class="form-group row">
-                                    <div class="col-sm-4">
-                                        <label for="present_division_id">Division</label>
-                                        <select name="present_division_id" class="form-control select2 select2bs4" id="present_division_id">
-                                            <option value="">Select Division</option>
-                                            @if ($divisions)
-                                                @foreach ($divisions as $division)
-                                                    <option value="{{ $division->id }}" >{{ $division->name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <small class="text-danger error present_division_id_error"></small>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label for="present_district_id">District</label>
-                                        <select name="present_district_id" class="form-control select2 select2bs4" id="present_district_id">
-                                            <option value="{{$user->addressInfo->present_district_id ?? ''}}">{{$user->addressInfo->presentDistrict->name ?? 'Select District'}}</option>
-                                        </select>
-                                        <small class="text-danger error present_district_id_error"></small>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label for="present_thana_id">Thana</label>
-                                        <select name="present_thana_id" class="form-control select2 select2bs4" id="present_thana_id">
-                                            <option value="{{$user->addressInfo->present_thana_id ?? ''}}">{{$user->addressInfo->presentThana->name ?? 'Select Thana'}}</option>
-                                        </select>
-                                        <small class="text-danger error present_thana_id_error"></small>
-                                    </div>
-                                </div>
-
-                                 <!--Row 4: Post Office, UP, Village--> 
-                                <div class="form-group row">
-                                    <div class="col-sm-4">
-                                        <label for="present_post_office_id">Post Office</label>
-                                        <select name="present_post_office_id" class="form-control select2 select2bs4" id="present_post_office_id">
-                                            <option value="">Select Post Office</option>
-                                            @if ($post_officeses)
-                                                @foreach ($post_officeses as $post_officese)
-                                                    <option value="{{$post_officese->id}}" >{{$post_officese->bn_name}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <small class="text-danger error present_post_office_id_error"></small>
-                                    </div>
-                                    <!--<div class="col-sm-4">
-                                        <label for="present_union_id">UP (Union Parishad)</label>
-                                        <select name="present_union_id" class="form-control select2 select2bs4" id="present_union_id">
-                                            <option value="{{$user->addressInfo->present_union_id ?? ''}}">{{$user->addressInfo->presentUnion->name ?? 'Select Union'}}</option>
-                                        </select>
-                                        <small class="text-danger error present_union_id_error"></small>
-                                    </div>-->
-                                    <div class="col-sm-4">
-                                        <label for="present_village_id">Village</label>
-                                        <select name="present_village_id" class="form-control select2 select2bs4" id="present_village_id">
-                                            <option value="{{$user->addressInfo->present_village_id ?? ''}}">{{$user->addressInfo->presentVillage->en_name ?? 'Select Village'}}</option>
-                                        </select>
-                                        <small class="text-danger error present_village_id_error"></small>
-                                    </div>
-                                </div>
-
-                                 <!-- Row 5: Ward, Road, House -->
-                                <div class="form-group row">
-                                    <div class="col-sm-2">
-                                        <label for="present_ward_id">Ward</label>
-                                        <select name="present_ward_id" class="form-control select2 select2bs4" id="present_ward_id">
-                                            <option value="">Select Ward</option>
-                                            @if ($wards)
-                                                @foreach ($wards as $ward)
-                                                    <option value="{{$ward->id}}" >{{$ward->en_ward_no}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <small class="text-danger error present_ward_id_error"></small>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label for="present_road">Road</label>
-                                        <input type="text" name="present_road" class="form-control" id="present_road"
-                                            value="{{ $user->addressInfo->present_road ?? '' }}" placeholder="Present Road">
-                                        <small class="text-danger error present_road_error"></small>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <label for="present_house">House</label>
-                                        <input type="text" name="present_house" class="form-control" id="present_house"
-                                             placeholder="Present House">
-                                        <small class="text-danger error present_house_error"></small>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <label for="present_house_bn">House (Bangla)</label>
-                                        <input type="text" name="present_house_bn" class="form-control" id="present_house_bn"
-                                            placeholder="বর্তমান বাড়ি">
-                                        <small class="text-danger error present_house_bn_error"></small>
-                                    </div>
-                                </div>
-
-                                 <!-- Row 5: Photo --> 
+                                <!-- Row 5: Photo -->
                                 <div class="form-group row">
                                     <div class="col-sm-6">
                                         <label for="image">Photo</label>
@@ -452,7 +451,7 @@
 
                         
                           
-                            
+                            <!-- /.card-footer -->
                             
                               
                                 <div class="form-group row">

@@ -28,22 +28,14 @@ class OrganizationOwnershipController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(function ($request, $next) {
-            $user = Auth::user();
-
-            if ($user && in_array((int) $user->role_id, [1, 4, 6], true)) {
-                return $next($request);
-            }
-
-            return redirect()->back();
-        })->except('index', 'show');
+        $this->middleware('unionAdmin')->except('index', 'show');
     }
 
     public function ownershipForm()
     {
-
-
-
+        
+         
+        
         $data['ownership'] = null;
         return view('backend.pages.organization.forms.ownership', $data);
     }
@@ -73,8 +65,8 @@ class OrganizationOwnershipController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
-
+     
+   
 public function saveNewOwnership(Request $request)
 {
     // ================= VALIDATION =================
@@ -135,17 +127,7 @@ public function saveNewOwnership(Request $request)
         if (!$people->save()) {
             throw new \Exception('People save failed');
         }
-
-        // ================= FAMILY SAVE =================
-        $family = new \App\Models\People\FamilyInfo();
-        $family->user_id = $user->id;
-        $family->family_type_id = $request->family_type_id ?? 1;
-        $family->father_name = $request->father_name;
-        $family->father_name_bn = $request->father_name_bn;
-        $family->mother_name = $request->mother_name;
-        $family->mother_name_bn = $request->mother_name_bn;
-        $family->save();
-
+        
         // ================= ADDRESS SAVE (NEW 🔥) =================
         $address = new AddressInfo();
         $address->user_id = $user->id;
@@ -179,9 +161,8 @@ public function saveNewOwnership(Request $request)
         // ================= OWNERSHIP SAVE =================
         $ownership = new OrganizationOwnership();
         $ownership->organization_id = $request->organization_id;
+        // $ownership->user_id = $people->id;
         $ownership->user_id = $user->id;
-        $ownership->system_id = $user->system_id;
-        $ownership->user_name = $user->name;
         $ownership->same_union = 1;
         // $ownership->created_by = Auth::id();
 
@@ -239,19 +220,19 @@ public function saveNewOwnership(Request $request)
                     }else {
                         $ownership = new OrganizationOwnership();
                     }
-
+    
                     $ownership->organization_id  = $request->organization_id;
                     $ownership->system_id  = $system_id;
-
+                  
                     $ownership->quantity  = $quantities[$key];
-
+                    
                     $ownership->user_id = $user_ids[$key];
                     $ownership->user_name  = $user_names[$key];
-
+                    
                     $ownership->is_trade_license = $is_trade_licenses[$key] ??  false;
                     $ownership->save();
                 }
-
+    
                 $data['status'] = true;
                 $data['message'] = "Ownership saved successfully!";
                 return response()->json($data, 200);
@@ -262,11 +243,11 @@ public function saveNewOwnership(Request $request)
                 return response()->json($data, 500);
             }
 
-
+            
         }
     }
-
-
+    
+    
     public function store(Request $request)
 {
     $validate = Validator::make($request->all(), [
@@ -363,29 +344,27 @@ public function saveNewOwnership(Request $request)
      */
     public function edit($id)
     {
-
-
+        
+        
         $user=User::find(Auth::user()->id);
-        $data['user'] = $user;
         $data['religions'] = Religion::where('status', true)->get();
         $data['villages'] = [];
         $data['permanentVillageAreas'] = [];
         $data['presentVillageAreas'] = [];
         $data['wards'] = [];
         $data['permanent_houses'] = [];
-        $data['roads'] = [];
-        $data['post_officeses'] = PostOffice::latest()->get();
-
+        
          if(isset($user->institute->institute_type_id) && $user->institute->institute_type_id == 1) {
             $data['villages'] = Village::where('union_id', $user->institute->union_id)->get();
             $data['wards'] = UnionWard::where('status', true)->get();
             $data['roads'] = Road::where('institute_id',  $user->institute->id)->latest()->get();
-
+            $data['post_officeses']=PostOffice::latest()->get();
+            
         }
-
+        
         $data['religions'] = Religion::where('status', true)->get();
-        $data['districts'] =  District::where('status', true)->orderBy('name')->get();
-        $data['countries'] =  Country::orderBy('name')->get();
+        $data['districts'] =  District::where('status', true)->orderBy('name')->get(); 
+        $data['countries'] =  Country::orderBy('name')->get(); 
          $data['divisions'] = Division::where('status', true)->get();
         $organization= Organization::with('ownership')->find($id);
         if($organization) {

@@ -665,6 +665,7 @@
   @if(
   $subMenu == "OrganizationCreate" ||
   $subMenu == "OrganizationList" ||
+  $subMenu == "ApprovedOrganizationList" ||
   $subMenu == "OrganizationShow" ||
   $subMenu == "RegistrationFees" ||
   $subMenu == "RenewFees" ||
@@ -700,6 +701,14 @@
       </a>
     </li>
     @endif
+    @if (view_permission())
+    <li class="nav-item">
+      <a href="{{route('orgapproved_index')}}" class="nav-link @if($subMenu == "ApprovedOrganizationList") active @endif">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Approved Org. List</p>
+      </a>
+    </li>
+    @endif
 
     @if (basic_settings_permissions())
     <li class="nav-item">
@@ -732,6 +741,7 @@
 
   </ul>
 </li>
+
 
 
 {{-- Tax --}}

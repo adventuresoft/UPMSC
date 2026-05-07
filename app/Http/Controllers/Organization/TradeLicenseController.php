@@ -11,7 +11,11 @@ use App\Models\InstituteType;
 use App\Models\Organization\TradeLicense;
 use App\Models\Tax\TaxYear;
 use App\Models\UnionWard;
+use Illuminate\Support\Facades\Log;
+use DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\TradeLicenseManualPayment;
 
@@ -74,12 +78,12 @@ class TradeLicenseController extends Controller
 
     public function index()
     {
-        if (Auth::user()->institute_id) {
-            $data['trade_licenses'] = TradeLicense::where('institute_id', Auth::user()->institute_id )->latest()->get();
-        } else{
-            $data['trade_licenses'] = TradeLicense::latest()->get();
-        }
-
+        // if (Auth::user()->institute_id) {
+        //     $data['trade_licenses'] = TradeLicense::where('institute_id', Auth::user()->institute_id )->latest()->get();
+        // } else{
+        //     $data['trade_licenses'] = TradeLicense::latest()->get();
+        // }
+  $data['trade_licenses'] = TradeLicense::where('payment_status','unpaid')->latest()->get();
         return view('backend.pages.organization.trade_license.index', $data);
     }
 
@@ -94,11 +98,14 @@ class TradeLicenseController extends Controller
         $data['tax_years'] = TaxYear::where('status', true)->latest()->get();
         return view('backend.pages.organization.trade_license.create', $data);
     }
-
+ 
     public function getTradeLicense()
     {
-        $data['tax_years'] = TaxYear::where('status', true)->latest()->get();
-        return view('backend.pages.organization.trade_license.get_license', $data);
+        // $data['tax_years'] = TaxYear::where('status', true)->latest()->get();
+        // return view('backend.pages.organization.trade_license.get_license', $data);
+        
+        $data['trade_licenses'] = TradeLicense::where('payment_status','paid')->latest()->get();
+        return view('backend.pages.organization.trade_license.paidindex', $data);
     }
 
     /**
@@ -109,6 +116,7 @@ class TradeLicenseController extends Controller
      */
     public function store(Request $request)
     {
+       
         $trade =  new TradeLicense();
         $trade->tax_year_id = $request->tax_year_id;
         $trade->organization_id = $request->organization_id;
@@ -194,6 +202,7 @@ class TradeLicenseController extends Controller
         //
     }
     
+    
     public function storeManualPayment(Request $request, $id)
 {
     $request->validate([
@@ -202,13 +211,93 @@ class TradeLicenseController extends Controller
         'note' => 'nullable|string|max:1000',
     ]);
 
-    $license = OrganizationTradeLicense::findOrFail($id);
+    $license = TradeLicense::findOrFail($id);
+
+    DB::beginTransaction();
+
+    try {
+
+        // Log request start
+        Log::info('Manual Payment Attempt Started', [
+            'user_id' => auth()->id(),
+            'license_id' => $id,
+            'request_data' => $request->all(),
+            'ip' => $request->ip(),
+            'time' => Carbon::now()->toDateTimeString(),
+        ]);
+
+        TradeLicenseManualPayment::create([
+            'trade_license_id' => $license->id,
+            'invoice_no' => $license->invoice_no,
+            'payment_details' => $request->payment_details,
+            'transaction_id' => $request->transaction_id,
+            'note' => $request->note,
+            'amount' => $license->total_amount ?? 0,
+            'created_by' => auth()->id(),
+        ]);
+
+        $license->payment_status = 'paid';
+        $license->payment_type = 'manual';
+        $license->payment_details = $request->payment_details;
+        $license->transaction_id = $request->transaction_id;
+        $license->payment_note = $request->note;
+        $license->paid_at = now();
+        $license->save();
+
+        DB::commit();
+
+        // Success log
+        Log::info('Manual Payment Saved Successfully', [
+            'user_id' => auth()->id(),
+            'license_id' => $license->id,
+            'transaction_id' => $request->transaction_id,
+            'time' => Carbon::now()->toDateTimeString(),
+        ]);
+
+        return redirect()
+            ->route('organizationA.trade-license.index')
+            ->with('success', 'Manual payment saved successfully.');
+
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+
+        // Error log (FULL DETAILS)
+        Log::error('Manual Payment Failed', [
+            'user_id' => auth()->id(),
+            'license_id' => $id,
+            'transaction_id' => $request->transaction_id ?? null,
+            'error_message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTraceAsString(),
+            'request_data' => $request->all(),
+            'ip' => $request->ip(),
+            'time' => Carbon::now()->toDateTimeString(),
+        ]);
+
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', 'Something went wrong. Please check logs.');
+    }
+}
+
+    public function storeManualPayment_backup(Request $request, $id)
+{
+    $request->validate([
+        'payment_details' => 'required|string|max:255',
+        'transaction_id' => 'required|string|max:255|unique:trade_license_manual_payments,transaction_id',
+        'note' => 'nullable|string|max:1000',
+    ]);
+
+    $license = TradeLicense::findOrFail($id);
 
     DB::beginTransaction();
     try {
         TradeLicenseManualPayment::create([
             'trade_license_id' => $license->id,
-            'invoice_no' => $license->invoice_no,
+            'invoice_no' => $license->system_id,
             'payment_details' => $request->payment_details,
             'transaction_id' => $request->transaction_id,
             'note' => $request->note,
@@ -242,8 +331,60 @@ class TradeLicenseController extends Controller
 public function onlinePayment($id)
 {
     $license = TradeLicense::findOrFail($id);
+    
 
-    // temporary button / placeholder
-    return redirect()->away('https://your-payment-api-link.com');
+    // Generate unique invoice (VERY IMPORTANT to avoid duplicate error)
+    $invoice = 'TL-' . $license->id . '-' . time();
+
+    // API Request
+    $response = Http::asForm()->post('https://api.paystation.com.bd/initiate-payment', [
+        'invoice_number' => $invoice,
+        'currency' => 'BDT',
+        'payment_amount' => $license->fee ?? 1, // change based on your DB
+        'reference' => 'Trade License Payment #' . $license->id,
+        'cust_name' => $license->name ?? 'Customer',
+        'cust_phone' => $license->phone ?? '01700000000',
+        'cust_email' => $license->email ?? 'test@test.com',
+        'cust_address' => $license->address ?? 'Dhaka',
+        'callback_url' => route('organizationA.trade-license.payment.success', $license->id), // create this route
+
+        'checkout_items' => json_encode([
+            [
+                "name" => "Trade License Fee",
+                "qty" => 1,
+                "price" => $license->fee ?? 1
+            ]
+        ]),
+        'merchantId' => "2573-1775021038",
+        'password' => "'poyt32@ft4e6hgc"
+    ]);
+
+    $result = $response->json();
+
+    // Handle response
+    if (isset($result['status']) && $result['status'] === 'success') {
+        return redirect()->away($result['payment_url']);
+    }
+
+    // Handle failure
+    return back()->with('error', $result['message'] ?? 'Payment initiation failed');
 }
+
+public function paymentSuccess($id)
+{
+
+    
+    $license = TradeLicense::findOrFail($id);
+
+    
+
+    // You can verify payment here if API supports verification
+
+    $license->payment_status = 'paid';
+    $license->save();
+
+    return redirect()->route('licenses.index')->with('success', 'Payment completed successfully');
+}
+
+
 }
