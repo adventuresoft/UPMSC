@@ -165,13 +165,14 @@
             width: 20%;
         }
 
-        .fees-footer {
-            background: #dcdcdc;
+        .fees-total {
+            background: #f8f8f8;
             font-weight: bold;
         }
         
-        .total-final {
-            background: #dcdcdc;
+        .fees-grand-total {
+            background: #e8e8e8;
+            font-weight: bold;
             color: black;
         }
 
@@ -183,10 +184,13 @@
                 background-color: transparent !important;
                 color: black !important;
             }
-            .total-final, .fees-footer, .fees-table-new th {
-                background-color: #dcdcdc !important;
+            .fees-grand-total, .fees-total, .fees-table-new th {
+                background-color: #f0f0f0 !important;
                 color: black !important;
                 -webkit-print-color-adjust: exact;
+            }
+            .fees-grand-total {
+                background-color: #e8e8e8 !important;
             }
             .fees-table-new th, .fees-table-new td {
                 border: 1px solid #333 !important;
@@ -353,11 +357,11 @@
                         <td></td>
                         <td>{{ currencyFormat($fee->tax_fee) ?? '০.০০' }}</td>
                     </tr>
-                    <tr class="fees-footer">
+                    <tr class="fees-total">
                         <td colspan="3" style="text-align: right; padding-right: 20px;">মোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($fee->total_fee) ?? '০.০০' }}</td>
                     </tr>
-                    <tr class="fees-footer total-final">
+                    <tr class="fees-grand-total">
                         <td colspan="3" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($fee->total_fee) ?? '০.০০' }}</td>
                     </tr>
