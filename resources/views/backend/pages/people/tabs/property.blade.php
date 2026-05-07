@@ -195,24 +195,24 @@
                                     <label for="is_property" class="col-sm-2 col-form-label">Any Property?</label>
                                     <div class="col-sm-10 px-2">
                                         <label for="property-no">
-                                            <input type="radio" value="0" {{(isset($user->propertyInfos->is_property) ?  (($user->propertyInfos->is_property == 0) ? 'checked' : '')  : 'checked')}} id="property-no"
+                                            <input type="radio" value="0" {{(isset($user->propertyInfos->first()->is_property) ?  (($user->propertyInfos->first()->is_property == 0) ? 'checked' : '')  : 'checked')}} id="property-no"
                                                 name="is_property">
                                             No
                                         </label>
 
                                         <label for="property-yes">
-                                            <input type="radio" value="1" {{(isset($user->propertyInfos->is_property) ?  (($user->propertyInfos->is_property == 1) ? 'checked' : '')  : '')}} id="property-yes" name="is_property">
+                                            <input type="radio" value="1" {{(isset($user->propertyInfos->first()->is_property) ?  (($user->propertyInfos->first()->is_property == 1) ? 'checked' : '')  : '')}} id="property-yes" name="is_property">
                                             Yes
                                         </label>
                                     </div>
                                 </div>
 
-                                <div class="property-content {{(isset($user->propertyInfos->is_property) ?  (($user->propertyInfos->is_property == 1) ? '' : 'd-none')  : 'd-none')}}">
+                                <div class="property-content {{(isset($user->propertyInfos->first()->is_property) ?  (($user->propertyInfos->first()->is_property == 1) ? '' : 'd-none')  : 'd-none')}}">
                                     <div class="form-group row">
                                         <label for="cash_amount" class="col-sm-2 col-form-label">Cash Amount</label>
                                         <div class="col-sm-9">
                                             <input type="number"  class="form-control"
-                                                value="{{ $user->propertyInfos->cash_amount ?? '' }}" name="cash_amount"
+                                                value="{{ $user->propertyInfos->first()->cash_amount ?? '' }}" name="cash_amount"
                                                 id="cash_amount" placeholder="Cash Amount">
                                         </div>
                                     </div>
@@ -220,7 +220,7 @@
                                         <label for="tin_number" class="col-sm-2 col-form-label">E-TIN</label>
                                         <div class="col-sm-9">
                                             <input type="text" name="tin_number"
-                                                value="{{ $user->propertyInfos->tin_number ?? '' }}" class="form-control"
+                                                value="{{ $user->propertyInfos->first()->tin_number ?? '' }}" class="form-control"
                                                 id="tin_number">
                                         </div>
                                     </div>
@@ -233,7 +233,7 @@
                                             Have any house? 
                                         </label>
                                         <div class="toggle-button r toggle-button-1">
-                                            <input type="checkbox" class="checkbox" name="house" id="house" value="1"  {{ $user->propertyInfos ? ($user->propertyInfos->house ? 'checked' : '') : '' }} />
+                                            <input type="checkbox" class="checkbox" name="house" id="house" value="1"  {{ optional($user->propertyInfos->first())->house ? 'checked' : '' }} />
                                             <div class="knobs"></div>
                                             <div class="layer"></div>
                                         </div>
@@ -244,7 +244,7 @@
                                     <hr>
 
                                     <div
-                                        class="house-property  {{ $user->propertyInfos ? ($user->propertyInfos->house ? '' : 'd-none') : 'd-none' }}">
+                                        class="house-property  {{ optional($user->propertyInfos->first())->house ? '' : 'd-none' }}">
                                         <div class="form-group row">
                                             <label for="house_type" class="col-sm-2 col-form-label">House Type</label>
                                             <div class="col-sm-9">
@@ -257,7 +257,7 @@
                                             <label for="house_area" class="col-sm-2 col-form-label">House Area</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="house_area"
-                                                    value="{{ $user->propertyInfos->house_area ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->house_area ?? '' }}"
                                                     placeholder="House Area" class="form-control" id="house_area">
                                             </div>
                                         </div>
@@ -266,7 +266,7 @@
                                                 Quantity</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="house_land_quantity"
-                                                    value="{{ $user->propertyInfos->house_land_quantity ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->house_land_quantity ?? '' }}"
                                                     placeholder="Land Quantity" class="form-control" id="house_land_quantity">
                                             </div>
                                         </div>
@@ -291,7 +291,7 @@
                                         <div class="form-group row">
                                             <label for="house_address" class="col-sm-2 col-form-label">Address</label>
                                             <div class="col-sm-9">
-                                                <textarea class="form-control" rows="3" name="house_address" placeholder="Address" id="house_address">{{ $user->propertyInfos->house_address ?? '' }}</textarea>
+                                                <textarea class="form-control" rows="3" name="house_address" placeholder="Address" id="house_address">{{ $user->propertyInfos->first()->house_address ?? '' }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -309,7 +309,7 @@
 
 
                                         <div class="toggle-button r toggle-button-1">
-                                            <input type="checkbox" class="checkbox" name="land" id="land" value="1"  {{ $user->propertyInfos ? ($user->propertyInfos->land ? 'checked' : '') : '' }} />
+                                            <input type="checkbox" class="checkbox" name="land" id="land" value="1"  {{ optional($user->propertyInfos->first())->land ? 'checked' : '' }} />
                                             <div class="knobs"></div>
                                             <div class="layer"></div>
                                         </div>
@@ -318,7 +318,7 @@
                                     <hr>
 
                                     <div
-                                        class="land-property {{ $user->propertyInfos ? ($user->propertyInfos->land ? '' : 'd-none') : 'd-none' }}">
+                                        class="land-property {{ optional($user->propertyInfos->first())->land ? '' : 'd-none' }}">
 
                                         <div class="form-group row">
                                             <label for="land_district_id" class="col-sm-2 col-form-label">District</label>
@@ -327,7 +327,7 @@
                                                     <option value="">Select District</option>
                                                     @foreach ($districts as $district)
                                                         <option value="{{ $district->id }}"
-                                                            {{ $user->propertyInfos ? ($user->propertyInfos->land_district_id == $district->id ? 'selected' : '') : '' }}>
+                                                            {{ optional($user->propertyInfos->first())->land_district_id == $district->id ? 'selected' : '' }}>
                                                             {{ $district->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -341,7 +341,7 @@
                                                     <option value="">Select Thana</option>
                                                     @if (count($landThanas))
                                                         @foreach($landThanas as $landThana)
-                                                            <option value="{{$landThana->id}}" {{ $user->propertyInfos ? ($user->propertyInfos->land_thana_id == $landThana->id ? 'selected' : '') : '' }}  >{{$landThana->name}}</option>
+                                                            <option value="{{$landThana->id}}" {{ optional($user->propertyInfos->first())->land_thana_id == $landThana->id ? 'selected' : '' }}  >{{$landThana->name}}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -355,7 +355,7 @@
                                                     <option value="">Select Mouza</option>
                                                     @if (count($landMouzas))
                                                         @foreach($landMouzas as $landMouza)
-                                                            <option value="{{$landMouza->id}}" {{ $user->propertyInfos ? ($user->propertyInfos->land_mouza_id == $landMouza->id ? 'selected' : '') : '' }}  >{{$landMouza->name}}</option>
+                                                            <option value="{{$landMouza->id}}" {{ optional($user->propertyInfos->first())->land_mouza_id == $landMouza->id ? 'selected' : '' }}  >{{$landMouza->name}}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -366,7 +366,7 @@
                                             <label for="land_khatian_id" class="col-sm-2 col-form-label">Khatian</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="land_khatian_id"
-                                                    value="{{ $user->propertyInfos->land_khatian_id ?? '' }}"
+                                                    value="{{ $user->propertyInfos->first()->land_khatian_id ?? '' }}"
                                                     placeholder="Khatian No." class="form-control" id="land_khatian_id">
                                             </div>
                                         </div>
@@ -375,7 +375,7 @@
                                             <label for="land_dag_no" class="col-sm-2 col-form-label">Dag No.</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="land_dag_no"
-                                                    value="{{ $user->propertyInfos->land_dag_no ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->land_dag_no ?? '' }}"
                                                     placeholder="Dag No." class="form-control" id="land_dag_no">
                                             </div>
                                         </div>
@@ -384,7 +384,7 @@
                                             <label for="land_bs" class="col-sm-2 col-form-label">BS</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="land_bs"
-                                                    value="{{ $user->propertyInfos->land_bs ?? '' }}" placeholder="BS"
+                                                    value="{{ optional($user->propertyInfos->first())->land_bs ?? '' }}" placeholder="BS"
                                                     class="form-control" id="land_bs">
                                             </div>
                                         </div>
@@ -393,7 +393,7 @@
                                             <label for="land_rs" class="col-sm-2 col-form-label">RS</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="land_rs"
-                                                    value="{{ $user->propertyInfos->land_rs ?? '' }}" placeholder="RS"
+                                                    value="{{ optional($user->propertyInfos->first())->land_rs ?? '' }}" placeholder="RS"
                                                     class="form-control" id="land_rs">
                                             </div>
                                         </div>
@@ -402,7 +402,7 @@
                                             <label for="land_sa" class="col-sm-2 col-form-label">SA</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="land_sa"
-                                                    value="{{ $user->propertyInfos->land_sa ?? '' }}" placeholder="SA"
+                                                    value="{{ optional($user->propertyInfos->first())->land_sa ?? '' }}" placeholder="SA"
                                                     class="form-control" id="land_sa">
                                             </div>
                                         </div>
@@ -411,7 +411,7 @@
                                             <label for="land_cs" class="col-sm-2 col-form-label">CS</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="land_cs"
-                                                    value="{{ $user->propertyInfos->land_cs ?? '' }}" placeholder="CS"
+                                                    value="{{ optional($user->propertyInfos->first())->land_cs ?? '' }}" placeholder="CS"
                                                     class="form-control" id="land_cs">
                                             </div>
                                         </div>
@@ -420,7 +420,7 @@
                                             <label for="land_quantity" class="col-sm-2 col-form-label">Quantity</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="land_quantity"
-                                                    value="{{ $user->propertyInfos->land_quantity ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->land_quantity ?? '' }}"
                                                     placeholder="Quantity" class="form-control" id="land_quantity">
                                             </div>
                                         </div>
@@ -429,7 +429,7 @@
                                             <label for="land_type" class="col-sm-2 col-form-label">Land Type</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="land_type"
-                                                    value="{{ $user->propertyInfos->land_type ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->land_type ?? '' }}"
                                                     placeholder="Land Type" class="form-control" id="land_type">
                                             </div>
                                         </div>
@@ -464,7 +464,7 @@
                                         </label> --}}
 
                                         <div class="toggle-button r toggle-button-1">
-                                            <input type="checkbox" class="checkbox" name="flat" id="flat" value="1"  {{ $user->propertyInfos ? ($user->propertyInfos->flat ? 'checked' : '') : '' }} />
+                                            <input type="checkbox" class="checkbox" name="flat" id="flat" value="1"  {{ optional($user->propertyInfos->first())->flat ? 'checked' : '' }} />
                                             <div class="knobs"></div>
                                             <div class="layer"></div>
                                         </div>
@@ -473,7 +473,7 @@
                                     <hr>
 
                                     <div
-                                        class="flat-property {{ $user->propertyInfos ? ($user->propertyInfos->flat ? '' : 'd-none') : 'd-none' }}">
+                                        class="flat-property {{ optional($user->propertyInfos->first())->flat ? '' : 'd-none' }}">
 
                                         <div class="form-group row">
                                             <label for="flat_district_id" class="col-sm-2 col-form-label">District</label>
@@ -482,7 +482,7 @@
                                                     <option value="">Select District</option>
                                                     @foreach ($districts as $district)
                                                         <option value="{{ $district->id }}"
-                                                            {{ $user->propertyInfos ? ($user->propertyInfos->flat_district_id == $district->id ? 'selected' : '') : '' }}>
+                                                            {{ optional($user->propertyInfos->first())->flat_district_id == $district->id ? 'selected' : '' }}>
                                                             {{ $district->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -496,7 +496,7 @@
                                                     <option value="">Select Thana</option>
                                                     @if (count($flatThanas))
                                                         @foreach($flatThanas as $landThana)
-                                                            <option value="{{$landThana->id}}" {{ $user->propertyInfos ? ($user->propertyInfos->flat_thana_id == $landThana->id ? 'selected' : '') : '' }}  >{{$landThana->name}}</option>
+                                                            <option value="{{$landThana->id}}" {{ optional($user->propertyInfos->first())->flat_thana_id == $landThana->id ? 'selected' : '' }}  >{{$landThana->name}}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -510,7 +510,7 @@
                                                     <option value="">Select Mouza</option>
                                                     @if (count($flatMouzas))
                                                         @foreach($flatMouzas as $flatMouza)
-                                                            <option value="{{$flatMouza->id}}" {{ $user->propertyInfos ? ($user->propertyInfos->flat_mouza_id == $flatMouza->id ? 'selected' : '') : '' }}  >{{$flatMouza->name}}</option>
+                                                            <option value="{{$flatMouza->id}}" {{ optional($user->propertyInfos->first())->flat_mouza_id == $flatMouza->id ? 'selected' : '' }}  >{{$flatMouza->name}}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -520,7 +520,7 @@
                                         <div class="form-group row">
                                             <label for="flat_area" class="col-sm-2 col-form-label">Flat Area</label>
                                             <div class="col-sm-9">
-                                                <input type="text" value="{{ $user->propertyInfos->flat_area ?? '' }}"
+                                                <input type="text" value="{{ optional($user->propertyInfos->first())->flat_area ?? '' }}"
                                                     name="flat_area" placeholder="Flat Area" class="form-control"
                                                     id="flat_area">
                                             </div>
@@ -530,7 +530,7 @@
                                             <label for="flat_road" class="col-sm-2 col-form-label">Flat Road</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="flat_road"
-                                                    value="{{ $user->propertyInfos->flat_road ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->flat_road ?? '' }}"
                                                     placeholder="Flat Road" class="form-control" id="flat_road">
                                             </div>
                                         </div>
@@ -539,7 +539,7 @@
                                             <label for="flat_house_no" class="col-sm-2 col-form-label">Flat House No.</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="flat_house_no"
-                                                    value="{{ $user->propertyInfos->flat_house_no ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->flat_house_no ?? '' }}"
                                                     placeholder="Flat House No." class="form-control" id="flat_house_no">
                                             </div>
                                         </div>
@@ -548,7 +548,7 @@
                                             <label for="flat_quantity" class="col-sm-2 col-form-label">Flat Quantity</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="flat_quantity"
-                                                    value="{{ $user->propertyInfos->flat_quantity ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->flat_quantity ?? '' }}"
                                                     placeholder="Flat Quantity" class="form-control" id="flat_quantity">
                                             </div>
                                         </div>
@@ -557,7 +557,7 @@
                                             <label for="flat_price" class="col-sm-2 col-form-label">Flat Price</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="flat_price" placeholder="Flat Price"
-                                                    value="{{ $user->propertyInfos->flat_price ?? '' }}" class="form-control"
+                                                    value="{{ optional($user->propertyInfos->first())->flat_price ?? '' }}" class="form-control"
                                                     id="flat_price">
                                             </div>
                                         </div>
@@ -567,7 +567,7 @@
                                                 Status</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="flat_ownership_status"
-                                                    value="{{ $user->propertyInfos->flat_ownership_status ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->flat_ownership_status ?? '' }}"
                                                     placeholder="Flat Ownership Status" class="form-control"
                                                     id="flat_ownership_status">
                                             </div>
@@ -590,7 +590,7 @@
                                         </label> --}}
 
                                         <div class="toggle-button r toggle-button-1">
-                                            <input type="checkbox" class="checkbox" name="diamond" id="diamond" value="1"  {{ $user->propertyInfos ? ($user->propertyInfos->diamond ? 'checked' : '') : '' }} />
+                                            <input type="checkbox" class="checkbox" name="diamond" id="diamond" value="1"  {{ optional($user->propertyInfos->first())->diamond ? 'checked' : '' }} />
                                             <div class="knobs"></div>
                                             <div class="layer"></div>
                                         </div>
@@ -599,14 +599,14 @@
                                     <hr>
 
                                     <div
-                                        class="diamond-property {{ $user->propertyInfos ? ($user->propertyInfos->diamond ? '' : 'd-none') : 'd-none' }}">
+                                        class="diamond-property {{ optional($user->propertyInfos->first())->diamond ? '' : 'd-none' }}">
 
                                         <div class="form-group row">
                                             <label for="diamond_type" class="col-sm-2 col-form-label">Diamond Type</label>
                                             <div class="col-sm-9">
                                                 <select name="diamond_type" class="form-control" id="diamond_type">
                                                     @foreach (property_constant_option('diamondType') as $key => $text)
-                                                        <option value="{{$key}}" {{ $user->propertyInfos ? ($user->propertyInfos->diamond_type ==  $key ? 'selected' : '') : '' }}>{{$text}}</option>
+                                                        <option value="{{$key}}" {{ optional($user->propertyInfos->first())->diamond_type ==  $key ? 'selected' : '' }}>{{$text}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -616,7 +616,7 @@
                                             <label for="diamond_quantity" class="col-sm-2 col-form-label">Diamond Qty.</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="diamond_quantity"
-                                                    value="{{ $user->propertyInfos->diamond_quantity ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->diamond_quantity ?? '' }}"
                                                     placeholder="Diamond  Qty." class="form-control" id="diamond_quantity">
                                             </div>
                                         </div>
@@ -625,7 +625,7 @@
                                             <label for="diamond_price" class="col-sm-2 col-form-label">Diamond Price.</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="diamond_price"
-                                                    value="{{ $user->propertyInfos->diamond_price ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->diamond_price ?? '' }}"
                                                     placeholder="Diamond  Price." class="form-control" id="diamond_price">
                                             </div>
                                         </div>
@@ -635,7 +635,7 @@
                                                 Status</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="diamond_ownership_status"
-                                                    value="{{ $user->propertyInfos->diamond_ownership_status ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->diamond_ownership_status ?? '' }}"
                                                     placeholder="Diamond Ownership Status" class="form-control"
                                                     id="diamond_ownership_status">
                                             </div>
@@ -659,7 +659,7 @@
                                             <span class="slider round"></span>
                                         </label> --}}
                                         <div class="toggle-button r toggle-button-1">
-                                            <input type="checkbox" class="checkbox" name="gold" id="gold" value="1"  {{ $user->propertyInfos ? ($user->propertyInfos->gold ? 'checked' : '') : '' }} />
+                                            <input type="checkbox" class="checkbox" name="gold" id="gold" value="1"  {{ optional($user->propertyInfos->first())->gold ? 'checked' : '' }} />
                                             <div class="knobs"></div>
                                             <div class="layer"></div>
                                         </div>
@@ -667,13 +667,13 @@
                                     <hr>
 
                                     <div
-                                        class="gold-property {{ $user->propertyInfos ? ($user->propertyInfos->gold ? '' : 'd-none') : 'd-none' }} ">
+                                        class="gold-property {{ optional($user->propertyInfos->first())->gold ? '' : 'd-none' }} ">
                                         <div class="form-group row">
                                             <label for="gold_type" class="col-sm-2 col-form-label">Gold Type</label>
                                             <div class="col-sm-9">
                                                 <select name="gold_type" class="form-control" id="gold_type">
                                                     @foreach (property_constant_option('goldType') as $key => $text)
-                                                        <option value="{{$key}}" {{ $user->propertyInfos ? ($user->propertyInfos->gold_type ==  $key ? 'selected' : '') : '' }}>{{$text}}</option>
+                                                        <option value="{{$key}}" {{ optional($user->propertyInfos->first())->gold_type ==  $key ? 'selected' : '' }}>{{$text}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -683,7 +683,7 @@
                                             <label for="gold_quantity" class="col-sm-2 col-form-label">Gold Qty.</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="gold_quantity"
-                                                    value="{{ $user->propertyInfos->gold_quantity ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->gold_quantity ?? '' }}"
                                                     placeholder="Gold  Qty." class="form-control" id="gold_quantity">
                                             </div>
                                         </div>
@@ -692,7 +692,7 @@
                                             <label for="gold_price" class="col-sm-2 col-form-label">Gold Price.</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="gold_price"
-                                                    value="{{ $user->propertyInfos->gold_price ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->gold_price ?? '' }}"
                                                     placeholder="Gold Price." class="form-control" id="gold_price">
                                             </div>
                                         </div>
@@ -702,7 +702,7 @@
                                                 Status</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="gold_ownership_status"
-                                                    value="{{ $user->propertyInfos->gold_ownership_status ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->gold_ownership_status ?? '' }}"
                                                     placeholder="Gold Ownership Status" class="form-control"
                                                     id="gold_ownership_status">
                                             </div>
@@ -723,7 +723,7 @@
                                             <span class="slider round"></span>
                                         </label> --}}
                                         <div class="toggle-button r toggle-button-1">
-                                            <input type="checkbox" class="checkbox" name="silver" id="silver" value="1"  {{ $user->propertyInfos ? ($user->propertyInfos->silver ? 'checked' : '') : '' }} />
+                                            <input type="checkbox" class="checkbox" name="silver" id="silver" value="1"  {{ optional($user->propertyInfos->first())->silver ? 'checked' : '' }} />
                                             <div class="knobs"></div>
                                             <div class="layer"></div>
                                         </div>
@@ -731,14 +731,14 @@
                                     <hr>
 
                                     <div
-                                        class="silver-property {{ $user->propertyInfos ? ($user->propertyInfos->silver ? '' : 'd-none') : 'd-none' }}">
+                                        class="silver-property {{ optional($user->propertyInfos->first())->silver ? '' : 'd-none' }}">
 
                                         <div class="form-group row">
                                             <label for="silver_type" class="col-sm-2 col-form-label">Silver Type</label>
                                             <div class="col-sm-9">
                                                 <select name="silver_type" class="form-control" id="silver_type">
                                                     @foreach (property_constant_option('silverType') as $key => $text)
-                                                        <option value="{{$key}}" {{ $user->propertyInfos ? ($user->propertyInfos->silver_type ==  $key ? 'selected' : '') : '' }}>{{$text}}</option>
+                                                        <option value="{{$key}}" {{ optional($user->propertyInfos->first())->silver_type ==  $key ? 'selected' : '' }}>{{$text}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -748,7 +748,7 @@
                                             <label for="silver_quantity" class="col-sm-2 col-form-label">Silver Qty.</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="silver_quantity"
-                                                    value="{{ $user->propertyInfos->silver_quantity ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->silver_quantity ?? '' }}"
                                                     placeholder="Silver  Qty." class="form-control" id="silver_quantity">
                                             </div>
                                         </div>
@@ -757,7 +757,7 @@
                                             <label for="silver_price" class="col-sm-2 col-form-label">Silver Price.</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="silver_price"
-                                                    value="{{ $user->propertyInfos->silver_price ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->silver_price ?? '' }}"
                                                     placeholder="Silver Price." class="form-control" id="silver_price">
                                             </div>
                                         </div>
@@ -767,7 +767,7 @@
                                                 Status</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="silver_ownership_status"
-                                                    value="{{ $user->propertyInfos->silver_ownership_status ?? '' }}"
+                                                    value="{{ optional($user->propertyInfos->first())->silver_ownership_status ?? '' }}"
                                                     placeholder="Silver Ownership Status" class="form-control"
                                                     id="silver_ownership_status">
                                             </div>
