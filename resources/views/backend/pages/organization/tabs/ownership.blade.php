@@ -61,18 +61,18 @@
         <form class="form-horizontal"   id="organizationOwnershipForm" method="POST" enctype="multipart/form-data" >
 @csrf
 <input type="hidden" name="organization_id" value="{{$organization->id}}">
-        
+
         <div id="load-ownership">
 
             @if (count($organization->ownership))
                 @foreach($organization->ownership as $ownership)
-                    @include('backend.pages.organization.forms.ownership', ['ownership' => $ownership ]) 
+                    @include('backend.pages.organization.forms.ownership', ['ownership' => $ownership ])
                 @endforeach
             @else
                 @php $owner = $organization->no_of_owner ?? 1; @endphp
 
                 @while ($owner > 0)
-                    @include('backend.pages.organization.forms.ownership', ['ownership' => null ]) 
+                    @include('backend.pages.organization.forms.ownership', ['ownership' => null ])
                     @php $owner--; @endphp
                 @endwhile
             @endif
@@ -94,12 +94,12 @@
     <div id="union-section" style="display:none;">
         <div class="row mb-3">
             <!--<form id="ownershipForm" class="form-horizontal" action="{{route('savenewownership')}}" method="POST" enctype="multipart/form-data">-->
-            
+
             <form id="ownershipForm" class="form-horizontal" action="javascript:void(0);" style="width:100%">
                             @csrf
-                            
+
                             <input type="hidden" value="{{$organization->id}}" name="organization_id">
-                            
+
                             <div class="card-body">
                                 <!-- Row 1: Name and Bangla Name -->
                                 <div class="form-group row">
@@ -114,8 +114,8 @@
                                         <small class="error bn_name-error text-danger"></small>
                                     </div>
                                 </div>
-                                
-                                
+
+
                                 <!-- Father Name -->
                                 <div class="form-group row">
                                     <div class="col-sm-6">
@@ -125,7 +125,7 @@
                                         <input type="text" required class="form-control" name="father_name" id="father_name" placeholder="Father Name English">
                                         <small class="error father_name-error text-danger"></small>
                                     </div>
-                                
+
                                     <div class="col-sm-6">
                                         <label for="father_name_bn">Father Name (Bangla)
                                             <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
@@ -134,7 +134,7 @@
                                         <small class="error father_name_bn-error text-danger"></small>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Mother Name -->
                                 <div class="form-group row">
                                     <div class="col-sm-6">
@@ -144,7 +144,7 @@
                                         <input type="text" required class="form-control" name="mother_name" id="mother_name" placeholder="Mother Name English">
                                         <small class="error mother_name-error text-danger"></small>
                                     </div>
-                                
+
                                     <div class="col-sm-6">
                                         <label for="mother_name_bn">Mother Name (Bangla)
                                             <span class="text-danger" title="Required" data-toggle="tooltip">*</span>
@@ -153,7 +153,7 @@
                                         <small class="error mother_name_bn-error text-danger"></small>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Permanent Address Section -->
                             <div class="card-header">
                                 <h6 class="card-title p-0 m-0">Permanent Address</h6>
@@ -188,7 +188,7 @@
                                         <small class="text-danger error permanent_thana_id_error"></small>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Row 1: Village, Post Office, Permanent Ward -->
                                 <div class="form-group row">
                                      <div class="col-sm-4">
@@ -203,7 +203,7 @@
                                         </select>
                                         <small class="text-danger error permanent_post_office_id_error"></small>
                                     </div>
-                                    
+
                                       <div class="col-sm-4">
                                         <label for="permanent_union_id">UP (Union Parishad)</label>
                                         <select name="permanent_union_id" class="form-control select2 select2bs4" id="permanent_union_id">
@@ -211,8 +211,8 @@
                                         </select>
                                         <small class="text-danger error present_union_id_error"></small>
                                     </div>
-                                    
-                                    
+
+
                                     <div class="col-sm-4">
                                         <label for="permanent_village_id">Village</label>
                                         <select name="permanent_village_id" class="form-control select2 select2bs4" id="permanent_village_id">
@@ -261,7 +261,7 @@
                                 </div>
 
                                 <!-- Row 2:  -->
-                              
+
                                     <div class="form-group row">
                             </div>
 
@@ -363,7 +363,7 @@
                                         <small class="text-danger error present_house_bn_error"></small>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Row 2: Date of Birth, Birth Reg., NID No. -->
                                 <div class="form-group row">
                                     <div class="col-sm-4">
@@ -449,23 +449,23 @@
                                     </div>
                                 </div>
 
-                        
-                          
+
+
                             <!-- /.card-footer -->
-                            
-                              
+
+
                                 <div class="form-group row">
                                     <div class="col-sm-12">
                                          <a href="{{route('organization.edit', $organization->id)}}" class="btn btn-danger float-right">
         Organization Info
     </a>
 
-                                       
+
                                         <button type="submit" class="btn btn-info">Save</button>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </form>
         </div>
     </div>
@@ -564,6 +564,11 @@ $(document).ready(function() {
             success: function (response) {
                 thisForm.find('button[type="submit"]').prop("disabled",false);
                 toastr.success(response.message);
+
+                let redirectUrl = response.redirect_url || "{{ route('organization.index') }}";
+                setTimeout(function () {
+                    window.location.href = redirectUrl;
+                }, 500);
             },
 
             error: function(xhr) {
@@ -791,10 +796,10 @@ $(document).on('change', '#present_division_id', function(e){
                 present_village_id.prop("disabled", true);
             }
         });
-        
-        
+
+
         // ------------ parmanent info --------------------
-        
+
         $(document).on('change', '#permanent_division_id', function(e){
             e.preventDefault();
             let district_id = $('#permanent_district_id');
@@ -912,6 +917,6 @@ $(document).on('change', '#present_division_id', function(e){
                 present_village_id.prop("disabled", true);
             }
         });
-        
+
 </script>
 @endpush

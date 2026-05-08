@@ -195,8 +195,15 @@
 @section('content')
 
 @php
-    $owner = $license->organization->ownership->firstWhere('is_trade_license')?->user;
+    $organization = $license->organization;
+    $ownerships = $organization?->ownership ?? collect();
+    $owner = $ownerships->firstWhere('is_trade_license', true)?->user
+        ?? $ownerships->firstWhere('is_trade_license', 1)?->user
+        ?? $ownerships->first()?->user;
     $fees = json_decode($license->fees ?? '{}', true) ?? [];
+    $businessAddress = $organization?->address
+        ?? collect([$organization?->house, $organization?->road])->filter()->implode(', ');
+    $businessAddress = $businessAddress ?: '--';
 
     $feeList = [
         ['label' => 'নতুন নিবন্ধন ফি', 'key' => 'New Registration Charge'],
@@ -225,6 +232,11 @@
 
 <div class="certificate-page">
     <div class="certificate-content">
+        @if(!$organization)
+            <div class="alert alert-warning no-print" style="font-size:13px;">
+                এই ট্রেড লাইসেন্সের সাথে যুক্ত প্রতিষ্ঠানের তথ্য পাওয়া যায়নি। কিছু তথ্য ফাঁকা থাকতে পারে।
+            </div>
+        @endif
 
         <div class="header-logos">
             <img src="{{ asset('images/dhaka.png') }}">
@@ -248,13 +260,13 @@
 
             <div style="text-align:right">
                 তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}<br>
-                <img src="{{ $owner->people->photo ?? asset('images/photo-placeholder.png') }}" style="width:80px;height:80px;object-fit:cover;">
+                <img src="{{ $owner?->people?->photo ?? asset('images/photo-placeholder.png') }}" style="width:80px;height:80px;object-fit:cover;">
             </div>
         </div>
 
         <div class="validity-info">
             নবায়ন/নতুন <br>
-            অর্থ বছর: {{ $license->taxYear->name }} <br>
+            অর্থ বছর: {{ $license->taxYear?->name ?? '--' }} <br>
             এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত
         </div>
 
@@ -264,12 +276,12 @@
 
         @php
         $businessInfo = [
-            '১। (ক) প্রতিষ্ঠানের নাম' => $license->organization->name,
-            '(খ) প্রতিষ্ঠানের নাম (ইংরেজি)' => $license->organization->en_name ?? $license->organization->name,
-            '২। ব্যবসার ধরণ' => $license->organization->subCategory->name,
-            '৩। প্রতিষ্ঠানের ধরণ' => count($license->organization->ownership) == 1 ? 'একক প্রতিষ্ঠান' : 'পার্টনারশিপ',
-            '৪। প্রতিষ্ঠানের মূলধন' => currencyFormat($license->organization->capital),
-            '৬। ব্যবসা প্রতিষ্ঠানের ঠিকানা' => $license->organization->address
+            '১। (ক) প্রতিষ্ঠানের নাম' => $organization?->name ?? '--',
+            '(খ) প্রতিষ্ঠানের নাম (ইংরেজি)' => $organization?->en_name ?? ($organization?->name ?? '--'),
+            '২। ব্যবসার ধরণ' => $organization?->subCategory?->name ?? $organization?->subcategory?->en_name ?? '--',
+            '৩। প্রতিষ্ঠানের ধরণ' => $ownerships->count() == 1 ? 'একক প্রতিষ্ঠান' : ($ownerships->count() > 1 ? 'পার্টনারশিপ' : '--'),
+            '৪। প্রতিষ্ঠানের মূলধন' => currencyFormat($organization?->capital),
+            '৬। ব্যবসা প্রতিষ্ঠানের ঠিকানা' => $businessAddress
         ];
         @endphp
 
@@ -284,7 +296,7 @@
         @php
         $ownerInfo = [
             '১। (ক) মালিকের নাম' => $owner?->people?->bn_name,
-            '(খ) মালিকের নাম (ইংরেজি)' => $owner?->people?->name,
+            '(খ) মালিকের নাম (ইংরেজি)' => $owner?->name,
             '২। মালিকের আইডি' => bnValue($owner?->id),
             '৩। মালিকের এনআইডি' => bnValue($owner?->people?->nid),
             '৪। মোবাইল নম্বর' => bnValue($owner?->mobile),

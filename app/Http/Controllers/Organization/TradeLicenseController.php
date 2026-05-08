@@ -8,6 +8,7 @@ use App\Models\BasicSettings\OrganizationSubCategory;
 use App\Models\BasicSettings\Village;
 use App\Models\Institute;
 use App\Models\InstituteType;
+use App\Models\Organization\Organization;
 use App\Models\Organization\TradeLicense;
 use App\Models\Tax\TaxYear;
 use App\Models\UnionWard;
@@ -72,18 +73,49 @@ class TradeLicenseController extends Controller
 
     public function invoice($id)
     {
-        $data['license'] = TradeLicense::find($id);
+        $data['license'] = TradeLicense::with([
+            'taxYear',
+            'organization',
+            'organization.type',
+            'organization.institute.union.thana.district',
+            'organization.Union.thana.district',
+            'organization.Thana.district',
+            'organization.District',
+            'organization.officeThana.district',
+            'organization.officeDistrict',
+            'organization.category',
+            'organization.subcategory',
+            'organization.village',
+            'organization.villageArea',
+            'organization.ownership.user.people',
+            'organization.ownership.user.addressInfo',
+            'organization.ownership.user.institute.union.thana.district',
+            'organization.ownership.user.addressInfo.presentUnion.thana.district',
+            'organization.ownership.user.addressInfo.permanentUnion.thana.district',
+            'organization.ownership.user.addressInfo.presentThana.district',
+            'organization.ownership.user.addressInfo.permanentThana.district',
+            'organization.ownership.user.addressInfo.presentDistrict',
+            'organization.ownership.user.addressInfo.permanentDistrict',
+            'organization.ownership.user.familyInfo',
+        ])->findOrFail($id);
         return view('backend.pages.organization.trade_license.invoice', $data);
     }
 
     public function index()
     {
-        // if (Auth::user()->institute_id) {
-        //     $data['trade_licenses'] = TradeLicense::where('institute_id', Auth::user()->institute_id )->latest()->get();
-        // } else{
-        //     $data['trade_licenses'] = TradeLicense::latest()->get();
-        // }
-  $data['trade_licenses'] = TradeLicense::where('payment_status','unpaid')->latest()->get();
+        $data['organizations'] = Organization::with([
+            'type',
+            'category',
+            'subcategory',
+            'ownership.user.people',
+            'latestTradeLicense.taxYear',
+        ])->where('status', 1)
+          ->when(Auth::user()->institute_id, function ($query) {
+              $query->where('institute_id', Auth::user()->institute_id);
+          })
+          ->latest()
+          ->get();
+
         return view('backend.pages.organization.trade_license.index', $data);
     }
 
@@ -94,17 +126,23 @@ class TradeLicenseController extends Controller
      */
     public function create()
     {
-        
+
         $data['tax_years'] = TaxYear::where('status', true)->latest()->get();
         return view('backend.pages.organization.trade_license.create', $data);
     }
- 
+
     public function getTradeLicense()
     {
         // $data['tax_years'] = TaxYear::where('status', true)->latest()->get();
         // return view('backend.pages.organization.trade_license.get_license', $data);
-        
-        $data['trade_licenses'] = TradeLicense::where('payment_status','paid')->latest()->get();
+
+        $data['trade_licenses'] = TradeLicense::with([
+            'taxYear',
+            'organization',
+            'organization.type',
+            'organization.category',
+            'organization.subcategory',
+        ])->where('payment_status','paid')->latest()->get();
         return view('backend.pages.organization.trade_license.paidindex', $data);
     }
 
@@ -116,7 +154,7 @@ class TradeLicenseController extends Controller
      */
     public function store(Request $request)
     {
-       
+
         $trade =  new TradeLicense();
         $trade->tax_year_id = $request->tax_year_id;
         $trade->organization_id = $request->organization_id;
@@ -149,7 +187,7 @@ class TradeLicenseController extends Controller
      */
     public function show($id)
     {
-        
+
         //  $data['license'] = TradeLicense::with(['organization'=>function($q1){
         //     $q1->with(['ownership'=>function($q2){
         //         $q2->with(['user' => function($q3){
@@ -201,8 +239,8 @@ class TradeLicenseController extends Controller
     {
         //
     }
-    
-    
+
+
     public function storeManualPayment(Request $request, $id)
 {
     $request->validate([
@@ -331,7 +369,7 @@ class TradeLicenseController extends Controller
 public function onlinePayment($id)
 {
     $license = TradeLicense::findOrFail($id);
-    
+
 
     // Generate unique invoice (VERY IMPORTANT to avoid duplicate error)
     $invoice = 'TL-' . $license->id . '-' . time();
@@ -373,10 +411,10 @@ public function onlinePayment($id)
 public function paymentSuccess($id)
 {
 
-    
+
     $license = TradeLicense::findOrFail($id);
 
-    
+
 
     // You can verify payment here if API supports verification
 

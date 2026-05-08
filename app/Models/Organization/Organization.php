@@ -214,5 +214,15 @@ class Organization extends Model
         return $this->belongsTo(Institute::class, 'institute_id', 'id');
     }
 
+    public function tradeLicenses()
+    {
+        return $this->hasMany(TradeLicense::class, 'organization_id', 'id');
+    }
+
+    public function latestTradeLicense()
+    {
+        return $this->hasOne(TradeLicense::class, 'organization_id', 'id')->latestOfMany();
+    }
+
 
 }

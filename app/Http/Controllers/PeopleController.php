@@ -46,19 +46,32 @@ class PeopleController extends Controller
 
     public function searchUser($system_id)
     {
-        $user = User::with( 'people', 'familyInfo')->where('system_id', $system_id)->first();
+        $searchKey = trim((string) $system_id);
 
-        if($user) {
+        $user = User::with('people', 'familyInfo')
+            ->where(function ($query) use ($searchKey) {
+                $query->where('system_id', $searchKey)
+                    ->orWhereHas('people', function ($q) use ($searchKey) {
+                        $q->where('approved_id', $searchKey);
+                    });
+
+                if (ctype_digit($searchKey)) {
+                    $query->orWhere('id', (int) $searchKey);
+                }
+            })
+            ->first();
+
+        if ($user) {
             $data['status'] = true;
             $data['message'] = "People information loaded.";
             $data['user'] = $user;
             return response()->json($data, 200);
-        }else {            
-            $data['status'] = false;
-            $data['message'] = "People not found.";
-            $data['user'] = $user;
-            return response()->json($data, 500);
         }
+
+        $data['status'] = false;
+        $data['message'] = "People not found.";
+        $data['user'] = null;
+        return response()->json($data, 404);
     }
 
     /**
@@ -120,7 +133,7 @@ class PeopleController extends Controller
         $data['users'] = $query->latest()->get();
         return view('backend.pages.people.approvedList', $data);
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -129,8 +142,8 @@ class PeopleController extends Controller
     public function create()
     {
         $data['religions'] = Religion::where('status', true)->get();
-        $data['districts'] =  District::where('status', true)->orderBy('name')->get(); 
-        $data['countries'] =  Country::orderBy('name')->get(); 
+        $data['districts'] =  District::where('status', true)->orderBy('name')->get();
+        $data['countries'] =  Country::orderBy('name')->get();
         return view('backend.pages.people.create', $data);
     }
 
@@ -169,7 +182,7 @@ class PeopleController extends Controller
                 $user = new User();
                 $user->role_id = 5; // 5 => User Role
                 $user->institute_id = Auth::user()->institute_id ?? '';
-                
+
                 $user->name = $request->name;
                 $user->email = $request->email;
                 $user->mobile = $request->mobile;
@@ -202,8 +215,8 @@ class PeopleController extends Controller
                     $people->religion_id = $request->religion;
                     $people->blood_group = $request->blood_group;
                     if ($people->save()) {
-                        
-                        
+
+
                         $data['status'] = true;
                         $data['message'] = "People saved successfully.";
                         $data['user'] = $user;
@@ -228,7 +241,7 @@ class PeopleController extends Controller
             }
         });
         return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'])->header('Content-Type', 'application/json');
-    } 
+    }
 
     /**
      * Display the specified resource.
@@ -238,10 +251,10 @@ class PeopleController extends Controller
      */
     public function show($id)
     {
-        
+
         $data['religions'] = Religion::where('status', true)->get();
-        $data['districts'] =  District::where('status', true)->orderBy('name')->get(); 
-        $data['countries'] =  Country::orderBy('name')->get(); 
+        $data['districts'] =  District::where('status', true)->orderBy('name')->get();
+        $data['countries'] =  Country::orderBy('name')->get();
         $data['religions'] = Religion::where('status', true)->get();
         $data['familyTypes'] = FamilyType::where('status', true)->get();
         $data['familyCategories'] = FamilyCategory::where('status', true)->get();
@@ -267,7 +280,7 @@ class PeopleController extends Controller
 
         $institute = $user->institute;
         $data['people']=People::where('user_id',$id)->first();
-        
+
         $data['religions'] = Religion::where('status', true)->get();
         $data['villages'] = [];
         $data['wards'] = [];
@@ -278,9 +291,9 @@ class PeopleController extends Controller
             $data['wards'] = UnionWard::where('status', true)->get();
             $data['roads'] = Road::where('institute_id',  $institute->id)->latest()->get();
         } else if (isset($institute?->institute_type_id) && $institute->institute_type_id == 2) {
-           
+
         } else if (isset($institute?->institute_type_id) && $institute->institute_type_id == 3) {
- 
+
         }
         $data['divisions'] = Division::where('status', true)->get();
 
@@ -321,8 +334,8 @@ class PeopleController extends Controller
         }
 
         $data['religions'] = Religion::where('status', true)->get();
-        $data['districts'] =  District::where('status', true)->orderBy('name')->get(); 
-        $data['countries'] =  Country::orderBy('name')->get(); 
+        $data['districts'] =  District::where('status', true)->orderBy('name')->get();
+        $data['countries'] =  Country::orderBy('name')->get();
         $data['user'] =  $user=User::with('people')->find($id);
 
         if (! $user) {
@@ -332,7 +345,7 @@ class PeopleController extends Controller
         $presentUnionId = $user->addressInfo ? $user->addressInfo->present_union_id : null;
         $data['villages'] = $presentUnionId ? Village::where('union_id', $presentUnionId)->get() : [];
 
-        
+
 
         return view('backend.pages.people.edit', $data);
     }
@@ -433,8 +446,8 @@ class PeopleController extends Controller
                     $data['code'] = 500;
                     $data['errors'] = $th;
                     return $data;
-                }                    
-            
+                }
+
         });
 
         return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'])->header('Content-Type', 'application/json');
@@ -450,35 +463,35 @@ class PeopleController extends Controller
     {
         //
     }
-    
+
     private function generateApprovedId($date_of_birth, $district_id)
     {
-        
+
         // DOB থেকে YYMMDD
         $datePart = Carbon::parse($date_of_birth)->format('ymd');
-    
+
         // District ID 2 digit
         $districtPart = str_pad($district_id, 2, '0', STR_PAD_LEFT);
-    
+
         // একই district + DOB এর last serial বের করা
         $last = People::where('district_id', $district_id)
             ->whereNotNull('approved_id')
             ->orderBy('id', 'desc')
             ->first();
-    
+
         if ($last) {
             $lastSerial = (int) substr($last->approved_id, -4);
             $newSerial = $lastSerial + 1;
         } else {
             $newSerial = 1;
         }
-        
+
         // 4 digit serial
         $serialPart = str_pad($newSerial, 4, '0', STR_PAD_LEFT);
-    
+
         return $districtPart . '-' . $datePart . '-' . $serialPart;
     }
-    
+
 
     public function approve(Request $request, $id)
     {
@@ -503,17 +516,17 @@ class PeopleController extends Controller
 
             Log::info('[PeopleApproval] Generating IDs', ['dob' => $dob, 'district' => $district_id]);
             $approvedId = $this->generateApprovedId($dob, $district_id);
-            
+
             // Auto-generate credentials
             $emailCandidate = optional($people->user)->email ?? $people->email;
-            
+
             // Resilience: Ensure login_id is unique in the people table
             if ($emailCandidate && !People::where('login_id', $emailCandidate)->exists()) {
                 $loginId = $emailCandidate;
             } else {
                 $loginId = $approvedId; // Fallback to unique approved_id
             }
-            
+
             $password = Str::random(8);
 
             Log::info('[PeopleApproval] Data generated', ['approvedId' => $approvedId, 'loginId' => $loginId]);
@@ -529,7 +542,7 @@ class PeopleController extends Controller
 
             $people->save();
             Log::info('[PeopleApproval] Database saved');
-            
+
             DB::commit();
             Log::info('[PeopleApproval] Transaction committed');
 

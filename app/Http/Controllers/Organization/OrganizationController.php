@@ -22,6 +22,9 @@ use App\Models\User;
 use App\Models\UnionWard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
@@ -57,6 +60,8 @@ class OrganizationController extends Controller
 
 public function getOrganizationBySystemId($system_id)
 {
+    $searchKey = trim((string) $system_id);
+
     $organization = Organization::with([
         'house',
         'road',
@@ -65,7 +70,16 @@ public function getOrganizationBySystemId($system_id)
         'ownership.user.familyInfo',
         'ownership.user.addressInfo'
     ])
-    ->where('approved_id', $system_id)
+    ->where('status', 1)
+    ->where(function ($query) use ($searchKey) {
+        $query->where('approved_id', $searchKey)
+            ->orWhere('application_id', $searchKey)
+            ->orWhere('system_id', $searchKey);
+
+        if (ctype_digit($searchKey)) {
+            $query->orWhere('id', (int) $searchKey);
+        }
+    })
     ->first();
 
     if (!$organization) {
@@ -129,8 +143,19 @@ public function getOrganizationBySystemId($system_id)
 
 public function getOrganizationBySystemId_01_05_26($system_id)
 {
+    $searchKey = trim((string) $system_id);
+
     $organization = Organization::with('house', 'road', 'villageArea', 'village')
-        ->where('approved_id', $system_id)
+        ->where('status', 1)
+        ->where(function ($query) use ($searchKey) {
+            $query->where('approved_id', $searchKey)
+                ->orWhere('application_id', $searchKey)
+                ->orWhere('system_id', $searchKey);
+
+            if (ctype_digit($searchKey)) {
+                $query->orWhere('id', (int) $searchKey);
+            }
+        })
         ->first();
 
     if ($organization) {
@@ -140,7 +165,7 @@ public function getOrganizationBySystemId_01_05_26($system_id)
             ->toArray();
 
         $users = User::whereIn('id', $ownershipUserIds)->get();
-        
+
          $addressInfos = AddressInfo::whereIn('user_id', $ownershipUserIds)->get();
 
         $names = $users->pluck('name')->filter()->implode(', ');
@@ -195,7 +220,7 @@ public function getOrganizationBySystemId_01_05_26($system_id)
 
             return implode(', ', $parts);
         })->filter()->implode(', ');
-        
+
         $address = "";
         $address .= "House# " . ($organization->house->house ?? '--') . ", ";
         $address .= "Road# " . ($organization->road->name ?? '--') . ", ";
@@ -207,9 +232,9 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         $data['organization'] = $organization;
         $data['organization_name'] = $organization->name;
         $data['organization_address'] = $address;
-        
-        
-        
+
+
+
 
         $data['name'] = $names ?: '--';
         $data['current_address'] = $currentAddresses ?: '--';
@@ -229,14 +254,14 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         return response()->json($data, 404);
     }
 }
-    
+
     public function index()
     {
         $data['organizations'] = Organization::with('category')->where('status',0)->latest()->get();
         return view('backend.pages.organization.index', $data);
     }
 
-    
+
        public function approved_index()
     {
         $data['organizations'] = Organization::with('category')->where('status',1)->latest()->get();
@@ -252,8 +277,8 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         $data['wards'] = UnionWard::where('status', true)->get();
         $data['roads'] = Road::where('institute_id', Auth::user()->institute_id)->get();
         $data['divisions'] = Division::where('status', true)->get();
-        // dd($data['divisions']);  
-         
+        // dd($data['divisions']);
+
        $data['post_officeses']=PostOffice::latest()->get();
         $institute = Institute::find(Auth::user()->institute_id);
         if($institute )
@@ -350,7 +375,7 @@ public function getOrganizationBySystemId_01_05_26($system_id)
     //             ]);
     //         }
 
-           
+
     //         $data['status'] = true;
     //         $data['message'] = "Organization saved successfully!";
     //         $data['result'] = $organization;
@@ -364,7 +389,7 @@ public function getOrganizationBySystemId_01_05_26($system_id)
     //         return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
     //     }
     // }
-    
+
     public function store(Request $request)
 {
     $validate = Validator::make($request->all(), [
@@ -440,7 +465,7 @@ public function getOrganizationBySystemId_01_05_26($system_id)
 
             'capital' => $request->capital,
             'establish_year' => $request->establish_year,
-            'application_type' => $request->application_type,
+            'application_type' => $request->application_type ?: 'new',
             'remarks' => $request->remarks,
             // 'status' => $request->has('status') ? $request->status : 1,
             'status' =>0,
@@ -450,9 +475,51 @@ public function getOrganizationBySystemId_01_05_26($system_id)
             $organization = Organization::findOrFail($request->id);
             $organization->update($payload);
         } else {
-            
-            $payload['institute_id'] = Auth::user()->institute_id;
-            
+            $instituteId = Auth::user()->institute_id;
+            $resolvedUnionId = $request->union_id;
+
+            // Fallback: for accounts without direct institute mapping,
+            // resolve institute from selected union.
+            if (!$instituteId && $request->filled('union_id')) {
+                $instituteId = Institute::where('union_id', $request->union_id)->value('id');
+            }
+
+            // If union is not selected but ward is selected, try to resolve union from ward.
+            if (!$instituteId && $request->filled('ward_id')) {
+                $resolvedUnionId = UnionWard::where('id', $request->ward_id)->value('union_id');
+                if ($resolvedUnionId) {
+                    $instituteId = Institute::where('union_id', $resolvedUnionId)->value('id');
+                    $payload['union_id'] = $resolvedUnionId;
+                }
+            }
+
+            // Last fallback for super/admin accounts: use the first available institute
+            // to avoid blocking form submit.
+            if (!$instituteId) {
+                $instituteId = Institute::orderBy('id')->value('id');
+            }
+
+            if (!$instituteId) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Institute not found for this account. Please select a valid union or contact admin.',
+                    'errors' => [
+                        'institute_id' => ['Institute not found for current user.'],
+                    ],
+                ], 422);
+            }
+
+            if (!Auth::user()->institute_id) {
+                Log::warning('Organization store used institute fallback', [
+                    'user_id' => optional(Auth::user())->id,
+                    'request_union_id' => $request->union_id,
+                    'resolved_union_id' => $resolvedUnionId,
+                    'fallback_institute_id' => $instituteId,
+                ]);
+            }
+
+            $payload['institute_id'] = $instituteId;
+
             $payload['application_id'] = $this->generateApplicationId();
             $organization = Organization::create($payload);
         }
@@ -461,13 +528,23 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         $data['message'] = "Organization saved successfully!";
         $data['result'] = $organization;
         $data['code'] = 200;
-        $data['redirect_url'] = route('organization-ownership.edit', $organization->id);
+        $data['redirect_url'] = route('organization-ownership.edit', ['organization_ownership' => $organization->id], false);
 
         return response()->json($data, 200);
 
     } catch (\Throwable $th) {
+        Log::error('Organization store failed', [
+            'request_id' => $request->id,
+            'user_id' => optional(Auth::user())->id,
+            'message' => $th->getMessage(),
+            'file' => $th->getFile(),
+            'line' => $th->getLine(),
+        ]);
+
         $data['status'] = false;
-        $data['message'] = "Something went wrong! Please try again...";
+        $data['message'] = config('app.debug')
+            ? $th->getMessage()
+            : "Something went wrong! Please try again...";
         $data['errors'] = $th->getMessage();
 
         return response()->json($data, 500);
@@ -515,11 +592,11 @@ public function getOrganizationBySystemId_01_05_26($system_id)
             // return response()->json($data, 200);
              $data['divisions'] = Division::where('status', true)->get();
              $data['districts'] = District::where('division_id',$organization->division_id)->where('status', true)->get();
-             
+
              $data['thanas'] = Thana::where('district_id',$organization->district_id)->where('status', true)->get();
              $data['ups'] = Union::where('thana_id',$organization->thana_id)->where('status', true)->get();
               $data['villages'] = Village::where('union_id', $organization->union_id )->get();
-        // dd($data['divisions']);  
+        // dd($data['divisions']);
        $data['post_officeses']=PostOffice::latest()->get();
 
             $institute = Institute::find(Auth::user()->institute_id);
@@ -534,7 +611,7 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         } else {
             return "Not found";
         }
-       
+
     }
 
     public function update(Request $request, $id)
@@ -565,71 +642,103 @@ public function getOrganizationBySystemId_01_05_26($system_id)
             return response()->json($data, 404);
         }
     }
-    
+
     public function approve(Request $request)
     {
-        $organization = Organization::findOrFail($request->id);
-        $approved_id = $this->generateApprovedId($organization);
-        $organization->approved_id = $approved_id;
-        $organization->status = 1; // approved
-        $organization->save();
-    
-        return response()->json(['success' => true]);
+        $request->validate([
+            'id' => 'required|integer|exists:organizations,id',
+        ]);
+
+        try {
+            $organization = null;
+
+            DB::transaction(function () use ($request, &$organization) {
+                $organization = Organization::lockForUpdate()->findOrFail($request->id);
+
+                if (Schema::hasColumn('organizations', 'approved_id')) {
+                    if (empty($organization->approved_id)) {
+                        $organization->approved_id = $this->generateApprovedId($organization);
+                    }
+                }
+
+                $organization->status = 1;
+                $organization->save();
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Organization approved successfully.',
+                'approved_id' => $organization->approved_id ?? null,
+            ]);
+        } catch (\Throwable $th) {
+            Log::error('Organization approve failed', [
+                'organization_id' => $request->id,
+                'user_id' => optional(Auth::user())->id,
+                'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => config('app.debug') ? $th->getMessage() : 'Something went wrong! Please try again...',
+            ], 500);
+        }
     }
-    
+
     private function generateApplicationId()
     {
         $datePart = Carbon::now()->format('ymd');
-    
+
         // আজকের last record
         $last = Organization::whereDate('created_at', Carbon::today())
             ->whereNotNull('application_id')
             ->orderBy('id', 'desc')
             ->first();
-    
+
         if ($last) {
             $lastSerial = (int) substr($last->application_id, -5);
             $newSerial = $lastSerial + 1;
         } else {
             $newSerial = 1;
         }
-    
+
         return $datePart . str_pad($newSerial, 5, '0', STR_PAD_LEFT);
     }
-    
-    
+
+
     private function generateApprovedId($organization)
     {
         $now = \Carbon\Carbon::now();
-    
+
         // Date parts
         $year  = $now->format('y');
         $month = $now->format('m');
         $date  = $now->format('d');
-    
+
         // Format IDs
         $union_id = str_pad($organization->union_id ?? 0, 4, '0', STR_PAD_LEFT);
         $category_id = str_pad($organization->organization_category_id ?? 0, 2, '0', STR_PAD_LEFT);
-    
+
         // Prefix
         $prefix = "{$year}{$month}{$date}{$union_id}{$category_id}";
-    
+
         // Get last serial
         $lastRecord = Organization::where('approved_id', 'like', $prefix . '%')
             ->orderBy('approved_id', 'desc')
             ->lockForUpdate() // 🔥 prevent duplicate in concurrency
             ->first();
-    
+
         if ($lastRecord) {
             $lastSerial = (int) substr($lastRecord->approved_id, -3);
             $newSerial = $lastSerial + 1;
         } else {
             $newSerial = 1;
         }
-    
+
         // Format serial
         $serial = str_pad($newSerial, 3, '0', STR_PAD_LEFT);
-    
+
         return "{$prefix}{$serial}";
     }
 
