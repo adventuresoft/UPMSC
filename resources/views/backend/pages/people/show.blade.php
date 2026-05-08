@@ -582,32 +582,33 @@
         @endif
 
         {{-- Property Details (if any) --}}
-        @if(isset($user->propertyInfos) && ($user->propertyInfos->is_property ?? false))
+        @if($user->propertyInfos->isNotEmpty() && optional($user->propertyInfos->first())->is_property)
+        @php $propertyInfo = $user->propertyInfos->first(); @endphp
         <div class="section-header">সম্পত্তির তথ্য / Property Information</div>
         <div class="two-columns">
             <div class="col">
-                @if($user->propertyInfos->cash_amount ?? false)
-                <div class="info-row"><span class="info-label">Cash Amount :</span><span class="info-value">{{ $user->propertyInfos->cash_amount }} BDT</span></div>
+                @if($propertyInfo->cash_amount ?? false)
+                <div class="info-row"><span class="info-label">Cash Amount :</span><span class="info-value">{{ $propertyInfo->cash_amount }} BDT</span></div>
                 @endif
-                @if($user->propertyInfos->tin_number ?? false)
-                <div class="info-row"><span class="info-label">E-TIN :</span><span class="info-value">{{ $user->propertyInfos->tin_number }}</span></div>
+                @if($propertyInfo->tin_number ?? false)
+                <div class="info-row"><span class="info-label">E-TIN :</span><span class="info-value">{{ $propertyInfo->tin_number }}</span></div>
                 @endif
-                @if($user->propertyInfos->house ?? false)
-                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->propertyInfos->house_type }} ({{ $user->propertyInfos->house_area }}) Price: {{ $user->propertyInfos->house_price }} BDT</span></div>
+                @if($propertyInfo->house ?? false)
+                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $propertyInfo->house_type }} ({{ $propertyInfo->house_area }}) Price: {{ $propertyInfo->house_price }} BDT</span></div>
                 @endif
-                @if($user->propertyInfos->land ?? false)
-                <div class="info-row"><span class="info-label">Land :</span><span class="info-value">{{ $user->propertyInfos->land_quantity }} {{ $user->propertyInfos->land_type }} in {{ $user->propertyInfos->landDistrict->name ?? '' }}</span></div>
+                @if($propertyInfo->land ?? false)
+                <div class="info-row"><span class="info-label">Land :</span><span class="info-value">{{ $propertyInfo->land_quantity }} {{ $propertyInfo->land_type }} in {{ $propertyInfo->landDistrict->name ?? '' }}</span></div>
                 @endif
             </div>
             <div class="col">
-                @if($user->propertyInfos->flat ?? false)
-                <div class="info-row"><span class="info-label">Flat :</span><span class="info-value">{{ $user->propertyInfos->flat_area }} sqft, Price: {{ $user->propertyInfos->flat_price }} BDT</span></div>
+                @if($propertyInfo->flat ?? false)
+                <div class="info-row"><span class="info-label">Flat :</span><span class="info-value">{{ $propertyInfo->flat_area }} sqft, Price: {{ $propertyInfo->flat_price }} BDT</span></div>
                 @endif
-                @if($user->propertyInfos->diamond ?? false)
-                <div class="info-row"><span class="info-label">Diamond :</span><span class="info-value">{{ $user->propertyInfos->diamond_quantity }} pcs, Price: {{ $user->propertyInfos->diamond_price }}</span></div>
+                @if($propertyInfo->diamond ?? false)
+                <div class="info-row"><span class="info-label">Diamond :</span><span class="info-value">{{ $propertyInfo->diamond_quantity }} pcs, Price: {{ $propertyInfo->diamond_price }}</span></div>
                 @endif
-                @if($user->propertyInfos->gold ?? false)
-                <div class="info-row"><span class="info-label">Gold :</span><span class="info-value">{{ $user->propertyInfos->gold_quantity }} gm, Price: {{ $user->propertyInfos->gold_price }}</span></div>
+                @if($propertyInfo->gold ?? false)
+                <div class="info-row"><span class="info-label">Gold :</span><span class="info-value">{{ $propertyInfo->gold_quantity }} gm, Price: {{ $propertyInfo->gold_price }}</span></div>
                 @endif
             </div>
         </div>

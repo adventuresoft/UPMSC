@@ -308,17 +308,20 @@ class PeopleController extends Controller
         $data['professions'] = Profession::where('status', true)->get();
 
         $data['account_types'] = AccountType::where('status', true)->latest()->get();
-        $data['banks'] = Bank::where('status', true)->latest()->get();
+        $data['user'] = $user;
+        $data['districts'] = District::latest()->get();
+        
+        $propertyInfo = $user->propertyInfos->first();
 
-        $data['landThanas'] = $user->propertyInfos ? ($user->propertyInfos->land_district_id ?  Thana::where('district_id', $user->propertyInfos->land_district_id )->get() : []  ) : [];
-        $data['landMouzas'] = $user->propertyInfos ? ($user->propertyInfos->land_thana_id ?  Mouza::where('thana_id', $user->propertyInfos->land_thana_id )->get() : []  ) : [];
+        $data['landThanas'] = $propertyInfo ? ($propertyInfo->land_district_id ? Thana::where('district_id', $propertyInfo->land_district_id)->get() : []) : [];
+        $data['landMouzas'] = $propertyInfo ? ($propertyInfo->land_thana_id ? Mouza::where('thana_id', $propertyInfo->land_thana_id)->get() : []) : [];
 
-        $data['flatThanas'] = $user->propertyInfos ? ($user->propertyInfos->flat_district_id ?  Thana::where('district_id', $user->propertyInfos->flat_district_id )->get() : []  ) : [];
-        $data['flatMouzas'] = $user->propertyInfos ? ($user->propertyInfos->flat_thana_id ?  Mouza::where('thana_id', $user->propertyInfos->flat_thana_id )->get() : []  ) : [];
+        $data['flatThanas'] = $propertyInfo ? ($propertyInfo->flat_district_id ? Thana::where('district_id', $propertyInfo->flat_district_id)->get() : []) : [];
+        $data['flatMouzas'] = $propertyInfo ? ($propertyInfo->flat_thana_id ? Mouza::where('thana_id', $propertyInfo->flat_thana_id)->get() : []) : [];
 
+        $data['active_tab'] = 'property';
 
-
-        return view('backend.pages.people.show', $data);
+        return view('backend.pages.people.tabs.property', $data);
     }
 
     /**

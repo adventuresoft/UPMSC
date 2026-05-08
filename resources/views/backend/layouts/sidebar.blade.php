@@ -32,6 +32,53 @@
             <p>Account Security</p>
           </a>
         </li>
+        <li class="nav-item {{ request()->is('people-portal/applications*') ? 'menu-open' : '' }}">
+          <a href="#" class="nav-link {{ request()->is('people-portal/applications*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-file-alt"></i>
+            <p>
+              আবেদনসমূহ (Applications)
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{ route('people.applications.registration.create') }}" class="nav-link {{ request()->routeIs('people.applications.registration.*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>নতুন নাগরিক নিবন্ধন</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('people.applications.certificate.create') }}" class="nav-link {{ request()->routeIs('people.applications.certificate.create') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>সনদপত্র আবেদন</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('people.applications.trade-license.create') }}" class="nav-link {{ request()->routeIs('people.applications.trade-license.create') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>ট্রেড লাইসেন্স আবেদন</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('people.applications.vehicle.create') }}" class="nav-link {{ request()->routeIs('people.applications.vehicle.create') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>যানবাহন আবেদন</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('people.applications.tax.create') }}" class="nav-link {{ request()->routeIs('people.applications.tax.create') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>হোল্ডিং ট্যাক্স আবেদন</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('people.applications.grant.create') }}" class="nav-link {{ request()->routeIs('people.applications.grant.create') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>অনুদান প্রাপ্তির আবেদন</p>
+              </a>
+            </li>
+          </ul>
+        </li>
         <li class="nav-item">
             <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();" class="nav-link text-danger">
                 <i class="nav-icon fas fa-sign-out-alt"></i>

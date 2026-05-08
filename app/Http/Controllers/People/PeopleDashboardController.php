@@ -19,7 +19,16 @@ class PeopleDashboardController extends Controller
      */
     public function index()
     {
-        $people = Auth::guard('people')->user();
+        $people = Auth::guard('people')->user()->load([
+            'user.educationInfos', 
+            'user.professionalInfos', 
+            'user.financialInfos', 
+            'user.propertyInfos', 
+            'user.disabilityInfo', 
+            'user.freedomFighterInfo',
+            'user.familyInfo',
+            'user.addressInfo'
+        ]);
         $mainMenu = 'Dashboard';
         $subMenu = 'dashboard';
         return view('people.dashboard.index', compact('people', 'mainMenu', 'subMenu'));
@@ -66,5 +75,47 @@ class PeopleDashboardController extends Controller
         $people->save();
 
         return back()->with('success', 'Password updated successfully.');
+    }
+
+    /**
+     * Update the portal user profile image.
+     */
+    public function updateImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $people = Auth::guard('people')->user();
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $image_name = 'citizen-' . $people->id . '-' . time();
+            $ext = strtolower($image->getClientOriginalExtension());
+            $image_full_name = $image_name . "." . $ext;
+            $upload_path = 'uploads/citizens/';
+            $image_url = $upload_path . $image_full_name;
+
+            // Ensure directory exists
+            if (!file_exists(public_path($upload_path))) {
+                mkdir(public_path($upload_path), 0777, true);
+            }
+
+            // Move the file
+            $image->move(public_path($upload_path), $image_full_name);
+
+            // Delete old image if exists
+            if ($people->image && file_exists(public_path($people->image))) {
+                @unlink(public_path($people->image));
+            }
+
+            // Update database
+            $people->image = $image_url;
+            $people->save();
+
+            return back()->with('success', 'Profile image updated successfully.');
+        }
+
+        return back()->withErrors(['image' => 'Failed to upload image.']);
     }
 }

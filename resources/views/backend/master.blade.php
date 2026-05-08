@@ -49,6 +49,14 @@ width:100%!important;
       display: flex;
       gap: 8px;
     }
+    /* Sidebar Active State Fix */
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link.active {
+        background-color: #046307 !important;
+        color: #fff !important;
+    }
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link.active i {
+        color: #fff !important;
+    }
   </style>
   @stack('style')
 </head>
@@ -179,6 +187,19 @@ width:100%!important;
             }
         });
     });
+
+    @if(Session::has('success'))
+        toastr.success("{{ Session::get('success') }}");
+    @endif
+    @if(Session::has('error'))
+        toastr.error("{{ Session::get('error') }}");
+    @endif
+    @if(Session::has('info'))
+        toastr.info("{{ Session::get('info') }}");
+    @endif
+    @if(Session::has('warning'))
+        toastr.warning("{{ Session::get('warning') }}");
+    @endif
 </script>
 
 

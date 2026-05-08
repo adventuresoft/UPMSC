@@ -117,6 +117,9 @@ use App\Http\Controllers\CertificateVerifyController;
 use App\Http\Controllers\People\PeopleAuthController;
 use App\Http\Controllers\People\PeopleDashboardController;
 use App\Http\Controllers\PeopleCredentialController;
+use App\Http\Controllers\People\PeopleApplicationController;
+use App\Http\Controllers\People\PeopleRegistrationController;
+use App\Http\Controllers\People\PeopleStatusController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -556,7 +559,48 @@ Route::prefix('people-portal')->name('people.')->group(function () {
     Route::middleware(['auth:people'])->group(function () {
         Route::get('/dashboard', [PeopleDashboardController::class, 'index'])->name('dashboard');
         Route::get('/profile', [PeopleDashboardController::class, 'profile'])->name('profile');
+        Route::post('/profile/update-image', [PeopleDashboardController::class, 'updateImage'])->name('profile.image.update');
         Route::get('/change-password', [PeopleDashboardController::class, 'showChangePassword'])->name('password.change');
         Route::post('/update-password', [PeopleDashboardController::class, 'updatePassword'])->name('password.update');
+        Route::post('/check-status', [PeopleStatusController::class, 'checkStatus'])->name('status.check');
+        
+        // Application Routes
+        Route::prefix('applications')->name('applications.')->group(function () {
+            Route::get('/certificate', [PeopleApplicationController::class, 'certificateCreate'])->name('certificate.create');
+            Route::get('/trade-license', [PeopleApplicationController::class, 'tradeLicenseCreate'])->name('trade-license.create');
+            Route::get('/vehicle', [PeopleApplicationController::class, 'vehicleCreate'])->name('vehicle.create');
+            Route::get('/tax', [PeopleApplicationController::class, 'taxCreate'])->name('tax.create');
+            Route::get('/grant', function() { return view('people.applications.grant'); })->name('grant.create');
+
+            // Registration Tabs (People Info)
+            Route::prefix('registration')->name('registration.')->group(function () {
+                Route::get('/create', [PeopleRegistrationController::class, 'create'])->name('create');
+                Route::post('/store', [PeopleRegistrationController::class, 'storePersonal'])->name('store');
+                
+                Route::get('/family/{id}', [PeopleRegistrationController::class, 'family'])->name('family');
+                Route::post('/family-store', [PeopleRegistrationController::class, 'storeFamily'])->name('family.store');
+                
+                Route::get('/address/{id}', [PeopleRegistrationController::class, 'address'])->name('address');
+                Route::post('/address-store', [PeopleRegistrationController::class, 'storeAddress'])->name('address.store');
+                
+                Route::get('/education/{id}', [PeopleRegistrationController::class, 'education'])->name('education');
+                Route::post('/education-store', [PeopleRegistrationController::class, 'storeEducation'])->name('educationStore');
+                
+                Route::get('/professional/{id}', [PeopleRegistrationController::class, 'professional'])->name('professional');
+                Route::post('/professional-store', [PeopleRegistrationController::class, 'storeProfessional'])->name('professionalStore');
+                
+                Route::get('/financial/{id}', [PeopleRegistrationController::class, 'financial'])->name('financial');
+                Route::post('/financial-store', [PeopleRegistrationController::class, 'storeFinancial'])->name('financialStore');
+                
+                Route::get('/property/{id}', [PeopleRegistrationController::class, 'property'])->name('property');
+                Route::post('/property-store', [PeopleRegistrationController::class, 'storeProperty'])->name('propertyStore');
+                
+                Route::get('/disability/{id}', [PeopleRegistrationController::class, 'disability'])->name('disability');
+                Route::post('/disability-store', [PeopleRegistrationController::class, 'storeDisability'])->name('disabilityStore');
+                
+                Route::get('/freedom/{id}', [PeopleRegistrationController::class, 'freedom'])->name('freedom');
+                Route::post('/freedom-store', [PeopleRegistrationController::class, 'storeFreedom'])->name('freedomStore');
+            });
+        });
     });
 });
