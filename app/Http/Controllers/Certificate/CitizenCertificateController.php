@@ -242,5 +242,24 @@ class CitizenCertificateController extends Controller
     public function destroy(CitizenCertificate $citizenCertificate)
     {
         //
+    public function approve(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'id' => 'required|exists:citizen_certificates,id',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json(['status' => false, 'message' => 'Invalid Request'], 400);
+        }
+
+        try {
+            $certificate = CitizenCertificate::findOrFail($request->id);
+            $certificate->status = 1;
+            $certificate->save();
+
+            return response()->json(['status' => true, 'message' => 'Certificate application approved successfully!']);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => false, 'message' => 'Error approving certificate'], 500);
+        }
     }
 }

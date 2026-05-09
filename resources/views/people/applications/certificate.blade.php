@@ -16,7 +16,7 @@
                 <h3 class="card-title text-sm font-bold text-gray-700">আবেদনকারীর তথ্য ও সনদের ধরন</h3>
             </div>
             
-            <form id="certAppForm" method="POST" action="{{ route('citizen.store') }}">
+            <form id="certAppForm" method="POST" action="{{ route('people.applications.certificate.store') }}">
                 @csrf
                 <input type="hidden" name="user_id" value="{{ Auth::guard('people')->user()->user_id }}">
                 

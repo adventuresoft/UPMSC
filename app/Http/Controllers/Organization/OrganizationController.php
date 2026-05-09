@@ -475,7 +475,19 @@ public function getOrganizationBySystemId_01_05_26($system_id)
             $organization = Organization::findOrFail($request->id);
             $organization->update($payload);
         } else {
-            $instituteId = Auth::user()->institute_id;
+            // Resolve Institute ID and User context
+            $instituteId = null;
+            $createdBy = null;
+
+            if (Auth::guard('people')->check()) {
+                $people = Auth::guard('people')->user();
+                $instituteId = $people->user->institute_id ?? null;
+                $createdBy = $people->id;
+            } else {
+                $instituteId = Auth::user()->institute_id ?? null;
+                $createdBy = Auth::id();
+            }
+
             $resolvedUnionId = $request->union_id;
 
             // Fallback: for accounts without direct institute mapping,
@@ -509,17 +521,8 @@ public function getOrganizationBySystemId_01_05_26($system_id)
                 ], 422);
             }
 
-            if (!Auth::user()->institute_id) {
-                Log::warning('Organization store used institute fallback', [
-                    'user_id' => optional(Auth::user())->id,
-                    'request_union_id' => $request->union_id,
-                    'resolved_union_id' => $resolvedUnionId,
-                    'fallback_institute_id' => $instituteId,
-                ]);
-            }
-
             $payload['institute_id'] = $instituteId;
-
+            $payload['created_by'] = $createdBy;
             $payload['application_id'] = $this->generateApplicationId();
             $organization = Organization::create($payload);
         }

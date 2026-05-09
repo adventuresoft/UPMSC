@@ -223,6 +223,8 @@ Route::get('/search-user-by-system-id/{systemID}', [PeopleController::class, 'se
 Route::get('/get-organization-info-by-system-id/{systemID}', [OrganizationController::class, 'getOrganizationBySystemId'])->name('getOrganizationBySystemId');
 Route::post('/organization-approve', [OrganizationController::class, 'approve'])
     ->name('organization.approve');
+Route::post('/citizen-certificate-approve', [CitizenCertificateController::class, 'approve'])
+    ->name('citizen.approve');
 
 Route::get('/profession-type-options-by-profession/{professionID}', [ProfessionTypeController::class, 'professionTypeOptions']);
 Route::get('/profession-category-options-by-profession-type/{professionTypeID}', [ProfessionCategoryController::class, 'professionCategoryOptions' ]);
@@ -566,7 +568,9 @@ Route::prefix('people-portal')->name('people.')->group(function () {
         
         // Application Routes
         Route::prefix('applications')->name('applications.')->group(function () {
+            Route::get('/', [PeopleApplicationController::class, 'index'])->name('index');
             Route::get('/certificate', [PeopleApplicationController::class, 'certificateCreate'])->name('certificate.create');
+            Route::post('/certificate', [PeopleApplicationController::class, 'certificateStore'])->name('certificate.store');
             Route::get('/trade-license', [PeopleApplicationController::class, 'tradeLicenseCreate'])->name('trade-license.create');
             Route::get('/vehicle', [PeopleApplicationController::class, 'vehicleCreate'])->name('vehicle.create');
             Route::get('/tax', [PeopleApplicationController::class, 'taxCreate'])->name('tax.create');
