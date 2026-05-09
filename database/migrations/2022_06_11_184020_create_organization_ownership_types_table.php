@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrganizationOwnershipTypesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateOrganizationOwnershipTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('organization_ownership_types', function (Blueprint $table) {
+        if (!Schema::hasTable('organization_ownership_types')) {
+            Schema::create('organization_ownership_types', function (Blueprint $table) {
             $table->id();
             $table->string('en_name');
             $table->string('bn_name');
@@ -23,6 +24,7 @@ class CreateOrganizationOwnershipTypesTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -34,4 +36,4 @@ class CreateOrganizationOwnershipTypesTable extends Migration
     {
         Schema::dropIfExists('organization_ownership_types');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePeopleLoginLogsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreatePeopleLoginLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('people_login_logs', function (Blueprint $table) {
+        if (!Schema::hasTable('people_login_logs')) {
+            Schema::create('people_login_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('people_id')->constrained('people')->onDelete('cascade');
             $table->string('ip_address')->nullable();
@@ -21,6 +22,7 @@ class CreatePeopleLoginLogsTable extends Migration
             $table->enum('status', ['success', 'failed']);
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -32,4 +34,4 @@ class CreatePeopleLoginLogsTable extends Migration
     {
         Schema::dropIfExists('people_login_logs');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePropertyInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreatePropertyInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('property_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('property_infos')) {
+            Schema::create('property_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
@@ -74,6 +75,7 @@ class CreatePropertyInfosTable extends Migration
             $table->string("silver_ownership_status")->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -85,4 +87,4 @@ class CreatePropertyInfosTable extends Migration
     {
         Schema::dropIfExists('property_infos');
     }
-}
+};

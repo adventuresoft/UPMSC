@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCityCorporationsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateCityCorporationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('city_corporations', function (Blueprint $table) {
+        if (!Schema::hasTable('city_corporations')) {
+            Schema::create('city_corporations', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('district_id')->unsigned();
             $table->foreign('district_id')->references('id')->on('districts')->onDelete('cascade');
@@ -28,6 +29,7 @@ class CreateCityCorporationsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -39,4 +41,4 @@ class CreateCityCorporationsTable extends Migration
     {
         Schema::dropIfExists('city_corporations');
     }
-}
+};

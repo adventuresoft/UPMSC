@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBirthCertificatesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateBirthCertificatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('birth_certificates', function (Blueprint $table) {
+        if (!Schema::hasTable('birth_certificates')) {
+            Schema::create('birth_certificates', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->double('fees', 16, 2)->default(0.00);
@@ -22,6 +23,7 @@ class CreateBirthCertificatesTable extends Migration
             $table->bigInteger('created_by');
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -33,4 +35,4 @@ class CreateBirthCertificatesTable extends Migration
     {
         Schema::dropIfExists('birth_certificates');
     }
-}
+};

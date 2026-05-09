@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVillagesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateVillagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('villages', function (Blueprint $table) {
+        if (!Schema::hasTable('villages')) {
+            Schema::create('villages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('division_id')->constrained('divisions')->onDelete('cascade');
             $table->foreignId('district_id')->constrained('districts')->onDelete('cascade');
@@ -27,6 +28,7 @@ class CreateVillagesTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -38,4 +40,4 @@ class CreateVillagesTable extends Migration
     {
         Schema::dropIfExists('villages');
     }
-}
+};

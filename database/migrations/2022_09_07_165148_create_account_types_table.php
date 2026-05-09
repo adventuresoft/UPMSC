@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccountTypesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateAccountTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('account_types', function (Blueprint $table) {
+        if (!Schema::hasTable('account_types')) {
+            Schema::create('account_types', function (Blueprint $table) {
             $table->id();
             $table->string('en_name');
             $table->string('bn_name');
@@ -23,6 +24,7 @@ class CreateAccountTypesTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -34,4 +36,4 @@ class CreateAccountTypesTable extends Migration
     {
         Schema::dropIfExists('account_types');
     }
-}
+};

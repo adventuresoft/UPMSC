@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrganizationOwenershipTypesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateOrganizationOwenershipTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('organization_owenership_types', function (Blueprint $table) {
+        if (!Schema::hasTable('organization_owenership_types')) {
+            Schema::create('organization_owenership_types', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -28,4 +30,4 @@ class CreateOrganizationOwenershipTypesTable extends Migration
     {
         Schema::dropIfExists('organization_owenership_types');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLandClassesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateLandClassesTable extends Migration
      */
     public function up()
     {
-        Schema::create('land_classes', function (Blueprint $table) {
+        if (!Schema::hasTable('land_classes')) {
+            Schema::create('land_classes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('land_type_id')->constrained('land_types')->onDelete('cascade');
             $table->string('en_name');
@@ -24,6 +25,7 @@ class CreateLandClassesTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -35,4 +37,4 @@ class CreateLandClassesTable extends Migration
     {
         Schema::dropIfExists('land_classes');
     }
-}
+};

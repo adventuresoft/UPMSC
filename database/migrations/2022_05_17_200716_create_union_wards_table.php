@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUnionWardsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateUnionWardsTable extends Migration
      */
     public function up()
     {
-        Schema::create('union_wards', function (Blueprint $table) {
+        if (!Schema::hasTable('union_wards')) {
+            Schema::create('union_wards', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('en_ward_no');
             $table->string('bn_ward_no');
@@ -22,6 +23,7 @@ class CreateUnionWardsTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -33,4 +35,4 @@ class CreateUnionWardsTable extends Migration
     {
         Schema::dropIfExists('union_wards');
     }
-}
+};

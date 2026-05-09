@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFamilyInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateFamilyInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('family_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('family_infos')) {
+            Schema::create('family_infos', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
             $table->bigInteger('family_type_id');
@@ -36,6 +37,7 @@ class CreateFamilyInfosTable extends Migration
             $table->integer('girls')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -47,4 +49,4 @@ class CreateFamilyInfosTable extends Migration
     {
         Schema::dropIfExists('family_infos');
     }
-}
+};

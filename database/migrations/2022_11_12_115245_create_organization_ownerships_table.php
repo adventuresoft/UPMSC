@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrganizationOwnershipsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateOrganizationOwnershipsTable extends Migration
      */
     public function up()
     {
-        Schema::create('organization_ownerships', function (Blueprint $table) {
+        if (!Schema::hasTable('organization_ownerships')) {
+            Schema::create('organization_ownerships', function (Blueprint $table) {
             $table->id();
             $table->foreignId('organization_id')->constrained('organizations')->onDelete('cascade');
             $table->bigInteger('user_id')->nullable();
@@ -23,6 +24,7 @@ class CreateOrganizationOwnershipsTable extends Migration
             $table->boolean('is_trade_license')->default(false)->comment("0=>NO, 1=>YES");
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -34,4 +36,4 @@ class CreateOrganizationOwnershipsTable extends Migration
     {
         Schema::dropIfExists('organization_ownerships');
     }
-}
+};

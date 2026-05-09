@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePostOfficesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreatePostOfficesTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_offices', function (Blueprint $table) {
+        if (!Schema::hasTable('post_offices')) {
+            Schema::create('post_offices', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('bn_name')->nullable();
@@ -24,6 +25,7 @@ class CreatePostOfficesTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -35,4 +37,4 @@ class CreatePostOfficesTable extends Migration
     {
         Schema::dropIfExists('post_offices');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCitizenCertificatesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateCitizenCertificatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('citizen_certificates', function (Blueprint $table) {
+        if (!Schema::hasTable('citizen_certificates')) {
+            Schema::create('citizen_certificates', function (Blueprint $table) {
             $table->id();
             $table->string('system_id')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -23,6 +24,7 @@ class CreateCitizenCertificatesTable extends Migration
             $table->bigInteger('created_by');
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -34,4 +36,4 @@ class CreateCitizenCertificatesTable extends Migration
     {
         Schema::dropIfExists('citizen_certificates');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfessionTypesTableTwo extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,10 +17,12 @@ class CreateProfessionTypesTableTwo extends Migration
             return;
         }
 
-        Schema::create('profession_types', function (Blueprint $table) {
+        if (!Schema::hasTable('profession_types')) {
+            Schema::create('profession_types', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -32,4 +34,4 @@ class CreateProfessionTypesTableTwo extends Migration
     {
         Schema::dropIfExists('profession_types');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDeathCertificatesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateDeathCertificatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('death_certificates', function (Blueprint $table) {
+        if (!Schema::hasTable('death_certificates')) {
+            Schema::create('death_certificates', function (Blueprint $table) {
             $table->id();
             $table->string('system_id')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -27,6 +28,7 @@ class CreateDeathCertificatesTable extends Migration
             $table->bigInteger('created_by');
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -38,4 +40,4 @@ class CreateDeathCertificatesTable extends Migration
     {
         Schema::dropIfExists('death_certificates');
     }
-}
+};

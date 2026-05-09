@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDisabilityInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateDisabilityInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('disability_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('disability_infos')) {
+            Schema::create('disability_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->boolean('is_disability')->default(false);
@@ -25,6 +26,7 @@ class CreateDisabilityInfosTable extends Migration
             $table->string('disability_doctor')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -36,4 +38,4 @@ class CreateDisabilityInfosTable extends Migration
     {
         Schema::dropIfExists('disability_infos');
     }
-}
+};

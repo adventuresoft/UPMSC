@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFreedomFighterInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateFreedomFighterInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('freedom_fighter_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('freedom_fighter_infos')) {
+            Schema::create('freedom_fighter_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->boolean('is_freedom_fighter')->default(false);
@@ -24,6 +25,7 @@ class CreateFreedomFighterInfosTable extends Migration
             $table->string('commander_name')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -35,4 +37,4 @@ class CreateFreedomFighterInfosTable extends Migration
     {
         Schema::dropIfExists('freedom_fighter_infos');
     }
-}
+};

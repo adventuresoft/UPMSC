@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUnmarriedCertificatesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,8 @@ class CreateUnmarriedCertificatesTable extends Migration
             return;
         }
 
-        Schema::create('unmarried_certificates', function (Blueprint $table) {
+        if (!Schema::hasTable('unmarried_certificates')) {
+            Schema::create('unmarried_certificates', function (Blueprint $table) {
             $table->id();
             $table->string('system_id')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -27,6 +28,7 @@ class CreateUnmarriedCertificatesTable extends Migration
             $table->bigInteger('created_by');
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -38,4 +40,4 @@ class CreateUnmarriedCertificatesTable extends Migration
     {
         Schema::dropIfExists('unmarried_certificates');
     }
-}
+};

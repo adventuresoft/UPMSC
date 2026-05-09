@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProjectsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        if (!Schema::hasTable('projects')) {
+            Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('project_type_id')->nullable();
             $table->bigInteger('union_id')->nullable();
@@ -21,6 +22,7 @@ class CreateProjectsTable extends Migration
             $table->bigInteger('city_corporation_id')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -32,4 +34,4 @@ class CreateProjectsTable extends Migration
     {
         Schema::dropIfExists('projects');
     }
-}
+};

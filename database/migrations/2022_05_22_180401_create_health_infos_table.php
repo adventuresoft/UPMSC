@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHealthInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateHealthInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('health_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('health_infos')) {
+            Schema::create('health_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('bp')->nullable();
@@ -40,6 +41,7 @@ class CreateHealthInfosTable extends Migration
 
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -51,4 +53,4 @@ class CreateHealthInfosTable extends Migration
     {
         Schema::dropIfExists('health_infos');
     }
-}
+};
