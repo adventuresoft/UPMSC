@@ -1,18 +1,18 @@
-@extends('backend.master', ['mainMenu' => 'Basic', 'subMenu' =>'VillageArea'])
+@extends('backend.master', ['mainMenu' => 'Basic', 'subMenu' =>'CityCorporation'])
 @push('style')
 @endpush
-@section('title', 'Village Area')
+@section('title', 'City Corporation')
 @section('content')
    <!-- Content Header (Page header) -->
    <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Village Area</h1>
+          <h1>City Corporation</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{route('basic-settings.village-area.index')}}">Village Area</a></li>
+            <li class="breadcrumb-item"><a href="{{route('basic-settings.city-corporation.index')}}">City Corporation</a></li>
             <li class="breadcrumb-item active">View</li>
           </ol>
         </div>
@@ -32,10 +32,10 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6 text-left">
-                                    <h3 class="card-title">Village Area List</h3>
+                                    <h3 class="card-title">City Corporation List</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <a href="{{route('basic-settings.village-area.create')}}" class="btn btn-primary">Create</a>
+                                    <a href="{{route('basic-settings.city-corporation.create')}}" class="btn btn-primary">Create</a>
                                 </div>
                             </div>
                         </div>
@@ -43,46 +43,46 @@
 
                         <div class="card-body">
                           <div class="table-responsive">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="example1" class="table table-bordered table-striped" style="width:100%">
                               <thead>
                                 <tr>
                                     <th>Sl.</th>
-                                    <th>Village Area Name</th>
-                                    <th>Benali Name</th>
-                                    <th>Division</th>
-                                    <th>Distict</th>
-                                    <th>Thana</th>
-                                    <th>Union</th>
-                                    <th>Village</th>
+                                    <th>Name</th>
+                                    <th>Bengali Name</th>
+                                    <th>District</th>
+                                    <th>Category</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                               </thead>
                               <tbody>
 
-                                @if ($areas)
+                                @if ($cityCorporations)
 
-                                  @foreach ($areas as $key=>$area)
+                                  @foreach ($cityCorporations as $key=>$cityCorporation)
                                     <tr>
                                       <td>{{++$key}}</td>
-                                      <td>{{$area->en_name}}</td>
-                                      <td>{{$area->bn_name}}</td>
-                                      <td>{{$area->division->name ?? 'N/A'}}</td>
-                                      <td>{{$area->district->name ?? 'N/A'}}</td>
-                                      <td>{{$area->thana->name ?? 'N/A'}}</td>
-                                      <td>{{$area->union->name ?? 'N/A'}}</td>
-                                      <td>{{$area->village->en_name ?? 'N/A'}}</td>
-
+                                      <td>{{$cityCorporation->name}}</td>
+                                      <td>{{$cityCorporation->bn_name}}</td>
+                                      <td>{{$cityCorporation->District->name ?? 'N/A'}}</td>
+                                      <td>{{$cityCorporation->category}}</td>
+                                      <td>
+                                          @if($cityCorporation->status == 1)
+                                            <span class="badge badge-success">Active</span>
+                                          @else
+                                            <span class="badge badge-danger">Inactive</span>
+                                          @endif
+                                      </td>
                                       <td>
                                         <div class="table-action">
-                                            <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.village-area.edit', $area->id)}}"><i class="fa fa-edit"></i></a>
-                                            <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('basic-settings.village-area.show', $area->id)}}"><i class="fa fa-eye"></i></a>
+                                            <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.city-corporation.edit', $cityCorporation->id)}}"><i class="fa fa-edit"></i></a>
 
-                                            <form class="deleteArea" method="post">
+                                            <form class="deleteCityCorporation" method="post">
                                               @csrf
                                               @method('DELETE')
-                                              <input type="hidden" class="id" name="id" value="{{$area->id}}">
-                                              <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.village-area.destroy', $area->id)}}">
-                                              <button type="submit" title="Edit" data-toggle="tooltip" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                              <input type="hidden" class="id" name="id" value="{{$cityCorporation->id}}">
+                                              <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.city-corporation.destroy', $cityCorporation->id)}}">
+                                              <button type="submit" title="Delete" data-toggle="tooltip" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                                             </form>
                                         </div>
                                       </td>
@@ -116,7 +116,18 @@
 <script>
   
   $(document).ready(function(){
-    $(".deleteArea").on('submit', function(e){
+    // Initialize DataTable safely
+    if ($.fn.DataTable.isDataTable('#example1')) {
+        $('#example1').DataTable().destroy();
+    }
+    $('#example1').DataTable({
+        responsive: true,
+        autoWidth: false,
+        scrollX: false,
+        pageLength: 10,
+    });
+
+    $(".deleteCityCorporation").on('submit', function(e){
       e.preventDefault();
       var thisForm = $(this);
       var formData = $(this).serialize();
@@ -139,7 +150,7 @@
                         thisForm.find('button[type="submit"]').prop("disabled",false);
                         toastr.success(response.message);
                         setTimeout(function() {
-                            location.href = "{{route('basic-settings.village-area.index')}}";
+                            location.href = "{{route('basic-settings.city-corporation.index')}}";
                         }, 2000)
                     },
                     error: function(xhr, status, error) {
@@ -166,4 +177,3 @@
 
 </script>
 @endpush
-

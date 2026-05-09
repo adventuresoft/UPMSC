@@ -222,72 +222,72 @@
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.house-type.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}}">
+          <a href="{{route('basic-settings.house-type.index')}}" class="nav-link @if($subMenu == "HouseType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>House Type</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.house-category.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "HouseCategory") active @endif">
+          <a href="{{route('basic-settings.house-category.index')}}" class="nav-link  @if($subMenu == "HouseCategory") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>House Category</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.land-type.index')}}" class="nav-link  {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "LandType") active @endif">
+          <a href="{{route('basic-settings.land-type.index')}}" class="nav-link   @if($subMenu == "LandType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Land Type</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{route('basic-settings.land-class.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "LandClass") active @endif">
+          <a href="{{route('basic-settings.land-class.index')}}" class="nav-link  @if($subMenu == "LandClass") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Land Class</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{route('basic-settings.land-ownership-type.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "LandOwnershipType") active @endif">
+          <a href="{{route('basic-settings.land-ownership-type.index')}}" class="nav-link  @if($subMenu == "LandOwnershipType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Land Ownership Type</p>
           </a>
         </li>
         {{-- <li class="nav-item">
-          <a href="{{route('basic-settings.market-category.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "MarketCategory") active @endif">
+          <a href="{{route('basic-settings.market-category.index')}}" class="nav-link  @if($subMenu == "MarketCategory") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Market Category</p>
           </a>
         </li> --}}
         {{-- <li class="nav-item">
-          <a href="{{route('basic-settings.market-type.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "MarketType") active @endif">
+          <a href="{{route('basic-settings.market-type.index')}}" class="nav-link  @if($subMenu == "MarketType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Market Type</p>
           </a>
         </li> --}}
         {{-- <li class="nav-item">
-          <a href="{{route('basic-settings.market-ownership-type.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "MarketOwnershipType") active @endif">
+          <a href="{{route('basic-settings.market-ownership-type.index')}}" class="nav-link  @if($subMenu == "MarketOwnershipType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Market Ownership Type</p>
           </a>
         </li> --}}
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.organization-category.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "OrganizationCategory") active @endif">
+          <a href="{{route('basic-settings.organization-category.index')}}" class="nav-link  @if($subMenu == "OrganizationCategory") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Organization Category</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.organization-subcategory.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "OrganizationSubcategory") active @endif">
+          <a href="{{route('basic-settings.organization-subcategory.index')}}" class="nav-link  @if($subMenu == "OrganizationSubcategory") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Org. Subcategory</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.organization-work-area.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}}  @if($subMenu == "OrganizationWorkArea") active @endif">
+          <a href="{{route('basic-settings.organization-work-area.index')}}" class="nav-link   @if($subMenu == "OrganizationWorkArea") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Org. Work Area</p>
           </a>
@@ -474,7 +474,7 @@
 
   @if(create_permission())
   <li class="nav-item {{ ($subMenu == "AdminCreate" || $subMenu == "AdminList" || $subMenu == "AdminShow") ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link {{ $mainMenu == "Admin" ? 'active' : '' }}">
+    <a href="#" class="nav-link">
       <i class="nav-icon fas fa-users"></i>
       <p>
         Institutional Admins
