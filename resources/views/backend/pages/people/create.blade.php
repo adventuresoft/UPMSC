@@ -38,12 +38,12 @@
                                 <div class="form-group row">
                                     <div class="col-sm-6">
                                         <label for="name">Name <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
-                                        <input type="text" required value="" class="form-control" name="name" id="name" placeholder="Name English">
+                                        <input type="text" value="" class="form-control" name="name" id="name" placeholder="Name English">
                                         <small class="error name-error text-danger"></small>
                                     </div>
                                     <div class="col-sm-6">
                                         <label for="bn_name">Name Bangla <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
-                                        <input type="text" required value="" class="form-control" name="bn_name" id="bn_name" placeholder="Name Bangla">
+                                        <input type="text" value="" class="form-control" name="bn_name" id="bn_name" placeholder="Name Bangla">
                                         <small class="error bn_name-error text-danger"></small>
                                     </div>
                                 </div>
@@ -137,7 +137,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <label for="email">Email</label>
-                                        <input type="email" required value="" name="email" placeholder="Email" class="form-control" id="email">
+                                        <input type="email" value="" name="email" placeholder="Email" class="form-control" id="email">
                                         <small class="error email-error text-danger"></small>
                                     </div>
                                 </div>

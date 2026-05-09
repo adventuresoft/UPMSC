@@ -143,15 +143,15 @@ class PeopleController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'name' => 'required|max:190',
-            'bn_name' => 'required|max:190',
+            'name' => 'nullable|max:190',
+            'bn_name' => 'nullable|max:190',
             'date_of_birth' => 'nullable|max:190',
             'birth_place' => 'nullable|max:190',
             'gender' => 'nullable|max:190',
             'religion' => 'nullable|max:190',
             'blood_group' => 'nullable|max:190',
             'mobile' => 'nullable|max:190',
-            'email' => 'required|max:190',
+            'email' => 'nullable|max:190',
             'birth_certificate' => 'nullable|max:190',
             'nid' => 'nullable|max:190',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
@@ -168,7 +168,7 @@ class PeopleController extends Controller
             try {
                 $user = new User();
                 $user->role_id = 5; // 5 => User Role
-                $user->institute_id = Auth::user()->institute_id ?? '';
+                $user->institute_id = Auth::user()->institute_id ?? null;
                 
                 $user->name = $request->name;
                 $user->email = $request->email;

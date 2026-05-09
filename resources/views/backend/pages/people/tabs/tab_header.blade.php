@@ -24,7 +24,7 @@
             @endphp
 
             <div class="step-item d-flex align-items-center flex-column mx-1 {{ $isActive ? 'active' : '' }} {{ $isCompleted ? 'completed' : '' }}">
-                <a href="{{ $step['route'] }}" class="step-link text-decoration-none {{ !$userId && !$isActive ? 'pe-none' : '' }}" title="{{ !$userId && !$isActive ? 'Save personal info first' : $step['name'] }}">
+                <a href="{{ $step['route'] }}" class="step-link text-decoration-none" onclick="{{ !$userId && !$isActive ? "event.preventDefault(); toastr.warning('Please save personal info first!');" : '' }}" title="{{ !$userId && !$isActive ? 'Save personal info first' : $step['name'] }}">
                     <div class="step-circle d-flex align-items-center justify-content-center mb-1">
                         @if($isCompleted)
                             <i class="fas fa-check"></i>
