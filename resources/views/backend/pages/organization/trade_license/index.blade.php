@@ -46,7 +46,7 @@
             <div class="row">
 
               <div class="col-md-6 text-left">
-                <h3 class="card-title">Organization List</h3>
+                <h3 class="card-title">Approved Organization List For Invoice</h3>
               </div>
 
               <div class="col-md-6 text-right">
@@ -64,9 +64,10 @@
 
               <div class="col-md-3">
                 <select id="statusFilter" class="form-control">
-                  <option value="">All Status</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Approved">Approved</option>
+                  <option value="">All Invoice Status</option>
+                  <option value="Not Generated">Not Generated</option>
+                  <option value="unpaid">Unpaid</option>
+                  <option value="paid">Paid</option>
                 </select>
               </div>
 
@@ -79,12 +80,14 @@
 
                 <tr>
                   <th>Sl.</th>
-                  <th>Tax Year</th>
+                  <th>Application ID</th>
+                  <th>Approved ID</th>
                   <th>Organization Name</th>
                   <th>Type</th>
                   <th>Category</th>
+                  <th>Tax Year</th>
                   <th>Date</th>
-                  <th>Status</th>
+                  <th>Invoice Status</th>
                   <th>Action</th>
                 </tr>
 
@@ -92,64 +95,68 @@
 
               <tbody>
 
-                @if (count($trade_licenses))
+                @if (count($organizations))
 
-                @foreach ($trade_licenses as $key=>$license)
+                @foreach ($organizations as $key => $organization)
+                @php
+                  $license = $organization->latestTradeLicense;
+                @endphp
 
                 <tr>
 
                   <td>{{++$key}}</td>
 
-                  <td>{{$license->taxYear->name}}</td>
+                  <td>{{ $organization->application_id ?? '-' }}</td>
 
-                  <td>{{$license->organization->name??''}}</td>
+                  <td>{{ $organization->approved_id ?? '-' }}</td>
 
-                  <td>{{$license->organization->category->en_name??''}}</td>
+                  <td>{{ $organization->name ?? '-' }}</td>
 
-                  <td>{{$license->organization->subcategory->en_name??''}}</td>
+                  <td>{{ $organization?->type?->en_name ?? $organization?->type?->bn_name ?? '-' }}</td>
 
-                  <td>{{date('d-m-Y', strtotime($license->updated_at))}}</td>
+                  <td>{{ $organization?->subcategory?->en_name ?? $organization?->category?->en_name ?? '-' }}</td>
+
+                  <td>{{ $license?->taxYear?->name ?? '-' }}</td>
+
+                  <td>{{ date('d-m-Y', strtotime($license?->updated_at ?? $organization->updated_at)) }}</td>
 
                   <td>
-
-                    @if ($license->status == 1)
-
-                    <label class="badge badge-info">Pending</label>
-
-                    @elseif($license->status == 2)
-
-                    <label class="badge badge-success">Approved</label>
-
+                    @if ($license)
+                      <label class="badge badge-info">{{ ucfirst($license->payment_status ?? 'unpaid') }}</label>
+                    @else
+                      <label class="badge badge-secondary">Not Generated</label>
                     @endif
-
                   </td>
 
                   <td>
 
                     <div class="table-action">
+                      @if ($license)
+                        <a href="{{ route('organizationA.trade-license.confirmed', $license->id ) }}"
+                          title="Confirmed"
+                          class="btn btn-sm btn-info">
+                          <i class="fa fa-hand-holding-usd"></i>
+                        </a>
 
-                      <a href="{{route('organizationA.trade-license.confirmed', $license->id )}}"
-                        title="Confirmed"
-                        class="btn btn-sm btn-info">
-                        <i class="fa fa-hand-holding-usd"></i>
-                      </a>
-                      
-                      
-                       <a href="{{route('organizationA.trade-license.show', $license->id )}}"
-                        title="Show"
-                        class="btn btn-sm btn-success">
-                        <i class="fa fa-eye"></i>
-                      </a>
-                      
+                        <a href="{{ route('organizationA.trade-license.invoice', $license->id ) }}"
+                          title="Invoice View"
+                          class="btn btn-sm btn-success">
+                          <i class="fa fa-eye"></i>
+                        </a>
 
-                      <a target="_blank"
-                        href="{{ $license->status == 2 ? route('organizationA.trade-license.preview', $license->id) :'#' }}"
-                        title="Print"
-                        class="btn btn-sm btn-primary">
-
-                        <i class="fa fa-print"></i>
-
-                      </a>
+                        <a target="_blank"
+                          href="{{ $license->status == 2 ? route('organizationA.trade-license.preview', $license->id) :'#' }}"
+                          title="Print"
+                          class="btn btn-sm btn-primary">
+                          <i class="fa fa-print"></i>
+                        </a>
+                      @else
+                        <a href="{{ route('organizationA.trade-license.create', ['org_id' => ($organization->approved_id ?? $organization->application_id ?? $organization->system_id)]) }}"
+                          title="Generate Invoice"
+                          class="btn btn-sm btn-warning">
+                          <i class="fa fa-file-invoice"></i>
+                        </a>
+                      @endif
 
                     </div>
 
@@ -202,7 +209,7 @@
 
     $('#statusFilter').on('change', function() {
 
-      table.column(6).search(this.value).draw();
+      table.column(7).search(this.value).draw();
 
     });
 

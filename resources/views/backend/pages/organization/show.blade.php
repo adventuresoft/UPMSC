@@ -312,10 +312,11 @@
                             <div class="owner-role">{{ $owner->designation ?? 'Owner' }}</div>
                         </div>
                     </div>
-                    <div class="info-row"><span class="info-label">NID :</span><span class="info-value">{{ $owner->user->nid ?? '-' }}</span></div>
+                    <div class="info-row"><span class="info-label">Owner ID :</span><span class="info-value">{{ $owner->user?->people?->approved_id ?? $owner->user?->system_id ?? $owner->system_id ?? '-' }}</span></div>
+                    <div class="info-row"><span class="info-label">NID :</span><span class="info-value">{{ $owner->user?->nid ?? $owner->user?->people?->nid ?? '-' }}</span></div>
 
-                    <div class="info-row"><span class="info-label">Father Name :</span><span class="info-value">{{ $owner->user->familyInfo->father_name ?? '-' }}</span></div>
-                    <div class="info-row"><span class="info-label">Mother Name :</span><span class="info-value">{{ $owner->user->familyInfo->mother_name ?? '-' }}</span></div>
+                    <div class="info-row"><span class="info-label">Father Name :</span><span class="info-value">{{ $owner->user?->familyInfo?->father_name ?? '-' }}</span></div>
+                    <div class="info-row"><span class="info-label">Mother Name :</span><span class="info-value">{{ $owner->user?->familyInfo?->mother_name ?? '-' }}</span></div>
                     <div class="info-row"><span class="info-label">Phone :</span><span class="info-value">{{ $owner->user?->mobile ?? '-' }}</span></div>
                     <div class="info-row"><span class="info-label">Email :</span><span class="info-value">{{ $owner->user?->email ?? '-' }}</span></div>
                     <div class="info-row"><span class="info-label">Present Address :</span><span class="info-value">
@@ -386,8 +387,12 @@ $('#approveBtn').click(function(){
                 alert("Approved Successfully");
                 location.reload();
             },
-            error: function(){
-                alert("Something went wrong");
+            error: function(xhr){
+                let msg = "Something went wrong";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    msg = xhr.responseJSON.message;
+                }
+                alert(msg);
             }
         });
 

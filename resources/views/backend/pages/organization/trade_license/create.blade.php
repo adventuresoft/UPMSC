@@ -52,11 +52,11 @@
                                                 </select>
                                                 <small class="error tax_year_id-error text-danger"></small>
                                             </th>
-                                            <th>Organizaiton ID</th>
-                                            
+                                            <th>Organization ID</th>
+
                                             <th>
                                                 <div class="row input-group input-group-sm user_info">
-                                                    <input type="text" name="system_id" id="system_id" placeholder="Search By Organization ID" required class="form-control system_id">
+                                                    <input type="text" name="system_id" id="system_id" value="{{ request('org_id') }}" placeholder="Approved / Application / System ID" required class="form-control system_id">
                                                     <span class="input-group-append">
                                                       <button type="button" class="btn btn-info btn-flat find_organization_info"><i class="fa fa-search"></i></button>
                                                     </span>
@@ -78,7 +78,7 @@
                                         <!--    </td>-->
                                         <!--</tr>-->
 
-                                       
+
                                         <!--<tr>-->
                                         <!--    <td class="align-middle">Applicant Name:</td>-->
                                         <!--    <td class="align-middle">-->
@@ -142,11 +142,11 @@
                                         <!--    <td class="align-middle"></td>-->
                                         <!--    <td class="align-middle"></td>-->
                                         <!--</tr>-->
-                                       
+
 
                                     </thead>
                                 </table>
-                                
+
                                 <table class="table table-bordered">
     <tbody class="owner_data_area">
         <tr>
@@ -227,8 +227,8 @@
             });
         })
     });
-    
-    
+
+
     $(document).on('click', '.find_organization_info', function(e){
     e.preventDefault();
 
@@ -434,5 +434,13 @@
             });
         }
     }
+
+    $(function() {
+        let prefillOrgId = "{{ request('org_id') }}";
+        if (prefillOrgId) {
+            $("#system_id").val(prefillOrgId);
+            $(".find_organization_info").trigger('click');
+        }
+    });
 </script>
 @endpush

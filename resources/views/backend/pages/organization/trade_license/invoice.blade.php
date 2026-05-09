@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Organization', 'subMenu' =>'TradeLicense'])
+@extends('backend.master', ['mainMenu' => 'Organization', 'subMenu' => 'TradeLicense'])
 
 @push('style')
 <style>
@@ -19,71 +19,66 @@
         background: #f4f6f9;
     }
 
-    /* Main license container */
     .trade-license-page {
         max-width: 1100px;
         margin: 0 auto;
         background: white;
-        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         position: relative;
         overflow: visible;
-        border-radius: 4px;
+        border-radius: 0;
+        border: 4px solid #556b2f;
+        padding: 8px;
     }
 
-    .trade-license-content {
+    .inner-border {
+        border: 2px solid #556b2f;
         padding: 8mm 12mm;
     }
 
-    /* Header Logos and Title - Matching People Certificate */
     .header-logos {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 15px;
-        border-bottom: 2px solid #006600;
-        padding-bottom: 10px;
     }
 
     .header-logos img {
-        width: 70px;
-        height: 70px;
+        width: 80px;
+        height: 80px;
         object-fit: contain;
     }
 
-    /* Union header section - centered text */
     .union-header {
         text-align: center;
         flex: 1;
     }
 
     .union-title-bn {
-        font-size: 22px;
+        font-size: 20px;
         font-weight: bold;
         color: #006600;
         margin: 0;
     }
 
     .union-title-en {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         color: #2e3192;
         margin: 2px 0;
     }
 
     .union-address {
-        font-size: 14px;
         margin: 0;
-        color: #333;
     }
 
-    /* License Title */
     .license-title {
         text-align: center;
-        margin: 15px 0;
+        margin: 15px 0 25px 0;
     }
 
     .license-title h3 {
-        background: #28a745;
+        background: #006600;
         color: #fff;
         display: inline-block;
         padding: 8px 30px;
@@ -94,297 +89,350 @@
     }
 
     .tax-year {
-        font-size: 14px;
-        font-weight: bold;
-        color: #006600;
+        font-size: 13px;
+        color: #333;
         margin-top: 8px;
+        line-height: 1.6;
     }
 
-    /* Info Tables */
-    .info-table {
-        width: 100%;
-        margin-bottom: 15px;
-        border-collapse: collapse;
+    .invoice-info-simple {
+        margin-bottom: 25px;
+        line-height: 1.8;
     }
 
-    .info-table td {
-        padding: 8px 12px;
-        border: 1px solid #dee2e6;
-        vertical-align: top;
+    .info-group {
+        display: flex;
+        margin-bottom: 8px;
+        align-items: flex-start;
     }
 
-    .info-table td:first-child {
-        background: #343a40;
-        color: #fff;
+    .info-header {
         font-weight: bold;
-        width: 200px;
+        font-size: 15px;
+        white-space: nowrap;
+        margin-right: 5px;
     }
 
-    /* Fees Table */
-    .fees-table {
+    .info-body {
+        font-size: 14px;
+        flex: 1;
+    }
+
+    .fees-table-new {
         width: 100%;
+        border-collapse: collapse;
         margin-bottom: 20px;
-        border-collapse: collapse;
     }
 
-    .fees-table th,
-    .fees-table td {
-        border: 1px solid #dee2e6;
+    .fees-table-new th {
+        background: #dcdcdc;
+        color: black;
         padding: 8px;
-        vertical-align: middle;
+        text-align: center;
+        border: 1px solid #333;
+        font-size: 14px;
     }
 
-    .fees-table th {
-        background: #343a40;
-        color: #fff;
-        font-weight: bold;
+    .fees-table-new td {
+        border: 1px solid #333;
+        padding: 8px 12px;
+        font-size: 13px;
         text-align: center;
     }
 
-    .fees-table td {
-        text-align: right;
-    }
-
-    .fees-table td:first-child {
-        text-align: center;
-        width: 10%;
-    }
-
-    .fees-table td:nth-child(2) {
+    .fees-table-new td:nth-child(2) {
         text-align: left;
-        width: 70%;
+        width: 50%;
     }
 
-    .fees-table td:nth-child(3) {
+    .fees-table-new td:nth-child(3),
+    .fees-table-new td:nth-child(4) {
+        text-align: right;
         width: 20%;
     }
 
-    /* Footer totals */
-    .total-row {
-        background: #e9ecef;
+    .fees-total {
+        background: #f8f8f8;
         font-weight: bold;
     }
 
-    /* Signature area */
+    .fees-grand-total {
+        background: #dcdcdc;
+        font-weight: bold;
+        color: black;
+    }
+
     .signature-area {
-        margin-top: 40px;
+        margin-top: 100px;
         display: flex;
         justify-content: space-between;
         text-align: center;
-        border-top: 1px dashed #aaa;
-        padding-top: 20px;
     }
 
     .sig-block {
-        width: 30%;
+        width: 200px;
     }
 
     .sig-line {
-        border-top: 1px solid #000;
-        margin: 25px 0 5px;
+        border-top: 1px solid #333;
+        margin-bottom: 5px;
     }
 
-    /* Print styles */
+    .sig-text {
+        font-size: 14px;
+        line-height: 1.2;
+        color: #333;
+    }
+
     @media print {
         body {
-            margin: 0;
-            padding: 0;
             background: white;
         }
-        
+
         .trade-license-page {
-            margin: 0;
-            padding: 0;
             box-shadow: none;
-            border-radius: 0;
-            width: 100%;
+            border: none;
         }
-        
-        .trade-license-content {
-            padding: 8mm 12mm;
+
+        .inner-border {
+            border: none;
         }
-        
-        #printPageButton,
+
         .no-print,
         .card-footer,
         footer,
         .main-footer {
             display: none !important;
         }
-        
-        .bg-success {
-            background: #28a745 !important;
-            color: #fff;
-        }
-        
-        .content-wrapper,
-        .container,
-        .card {
-            background: #ffffff;
-            padding: 0;
-            margin: 0;
-        }
-        
-        @page {
-            margin: 12mm 8mm;
-        }
-        
-        /* Force background colors */
-        .info-table td:first-child,
-        .fees-table th,
-        .total-row {
+
+        .fees-grand-total,
+        .fees-total,
+        .fees-table-new th {
+            background-color: #f0f0f0 !important;
+            color: black !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
-        
-        /* Page break controls */
-        .fees-table tr {
-            page-break-inside: avoid;
-            break-inside: avoid;
+
+        .fees-grand-total {
+            background-color: #e8e8e8 !important;
         }
-        
-        .signature-area {
-            margin-top: 200px !important;
-            page-break-inside: avoid;
-            break-inside: avoid;
+
+        .fees-table-new th,
+        .fees-table-new td {
+            border: 1px solid #333 !important;
         }
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
-        .info-table td:first-child {
-            width: 120px;
+        .info-group {
+            flex-direction: column;
+            margin-bottom: 14px;
         }
-        
-        .fees-table th,
-        .fees-table td {
-            font-size: 11px;
-            padding: 5px;
+
+        .info-header {
+            margin-right: 0;
+            margin-bottom: 3px;
         }
     }
 </style>
 @endpush
 
-@section('title', 'Organization Trade License')
+@section('title', 'Organization Invoice Details')
 
 @section('content')
-<div class="trade-license-page">
-    <div class="trade-license-content">
-        
-        {{-- Header with Logos - Matching People Certificate exactly --}}
+@php
+    $organization = $license->organization;
+    $ownerships = $organization?->ownership ?? collect();
+    $ownerRecord = $ownerships->firstWhere('is_trade_license', true)
+        ?? $ownerships->firstWhere('is_trade_license', 1)
+        ?? $ownerships->first();
+    $ownerUser = $ownerRecord?->user;
+    $ownerPeople = $ownerUser?->people;
+
+    $organizationId = $organization?->approved_id ?? $organization?->application_id ?? $organization?->system_id ?? '--';
+    $ownerId = $ownerPeople?->approved_id ?? $ownerUser?->system_id ?? $ownerRecord?->system_id ?? '--';
+    $ownerName = $ownerUser?->name ?? $ownerRecord?->user_name ?? '--';
+
+    $organizationAddress = collect([
+        $organization?->house_bn ? 'বাড়ি: ' . $organization->house_bn : ($organization?->house ? 'বাড়ি: ' . $organization->house : null),
+        $organization?->road ? 'রোড: ' . $organization->road : null,
+        $organization?->villageArea?->bn_name ? 'এলাকা: ' . $organization->villageArea->bn_name : null,
+        $organization?->village?->bn_name ? 'গ্রাম: ' . $organization->village->bn_name : null,
+    ])->filter()->implode(', ');
+    $organizationAddress = $organizationAddress ?: '--';
+
+    $organizationType = $organization?->type?->bn_name
+        ?? $organization?->type?->en_name
+        ?? $organization?->subcategory?->bn_name
+        ?? $organization?->subcategory?->en_name
+        ?? '--';
+
+    $taxYearName = $license?->taxYear?->bn_name ?? $license?->taxYear?->name ?? 'N/A';
+    $fees = json_decode($license->fees ?? '{}', true);
+    $fees = is_array($fees) ? $fees : [];
+
+    $totalFee = 0;
+    foreach ($fees as $amount) {
+        $totalFee += (float) $amount;
+    }
+
+    $isApproved = (int) ($license->status ?? 0) === 2;
+    $isPaid = ($license->payment_status ?? 'unpaid') === 'paid';
+    $canTakePayment = $isApproved && !$isPaid;
+
+    $fallbackHeaderUnion = \App\Models\Institute::with('union.thana.district')
+        ->whereNotNull('union_id')
+        ->first()?->union;
+
+    $headerUnion = $organization?->Union
+        ?? $organization?->institute?->union
+        ?? $ownerUser?->addressInfo?->presentUnion
+        ?? $ownerUser?->addressInfo?->permanentUnion
+        ?? $ownerUser?->institute?->union
+        ?? auth()->user()?->institute?->union
+        ?? $fallbackHeaderUnion;
+
+    $headerThana = $organization?->Thana
+        ?? $headerUnion?->thana
+        ?? $organization?->officeThana
+        ?? $ownerUser?->addressInfo?->presentThana
+        ?? $ownerUser?->addressInfo?->permanentThana
+        ?? auth()->user()?->institute?->union?->thana
+        ?? $fallbackHeaderUnion?->thana;
+
+    $headerDistrict = $organization?->District
+        ?? $headerThana?->district
+        ?? $organization?->officeDistrict
+        ?? $ownerUser?->addressInfo?->presentDistrict
+        ?? $ownerUser?->addressInfo?->permanentDistrict
+        ?? auth()->user()?->institute?->union?->thana?->district
+        ?? $fallbackHeaderUnion?->thana?->district;
+@endphp
+
+<div class="trade-license-page mt-4 mb-4">
+    <div class="inner-border">
         <div class="header-logos">
-            <!-- <img src="{{ isset($license->organization->institute->left_image) ? asset($license->organization->institute->left_image) : asset('images/dhaka.png') }}" alt="City Logo"> -->
-            <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
+            <img src="{{ asset('images/dhaka.png') }}" alt="Left Logo">
             <div class="union-header">
                 <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
-                <div class="union-title-bn">{{ $license->organization->institute->union->bn_name ?? 'মোহরাজপুর ইউনিয়ন' }}</div>
-                <div class="union-title-en">{{ $license->organization->institute->union->name ?? 'Moharajpur Union' }}</div>
+                <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>
+                <div class="union-title-en">{{ $headerUnion?->name ?? '' }}</div>
                 <p class="union-address">
-                    উপজেলা: {{ $license->organization->institute->union->thana->bn_name ?? 'গোপালগঞ্জ সদর' }},
-                    জেলা: {{ $license->organization->institute->union->thana->district->bn_name ?? 'গোপালগঞ্জ' }},
+                    থানাঃ {{ $headerThana?->bn_name ?? $headerThana?->name ?? '' }},
+                    জেলাঃ {{ $headerDistrict?->bn_name ?? $headerDistrict?->name ?? '' }},
                     বাংলাদেশ।
                 </p>
             </div>
-            <!-- <img src="{{ isset($license->organization->institute->right_image) ? asset($license->organization->institute->right_image) : asset('images/govt-bd-logo.png') }}" alt="Govt Logo"> -->
-            <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Govt Logo">
+            <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Right Logo">
         </div>
-        
-        {{-- License Title --}}
+
+        <div style="display: flex; justify-content: space-between; margin-bottom: -15px; position: relative; z-index: 10;">
+            <div>নম্বর: <strong>{{ bnValue($license->system_id ?? $license->id) }}</strong></div>
+            <div>তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at ?? $license->created_at))) }}</div>
+        </div>
+
         <div class="license-title">
             <h3>ট্রেড লাইসেন্স রসিদ / TRADE LICENSE INVOICE</h3>
-            <div class="tax-year">অর্থ বছর: <strong>{{ $license->taxYear->bn_name ?? 'N/A' }}</strong></div>
+            <div class="tax-year">
+                <br>
+                অর্থ বছর: {{ bnValue($taxYearName) }}<br>
+                <span style="font-size: 11px;">( স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই ফিস নির্ধারণ করা হলো )</span>
+            </div>
         </div>
 
-        {{-- License Metadata --}}
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <div><strong>নম্বর:</strong> {{ bnValue($license->system_id ?? '') }}</div>
-            <div><strong>তারিখ:</strong> {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }} খ্রিঃ</div>
+        <div class="invoice-info-simple">
+            <div class="info-group">
+                <div class="info-header">প্রতিষ্ঠানের তথ্য:</div>
+                <div class="info-body">
+                    আইডি নম্বর- {{ bnValue($organizationId) }},
+                    নাম- {{ $organization?->name ?? '--' }},
+                    ধরণ- {{ $organizationType }}
+                </div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-header">মালিকের তথ্য:</div>
+                <div class="info-body">
+                    আইডি নং- {{ bnValue($ownerId) }},
+                    নাম- {{ $ownerName }}
+                </div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-header">প্রতিষ্ঠান সংক্রান্ত তথ্য:</div>
+                <div class="info-body">
+                    আবেদন আইডি- {{ $organization?->application_id ?? '--' }},
+                    অনুমোদন আইডি- {{ $organization?->approved_id ?? '--' }},
+                    ঠিকানা- {{ $organizationAddress }}
+                </div>
+            </div>
         </div>
 
-        {{-- Organization Information --}}
-        <table class="info-table">
-            <tr>
-                <td>প্রতিষ্ঠানের তথ্য:</strong> </td>
-                <td>
-                    <strong>আইডি নং- {{ bnValue($license->organization->system_id ?? '') }},</strong>
-                    <strong>নাম: {{ $license->organization->name ?? 'N/A' }}</strong>
-                </strong>
-            </strong>
-            </tr>
-            <tr>
-                <td>প্রতিষ্ঠান সংক্রান্ত তথ্য:</strong> </td>
-                <td>
-                    <strong>
-                        বাড়ি নং- {{ $license->organization->house->house_bn ?? 'N/A' }}, 
-                        এলাকা: {{ $license->organization->villageArea->bn_name ?? 'N/A' }}, 
-                        গ্রাম: {{ $license->organization->village->bn_name ?? 'N/A' }}
-                    </strong>
-                </strong>
-            </strong>
-        </table>
-
-        {{-- Fees Table --}}
-        <table class="fees-table">
+        <table class="fees-table-new">
             <thead>
                 <tr>
-                    <th style="width: 10%">ক্রমিক নং</th>
-                    <th style="width: 70%">ফি এর শিরোনাম</th>
-                    <th style="width: 20%">ফি এর পরিমাণ</th>
+                    <th>ক্রমিক নং</th>
+                    <th>ফি এর বিষয়</th>
+                    <th>বকেয়া</th>
+                    <th>টাকা</th>
                 </tr>
             </thead>
-            <tbody id="load-fees">
-                @php
-                    $total_fee = 0;
-                    $index = 0;
-                    $fees = json_decode($license->fees, true);
-                @endphp
+            <tbody>
                 @if(!empty($fees))
-                    @foreach ($fees as $key => $fee)
-                        @php
-                            $total_fee = $total_fee + $fee;
-                        @endphp
+                    @foreach($fees as $feeHead => $amount)
                         <tr>
-                            <td>{{ ++$index }}</strong>
-                            <td class="text-left"><strong>{{ $key }}</strong></td>
-                            <td class="text-right"><strong>{{ currencyFormat($fee) }}</strong></td>
+                            <td>{{ bnValue($loop->iteration) }}</td>
+                            <td>{{ $feeHead }}</td>
+                            <td></td>
+                            <td>{{ currencyFormat((float) $amount) }}</td>
                         </tr>
                     @endforeach
+                    <tr class="fees-total">
+                        <td colspan="3" style="text-align: right; padding-right: 20px;">মোট:</td>
+                        <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
+                    </tr>
+                    <tr class="fees-grand-total">
+                        <td colspan="3" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
+                        <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
+                    </tr>
+                @else
+                    <tr>
+                        <td colspan="4" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
+                    </tr>
                 @endif
-                <tr class="total-row">
-                    <td><strong>মোট:</strong></strong>
-                    <td class="text-right" colspan="2"><strong>{{ currencyFormat($total_fee) }}</strong></td>
-                </tr>
             </tbody>
         </table>
 
-        {{-- Signature Area --}}
         <div class="signature-area">
             <div class="sig-block">
                 <div class="sig-line"></div>
-                লাইসেন্স ও বিজ্ঞাপন সুপারভাইজার
+                <div class="sig-text">লাইসেন্স ও বিজ্ঞাপন<br>সুপারভাইজার</div>
             </div>
             <div class="sig-block">
                 <div class="sig-line"></div>
-                সীল
+                <div class="sig-text">সীল</div>
             </div>
             <div class="sig-block">
                 <div class="sig-line"></div>
-                কর্তৃপক্ষ
+                <div class="sig-text">কর্তৃপক্ষ</div>
             </div>
         </div>
-        
-        {{-- Footer --}}
-        <!-- <div class="text-center mt-3 small text-muted">
-            <small>ইস্যুর তারিখ: {{ bnValue(date('d/m/Y')) }} খ্রিঃ</small>
-        </div>
-        <div class="text-center mt-2 small text-muted">
-            <small>Developed & Maintained by: <a href="https://www.jatri24.com">Jatri 24 Ltd.</a> & <a href="https://www.adventure-soft.com">Adventure Soft Ltd.</a></small>
-        </div> -->
     </div>
 </div>
 
-{{-- Print Buttons --}}
 <div class="no-print text-center my-4">
+    @if($canTakePayment)
+        <button type="button" class="btn btn-primary px-5 py-2" id="showManualPaymentBtn">
+            <i class="fa fa-credit-card"></i> Make Payment
+        </button>
+        <a href="{{ route('organizationA.trade-license.online-payment', $license->id) }}" class="btn btn-warning px-5 py-2 ms-2">
+            <i class="fa fa-globe"></i> Online Payment
+        </a>
+    @elseif($isPaid)
+        <span class="badge badge-success p-2" style="font-size: 14px;">Payment Completed</span>
+    @endif
+
     <button class="btn btn-success px-5 py-2" onclick="window.print()">
         <i class="fa fa-print"></i> Print / প্রিন্ট
     </button>
@@ -392,16 +440,58 @@
         <i class="fa fa-arrow-left"></i> Back to List
     </a>
 </div>
+
+@if($canTakePayment)
+    <div class="no-print" id="manualPaymentBox" style="display:none; max-width: 900px; margin: 0 auto 20px; background: #fff; border: 1px solid #dee2e6; padding: 20px; border-radius: 6px;">
+        <h5 class="mb-3">Manual Payment Information</h5>
+
+        <form action="{{ route('organizationA.trade-license.manual-payment.store', $license->id) }}" method="POST">
+            @csrf
+
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Payment Details <span class="text-danger">*</span></label>
+                <div class="col-md-9">
+                    <input type="text" name="payment_details" class="form-control" value="{{ old('payment_details') }}" placeholder="Enter payment details" required>
+                    @error('payment_details')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Transaction ID <span class="text-danger">*</span></label>
+                <div class="col-md-9">
+                    <input type="text" name="transaction_id" class="form-control" value="{{ old('transaction_id') }}" placeholder="Enter transaction id" required>
+                    @error('transaction_id')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label">Note</label>
+                <div class="col-md-9">
+                    <textarea name="note" class="form-control" rows="3" placeholder="Enter note">{{ old('note') }}</textarea>
+                    @error('note')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-info">Save Manual Payment</button>
+            </div>
+        </form>
+    </div>
+@endif
 @endsection
 
 @push('script')
 <script>
-    window.onbeforeprint = function() {
-        // Optional: Any pre-print adjustments
-    };
-    
-    window.onafterprint = function() {
-        // Optional: Any post-print cleanup
-    };
+    $(document).ready(function () {
+        $('#showManualPaymentBtn').on('click', function () {
+            $('#manualPaymentBox').slideToggle();
+        });
+    });
 </script>
 @endpush

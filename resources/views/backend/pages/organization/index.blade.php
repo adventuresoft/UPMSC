@@ -100,12 +100,12 @@
                                         <td>
                                           @php
                                             $owner = $organization->ownership->first() ?? null;
+                                            $ownerName = $owner?->user?->name ?? $owner?->user_name ?? '-';
                                           @endphp
-                                          <div>{{ $owner?->user?->name ?? $owner?->user_name ?? '-' }}</div>
-                                          <div>{{ $owner?->user?->people?->bn_name ?? '-' }}</div>
+                                          <div>{{ $ownerName }}</div>
                                         </td>
-                                        <td>{{$organization->category->en_name}}</td>
-                                        <td>{{$organization->subcategory?->en_name}}</td>
+                                        <td>{{$organization->category?->en_name ?? '-'}}</td>
+                                        <td>{{$organization->subcategory?->en_name ?? '-'}}</td>
 
                                         <td>
                                           {{date( 'd-m-Y', strtotime($organization->created_at) )}}
@@ -231,4 +231,3 @@
   });
 </script>
 @endpush
-

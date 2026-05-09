@@ -100,23 +100,23 @@
 
                   <td>{{++$key}}</td>
 
-                  <td>{{$license->taxYear->name}}</td>
+                  <td>{{$license->taxYear->name ?? '-'}}</td>
 
-                  <td>{{$license->organization->name??''}}</td>
+                  <td>{{$license->organization->name ?? '-'}}</td>
 
-                  <td>{{$license->organization->category->en_name??''}}</td>
+                  <td>{{$license->organization?->type?->en_name ?? $license->organization?->type?->bn_name ?? $license->organization?->category?->en_name ?? '-'}}</td>
 
-                  <td>{{$license->organization->subcategory->en_name??''}}</td>
+                  <td>{{$license->organization?->subcategory?->en_name ?? $license->organization?->category?->en_name ?? '-'}}</td>
 
                   <td>{{date('d-m-Y', strtotime($license->updated_at))}}</td>
 
                   <td>
 
-                    
+
 
                     <label class="badge badge-success">{{ucfirst($license->payment_status)}}</label>
 
-                    
+
 
                   </td>
 
@@ -129,14 +129,14 @@
                       <!--  class="btn btn-sm btn-info">-->
                       <!--  <i class="fa fa-hand-holding-usd"></i>-->
                       <!--</a>-->
-                      
-                      
+
+
                       <!-- <a href="{{route('organizationA.trade-license.show', $license->id )}}"-->
                       <!--  title="Show"-->
                       <!--  class="btn btn-sm btn-success">-->
                       <!--  <i class="fa fa-eye"></i>-->
                       <!--</a>-->
-                      
+
 
                       <a target="_blank"
                         href="{{ $license->status == 2 ? route('organizationA.trade-license.preview', $license->id) :'#' }}"
