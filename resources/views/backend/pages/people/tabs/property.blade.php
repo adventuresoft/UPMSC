@@ -249,7 +249,7 @@
                                             <label for="house_type" class="col-sm-2 col-form-label">House Type</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="house_type"
-                                                    value="{{ $user->propertyInfos->house_type ?? '' }}"
+                                                    value="{{ $user->propertyInfos->first()->house_type ?? '' }}"
                                                     placeholder="Building/Tien Shed" class="form-control" id="house_type">
                                             </div>
                                         </div>
@@ -274,7 +274,7 @@
                                             <label for="house_price" class="col-sm-2 col-form-label">House Price</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="house_price"
-                                                    value="{{ $user->propertyInfos->house_price ?? '' }}"
+                                                    value="{{ $user->propertyInfos->first()->house_price ?? '' }}"
                                                     placeholder="House Price" class="form-control" id="house_price">
                                             </div>
                                         </div>
@@ -283,7 +283,7 @@
                                                 Status</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="house_ownership_status"
-                                                    value="{{ $user->propertyInfos->house_ownership_status ?? '' }}"
+                                                    value="{{ $user->propertyInfos->first()->house_ownership_status ?? '' }}"
                                                     placeholder="Ownership Status" class="form-control"
                                                     id="house_ownership_status">
                                             </div>
@@ -439,7 +439,7 @@
                                                 Status</label>
                                             <div class="col-sm-9">
                                                 <input type="text" name="land_ownership_status"
-                                                    value="{{ $user->propertyInfos->land_ownership_status ?? '' }}"
+                                                    value="{{ $user->propertyInfos->first()->land_ownership_status ?? '' }}"
                                                     placeholder="Land Ownership Status" class="form-control"
                                                     id="land_ownership_status">
                                             </div>

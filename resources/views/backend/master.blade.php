@@ -38,6 +38,16 @@
   <link rel="stylesheet" href="{{ asset('plugins')}}/select2/css/select2.min.css">
   <link rel="stylesheet" href="{{ asset('plugins')}}/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <style>
+    /* Global: Prevent horizontal scrollbars on all DataTable pages */
+    .card-body {
+        overflow-x: hidden;
+    }
+    
+    /* Ensure DataTables Responsive collapse works cleanly */
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before {
+        background-color: #17a2b8;
+    }
     .select2-container--default .select2-selection--single .select2-selection__rendered {
         color: #444;
         line-height: 17px !important;

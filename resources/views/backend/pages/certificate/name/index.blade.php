@@ -143,7 +143,7 @@
 
                         <!-- TABLE -->
 
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="example1" class="table table-bordered table-striped" style="width:100%">
 
                             <thead>
                                 <tr>
@@ -241,6 +241,7 @@
         let table = $('#example1').DataTable({
             responsive: true,
             autoWidth: false,
+            scrollX: false,
             pageLength: 10,
             lengthChange: false,
             order: [[0, 'asc']],

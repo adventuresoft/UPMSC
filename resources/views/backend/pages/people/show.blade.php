@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'People', 'subMenu' =>'View'])
+@extends('backend.master', ['mainMenu' => 'People', 'subMenu' => $subMenu ?? 'View'])
 
 @push('style')
 <style>
@@ -249,7 +249,55 @@
     .education-table th {
         background-color: #e9ecef;
         font-weight: bold;
-        color: #2c3e4e;
+        color: #006600;
+    }
+
+    /* Stackable Table for Mobile - No horizontal scroll */
+    @media screen and (max-width: 768px) {
+        .stackable-table, 
+        .stackable-table thead, 
+        .stackable-table tbody, 
+        .stackable-table th, 
+        .stackable-table td, 
+        .stackable-table tr {
+            display: block;
+            width: 100%;
+        }
+        
+        .stackable-table thead {
+            display: none;
+        }
+        
+        .stackable-table tr {
+            margin-bottom: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .stackable-table td {
+            text-align: right;
+            padding: 10px 15px;
+            border: none;
+            border-bottom: 1px solid #f1f1f1;
+            position: relative;
+            min-height: 40px;
+        }
+        
+        .stackable-table td:last-child {
+            border-bottom: none;
+        }
+        
+        .stackable-table td:before {
+            content: attr(data-label);
+            position: absolute;
+            left: 15px;
+            width: 45%;
+            text-align: left;
+            font-weight: bold;
+            color: #006600;
+        }
     }
 
     .education-table tr {
@@ -503,7 +551,7 @@
         {{-- Education Section as Table --}}
         @if(count($user->educationInfos) > 0)
         <div class="section-header">শিক্ষাগত যোগ্যতা / Education</div>
-        <table class="education-table">
+        <table class="education-table stackable-table">
             <thead>
                 <tr>
                     <th>ডিগ্রি / Degree</th>
@@ -516,33 +564,33 @@
             <tbody>
                 @foreach($user->educationInfos as $edu)
                 <tr>
-                    <td>
+                    <td data-label="Degree">
                         @if($edu->degree_id == 1) HSC
                         @elseif($edu->degree_id == 2) SSC
                         @elseif($edu->degree_id == 3) JSC
                         @else {{ $edu->degree_id ?? '' }}
                         @endif
                     </td>
-                    <td>
+                    <td data-label="Group">
                         @if($edu->group_id == 1) Science
                         @elseif($edu->group_id == 2) Business
                         @elseif($edu->group_id == 3) Humanities
                         @else {{ $edu->group_id ?? '' }}
                         @endif
                     </td>
-                    <td>
+                    <td data-label="Grade">
                         @php
                             $grades = ['A+','A','A-','B+','B','B-','C+','C','D','F'];
                         @endphp
                         {{ $edu->grade_id ? ($grades[$edu->grade_id-1] ?? '') : '' }}
                     </td>
-                    <td>
+                    <td data-label="Board">
                         @php
                             $boards = ['Dhaka','Rajshahi','Rangpur','Jessore','Comilla','Sylhet','Chittagong'];
                         @endphp
                         {{ $edu->board_id ? ($boards[$edu->board_id-1] ?? '') : '' }}
                     </td>
-                    <td>{{ $edu->institute ?? '' }}</td>
+                    <td data-label="Institute">{{ $edu->institute ?? '' }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -658,7 +706,7 @@
 
 
     <button class="btn btn-success px-5 py-2 btn-print-custom" onclick="window.print()"><i class="fa fa-print"></i> Print / প্রিন্ট</button>
-    <a href="{{ route('people.index') }}" class="btn btn-secondary px-5 py-2 ms-3"><i class="fa fa-arrow-left"></i> Back to List</a>
+    <a href="{{ !empty($user->people->approved_id) ? route('peopleapprovedlist') : route('people.index') }}" class="btn btn-secondary px-5 py-2 ms-3"><i class="fa fa-arrow-left"></i> Back to List</a>
 
     @if(empty($user->people->approved_id))
     <button type="button" 

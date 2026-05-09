@@ -74,6 +74,62 @@ class PeopleController extends Controller
         return response()->json($data, 404);
     }
 
+    public function searchPeople(Request $request)
+    {
+        $q = trim($request->q);
+        if (empty($q)) {
+            return response()->json(['results' => []]);
+        }
+
+        $users = User::with(['people', 'addressInfo' => function($query) {
+            $query->with(['permanentVillage', 'permanentWard', 'permanentThana', 'permanentDistrict', 'permanentPostOffice']);
+        }])
+        ->where('role_id', 5);
+
+        // Filter by institute if current user has one
+        if (Auth::user()->institute_id) {
+            $users->where('institute_id', Auth::user()->institute_id);
+        }
+
+        $users->where(function($query) use ($q) {
+            $query->where('name', 'LIKE', "%{$q}%")
+                  ->orWhere('mobile', 'LIKE', "%{$q}%")
+                  ->orWhere('system_id', 'LIKE', "%{$q}%")
+                  ->orWhereHas('people', function($query) use ($q) {
+                      $query->where('bn_name', 'LIKE', "%{$q}%")
+                            ->orWhere('name', 'LIKE', "%{$q}%")
+                            ->orWhere('nid', 'LIKE', "%{$q}%")
+                            ->orWhere('mobile', 'LIKE', "%{$q}%")
+                            ->orWhere('approved_id', 'LIKE', "%{$q}%");
+                  });
+        });
+
+        $users = $users->limit(20)->get();
+
+        $results = [];
+        foreach ($users as $user) {
+            $address = $user->addressInfo;
+            $people = $user->people;
+
+            $areaName = $address ? (($address->permanentVillage->bn_name ?? '') . ', ' . ($address->permanentWard->bn_ward_no ?? '') . ' নং ওয়ার্ড') : '';
+            $fullAddress = $address ? (($address->permanentVillage->bn_name ?? '') . ', ' . ($address->permanent_road ?? '') . ', ' . ($address->permanent_house ?? '')) : '';
+            
+            $results[] = [
+                'id' => $user->id,
+                'text' => ($people->approved_id ?? $user->system_id) . ' - ' . ($people->bn_name ?? $user->name) . ' - ' . ($people->nid ?? 'No NID') . ' - ' . ($user->mobile ?? $people->mobile ?? ''),
+                'name' => $people->bn_name ?? $user->name,
+                'nid' => $people->nid ?? '',
+                'dob' => $people->date_of_birth ?? '',
+                'voter_area' => $areaName,
+                'thana' => $address->permanentThana->bn_name ?? '',
+                'district' => $address->permanentDistrict->bn_name ?? '',
+                'address' => $fullAddress
+            ];
+        }
+
+        return response()->json(['results' => $results]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -320,8 +376,9 @@ class PeopleController extends Controller
         $data['flatMouzas'] = $propertyInfo ? ($propertyInfo->flat_thana_id ? Mouza::where('thana_id', $propertyInfo->flat_thana_id)->get() : []) : [];
 
         $data['active_tab'] = 'property';
+        $data['subMenu'] = !empty($user->people->approved_id) ? 'approvedList' : 'View';
 
-        return view('backend.pages.people.tabs.property', $data);
+        return view('backend.pages.people.show', $data);
     }
 
     /**

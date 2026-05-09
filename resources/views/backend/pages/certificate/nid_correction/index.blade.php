@@ -201,15 +201,14 @@
                         </div>
 
                         <!-- TABLE -->
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="example1" class="table table-bordered table-striped" style="width:100%">
 
                             <thead>
                                 <tr>
                                     <th>Sl</th>
                                     <th>Photo</th>
                                     <th>Certificate No</th>
-                                    <th>NID Number</th>
-                                    <th>Name</th>
+                                    <th>ID & Name</th>
                                     <th>Address & Mobile</th>
                                     <th>Correction Details</th>
                                     <th>Status</th>
@@ -226,7 +225,7 @@
                                         <td>{{ $key + 1 }}</td>
 
                                         <td>
-                                            <img src="{{ asset($certificate->user->photo ?? 'default.png') }}"
+                                            <img src="{{ asset($certificate->user->people->image ?? 'default.png') }}"
                                                 width="40"
                                                 height="40"
                                                 class="img-circle"
@@ -241,20 +240,14 @@
 
                                         <td>
                                             <span class="citizen-id">
-                                                {{ bnValue($certificate->nid_number ?? $certificate->user->nid ?? 'N/A') }}
-                                            </span>
+                                                {{ bnValue($certificate->user->system_id ?? '') }}
+                                            </span><br>
+                                            <strong>{{ $certificate->applicant_name ?? $certificate->user->name ?? 'N/A' }}</strong>
                                         </td>
 
                                         <td>
-                                            <strong>{{ $certificate->user->name ?? 'N/A' }}</strong>
-                                            @if($certificate->old_name)
-                                                <br><small class="nid-old">Old: {{ $certificate->old_name }}</small>
-                                            @endif
-                                        </td>
-
-                                        <td>
-                                            {{ $certificate->user->address ?? 'N/A' }} <br>
-                                            <strong>{{ $certificate->user->mobile ?? 'N/A' }}</strong>
+                                            {{ $certificate->current_village_road ?? $certificate->user->address ?? 'N/A' }} <br>
+                                            <strong>{{ $certificate->transfer_phone_mobile ?? $certificate->user->mobile ?? 'N/A' }}</strong>
                                         </td>
 
                                         <td>
@@ -276,15 +269,20 @@
 
                                         <td>
                                             @php
-                                                $status = $certificate->status ?? 'pending';
-                                                $statusClass = match($status) {
-                                                    'approved' => 'approved',
-                                                    'rejected' => 'rejected',
-                                                    default => 'pending'
-                                                };
+                                                $status = $certificate->status;
+                                                $statusText = 'Pending';
+                                                $statusClass = 'pending';
+                                                
+                                                if($status == 1 || $status == 'approved') {
+                                                    $statusText = 'Approved';
+                                                    $statusClass = 'approved';
+                                                } elseif($status == 2 || $status == 'rejected') {
+                                                    $statusText = 'Rejected';
+                                                    $statusClass = 'rejected';
+                                                }
                                             @endphp
                                             <span class="correction-badge {{ $statusClass }}">
-                                                {{ ucfirst($status) }}
+                                                {{ $statusText }}
                                             </span>
                                         </td>
 
@@ -297,14 +295,20 @@
                                         </td>
 
                                         <td>
-                                            <a target="_blank" href="{{ route('nid-correction.show', $certificate->id) }}" 
-                                                class="btn btn-primary btn-sm">
-                                                <i class="fa fa-file-pdf"></i> EN
-                                            </a>
-                                            <a target="_blank" href="{{ route('nid-correction.bn_certificate', $certificate->id) }}" 
-                                                class="btn btn-info btn-sm">
-                                                <i class="fa fa-file-pdf"></i> BN
-                                            </a>
+                                            @if($certificate->status == 0)
+                                                <button onclick="approveCertificate({{ $certificate->id }})" class="btn btn-success btn-sm">
+                                                    <i class="fa fa-check"></i> Approve
+                                                </button>
+                                            @else
+                                                <a target="_blank" href="{{ route('nid-correction.show', $certificate->id) }}" 
+                                                    class="btn btn-primary btn-sm">
+                                                    <i class="fa fa-file-pdf"></i> EN
+                                                </a>
+                                                <a target="_blank" href="{{ route('nid-correction.bn_certificate', $certificate->id) }}" 
+                                                    class="btn btn-info btn-sm">
+                                                    <i class="fa fa-file-pdf"></i> BN
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
@@ -343,12 +347,13 @@
         let table = $('#example1').DataTable({
             responsive: true,
             autoWidth: false,
+            scrollX: false,
             pageLength: 10,
             lengthChange: false,
             order: [[0, 'asc']],
             columnDefs: [
                 { targets: 1, orderable: false }, // Disable sorting on photo column
-                { targets: 10, orderable: false }  // Disable sorting on action column
+                { targets: 9, orderable: false }  // Disable sorting on action column
             ],
             language: {
                 emptyTable: '<div class="empty-state"><i class="fas fa-folder-open"></i><h5>No data available</h5></div>',
@@ -361,44 +366,38 @@
             table.column(2).search(this.value).draw();
         });
 
-        // NID Number (Column 3)
-        $('#search_nid').keyup(function() {
+        // ID & Name (Column 3)
+        $('#search_name').keyup(function() {
             table.column(3).search(this.value).draw();
         });
 
-        // Name (Column 4)
-        $('#search_name').keyup(function() {
+        // Address & Mobile (Column 4)
+        $('#search_address').keyup(function() {
             table.column(4).search(this.value).draw();
         });
 
-        // Address & Mobile (Column 5)
-        $('#search_address').keyup(function() {
-            table.column(5).search(this.value).draw();
+        // Status (Column 6)
+        $('#search_status').change(function() {
+            table.column(6).search(this.value).draw();
         });
 
-        // Status (Column 7)
-        $('#search_status').change(function() {
+        // Quantity (Column 7)
+        $('#search_quantity').keyup(function() {
             table.column(7).search(this.value).draw();
         });
 
-        // Quantity (Column 8)
-        $('#search_quantity').keyup(function() {
-            table.column(8).search(this.value).draw();
-        });
-
-        // Created Date (Column 9)
+        // Created Date (Column 8)
         $('#search_date').on('change', function() {
             if (this.value) {
                 // Convert YYYY-MM-DD to DD-MM-YYYY for searching
                 let dateParts = this.value.split('-');
                 let formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-                table.column(9).search(formattedDate).draw();
+                table.column(8).search(formattedDate).draw();
             } else {
-                table.column(9).search('').draw();
+                table.column(8).search('').draw();
             }
         });
 
-        // Global Search
         $('#search_global').keyup(function() { 
             table.search(this.value).draw(); 
         });
@@ -412,7 +411,6 @@
         $('#resetFilter').click(function() {
             // Clear all input fields
             $('#search_cert').val('');
-            $('#search_nid').val('');
             $('#search_name').val('');
             $('#search_address').val('');
             $('#search_status').val('');
@@ -425,6 +423,32 @@
         });
 
     });
+
+    function approveCertificate(id) {
+        if (confirm('Are you sure you want to approve this application?')) {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('nid-correction.approve') }}",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id
+                },
+                success: function(response) {
+                    if (response.status) {
+                        toastr.success(response.message);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error("Something went wrong!");
+                }
+            });
+        }
+    }
 </script>
 
 @endpush

@@ -242,6 +242,8 @@ class CitizenCertificateController extends Controller
     public function destroy(CitizenCertificate $citizenCertificate)
     {
         //
+    }
+
     public function approve(Request $request)
     {
         $validate = Validator::make($request->all(), [
