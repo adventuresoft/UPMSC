@@ -152,11 +152,11 @@
                             পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
                             মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }},
                             ঠিকানাঃ 
-                            গ্রাম: - {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                            ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
+                            গ্রাম: - {{ $certificate->user?->addressInfo?->permanentVillage?->bn_name ?? '' }},
+                            ওয়ার্ড:- {{ $certificate->user?->addressInfo?->permanentWard?->bn_ward_no ?? '' }},
                             ডাকঘর: - 
-{{ optional($certificate->user->addressInfo->permanentPostOffice)->bn_name ?? '' }} -
-@if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
+{{ $certificate->user?->addressInfo?->permanentPostOffice?->bn_name ?? '' }} -
+@if($certificate->user?->addressInfo?->permanentPostOffice?->postal_code)
 {{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }},
 @endif
                             উপজেলা: - {{ $certificate->user->institute->union->thana->bn_name ?? '' }},

@@ -27,7 +27,12 @@ class CharacterCertificateController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = CharacterCertificate::with('user')
+        $data['certificates'] = CharacterCertificate::with([
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district'
+        ])
         ->whereHas('user', function($q1){
             $q1->where('institute_id', Auth::user()->institute_id);
         })->latest()->get();

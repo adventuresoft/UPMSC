@@ -27,7 +27,12 @@ class CitizenCertificateController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = CitizenCertificate::with('user')
+        $data['certificates'] = CitizenCertificate::with([
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district'
+        ])
         ->whereHas('user', function($q1){
             $q1->where('institute_id', Auth::user()->institute_id);
         })

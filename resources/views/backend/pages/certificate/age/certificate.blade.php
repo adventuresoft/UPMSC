@@ -166,11 +166,11 @@
                             ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
                             Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>
                             and Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
-                            Address: Village : - <span>{{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }}</span>,
-                            Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},
+                             Address: Village : - <span>{{ $certificate->user?->addressInfo?->permanentVillage?->en_name ?? '' }}</span>,
+                            Word:- {{ $certificate->user?->addressInfo?->permanentWard?->en_ward_no ?? '' }},
                             Post Office: - 
-{{ optional($certificate->user->addressInfo->permanentPostOffice)->name ?? '' }}-
-@if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
+{{ $certificate->user?->addressInfo?->permanentPostOffice?->name ?? '' }}-
+@if($certificate->user?->addressInfo?->permanentPostOffice?->postal_code)
 {{ $certificate->user->addressInfo->permanentPostOffice->postal_code }},
 @endif
                             Upzila:- <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,

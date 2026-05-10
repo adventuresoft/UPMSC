@@ -174,11 +174,11 @@
                             @endif
                             Date of Birth: {{ $certificate->user->people->date_of_birth ? date('d/m/Y', strtotime($certificate->user->people->date_of_birth)) : '' }},
                             Address:
-                            Village: - {{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }},
-                            Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},
+                            Village: - {{ $certificate->user?->addressInfo?->permanentVillage?->en_name ?? '' }},
+                            Word:- {{ $certificate->user?->addressInfo?->permanentWard?->en_ward_no ?? '' }},
                             Post Office -
-{{ optional($certificate->user->addressInfo->permanentPostOffice)->name ?? '' }} -
-@if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
+{{ $certificate->user?->addressInfo?->permanentPostOffice?->name ?? '' }} -
+@if($certificate->user?->addressInfo?->permanentPostOffice?->postal_code)
 {{ $certificate->user->addressInfo->permanentPostOffice->postal_code }},
 @endif
                             Upzila - {{ $certificate->user->institute->union->thana->name ?? '' }},

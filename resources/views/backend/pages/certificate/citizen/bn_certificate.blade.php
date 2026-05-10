@@ -174,11 +174,11 @@
                             @endif
                             জন্ম তারিখ: {{ $certificate->user->people->date_of_birth ? bnValue(date('d/m/Y', strtotime($certificate->user->people->date_of_birth))) : '' }},
                             ঠিকানাঃ
-                            গ্রাম: - {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                            ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
+                            গ্রাম: - {{ $certificate->user?->addressInfo?->permanentVillage?->bn_name ?? '' }},
+                            ওয়ার্ড:- {{ $certificate->user?->addressInfo?->permanentWard?->bn_ward_no ?? '' }},
                             ডাকঘর: -
-{{ optional($certificate->user->addressInfo->permanentPostOffice)->bn_name ?? '' }} -
-@if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
+{{ $certificate->user?->addressInfo?->permanentPostOffice?->bn_name ?? '' }} -
+@if($certificate->user?->addressInfo?->permanentPostOffice?->postal_code)
 {{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }},
 @endif
                             উপজেলা: - {{ $certificate->user->institute->union->thana->bn_name ?? '' }},

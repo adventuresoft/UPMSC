@@ -25,7 +25,12 @@ class AgeCertificateController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = AgeCertificate::with('user')
+        $data['certificates'] = AgeCertificate::with([
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district'
+        ])
         ->whereHas('user', function($q1){
             $q1->where('institute_id', Auth::user()->institute_id);
         })
