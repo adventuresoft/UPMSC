@@ -277,6 +277,10 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         $data['wards'] = UnionWard::where('status', true)->get();
         $data['roads'] = Road::where('institute_id', Auth::user()->institute_id)->get();
         $data['divisions'] = Division::where('status', true)->get();
+        $data['districts'] = [];
+        $data['thanas'] = [];
+        $data['office_districts'] = [];
+        $data['office_thanas'] = [];
         // dd($data['divisions']);
 
        $data['post_officeses']=PostOffice::latest()->get();
@@ -423,6 +427,16 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         'road' => 'nullable|max:190',
         'house' => 'nullable|max:190',
         'house_bn' => 'nullable|max:190',
+        'office_division_id' => 'nullable|integer',
+        'office_district_id' => 'nullable|integer',
+        'office_thana_id' => 'nullable|integer',
+        'office_post_office_id' => 'nullable|integer',
+        'office_village_id' => 'nullable|integer',
+        'office_ward_id' => 'nullable|integer',
+        'office_road' => 'nullable|max:190',
+        'office_house' => 'nullable|max:190',
+        'office_house_bn' => 'nullable|max:190',
+        'premises_ownership' => 'nullable|in:rented,owned',
 
         'status' => 'nullable|boolean',
     ]);
@@ -462,6 +476,16 @@ public function getOrganizationBySystemId_01_05_26($system_id)
             'road' => $request->road,
             'house' => $request->house,
             'house_bn' => $request->house_bn,
+            'office_division_id' => $request->office_division_id,
+            'office_district_id' => $request->office_district_id,
+            'office_thana_id' => $request->office_thana_id,
+            'office_post_office_id' => $request->office_post_office_id,
+            'office_village_id' => $request->office_village_id,
+            'office_ward_id' => $request->office_ward_id,
+            'office_road' => $request->office_road,
+            'office_house' => $request->office_house,
+            'office_house_bn' => $request->office_house_bn,
+            'premises_ownership' => $request->premises_ownership,
 
             'capital' => $request->capital,
             'establish_year' => $request->establish_year,
@@ -594,6 +618,8 @@ public function getOrganizationBySystemId_01_05_26($system_id)
              $data['districts'] = District::where('division_id',$organization->division_id)->where('status', true)->get();
 
              $data['thanas'] = Thana::where('district_id',$organization->district_id)->where('status', true)->get();
+             $data['office_districts'] = District::where('division_id', $organization->office_division_id)->where('status', true)->get();
+             $data['office_thanas'] = Thana::where('district_id', $organization->office_district_id)->where('status', true)->get();
              $data['ups'] = Union::where('thana_id',$organization->thana_id)->where('status', true)->get();
               $data['villages'] = Village::where('union_id', $organization->union_id )->get();
         // dd($data['divisions']);
