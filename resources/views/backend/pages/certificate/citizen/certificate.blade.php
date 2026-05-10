@@ -89,7 +89,7 @@
             padding: 0;
             margin: 0;
         }
-        
+
         .main-footer{
         display: none;
     }
@@ -168,10 +168,15 @@
                             ID No. <strong>{{ $certificate->user->people->approved_id }}</strong>,
                             Father: {{ $certificate->user->familyInfo->father_name ?? '' }},
                             Mother: {{ $certificate->user->familyInfo->mother_name ?? '' }},
-                            Address:  
+                            @if($certificate->user->people->nid || $certificate->user->people->birth_certificate)
+                            @if($certificate->user->people->nid)NID: {{ $certificate->user->people->nid }}{{ $certificate->user->people->birth_certificate ? ', ' : '' }}@endif
+                            @if($certificate->user->people->birth_certificate)Birth Reg. No.: {{ $certificate->user->people->birth_certificate }}@endif,
+                            @endif
+                            Date of Birth: {{ $certificate->user->people->date_of_birth ? date('d/m/Y', strtotime($certificate->user->people->date_of_birth)) : '' }},
+                            Address:
                             Village: - {{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }},
                             Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},
-                            Post Office - 
+                            Post Office -
 {{ optional($certificate->user->addressInfo->permanentPostOffice)->name ?? '' }} -
 @if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
 {{ $certificate->user->addressInfo->permanentPostOffice->postal_code }},
