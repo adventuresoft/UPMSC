@@ -3,7 +3,7 @@
 @endpush
 @section('title', 'Organization Registration Fees')
 @section('content')
-   <!-- Content Header (Page header) -->
+   <!-- Content Header (Page header)
    <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -17,9 +17,9 @@
           </ol>
         </div>
       </div>
-    </div><!-- /.container-fluid -->
+    </div>
   </section>
-
+    -->
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
@@ -42,13 +42,59 @@
                         <!-- /.card-header -->
 
                         <div class="card-body">
+
+                          <!-- FILTER BAR -->
+                          <div class="row mb-3 align-items-center g-2">
+
+                            <!-- Show Entries -->
+                            <div class="col-md-1">
+                              <select id="tableLength" class="form-control form-control-sm">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                              </select>
+                            </div>
+
+                            <!-- Financial Year Filter -->
+                            <div class="col-md-2">
+                              <input type="text" id="search_financial_year" class="form-control form-control-sm"
+                                placeholder="Financial Year">
+                            </div>
+
+                            <!-- Type Filter -->
+                            <div class="col-md-2">
+                              <input type="text" id="search_type" class="form-control form-control-sm"
+                                placeholder="Type">
+                            </div>
+
+                            <!-- Category Filter -->
+                            <div class="col-md-2">
+                              <input type="text" id="search_category" class="form-control form-control-sm"
+                                placeholder="Category">
+                            </div>
+
+                            <!-- Fees Head Filter -->
+                            <div class="col-md-2">
+                              <input type="text" id="search_fees_head" class="form-control form-control-sm"
+                                placeholder="Fees Head">
+                            </div>
+
+                            <!-- GLOBAL SEARCH -->
+                            <div class="col-md-2">
+                              <input type="text" id="search_global" class="form-control form-control-sm"
+                                placeholder="Search">
+                            </div>
+
+                          </div>
+
                             <table id="example1" class="table table-bordered table-striped">
                               <thead>
                                 <tr>
                                     <th>Sl.</th>
                                     <th>Financial Year</th>
-                                    <th>Institute Type</th>
-                                    <th>Org. Category</th>
+                                    <th>Type</th>
+                                    <th>Category</th>
                                     <th>Fees Head</th>
                                     <th>Category A</th>
                                     <th>Category B</th>
@@ -62,9 +108,14 @@
                                   @foreach ($fees as $key=>$fee)
                                     <tr>
                                       <td>{{++$key}}</td>
-                                      <td>{{$fee->taxYear->name}}</td>
-                                      <td>{{$fee->instituteType->name}}</td>
-                                      <td>{{$fee->organizationCategory->en_name}} -- {{$fee->organizationSubcategory->en_name}}</td>
+                                      <td>{{ $fee->taxYear->name ?? '-' }}</td>
+                                      <td>{{ $fee->instituteType->name ?? '-' }}</td>
+                                      <td>
+                                        {{ $fee->organizationCategory->en_name ?? '-' }}
+                                        @if(!empty($fee->organizationSubcategory?->en_name))
+                                          <small class="text-muted">({{ $fee->organizationSubcategory->en_name }})</small>
+                                        @endif
+                                      </td>
                                       <td>{{$fee->name}}</td>
                                       <td>{{$fee->category_a_fees}}</td>
                                       <td>{{$fee->category_b_fees}}</td>
@@ -103,5 +154,87 @@
 
 @endsection
 @push('script')
-@endpush
+<script>
+  $(document).ready(function(){
+  let table = $('#example1').DataTable({
+    dom: 'rtip',
+    responsive: true,
+    autoWidth: false,
+    pageLength: 10,
+    lengthChange: false,
+    order: [[0, 'asc']],
+    columnDefs: [
+      { targets: 8, orderable: false }
+    ],
+    language: {
+      emptyTable: '<div class="empty-state"><i class="fas fa-folder-open"></i><h5>No data available</h5></div>',
+      zeroRecords: '<div class="empty-state"><i class="fas fa-folder-open"></i><h5>No matching records found</h5></div>'
+    }
+  });
 
+  $('#search_financial_year').keyup(function() {
+    table.column(1).search(this.value).draw();
+  });
+
+  $('#search_type').keyup(function() {
+    table.column(2).search(this.value).draw();
+  });
+
+  $('#search_category').keyup(function() {
+    table.column(3).search(this.value).draw();
+  });
+
+  $('#search_fees_head').keyup(function() {
+    table.column(4).search(this.value).draw();
+  });
+
+  $('#search_global').keyup(function() {
+    table.search(this.value).draw();
+  });
+
+  $('#tableLength').change(function() {
+    table.page.len($(this).val()).draw();
+  });
+
+  $(".deleteOrganzationFee").on('submit', function(e){
+      e.preventDefault();
+      var thisForm = $(this);
+      var formData = $(this).serialize();
+      var deleteUrl = $(this).find(".deleteUrl").val();
+      $("#toast-container").show();
+      toastr.success("<br /><button type='button' id='confirmationRevertNo' class='btn clear'>No</button><br /><button type='button' id='confirmationRevertYes' class='btn clear'>Yes</button>",'Are you sure, you want to delete it?',
+      {
+        closeButton: false,
+        allowHtml: true,
+        onShown: function (toast) {
+          $("#confirmationRevertYes").click(function(){
+            $.ajax({
+                      type: "POST",
+                      url: deleteUrl,
+                      data: formData,
+                      beforeSend: function() {
+                          thisForm.find('button[type="submit"]').prop("disabled",true);
+                      },
+                      success: function (response) {
+                          thisForm.find('button[type="submit"]').prop("disabled",false);
+                          toastr.success(response.message);
+                          location.reload();
+                      },
+                      error: function(xhr, status, error) {
+                          thisForm.find('button[type="submit"]').prop("disabled",false);
+                          var responseText = jQuery.parseJSON(xhr.responseText);
+                          toastr.error(responseText.message);
+                      }
+                  });
+
+          });
+
+          $("#confirmationRevertNo").click(function(){
+            $("#toast-container").hide();
+          })
+        }
+      });
+    })
+  });
+</script>
+@endpush

@@ -24,16 +24,58 @@ class OrganizationFeeController extends Controller
 
     public function registrationFees(Request $request)
     {
+        $request->validate([
+            'organization_id' => 'required|integer|exists:organizations,id',
+            'tax_year_id' => 'required|integer|exists:tax_years,id',
+        ]);
 
-        $organization = Organization::with('institute')->where('id', $request->organization_id)->first();
+        $organization = Organization::with(['institute'])->find($request->organization_id);
 
-        $fees_category = $organization->institute->institute_subcategory_id;
-        //  $fees_category=$organization->organization_subcategory_id;
-        // dd($fees_category);
-        $fees = OrganizationFee::where('tax_year_id', $request->tax_year_id)
-        ->where('organization_category_id', $organization->organization_category_id)
-        ->where('organization_subcategory_id', $organization->organization_subcategory_id)
-        ->get();
+        if (!$organization) {
+            return response()->json([
+                'status' => false,
+                'message' => "Organization not found!",
+            ], 404);
+        }
+
+        $fees_category = (int) optional($organization->institute)->institute_subcategory_id;
+        if (!in_array($fees_category, [1, 2, 3], true)) {
+            $fees_category = 1;
+        }
+
+        $instituteTypeId = optional($organization->institute)->institute_type_id;
+        $subcategoryId = $organization->organization_subcategory_id;
+
+        $fees = OrganizationFee::query()
+            ->where('tax_year_id', $request->tax_year_id)
+            ->where('organization_category_id', $organization->organization_category_id)
+            ->when($instituteTypeId, function ($query) use ($instituteTypeId) {
+                $query->where('institute_type_id', $instituteTypeId);
+            })
+            ->when($subcategoryId, function ($query) use ($subcategoryId) {
+                $query->where(function ($subQuery) use ($subcategoryId) {
+                    $subQuery->where('organization_subcategory_id', $subcategoryId)
+                        ->orWhereNull('organization_subcategory_id')
+                        ->orWhere('organization_subcategory_id', 0);
+                });
+            }, function ($query) {
+                $query->where(function ($subQuery) {
+                    $subQuery->whereNull('organization_subcategory_id')
+                        ->orWhere('organization_subcategory_id', 0);
+                });
+            })
+            ->get();
+
+        // Exact subcategory rows take priority over "all subcategory" rows for same fee head.
+        $fees = $fees
+            ->sortBy(function ($fee) use ($subcategoryId) {
+                if (!empty($subcategoryId) && (int) $fee->organization_subcategory_id === (int) $subcategoryId) {
+                    return 0;
+                }
+                return 1;
+            })
+            ->unique('name')
+            ->values();
 
         // return response()->json(['fees' => $fees]);
         $html = '';
@@ -41,6 +83,15 @@ class OrganizationFeeController extends Controller
         $total = 0;
         if(count($fees)){
             foreach ($fees as $key => $fee) {
+                $feeAmount = 0;
+                if ($fees_category === 1) {
+                    $feeAmount = (float) $fee->category_a_fees;
+                } elseif ($fees_category === 2) {
+                    $feeAmount = (float) $fee->category_b_fees;
+                } elseif ($fees_category === 3) {
+                    $feeAmount = (float) $fee->category_c_fees;
+                }
+
                 $html .='<tr>';
                     $html .='<td>'.++$key.'</td>';
                 $html .='<td>';
@@ -48,22 +99,9 @@ class OrganizationFeeController extends Controller
                     $html .='<input type="text" class="form-control text-left" readonly value="'.$fee->name.'" name="name[]">';
                 $html .='</td>';
                 $html .='<td>';
-                    if($fees_category == 1){
-                        $total = $total + $fee->category_a_fees;
-                        $html .='<input class="form-control text-right" readonly value="'.$fee->category_a_fees.'" min="0" type="number" name="category_fees[]">';
-                        $html .='<input  type="hidden"  name="fees['.$fee->name.']"   value="'.$fee->category_a_fees.'">';
-
-                    } else if($fees_category == 2){
-                        $total = $total + $fee->category_b_fees;
-                        $html .='<input class="form-control text-right" readonly value="'.$fee->category_b_fees.'" min="0" type="number" name="category_fees[]">';
-                        $html .='<input  type="hidden"  name="fees['.$fee->name.']"   value="'.$fee->category_b_fees.'">';
-
-                    } else if($fees_category == 3) {
-                        $total = $total + $fee->category_c_fees;
-                        $html .='<input class="form-control text-right" readonly value="'.$fee->category_c_fees.'" min="0" type="number" name="category_fees[]">';
-                        $html .='<input  type="hidden"  name="fees['.$fee->name.']"   value="'.$fee->category_c_fees.'">';
-
-                    }
+                    $total = $total + $feeAmount;
+                    $html .='<input class="form-control text-right" readonly value="'.$feeAmount.'" min="0" type="number" name="category_fees[]">';
+                    $html .='<input  type="hidden"  name="fees['.$fee->name.']"   value="'.$feeAmount.'">';
                 $html .='</td>';
                 $html .='</tr>'; 
             }
@@ -113,7 +151,7 @@ class OrganizationFeeController extends Controller
             'tax_year_id' => 'required',
             'institute_type_id' => 'required',
             'organization_category_id' => 'required',
-            'organization_subcategory_id' => 'required',
+            'organization_subcategory_id' => 'nullable',
         ]);
 
         if ($validate->fails()) {
@@ -126,7 +164,7 @@ class OrganizationFeeController extends Controller
         $tax_year_id = $request->tax_year_id;
         $institute_type_id = $request->institute_type_id;
         $organization_category_id = $request->organization_category_id;
-        $organization_subcategory_id = $request->organization_subcategory_id;
+        $organization_subcategory_id = $request->organization_subcategory_id ?: null;
 
         $names = $request->name;
         $category_a_fees = $request->category_a_fees;
@@ -196,7 +234,7 @@ class OrganizationFeeController extends Controller
             'tax_year_id' => 'required',
             'institute_type_id' => 'required',
             'organization_category_id' => 'required',
-            'organization_subcategory_id' => 'required',
+            'organization_subcategory_id' => 'nullable',
         ]);
 
         if ($validate->fails()) {
@@ -206,13 +244,13 @@ class OrganizationFeeController extends Controller
             return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
         }
 
-        $fees = new OrganizationFee();
+        $fees = OrganizationFee::find($id);
 
         if($fees){
             $fees->tax_year_id = $request->tax_year_id;
             $fees->institute_type_id = $request->institute_type_id;
             $fees->organization_category_id = $request->organization_category_id;
-            $fees->organization_subcategory_id = $request->organization_subcategory_id;
+            $fees->organization_subcategory_id = $request->organization_subcategory_id ?: null;
     
             $fees->name = $request->name;
             $fees->category_a_fees = $request->category_a_fees;
@@ -226,12 +264,13 @@ class OrganizationFeeController extends Controller
                 return response()->json($data, 200);
             } catch (\Throwable $th) {
                 $data['status'] = false;
-                $data['message'] = "Organization Fee Updated Successfully";
+                $data['message'] = "Failed to update organization fee";
+                $data['errors'] = $th->getMessage();
                 return response()->json($data, 500);
             }
         }else{
             $data['status'] = false;
-            $data['message'] = "Organization Fee Updated Successfully";
+            $data['message'] = "Organization fee not found";
             return response()->json($data, 404);
         }
 

@@ -277,10 +277,9 @@
         $totalFee += (float) $amount;
     }
 
-    $isApproved = (int) ($license->status ?? 0) === 2;
+    $isApproved = (int) ($license->status ?? 0) === 1;
     $isPaid = ($license->payment_status ?? 'unpaid') === 'paid';
     $canTakePayment = $isApproved && !$isPaid;
-
     $fallbackHeaderUnion = \App\Models\Institute::with('union.thana.district')
         ->whereNotNull('union_id')
         ->first()?->union;
