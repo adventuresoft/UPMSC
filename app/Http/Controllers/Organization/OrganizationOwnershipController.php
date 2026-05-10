@@ -18,6 +18,7 @@ use App\Models\UnionWard;
 use App\Models\PostOffice;
 use App\Models\BasicSettings\Village;
 use App\Models\People\AddressInfo;
+use App\Models\People\FamilyInfo;
 use App\Models\User;
 use App\Models\Organization\OrganizationOwnership;
 use Illuminate\Http\Request;
@@ -82,6 +83,10 @@ public function saveNewOwnership(Request $request)
         'name' => 'required|max:190',
         'bn_name' => 'required|max:190',
         'email' => 'required|max:190',
+        'father_name' => 'nullable|max:190',
+        'father_name_bn' => 'nullable|max:190',
+        'mother_name' => 'nullable|max:190',
+        'mother_name_bn' => 'nullable|max:190',
     ]);
 
     if ($validate->fails()) {
@@ -136,6 +141,18 @@ public function saveNewOwnership(Request $request)
             throw new \Exception('People save failed');
         }
 
+        // ================= FAMILY INFO SAVE =================
+        $familyInfo = new FamilyInfo();
+        $familyInfo->user_id = $user->id;
+        $familyInfo->father_name = $request->father_name;
+        $familyInfo->father_name_bn = $request->father_name_bn;
+        $familyInfo->mother_name = $request->mother_name;
+        $familyInfo->mother_name_bn = $request->mother_name_bn;
+
+        if (!$familyInfo->save()) {
+            throw new \Exception('Family info save failed');
+        }
+
         // ================= ADDRESS SAVE (NEW 🔥) =================
         $address = new AddressInfo();
         $address->user_id = $user->id;
@@ -144,6 +161,7 @@ public function saveNewOwnership(Request $request)
         $address->permanent_division_id = $request->permanent_division_id;
         $address->permanent_district_id = $request->permanent_district_id;
         $address->permanent_thana_id = $request->permanent_thana_id;
+        $address->permanent_post_office_id = $request->permanent_post_office_id;
         $address->permanent_union_id = $request->permanent_union_id;
         $address->permanent_ward_id = $request->permanent_ward_id;
         $address->permanent_village_id = $request->permanent_village_id;
@@ -155,6 +173,7 @@ public function saveNewOwnership(Request $request)
         $address->present_division_id = $request->present_division_id;
         $address->present_district_id = $request->present_district_id;
         $address->present_thana_id = $request->present_thana_id;
+        $address->present_post_office_id = $request->present_post_office_id;
         $address->present_union_id = $request->present_union_id;
         $address->present_ward_id = $request->present_ward_id;
         $address->present_village_id = $request->present_village_id;
