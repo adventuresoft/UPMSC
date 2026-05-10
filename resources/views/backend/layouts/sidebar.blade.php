@@ -1014,7 +1014,7 @@
         @if (view_permission())
         <li class="nav-item">
           <a href="{{route('vehicle.create')}}" class="nav-link @if( $subMenu == "VehicleCreate") active @endif">
-            <i class="far fa-circle nav-icon"></i>
+            <i class="far @if($subMenu == "VehicleCreate") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>Create</p>
           </a>
         </li>
@@ -1023,7 +1023,7 @@
         @if (view_permission())
         <li class="nav-item">
           <a href="{{route('vehicle.index')}}" class="nav-link @if( $subMenu == "VehicleList") active @endif">
-            <i class="far fa-circle nav-icon"></i>
+            <i class="far @if($subMenu == "VehicleList") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>Application List</p>
           </a>
         </li>
@@ -1032,7 +1032,7 @@
         @if (view_permission())
         <li class="nav-item">
           <a href="{{ route('vehicle.approval.list') }}" class="nav-link @if( $subMenu == "VehicleApprovalList") active @endif">
-            <i class="far fa-circle nav-icon"></i>
+            <i class="far @if($subMenu == "VehicleApprovalList") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>Approval List</p>
           </a>
         </li>
@@ -1040,8 +1040,8 @@
 
         @if (view_permission())
         <li class="nav-item has-treeview @if($subMenu == "VehicleAddFeesNewSetup" || $subMenu == "VehicleAddFeesList") menu-open @endif">
-          <a href="#" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
+          <a href="#" class="nav-link @if($subMenu == "VehicleAddFeesNewSetup" || $subMenu == "VehicleAddFeesList") active @endif">
+            <i class="far @if($subMenu == "VehicleAddFeesNewSetup" || $subMenu == "VehicleAddFeesList") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>
               Fees
               <i class="right fas fa-angle-left"></i>
@@ -1050,13 +1050,13 @@
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="{{route('vehicle.fees.vehicle')}}" class="nav-link @if( $subMenu == "VehicleAddFeesNewSetup") active @endif">
-                <i class="far fa-dot-circle nav-icon"></i>
+                <i class="far @if($subMenu == "VehicleAddFeesNewSetup") fa-dot-circle @else fa-circle @endif nav-icon"></i>
                 <p>New</p>
               </a>
             </li>
             <li class="nav-item">
               <a href="{{route('vehicle.fees.list')}}" class="nav-link @if( $subMenu == "VehicleAddFeesList") active @endif">
-                <i class="far fa-dot-circle nav-icon"></i>
+                <i class="far @if($subMenu == "VehicleAddFeesList") fa-dot-circle @else fa-circle @endif nav-icon"></i>
                 <p>Fees List</p>
               </a>
             </li>
@@ -1067,7 +1067,7 @@
         @if (view_permission())
         <li class="nav-item">
           <a href="{{ route('vehicle.invoice.list') }}" class="nav-link @if( $subMenu == "VehicleGenerateInvoice") active @endif">
-            <i class="far fa-circle nav-icon"></i>
+            <i class="far @if($subMenu == "VehicleGenerateInvoice") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>Generate Invoice</p>
           </a>
         </li>
@@ -1077,8 +1077,8 @@
 
         @if (view_permission())
         <li class="nav-item">
-          <a href="#" class="nav-link @if( $subMenu == "VehicleLicense") active @endif">
-            <i class="far fa-circle nav-icon"></i>
+          <a href="{{ route('vehicle.invoice.list') }}" class="nav-link @if( $subMenu == "VehicleLicense") active @endif">
+            <i class="far @if($subMenu == "VehicleLicense") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>License</p>
           </a>
         </li>
@@ -1086,8 +1086,8 @@
 
         @if (view_permission())
         <li class="nav-item has-treeview @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") menu-open @endif">
-          <a href="#" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
+          <a href="#" class="nav-link @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") active @endif">
+            <i class="far @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>
               Ownership Change
               <i class="right fas fa-angle-left"></i>
@@ -1096,14 +1096,14 @@
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="#" class="nav-link @if( $subMenu == "VehicleOwnershipChangeApplication") active @endif">
-                <i class="far fa-dot-circle nav-icon"></i>
+                <i class="far @if($subMenu == "VehicleOwnershipChangeApplication") fa-dot-circle @else fa-circle @endif nav-icon"></i>
                 <p>Application for Change Ownership</p>
               </a>
             </li>
             <li class="nav-item">
               <a href="#" class="nav-link @if( $subMenu == "VehicleOwnershipChangeApproval") active @endif">
-                <i class="far fa-dot-circle nav-icon"></i>
-                <p>Approval</p>
+                <i class="far @if($subMenu == "VehicleOwnershipChangeApproval") fa-dot-circle @else fa-circle @endif nav-icon"></i>
+                <p>Ownership Change Approval</p>
               </a>
             </li>
           </ul>

@@ -62,15 +62,15 @@
                                           <td>{{++$key}}</td>
                                           <td>
                                             @if ($institute->institute_type_id == 1)
-                                              {{$institute->union->name}}
+                                              {{$institute->union?->name}}
                                             @elseif($institute->institute_type_id == 2)
-                                              {{$institute->pourashava->name}}
+                                              {{$institute->pourashava?->name}}
                                             @elseif($institute->institute_type_id == 3)
-                                              {{$institute->cityCorporation->name}}
+                                              {{$institute->cityCorporation?->name}}
                                             @endif
                                           </td>
-                                          <td>{{$institute->type->name}}</td>
-                                          <td>{{$institute->category->name}}</td>
+                                          <td>{{$institute->type?->name}}</td>
+                                          <td>{{$institute->category?->name}}</td>
                                           <td>{{date("d M, Y", strtotime($institute->activation_time))}}</td>
                                           <td style="width: 10%">
                                             <div class="table-action">
