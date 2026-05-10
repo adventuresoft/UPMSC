@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMarriagesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateMarriagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('marriages', function (Blueprint $table) {
+        if (!Schema::hasTable('marriages')) {
+            Schema::create('marriages', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -28,4 +30,4 @@ class CreateMarriagesTable extends Migration
     {
         Schema::dropIfExists('marriages');
     }
-}
+};

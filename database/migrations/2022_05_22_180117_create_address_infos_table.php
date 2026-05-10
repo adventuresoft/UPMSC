@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAddressInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateAddressInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('address_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('address_infos')) {
+            Schema::create('address_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->bigInteger('permanent_division_id')->nullable();
@@ -45,6 +46,7 @@ class CreateAddressInfosTable extends Migration
             $table->string('present_start_date')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -56,4 +58,4 @@ class CreateAddressInfosTable extends Migration
     {
         Schema::dropIfExists('address_infos');
     }
-}
+};

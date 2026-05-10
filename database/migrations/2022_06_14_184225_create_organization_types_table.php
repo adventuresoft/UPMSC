@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrganizationTypesTableUpdate extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,8 @@ class CreateOrganizationTypesTableUpdate extends Migration
             return;
         }
 
-        Schema::create('organization_types', function (Blueprint $table) {
+        if (!Schema::hasTable('organization_types')) {
+            Schema::create('organization_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('organization_category_id')->constrained('organization_categories')->onDelete('cascade');
             $table->string('en_name');
@@ -28,6 +29,7 @@ class CreateOrganizationTypesTableUpdate extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -39,4 +41,4 @@ class CreateOrganizationTypesTableUpdate extends Migration
     {
         Schema::dropIfExists('organization_types');
     }
-}
+};

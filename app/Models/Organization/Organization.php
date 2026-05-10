@@ -89,6 +89,8 @@ class Organization extends Model
     'application_type',
     'remarks',
     'status',
+    'created_by',
+    'updated_by',
 ];
 
     public static function boot()

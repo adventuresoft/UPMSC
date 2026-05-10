@@ -29,7 +29,8 @@ class UnionController extends Controller
      */
     public function index()
     {
-        //
+        $data['unions'] = Union::with('thana')->latest()->get();
+        return view('backend.pages.basic.union.index', $data);
     }
 
     /**
@@ -39,7 +40,8 @@ class UnionController extends Controller
      */
     public function create()
     {
-        //
+        $data['thanas'] = \App\Models\Thana::latest()->get();
+        return view('backend.pages.basic.union.create', $data);
     }
 
     /**
@@ -50,7 +52,42 @@ class UnionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validate = \Illuminate\Support\Facades\Validator::make($request->all(), [
+                'name' => 'required',
+                'thana_id' => 'required',
+            ]);
+
+            if ($validate->fails()) {
+                $data['status'] = false;
+                $data['message'] = "Sorry! Invalid Entry.";
+                $data['errors'] = $validate->errors();
+                return response()->json($data, 400);
+            }
+
+            $union = new Union();
+            $union->name = $request->name;
+            $union->bn_name = $request->bn_name;
+            $union->url = $request->url;
+            $union->thana_id = $request->thana_id;
+            $union->status = $request->status ? $request->status : 1;
+
+            if ($union->save()) {
+                $data['status'] = true;
+                $data['message'] = "Union Saved Successfully!";
+                return response()->json($data, 200);
+            } else {
+                $data['status'] = false;
+                $data['message'] = "Failed to save data!";
+                return response()->json($data, 500);
+            }
+
+        } catch (\Throwable $th) {
+            $data['status'] = false;
+            $data['message'] = "Something went wrong! Please try again...";
+            $data['errors'] = $th->getMessage();
+            return response()->json($data, 500);
+        }
     }
 
     /**
@@ -59,7 +96,7 @@ class UnionController extends Controller
      * @param  \App\Models\Union  $union
      * @return \Illuminate\Http\Response
      */
-    public function show(Union $union)
+    public function show($id)
     {
         //
     }
@@ -70,9 +107,11 @@ class UnionController extends Controller
      * @param  \App\Models\Union  $union
      * @return \Illuminate\Http\Response
      */
-    public function edit(Union $union)
+    public function edit($id)
     {
-        //
+        $data['union'] = Union::find($id);
+        $data['thanas'] = \App\Models\Thana::latest()->get();
+        return view('backend.pages.basic.union.edit', $data);
     }
 
     /**
@@ -82,9 +121,51 @@ class UnionController extends Controller
      * @param  \App\Models\Union  $union
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Union $union)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $validate = \Illuminate\Support\Facades\Validator::make($request->all(), [
+                'name' => 'required',
+                'thana_id' => 'required',
+            ]);
+
+            if ($validate->fails()) {
+                $data['status'] = false;
+                $data['message'] = "Sorry! Invalid Entry.";
+                $data['errors'] = $validate->errors();
+                return response()->json($data, 400);
+            }
+
+            $union = Union::find($id);
+
+            if($union) {
+                $union->name = $request->name;
+                $union->bn_name = $request->bn_name;
+                $union->url = $request->url;
+                $union->thana_id = $request->thana_id;
+                $union->status = $request->status ? $request->status : 1;
+
+                if ($union->save()) {
+                    $data['status'] = true;
+                    $data['message'] = "Union Updated Successfully!";
+                    return response()->json($data, 200);
+                } else {
+                    $data['status'] = false;
+                    $data['message'] = "Failed to save data!";
+                    return response()->json($data, 500);
+                }
+            } else {
+                $data['status'] = false;
+                $data['message'] = "Union not found!";
+                return response()->json($data, 404);
+            }
+
+        } catch (\Throwable $th) {
+            $data['status'] = false;
+            $data['message'] = "Something went wrong! Please try again...";
+            $data['errors'] = $th->getMessage();
+            return response()->json($data, 500);
+        }
     }
 
     /**
@@ -93,8 +174,30 @@ class UnionController extends Controller
      * @param  \App\Models\Union  $union
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Union $union)
+    public function destroy($id)
     {
-        //
+        try {
+            $union = Union::find($id);
+            if($union) {
+                if ($union->delete()) {
+                    $data['status'] = true;
+                    $data['message'] = "Union Deleted successfully";
+                    return response()->json($data, 200);
+                } else {
+                    $data['status'] = false;
+                    $data['message'] = "Something went wrong! Please try again...";
+                    return response()->json($data, 500);
+                }
+            }else {
+                $data['status'] = false;
+                $data['message'] = "Union not found!";
+                return response()->json($data, 404);
+            }
+        } catch (\Throwable $th) {
+            $data['status'] = false;
+            $data['message'] = "Something went wrong! Please try again...";
+            $data['errors'] = $th->getMessage();
+            return response()->json($data, 500);
+        }
     }
 }

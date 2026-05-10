@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfessionalInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateProfessionalInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('professional_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('professional_infos')) {
+            Schema::create('professional_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->bigInteger("profession_subcategory_id")->nullable();
@@ -24,6 +25,7 @@ class CreateProfessionalInfosTable extends Migration
             $table->string("address")->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -35,4 +37,4 @@ class CreateProfessionalInfosTable extends Migration
     {
         Schema::dropIfExists('professional_infos');
     }
-}
+};

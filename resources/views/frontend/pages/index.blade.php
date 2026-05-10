@@ -106,9 +106,43 @@
               </span>
             </a>
           </li>
-          <li><a href="{{ route('people.login') }}" class="text-white hover:opacity-80">নাগরিক লগইন</a></li>
-          <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80">অ্যাডমিন লগইন</a></li>
-          <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80">মনিটরিং লগইন</a></li>
+          @if(Auth::guard('people')->check())
+            <li class="relative">
+              <button type="button" onclick="document.getElementById('citizenDropdown').classList.toggle('hidden')" class="text-white hover:opacity-80 flex items-center gap-1 focus:outline-none user-dropdown-btn">
+                {{ Auth::guard('people')->user()->name ?: Auth::guard('people')->user()->bn_name ?: 'আমার প্রোফাইল' }}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+              <div id="citizenDropdown" class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden z-50 text-gray-800 user-dropdown-menu" style="text-transform: none;">
+                <a href="{{ route('people.dashboard') }}" class="block px-4 py-2 text-sm hover:bg-gray-100">ড্যাশবোর্ড</a>
+                <a href="{{ route('people.profile') }}" class="block px-4 py-2 text-sm hover:bg-gray-100">প্রোফাইল</a>
+                <form method="POST" action="{{ route('people.logout') }}">
+                  @csrf
+                  <button type="submit" class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">লগআউট</button>
+                </form>
+              </div>
+            </li>
+          @else
+            <li><a href="{{ route('people.login') }}" class="text-white hover:opacity-80">নাগরিক লগইন</a></li>
+          @endif
+
+          @if(Auth::check())
+            <li class="relative">
+              <button type="button" onclick="document.getElementById('adminDropdown').classList.toggle('hidden')" class="text-white hover:opacity-80 flex items-center gap-1 focus:outline-none user-dropdown-btn">
+                {{ Auth::user()->name ?: 'অ্যাডমিন প্রোফাইল' }}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+              <div id="adminDropdown" class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden z-50 text-gray-800 user-dropdown-menu" style="text-transform: none;">
+                <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm hover:bg-gray-100">ড্যাশবোর্ড</a>
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <button type="submit" class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100">লগআউট</button>
+                </form>
+              </div>
+            </li>
+          @else
+            <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80">অ্যাডমিন লগইন</a></li>
+            <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80">মনিটরিং লগইন</a></li>
+          @endif
         </ul>
       </div>
     </nav>
@@ -127,30 +161,54 @@
           >
             হোম
           </a>
-          <a href="{{ route('people.login') }}" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded">
-            <span class="inline-flex h-5 w-5 items-center justify-center text-red-600" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
-              </svg>
-            </span>
-            নাগরিক লগইন
-          </a>
-          <a href="{{url('/')}}/login" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded">
-            <span class="inline-flex h-5 w-5 items-center justify-center text-red-600" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
-              </svg>
-            </span>
-            অ্যাডমিন লগইন
-          </a>
-          <a href="{{url('/')}}/login" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded">
-            <span class="inline-flex h-5 w-5 items-center justify-center text-red-600" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
-              </svg>
-            </span>
-            মনিটরিং লগইন
-          </a>
+          @if(Auth::guard('people')->check())
+            <div class="px-4 py-2 border-b border-gray-100">
+              <div class="font-bold text-gray-800">{{ Auth::guard('people')->user()->name }}</div>
+              <a href="{{ route('people.dashboard') }}" class="block mt-2 text-sm text-gray-600 hover:text-[#046307]">ড্যাশবোর্ড</a>
+              <a href="{{ route('people.profile') }}" class="block mt-1 text-sm text-gray-600 hover:text-[#046307]">প্রোফাইল</a>
+              <form method="POST" action="{{ route('people.logout') }}" class="mt-1">
+                @csrf
+                <button type="submit" class="text-sm text-red-600 hover:underline">লগআউট</button>
+              </form>
+            </div>
+          @else
+            <a href="{{ route('people.login') }}" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded">
+              <span class="inline-flex h-5 w-5 items-center justify-center text-red-600" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
+                </svg>
+              </span>
+              নাগরিক লগইন
+            </a>
+          @endif
+
+          @if(Auth::check())
+            <div class="px-4 py-2 border-b border-gray-100">
+              <div class="font-bold text-gray-800">{{ Auth::user()->name }}</div>
+              <a href="{{ route('dashboard') }}" class="block mt-2 text-sm text-gray-600 hover:text-[#046307]">ড্যাশবোর্ড</a>
+              <form method="POST" action="{{ route('logout') }}" class="mt-1">
+                @csrf
+                <button type="submit" class="text-sm text-red-600 hover:underline">লগআউট</button>
+              </form>
+            </div>
+          @else
+            <a href="{{url('/')}}/login" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded">
+              <span class="inline-flex h-5 w-5 items-center justify-center text-red-600" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
+                </svg>
+              </span>
+              অ্যাডমিন লগইন
+            </a>
+            <a href="{{url('/')}}/login" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 rounded">
+              <span class="inline-flex h-5 w-5 items-center justify-center text-red-600" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+                  <path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" />
+                </svg>
+              </span>
+              মনিটরিং লগইন
+            </a>
+          @endif
 
         </div>
       </div>
@@ -444,6 +502,16 @@
           autoplay: false,
           pagination: false,
         }).mount();
+      });
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-dropdown-btn') && !e.target.closest('.user-dropdown-menu')) {
+          var menus = document.querySelectorAll('.user-dropdown-menu');
+          menus.forEach(function(menu) {
+            menu.classList.add('hidden');
+          });
+        }
       });
     </script>
   </body>

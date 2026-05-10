@@ -4,11 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateYearlyIncomeCertificatesTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
-        Schema::create('yearly_income_certificates', function (Blueprint $table) {
+        if (!Schema::hasTable('yearly_income_certificates')) {
+            Schema::create('yearly_income_certificates', function (Blueprint $table) {
 
             $table->id();
             $table->string('system_id')->unique();
@@ -27,10 +28,11 @@ class CreateYearlyIncomeCertificatesTable extends Migration
 
             $table->timestamps();
         });
+        }
     }
 
     public function down()
     {
         Schema::dropIfExists('yearly_income_certificates');
     }
-}
+};

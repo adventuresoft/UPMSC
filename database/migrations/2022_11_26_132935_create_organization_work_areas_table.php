@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrganizationWorkAreasTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateOrganizationWorkAreasTable extends Migration
      */
     public function up()
     {
-        Schema::create('organization_work_areas', function (Blueprint $table) {
+        if (!Schema::hasTable('organization_work_areas')) {
+            Schema::create('organization_work_areas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('organization_category_id')->constrained('organization_categories')->onDelete('cascade');
             $table->foreignId('organization_subcategory_id')->constrained('organization_sub_categories')->onDelete('cascade');
@@ -25,6 +26,7 @@ class CreateOrganizationWorkAreasTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -36,4 +38,4 @@ class CreateOrganizationWorkAreasTable extends Migration
     {
         Schema::dropIfExists('organization_work_areas');
     }
-}
+};

@@ -1,6 +1,57 @@
+@php
+    // Helper to check if any of the given routes are active
+    $isRoute = function($routes) {
+        foreach ((array)$routes as $route) {
+            if (request()->routeIs($route)) return true;
+        }
+        return false;
+    };
+
+    // Helper to check if any of the given patterns are active
+    $isPath = function($patterns) {
+        foreach ((array)$patterns as $pattern) {
+            if (request()->is($pattern)) return true;
+        }
+        return false;
+    };
+
+    // Fallback for variables that might not be passed from controller
+    $_subMenu = $subMenu ?? null;
+    $_mainMenu = $mainMenu ?? null;
+
+    // Define active states for major sections
+    $isBasicSettings = $isPath(['basic-settings*', '*/basic-settings*']) || in_array($_subMenu, ['CityCorporation', 'CityCorporationWard', 'FamilyCategory', 'FamilySubcategory', 'FamilyType', 'Financialyear', 'HouseType', 'HouseCategory', 'HouseOwnershipType', 'LandType', 'LandClass', 'LandOwnershipType', 'MarketType', 'MarketCategory', 'MarketOwnershipType', 'OrganizationCategory', 'OrganizationSubcategory', 'OrganizationWorkArea', 'OrganizationOwnershipType', 'OrganizationType', 'OrganizationSubtype', 'Profession', 'ProfessionCategory', 'ProfessionSubcategory', 'ProfessionType', 'RoadCategory', 'RoadType', 'RoadOwner', 'ResarvWard', 'VehicleCategory', 'VehicleSubcategory', 'VehicleType', 'UnionWard', 'ReserveWard', 'Village', 'VillageArea', 'Union', 'Year']);
+    
+    $isAccessManagement = $isRoute(['role.*', 'permission.*', 'user.*']) || (isset($page) && in_array($page, ['role', 'permission', 'rolepermission', 'userper', 'roleuser', 'user']));
+    
+    $isInstituteSettings = $isPath(['institute*']) || in_array($_subMenu, ['InstituteCreate', 'InstituteType', 'InstituteCategory', 'InstituteList']);
+    
+    $isPeopleInfo = $isPath(['people*', 'peopleapprovedlist*']) || in_array($_subMenu, ['Create', 'View', 'Show', 'approvedList']);
+    
+    $isCertificate = $isPath(['citizen*', 'character*', 'death*', 'succession*', 'unmarried*', 'married*', 'remarried*', 'landless*', 'name*', 'income*', 'disability-certificate*', 'voter-area*', 'voter-list*', 'nid-correction*', 'childless*', 'orphan*', 'financial-instability*', 'age*', 'permanent-citizen*', 'residential*', 'guardian-income*']) || $_mainMenu == 'Certificate';
+    
+    $isOrganization = $isPath(['organization*', 'orgapproved*']) || in_array($_subMenu, ['OrganizationCreate', 'OrganizationList', 'ApprovedOrganizationList', 'OrganizationShow', 'RegistrationFees', 'RenewFees', 'TradeLicense', 'GetTradeLicense']);
+    
+    $isTax = $isPath(['tax*', 'taxes*']) || in_array($_subMenu, ['TaxGenerate', 'TaxReceived', 'TaxRateList', 'TaxList']);
+    
+    $isHouse = $isPath(['house*']) || in_array($_subMenu, ['HouseCreate', 'HouseList']);
+    
+    $isLand = $isPath(['land*']) || in_array($_subMenu, ['LandCreate', 'LandList']);
+    
+    $isVehicle = $isPath(['vehicle*']) || in_array($_subMenu, ['VehicleCreate', 'VehicleList', 'VehicleApprovalList', 'VehicleGenerateInvoice', 'VehicleLicense', 'VehicleOwnershipChangeApplication', 'VehicleOwnershipChangeApproval', 'VehicleAddFeesNewSetup', 'VehicleAddFeesList']);
+    
+    $isRoad = $isPath(['road*']) || in_array($_subMenu, ['RoadCreate', 'RoadList']);
+
+    $isWedding = $isPath(['marriage*', 'divorce*']) || in_array($_subMenu, ['MarriageCreate', 'MarriageList', 'DivorceCreate', 'DivorceList']) || in_array($_mainMenu, ['Marriage', 'Divorce']);
+
+    $isChairman = $isPath(['chairman*']) || in_array($_subMenu, ['chairmanCreate', 'chairmanList']) || $_mainMenu == 'chairman';
+
+    $isCouncilor = $isPath(['councilor*']) || in_array($_subMenu, ['councilorCreate', 'councilorList']) || $_mainMenu == 'councilor';
+@endphp
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
   <!-- Brand Logo -->
-  <a href="{{route('dashboard')}}" class="brand-link">
+  <a href="{{route('home')}}" class="brand-link">
     <img src="{{ asset('backend')}}/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">UPMS</span>
   </a>
@@ -20,11 +71,28 @@
             <p>Citizen Dashboard</p>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="{{route('people.profile')}}" class="nav-link {{ request()->routeIs('people.profile') ? 'active' : '' }}">
+        <li class="nav-item {{ request()->routeIs('people.profile') || request()->routeIs('people.applications.registration.*') ? 'menu-open' : '' }}">
+          <a href="#" class="nav-link">
             <i class="nav-icon fas fa-user-circle"></i>
-            <p>My Profile</p>
+            <p>
+              My Profile
+              <i class="right fas fa-angle-left"></i>
+            </p>
           </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{route('people.profile')}}" class="nav-link {{ request()->routeIs('people.profile') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>View Profile</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('people.applications.registration.create') }}" class="nav-link {{ request()->routeIs('people.applications.registration.*') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Update Profile</p>
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="nav-item">
           <a href="{{route('people.password.change')}}" class="nav-link {{ request()->routeIs('people.password.change') ? 'active' : '' }}">
@@ -32,8 +100,8 @@
             <p>Account Security</p>
           </a>
         </li>
-        <li class="nav-item {{ request()->is('people-portal/applications*') ? 'menu-open' : '' }}">
-          <a href="#" class="nav-link {{ request()->is('people-portal/applications*') ? 'active' : '' }}">
+        <li class="nav-item {{ request()->is('people-portal/applications*') && !request()->routeIs('people.applications.registration.*') ? 'menu-open' : '' }}">
+          <a href="#" class="nav-link">
             <i class="nav-icon fas fa-file-alt"></i>
             <p>
               আবেদনসমূহ (Applications)
@@ -42,9 +110,9 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="{{ route('people.applications.registration.create') }}" class="nav-link {{ request()->routeIs('people.applications.registration.*') ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>নতুন নাগরিক নিবন্ধন</p>
+              <a href="{{ route('people.applications.index') }}" class="nav-link {{ request()->routeIs('people.applications.index') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon text-green-500"></i>
+                <p class="font-bold">আবেদনের অবস্থা</p>
               </a>
             </li>
             <li class="nav-item">
@@ -98,51 +166,8 @@
 
         @if (basic_settings_permissions())
         {{-- Basic Settings --}}
-        <li class="nav-item
-        @if(
-        $subMenu == 'CityCorporation' ||
-        $subMenu == 'CityCorporationWard' ||
-        $subMenu == "FamilyCategory" ||
-        $subMenu == "FamilySubcategory" ||
-        $subMenu == "FamilyType" ||
-        $subMenu == "Financialyear" ||
-        $subMenu == "HouseType" ||
-        $subMenu == "HouseCategory" ||
-        $subMenu == "HouseOwnershipType" ||
-        $subMenu == "LandType" ||
-        $subMenu == "LandClass" ||
-        $subMenu == "LandOwnershipType" ||
-        $subMenu == "MarketType" ||
-        $subMenu == "MarketCategory" ||
-        $subMenu == "MarketOwnershipType"||
-        $subMenu == "OrganizationCategory" ||
-        $subMenu == "OrganizationSubcategory" ||
-        $subMenu == "OrganizationWorkArea" ||
-        $subMenu == "OrganizationOwnershipType" ||
-        $subMenu == "OrganizationType" ||
-        $subMenu == "OrganizationSubtype" ||
-        $subMenu == "Profession" ||
-        $subMenu == "ProfessionCategory" ||
-        $subMenu == "ProfessionSubcategory" ||
-        $subMenu == "ProfessionType" ||
-        $subMenu == "RoadCategory" ||
-        $subMenu == "RoadType" ||
-        $subMenu == "RoadOwner" ||
-        $subMenu == "ResarvWard" ||
-        $subMenu == "VehicleCategory" ||
-        $subMenu == "VehicleSubcategory" ||
-        $subMenu == "VehicleType" ||
-        $subMenu == "UnionWard" ||
-        $subMenu == "ReserveWard" ||
-        $subMenu == "Village" ||
-        $subMenu == "VillageArea" ||
-        $subMenu == "Union" ||
-        $subMenu == "Year"
-        )
-        menu-open
-        @endif
-        ">
-        <a href="#" class="nav-link {{$mainMenu =='Basic'?'active' :''}}">
+        <li class="nav-item {{ $isBasicSettings ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link">
           <i class="nav-icon fas fa-tasks"></i>
           <p>
             Basic Settings
@@ -197,72 +222,72 @@
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.house-type.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}}">
+          <a href="{{route('basic-settings.house-type.index')}}" class="nav-link @if($subMenu == "HouseType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>House Type</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.house-category.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "HouseCategory") active @endif">
+          <a href="{{route('basic-settings.house-category.index')}}" class="nav-link  @if($subMenu == "HouseCategory") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>House Category</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.land-type.index')}}" class="nav-link  {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "LandType") active @endif">
+          <a href="{{route('basic-settings.land-type.index')}}" class="nav-link   @if($subMenu == "LandType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Land Type</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{route('basic-settings.land-class.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "LandClass") active @endif">
+          <a href="{{route('basic-settings.land-class.index')}}" class="nav-link  @if($subMenu == "LandClass") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Land Class</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{route('basic-settings.land-ownership-type.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "LandOwnershipType") active @endif">
+          <a href="{{route('basic-settings.land-ownership-type.index')}}" class="nav-link  @if($subMenu == "LandOwnershipType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Land Ownership Type</p>
           </a>
         </li>
         {{-- <li class="nav-item">
-          <a href="{{route('basic-settings.market-category.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "MarketCategory") active @endif">
+          <a href="{{route('basic-settings.market-category.index')}}" class="nav-link  @if($subMenu == "MarketCategory") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Market Category</p>
           </a>
         </li> --}}
         {{-- <li class="nav-item">
-          <a href="{{route('basic-settings.market-type.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "MarketType") active @endif">
+          <a href="{{route('basic-settings.market-type.index')}}" class="nav-link  @if($subMenu == "MarketType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Market Type</p>
           </a>
         </li> --}}
         {{-- <li class="nav-item">
-          <a href="{{route('basic-settings.market-ownership-type.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "MarketOwnershipType") active @endif">
+          <a href="{{route('basic-settings.market-ownership-type.index')}}" class="nav-link  @if($subMenu == "MarketOwnershipType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Market Ownership Type</p>
           </a>
         </li> --}}
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.organization-category.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "OrganizationCategory") active @endif">
+          <a href="{{route('basic-settings.organization-category.index')}}" class="nav-link  @if($subMenu == "OrganizationCategory") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Organization Category</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.organization-subcategory.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}} @if($subMenu == "OrganizationSubcategory") active @endif">
+          <a href="{{route('basic-settings.organization-subcategory.index')}}" class="nav-link  @if($subMenu == "OrganizationSubcategory") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Org. Subcategory</p>
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.organization-work-area.index')}}" class="nav-link {{$subMenu == 'HouseType'?'active':''}}  @if($subMenu == "OrganizationWorkArea") active @endif">
+          <a href="{{route('basic-settings.organization-work-area.index')}}" class="nav-link   @if($subMenu == "OrganizationWorkArea") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Org. Work Area</p>
           </a>
@@ -393,8 +418,8 @@
     @endif
 
 
-      <li class="nav-item">
-               <a href="{{ route('role.index') }}" class="nav-link {{isset($page) && in_array($page, ['role', 'permission', 'rolepermission', 'userper', 'roleuser', 'user']) ? 'active' : '' }}">
+      <li class="nav-item {{ $isAccessManagement ? 'menu-open' : '' }}">
+               <a href="{{ route('role.index') }}" class="nav-link {{ $isAccessManagement ? 'active' : '' }}">
                  <i class="nav-icon fas fa-shield-alt"></i>
                  <p>
                    Access Management
@@ -404,17 +429,8 @@
 
     @if (institute_permissions())
     {{-- Institute Settings --}}
-    <li class="nav-item
-    @if(
-    $subMenu == "InstituteCreate" ||
-    $subMenu == "InstituteType" ||
-    $subMenu == "InstituteCategory" ||
-    $subMenu == "InstituteList"
-    )
-    menu-open
-    @endif"
-    >
-    <a href="#" class="nav-link @if($mainMenu == "Institute") active @endif ">
+    <li class="nav-item {{ $isInstituteSettings ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link">
       <i class="nav-icon fas fa-university"></i>
       <p>
         Institute Settings
@@ -457,8 +473,8 @@
   @endif
 
   @if(create_permission())
-  <li class="nav-item @if($subMenu == "AdminCreate" || $subMenu == "AdminList" || $subMenu == "AdminShow") menu-open @endif">
-    <a href="#" class="nav-link @if($mainMenu == "Admin") active @endif">
+  <li class="nav-item {{ ($subMenu == "AdminCreate" || $subMenu == "AdminList" || $subMenu == "AdminShow") ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link">
       <i class="nav-icon fas fa-users"></i>
       <p>
         Institutional Admins
@@ -487,8 +503,8 @@
   @endif
 
   {{-- People Info --}}
-  <li class="nav-item @if($subMenu == "Create" || $subMenu == "View" || $subMenu == "Show" || $subMenu == "approvedList") menu-open @endif">
-    <a href="#" class="nav-link @if($mainMenu == "People") active @endif">
+  <li class="nav-item {{ $isPeopleInfo ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link">
       <i class="nav-icon fas fa-users"></i>
       <p>
         People Info
@@ -533,8 +549,8 @@
   </li>
 
   {{-- Certificate --}}
-  <li class="nav-item  @if($mainMenu == "Certificate") menu-open @endif ">
-    <a href="#" class="nav-link @if($mainMenu == "Certificate") active @endif">
+  <li class="nav-item {{ $isCertificate ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link">
       <i class="nav-icon fas fa-certificate"></i>
       <p>
         Certificate
@@ -707,22 +723,8 @@
   </li>
 
   {{-- Organization Info --}}
-  <li class="nav-item
-
-  @if(
-  $subMenu == "OrganizationCreate" ||
-  $subMenu == "OrganizationList" ||
-  $subMenu == "ApprovedOrganizationList" ||
-  $subMenu == "OrganizationShow" ||
-  $subMenu == "RegistrationFees" ||
-  $subMenu == "RenewFees" ||
-  $subMenu == "TradeLicense"||
-  $subMenu == "GetTradeLicense"
-  )
-  menu-open
-  @endif
-  ">
-  <a href="#" class="nav-link @if($mainMenu == "Organization") active @endif ">
+  <li class="nav-item {{ $isOrganization ? 'menu-open' : '' }}">
+  <a href="#" class="nav-link">
     <i class="nav-icon fas fa-briefcase"></i>
     <p>
       Organization
@@ -792,20 +794,8 @@
 
 
 {{-- Tax --}}
-<li class="nav-item
-@if(
-
-$subMenu == "TaxGenerate" ||
-$subMenu == "TaxReceived" ||
-$subMenu == "TaxRateList" ||
-$subMenu == "TaxList"
-
-)
-menu-open
-@endif
-
-">
-<a href="#" class="nav-link @if($mainMenu == "Tax") active @endif">
+<li class="nav-item {{ $isTax ? 'menu-open' : '' }}">
+<a href="#" class="nav-link">
   <i class="nav-icon fas fa-money-bill"></i>
   <p>
     Tax
@@ -941,13 +931,8 @@ menu-open
           </li> -->
 
           {{-- House Info --}}
-          <li class="nav-item @if(
-          $subMenu == "HouseCreate" ||
-          $subMenu == "HouseList"
-          )
-          menu-open
-          @endif">
-          <a href="#" class="nav-link  @if($mainMenu == "House") active @endif ">
+          <li class="nav-item {{ $isHouse ? 'menu-open' : '' }}">
+          <a href="#" class="nav-link">
             <i class="nav-icon fas fa-home"></i>
             <p>
               House Info
@@ -980,16 +965,8 @@ menu-open
         </li>
 
         {{-- Land Info --}}
-        <li class="nav-item
-        @if(
-        $subMenu == "LandCreate" ||
-        $subMenu == "LandList"
-        )
-        menu-open
-        @endif
-
-        ">
-        <a href="#" class="nav-link @if($mainMenu == "Land") active @endif">
+        <li class="nav-item {{ $isLand ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link">
           <i class="nav-icon fas fa-bacon"></i>
           <p>
             Land Info
@@ -1024,22 +1001,8 @@ menu-open
 
 
       {{-- Vehicle Info --}}
-      <li class="nav-item
-      @if(
-      $subMenu == "VehicleCreate" ||
-      $subMenu == "VehicleList" ||
-      $subMenu == "VehicleApprovalList" ||
-      $subMenu == "VehicleGenerateInvoice" ||
-      $subMenu == "VehicleLicense" ||
-      $subMenu == "VehicleOwnershipChangeApplication" ||
-      $subMenu == "VehicleOwnershipChangeApproval" ||
-      $subMenu == "VehicleAddFeesNewSetup" ||
-      $subMenu == "VehicleAddFeesList"
-      )
-      menu-open
-      @endif"
-      >
-      <a href="#" class="nav-link @if($mainMenu == "Vehicle") active @endif">
+      <li class="nav-item {{ $isVehicle ? 'menu-open' : '' }}">
+      <a href="#" class="nav-link">
         <i class="nav-icon fas fa-truck"></i>
         <p>
           Vehicle Info
@@ -1077,7 +1040,7 @@ menu-open
 
         @if (view_permission())
         <li class="nav-item has-treeview @if($subMenu == "VehicleAddFeesNewSetup" || $subMenu == "VehicleAddFeesList") menu-open @endif">
-          <a href="#" class="nav-link @if($subMenu == "VehicleAddFeesNewSetup" || $subMenu == "VehicleAddFeesList") active @endif">
+          <a href="#" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>
               Fees
@@ -1123,7 +1086,7 @@ menu-open
 
         @if (view_permission())
         <li class="nav-item has-treeview @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") menu-open @endif">
-          <a href="#" class="nav-link @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") active @endif">
+          <a href="#" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>
               Ownership Change
@@ -1155,7 +1118,7 @@ menu-open
     </li>
 
     {{-- Road Info --}}
-    <li class="nav-item @if($subMenu == "RoadCreate" || $subMenu == "RoadList") menu-open @endif">
+    <li class="nav-item {{ $isRoad ? 'menu-open' : '' }}">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-road"></i>
         <p>
@@ -1187,12 +1150,8 @@ menu-open
     </li>
 
     {{-- Bridge Info --}}
-    <li class="nav-item
-
-    @if($subMenu == "BridgeCreate" || $subMenu == "BridgeList" ) menu-open @endif
-
-    ">
-    <a href="#" class="nav-link @if($mainMenu == "Bridge") active @endif">
+    <li class="nav-item {{ $isPath(['bridge*']) ? 'menu-open' : '' }}">
+      <a href="#" class="nav-link">
       <i class="nav-icon fas fa-archway"></i>
       <p>
         Bridge Info
@@ -1224,8 +1183,8 @@ menu-open
   </li>
 
   {{-- Market Info --}}
-  <li class="nav-item  @if($subMenu == "MarketCreate" || $subMenu == "MarketList") menu-open @endif">
-    <a href="#" class="nav-link  @if($mainMenu == "Market") active @endif">
+  <li class="nav-item {{ ($subMenu == "MarketCreate" || $subMenu == "MarketList") ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link">
       <i class="nav-icon fas fa-store"></i>
       <p>
         Market Info
@@ -1383,20 +1342,8 @@ menu-open
           </li> -->
 
           {{-- Wedding --}}
-          <li class="nav-item
-
-          @if(
-          $subMenu == "MarriageCreate" ||
-          $subMenu == "MarriageList" ||
-          $subMenu ==  "DivorceCreate" ||
-          $subMenu == "DivorceList"
-          )
-          menu-open
-          @endif
-
-
-          ">
-          <a href="#" class="nav-link @if($mainMenu == "Marriage" || $mainMenu == "Divorce") active @endif ">
+          <li class="nav-item {{ $isWedding ? 'menu-open' : '' }}">
+          <a href="#" class="nav-link">
             <i class="nav-icon fas fa-ring"></i>
             <p>
              Marriage & Divorce
@@ -1446,8 +1393,8 @@ menu-open
       </li>
 
       {{-- Chairman Info --}}
-      <li class="nav-item {{$mainMenu=='chairman'?'menu-open':''}}">
-        <a href="#" class="nav-link {{$mainMenu=='chairman'?'active':''}}">
+      <li class="nav-item {{ $isChairman ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link">
           <i class="nav-icon fas fa-user-tie"></i>
           <p>
             Chairman Info
@@ -1487,8 +1434,8 @@ menu-open
       </li>
 
       {{-- Member/Councilor Info --}}
-      <li class="nav-item {{$mainMenu=='councilor'?'menu-open':''}}">
-        <a href="#" class="nav-link {{$mainMenu=='councilor'?'active':''}}">
+      <li class="nav-item {{ $isCouncilor ? 'menu-open' : '' }}">
+        <a href="#" class="nav-link">
           <i class="nav-icon fas fa-user-friends"></i>
           <p>
             Member/Councilor Info

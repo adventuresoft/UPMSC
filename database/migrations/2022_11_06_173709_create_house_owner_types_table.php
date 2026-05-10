@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHouseOwnerTypesTableDuplicate extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,8 @@ class CreateHouseOwnerTypesTableDuplicate extends Migration
             return;
         }
 
-        Schema::create('house_owner_types', function (Blueprint $table) {
+        if (!Schema::hasTable('house_owner_types')) {
+            Schema::create('house_owner_types', function (Blueprint $table) {
             $table->id();
             $table->string('en_name')->unique();
             $table->string('bn_name');
@@ -27,6 +28,7 @@ class CreateHouseOwnerTypesTableDuplicate extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -40,4 +42,4 @@ class CreateHouseOwnerTypesTableDuplicate extends Migration
             Schema::dropIfExists('house_owner_types');
         }
     }
-}
+};

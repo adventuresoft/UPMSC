@@ -38,6 +38,16 @@
   <link rel="stylesheet" href="{{ asset('plugins')}}/select2/css/select2.min.css">
   <link rel="stylesheet" href="{{ asset('plugins')}}/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <style>
+    /* Global: Prevent horizontal scrollbars on all DataTable pages */
+    .card-body {
+        overflow-x: hidden;
+    }
+    
+    /* Ensure DataTables Responsive collapse works cleanly */
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before {
+        background-color: #17a2b8;
+    }
     .select2-container--default .select2-selection--single .select2-selection__rendered {
         color: #444;
         line-height: 17px !important;
@@ -53,9 +63,16 @@ width:100%!important;
     .nav-sidebar .nav-treeview > .nav-item > .nav-link.active {
         background-color: #046307 !important;
         color: #fff !important;
+        border-radius: 4px;
     }
     .nav-sidebar .nav-treeview > .nav-item > .nav-link.active i {
         color: #fff !important;
+    }
+    .nav-sidebar .nav-link:hover {
+        background-color: rgba(255,255,255,0.1) !important;
+    }
+    .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+        background-color: #046307 !important;
     }
   </style>
   @stack('style')
@@ -200,6 +217,54 @@ width:100%!important;
     @if(Session::has('warning'))
         toastr.warning("{{ Session::get('warning') }}");
     @endif
+
+    // Sidebar Scroll Persistence & Active Item Focus
+    $(document).ready(function() {
+        var sidebar = $('.sidebar');
+        var storageKey = 'sidebar-scroll';
+        
+        var initSidebarScroll = function() {
+            var osInstance = sidebar.overlayScrollbars();
+            var savedScroll = localStorage.getItem(storageKey);
+            
+            if (osInstance) {
+                // Restore scroll position instantly
+                if (savedScroll !== null) {
+                    osInstance.scroll({ y: savedScroll }, 0);
+                } else {
+                    var activeItem = $('.nav-link.active');
+                    if (activeItem.length > 0) {
+                        osInstance.scroll(activeItem, 0);
+                    }
+                }
+                
+                // Show sidebar smoothly after positioning
+                sidebar.css('opacity', '1');
+                
+                // Save scroll position on scroll
+                osInstance.options({
+                    callbacks: {
+                        onScroll: function() {
+                            localStorage.setItem(storageKey, this.scroll().position.y);
+                        }
+                    }
+                });
+            }
+        };
+
+        // Initialize multiple times to catch potential timing issues
+        initSidebarScroll();
+        setTimeout(initSidebarScroll, 50);
+        setTimeout(initSidebarScroll, 200);
+
+        // Save on click
+        $(document).on('click', '.nav-link', function() {
+            var osInstance = sidebar.overlayScrollbars();
+            if (osInstance) {
+                localStorage.setItem(storageKey, osInstance.scroll().position.y);
+            }
+        });
+    });
 </script>
 
 

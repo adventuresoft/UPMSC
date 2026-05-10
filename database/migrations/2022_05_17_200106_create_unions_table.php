@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUnionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateUnionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('unions', function (Blueprint $table) {
+        if (!Schema::hasTable('unions')) {
+            Schema::create('unions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('bn_name')->nullable();
@@ -23,6 +24,7 @@ class CreateUnionsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -34,4 +36,4 @@ class CreateUnionsTable extends Migration
     {
         Schema::dropIfExists('unions');
     }
-}
+};

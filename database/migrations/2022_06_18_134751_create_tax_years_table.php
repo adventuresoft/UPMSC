@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTaxYearsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateTaxYearsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tax_years', function (Blueprint $table) {
+        if (!Schema::hasTable('tax_years')) {
+            Schema::create('tax_years', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('bn_name')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -31,4 +33,4 @@ class CreateTaxYearsTable extends Migration
     {
         Schema::dropIfExists('tax_years');
     }
-}
+};

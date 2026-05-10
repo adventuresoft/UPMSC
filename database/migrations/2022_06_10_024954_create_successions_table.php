@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSuccessionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateSuccessionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('successions', function (Blueprint $table) {
+        if (!Schema::hasTable('successions')) {
+            Schema::create('successions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('death_certificate_id')->constrained('death_certificates')->onDelete('cascade');
@@ -26,6 +27,7 @@ class CreateSuccessionsTable extends Migration
             $table->string('date_of_death')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -37,4 +39,4 @@ class CreateSuccessionsTable extends Migration
     {
         Schema::dropIfExists('successions');
     }
-}
+};

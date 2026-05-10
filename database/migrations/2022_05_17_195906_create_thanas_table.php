@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateThanasTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateThanasTable extends Migration
      */
     public function up()
     {
-        Schema::create('thanas', function (Blueprint $table) {
+        if (!Schema::hasTable('thanas')) {
+            Schema::create('thanas', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('bn_name')->nullable();
@@ -23,6 +24,7 @@ class CreateThanasTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -34,4 +36,4 @@ class CreateThanasTable extends Migration
     {
         Schema::dropIfExists('thanas');
     }
-}
+};

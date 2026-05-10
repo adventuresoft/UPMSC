@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLoginActivitiesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateLoginActivitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('login_activities', function (Blueprint $table) {
+        if (!Schema::hasTable('login_activities')) {
+            Schema::create('login_activities', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -22,6 +23,7 @@ class CreateLoginActivitiesTable extends Migration
             $table->string('event_type');
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -33,4 +35,4 @@ class CreateLoginActivitiesTable extends Migration
     {
         Schema::dropIfExists('login_activities');
     }
-}
+};

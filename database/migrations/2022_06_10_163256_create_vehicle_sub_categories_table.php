@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVehicleSubCategoriesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateVehicleSubCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('vehicle_sub_categories', function (Blueprint $table) {
+        if (!Schema::hasTable('vehicle_sub_categories')) {
+            Schema::create('vehicle_sub_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('vehicle_category_id')->constrained('vehicle_categories')->onDelete('cascade');
             $table->string('en_name');
@@ -24,6 +25,7 @@ class CreateVehicleSubCategoriesTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -35,4 +37,4 @@ class CreateVehicleSubCategoriesTable extends Migration
     {
         Schema::dropIfExists('vehicle_sub_categories');
     }
-}
+};

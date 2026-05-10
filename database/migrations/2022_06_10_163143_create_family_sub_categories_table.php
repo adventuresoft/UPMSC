@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFamilySubCategoriesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateFamilySubCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('family_sub_categories', function (Blueprint $table) {
+        if (!Schema::hasTable('family_sub_categories')) {
+            Schema::create('family_sub_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('family_category_id')->constrained('family_categories')->onDelete('cascade');
             $table->string('en_name');
@@ -24,6 +25,7 @@ class CreateFamilySubCategoriesTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -35,4 +37,4 @@ class CreateFamilySubCategoriesTable extends Migration
     {
         Schema::dropIfExists('family_sub_categories');
     }
-}
+};

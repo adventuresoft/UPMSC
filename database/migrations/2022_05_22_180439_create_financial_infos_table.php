@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFinancialInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateFinancialInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('financial_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('financial_infos')) {
+            Schema::create('financial_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('account_no')->nullable();
@@ -22,6 +23,7 @@ class CreateFinancialInfosTable extends Migration
             $table->double('account_balance', 16, 2)->default(0.00);
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -33,4 +35,4 @@ class CreateFinancialInfosTable extends Migration
     {
         Schema::dropIfExists('financial_infos');
     }
-}
+};

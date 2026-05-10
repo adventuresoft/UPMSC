@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePermanentCitizenCertificatesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreatePermanentCitizenCertificatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('permanent_citizen_certificates', function (Blueprint $table) {
+        if (!Schema::hasTable('permanent_citizen_certificates')) {
+            Schema::create('permanent_citizen_certificates', function (Blueprint $table) {
             $table->id();
             $table->string('system_id')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -23,6 +24,7 @@ class CreatePermanentCitizenCertificatesTable extends Migration
             $table->bigInteger('created_by');
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -34,4 +36,4 @@ class CreatePermanentCitizenCertificatesTable extends Migration
     {
         Schema::dropIfExists('permanent_citizen_certificates');
     }
-}
+};

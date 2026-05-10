@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVehicleFeesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateVehicleFeesTable extends Migration
      */
     public function up()
     {
-        Schema::create('vehicle_fees', function (Blueprint $table) {
+        if (!Schema::hasTable('vehicle_fees')) {
+            Schema::create('vehicle_fees', function (Blueprint $table) {
             $table->id();
             $table->string('finance_year');
             $table->string('vehicle_type');
@@ -32,6 +33,7 @@ class CreateVehicleFeesTable extends Migration
                 'vehicle_fee_unique'
             );
         });
+        }
     }
 
     /**
@@ -43,5 +45,4 @@ class CreateVehicleFeesTable extends Migration
     {
         Schema::dropIfExists('vehicle_fees');
     }
-}
-
+};

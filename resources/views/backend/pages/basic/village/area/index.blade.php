@@ -66,11 +66,11 @@
                                       <td>{{++$key}}</td>
                                       <td>{{$area->en_name}}</td>
                                       <td>{{$area->bn_name}}</td>
-                                      <td>{{$area->division->name}}</td>
-                                      <td>{{$area->district->name}}</td>
-                                      <td>{{$area->thana->name}}</td>
-                                      <td>{{$area->union->name}}</td>
-                                      <td>{{$area->village->en_name}}</td>
+                                      <td>{{$area->division->name ?? 'N/A'}}</td>
+                                      <td>{{$area->district->name ?? 'N/A'}}</td>
+                                      <td>{{$area->thana->name ?? 'N/A'}}</td>
+                                      <td>{{$area->union->name ?? 'N/A'}}</td>
+                                      <td>{{$area->village->en_name ?? 'N/A'}}</td>
 
                                       <td>
                                         <div class="table-action">

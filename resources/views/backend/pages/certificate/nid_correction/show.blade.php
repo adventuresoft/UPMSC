@@ -1,99 +1,131 @@
 @extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'NidCorrection'])
 @push('style')
-
+<style>
+    .info-table th { width: 30%; background-color: #f8f9fa; }
+    .section-header { background-color: #17a2b8; color: white; padding: 10px; margin-top: 20px; border-radius: 5px; }
+</style>
 @endpush
-@section('title', 'NID Correction Certificate')
+
+@section('title', 'Voter Transfer Details')
+
 @section('content')
-<div class="container">
-  <div class="card mt-2">
-      <div class="card-body border border-dark ">
-          <div class="border border-5 border-info p-5">
-              <div class="row  text-center">
-                  <div class="col-md-12 ">
-                      <img height="100" width="100" class="mx-auto d-block"
-                          src="{{ isset($certificate->user->institute->top_image) ? asset($certificate->user->institute->top_image)  : asset('public/backend/img/certificate/govt-bd-logo.png') }}" alt="govt-bd-logo">
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-md-2 text-right">
-                      <img height="100" width="100" class="mx-auto d-block"
-                          src=" {{isset($certificate->user->institute->left_image) ? asset($certificate->user->institute->left_image)  : 'https://seeklogo.com/images/M/moharajpur-union-logo-6FAC2CBD46-seeklogo.com.png '}}"
-                          alt="govt-bd-logo">
-                  </div>
-                  <div class="col-md-8 text-center">
-                      <h1 class="text-danger bold">{{ $certificate->user->institute->union->name ?? '' }} Union Parishad
-                      </h1>
-                      <p>
-                          PS.:-   <strong class="text-danger">{{ $certificate->user->institute->union->thana->name ?? '' }}</strong>,
-                          Dist.:- <strong class="text-danger">{{ $certificate->user->institute->union->thana->district->name ?? '' }}</strong>,
-                                  <strong class="text-danger">Dhaka</strong>,Bangladesh
-                      </p>
-                  </div>
-                  <div class="col-md-2 text-left">
-                      <img height="100" width="100" class="mx-auto d-block"
-                          src="{{isset($certificate->user->institute->right_image) ? asset($certificate->user->institute->right_image)  : 'https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/Mujib_100_Logo.svg/1200px-Mujib_100_Logo.svg.png'}} "
-                          alt="govt-bd-logo">
-                  </div>
-              </div>
-              <div class="row character-certificate">
-                  <div class="col-md-2">
-                      <h6 class="text-success mt-4">No. : {{ $certificate->system_id ?? '' }}</h6>
-                  </div>
-                  <div class="col-md-8 text-center">
-                      <h3 class="text-light bg-success bold">NID Cor r e c t i o n  Cer t i f i c a t e</h3>
-                  </div>
-                  <div class="col-md-2">
-                      <h6 class="text-success mt-4">Date : {{ date('d.m.Y', strtotime($certificate->created_at)) }}
-                      </h6>
-                  </div>
-              </div>
-              <div class="row mt-5">
-                  <div class="col-md-12 certificate-body">
-                      <p>This is to certify that <strong class="text-danger">{{ $certificate->user->name ?? '' }}</strong>
-                          Id no.: <strong class="text-danger"> {{ $certificate->user->system_id ?? '' }}</strong>
-                          son of <strong
-                              class="text-danger">{{ family_live_status($certificate->user->familyInfo->father_live_status ?? 0) }}
-                              {{ $certificate->user->familyInfo->father_name ?? '' }}</strong> & <strong
-                              class="text-danger">{{ family_live_status($certificate->user->familyInfo->mother_live_status ?? 0) }}
-                              {{ $certificate->user->familyInfo->mother_name ?? '' }}</strong>,
-                          Village: <strong
-                              class="text-danger">{{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }}</strong>,
-                          <strong
-                              class="text-danger">Road-{{ $certificate->user->addressInfo->permanent_road ?? '' }}</strong>,
-                          <strong class="text-danger">House-03</strong>,
-                          <strong class="text-danger">Ward
-                              No.-{{ $certificate->user->addressInfo->presentWard->en_ward_no ?? '' }}</strong>, PO.:
-                          <strong class="text-danger">{{ $certificate->user->institute->union->name ?? ''  }}</strong>, PS.
-                          : <strong
-                              class="text-danger">{{ $certificate->user->institute->union->thana->name ?? '' }}</strong>,
-                          Dist.: <strong
-                              class="text-danger">{{ $certificate->user->institute->union->thana->district->name ?? '' }}</strong>,
-                          is known to me for about long time.
-                          <br>
-                          He is a citizen of Bangladesh by birth.
-                      </p>
-                      <br>
-                      <p>To the best of my knowledge, he bears a good moral character and is not involved is such
-                          activities which are against the country freedom and peace.</p>
-                      <br>
-                      <p>I wish all success and prosperity in his life.</p>
-                      <br>
-                      <p class="text-right">Chairman/Meyor</p>
-                      <p>NB.: Any Query <a href="https://www.upbd.com" target="_blank">www.upbd.com</a></p>
-                  </div>
-              </div>
-          </div>
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">ভোটার স্থানান্তর আবেদন বিস্তারিত (ফরম-১৩)</h3>
+                    <div>
+                        <a href="{{ route('nid-correction.index') }}" class="btn btn-sm btn-light">Back to List</a>
+                        <a href="{{ route('nid-correction.bn_certificate', $certificate->id) }}" class="btn btn-sm btn-warning">View PDF/Form</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <strong>আবেদন নম্বর:</strong> {{ bnValue($certificate->system_id) }}
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <strong>আবেদনের তারিখ:</strong> {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }}
+                        </div>
+                    </div>
 
+                    <h5 class="section-header">১. আবেদনকারীর তথ্য</h5>
+                    <table class="table table-bordered info-table">
+                        <tr>
+                            <th>আবেদনকারীর নাম</th>
+                            <td>{{ $certificate->applicant_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>জাতীয় পরিচয়পত্র নম্বর (NID)</th>
+                            <td>{{ bnValue($certificate->applicant_nid) }}</td>
+                        </tr>
+                        <tr>
+                            <th>জন্ম তারিখ</th>
+                            <td>{{ $certificate->applicant_dob ? bnValue(date('d/m/Y', strtotime($certificate->applicant_dob))) : '--' }}</td>
+                        </tr>
+                        <tr>
+                            <th>প্রাপক অফিসার</th>
+                            <td>{{ $certificate->recipient_upazila_thana_name }}, {{ $certificate->recipient_district }}</td>
+                        </tr>
+                    </table>
 
-      </div>
-      <div class="card-footer">
-          <p>This report generated by Jatri 24 Ltd. <a href="https://www.jatri24.com">www.jatri24.com</a></p>
-          <button id="printPageButton" class="btn btn-outline-secondary btn-sm text-right"
-              onClick="window.print();">Print</button>
+                    <h5 class="section-header">২. বর্তমান তালিকাভুক্তি সংক্রান্ত তথ্যাদি</h5>
+                    <table class="table table-bordered info-table">
+                        <tr>
+                            <th>ভোটার নম্বর</th>
+                            <td>{{ bnValue($certificate->current_voter_no) }}</td>
+                        </tr>
+                        <tr>
+                            <th>ভোটার এলাকা</th>
+                            <td>{{ $certificate->current_voter_area_name }} (নম্বর: {{ bnValue($certificate->current_voter_area_no) }})</td>
+                        </tr>
+                        <tr>
+                            <th>উপজেলা/থানা ও জেলা</th>
+                            <td>{{ $certificate->current_upazila_thana }}, {{ $certificate->current_district }}</td>
+                        </tr>
+                        <tr>
+                            <th>বর্তমান ঠিকানা</th>
+                            <td>{{ $certificate->current_village_road }}, বাসা/হোল্ডিং: {{ bnValue($certificate->current_house_holding) }}</td>
+                        </tr>
+                    </table>
 
-      </div>
-  </div>
+                    <h5 class="section-header">৩. স্থানান্তরের গন্তব্য তথ্য</h5>
+                    <table class="table table-bordered info-table">
+                        <tr>
+                            <th>গন্তব্য জেলা ও উপজেলা</th>
+                            <td>{{ $certificate->transfer_district }}, {{ $certificate->transfer_upazila_thana }}</td>
+                        </tr>
+                        <tr>
+                            <th>গন্তব্য এলাকা ({{ $certificate->transfer_entity_type }})</th>
+                            <td>{{ $certificate->transfer_entity_name }}, ওয়ার্ড: {{ bnValue($certificate->transfer_ward_no) }}</td>
+                        </tr>
+                        <tr>
+                            <th>গন্তব্য ভোটার এলাকা</th>
+                            <td>{{ $certificate->transfer_voter_area_name }} (নম্বর: {{ bnValue($certificate->transfer_voter_area_no) }})</td>
+                        </tr>
+                        <tr>
+                            <th>গন্তব্য ঠিকানা</th>
+                            <td>{{ $certificate->transfer_village_road }}, বাসা/হোল্ডিং: {{ bnValue($certificate->transfer_house_holding) }}</td>
+                        </tr>
+                        <tr>
+                            <th>ডাকঘর ও পোস্ট কোড</th>
+                            <td>{{ $certificate->transfer_post_office }} ({{ bnValue($certificate->transfer_post_code) }})</td>
+                        </tr>
+                        <tr>
+                            <th>মোবাইল নম্বর</th>
+                            <td>{{ bnValue($certificate->transfer_phone_mobile) }}</td>
+                        </tr>
+                    </table>
+
+                    <h5 class="section-header">৪. অতিরিক্ত তথ্য ও সনাক্তকারী</h5>
+                    <table class="table table-bordered info-table">
+                        <tr>
+                            <th>অবস্থানের সময়</th>
+                            <td>{{ $certificate->staying_since }}</td>
+                        </tr>
+                        <tr>
+                            <th>স্থানান্তরের কারণ</th>
+                            <td>{{ $certificate->transfer_reason }}</td>
+                        </tr>
+                        <tr>
+                            <th>সনাক্তকারীর তথ্য</th>
+                            <td>
+                                <strong>নাম:</strong> {{ $certificate->identifier_name }} <br>
+                                <strong>NID:</strong> {{ bnValue($certificate->identifier_nid) }} <br>
+                                <strong>ঠিকানা:</strong> {{ $certificate->identifier_address }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer text-center">
+                    <button class="btn btn-success" onclick="window.print()">Print Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
+
 @push('script')
 @endpush

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEducationalInfosTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateEducationalInfosTable extends Migration
      */
     public function up()
     {
-        Schema::create('educational_infos', function (Blueprint $table) {
+        if (!Schema::hasTable('educational_infos')) {
+            Schema::create('educational_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->bigInteger("degree_id")->nullable();
@@ -24,6 +25,7 @@ class CreateEducationalInfosTable extends Migration
             $table->string("institute")->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -35,4 +37,4 @@ class CreateEducationalInfosTable extends Migration
     {
         Schema::dropIfExists('educational_infos');
     }
-}
+};

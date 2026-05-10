@@ -191,9 +191,9 @@
                     success: function (response) {
                         thisForm.find('button[type="submit"]').prop("disabled",false);
                         toastr.success(response.message);
-                        // setTimeout(function() {
-                        //     location.href = "/";
-                        // }, 2000)
+                        setTimeout(function() {
+                            location.href = response.redirect_url;
+                        }, 2000)
                     },
                     error: function(xhr, status, error) {
                         thisForm.find('button[type="submit"]').prop("disabled",false);

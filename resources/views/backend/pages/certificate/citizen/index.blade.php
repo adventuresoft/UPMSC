@@ -102,7 +102,7 @@
 
                         <!-- TABLE -->
 
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="example1" class="table table-bordered table-striped" style="width:100%">
 
                             <thead>
                                 <tr>
@@ -112,7 +112,7 @@
                                     <th>ID & Name</th>
                                     <th>Address & Mobile</th>
                                     <!-- <th>Quantity</th> -->
-                                    <th>Created At</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -154,24 +154,32 @@
                                    {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
                                     </td>
 
-                                    <!-- <td>{{ $certificate->quantity }}</td> -->
-
-                                    <td>{{ $certificate->created_at->format('d-m-Y') }}</td>
+                                    <td>
+                                        @if($certificate->status == 0)
+                                            <span class="badge badge-warning">Pending</span>
+                                        @else
+                                            <span class="badge badge-success">Approved</span>
+                                        @endif
+                                    </td>
 
                                     <td>
+                                        @if($certificate->status == 0)
+                                            <button onclick="approveCertificate({{ $certificate->id }})" class="btn btn-success btn-sm">
+                                                <i class="fa fa-check"></i> Approve
+                                            </button>
+                                        @else
+                                            <a target="_blank"
+                                                href="{{ route('citizen.show', $certificate->id) }}"
+                                                class="btn btn-primary btn-sm">
+                                                <i class="fa fa-file-pdf"></i> EN
+                                            </a>
 
-                                        <a target="_blank"
-                                            href="{{ route('citizen.show', $certificate->id) }}"
-                                            class="btn btn-primary btn-sm">
-                                            <i class="fa fa-file-pdf"></i> EN
-                                        </a>
-
-                                        <a target="_blank"
-                                            href="{{ route('citizen.bn_certificate', $certificate->id) }}"
-                                            class="btn btn-info btn-sm">
-                                            <i class="fa fa-file-pdf"></i> BN
-                                        </a>
-
+                                            <a target="_blank"
+                                                href="{{ route('citizen.bn_certificate', $certificate->id) }}"
+                                                class="btn btn-info btn-sm">
+                                                <i class="fa fa-file-pdf"></i> BN
+                                            </a>
+                                        @endif
                                     </td>
 
                                 </tr>
@@ -202,6 +210,7 @@
         let table = $('#example1').DataTable({
             responsive: true,
             autoWidth: false,
+            scrollX: false,
             pageLength: 10,
             lengthChange: false,
             order: [
@@ -252,6 +261,32 @@
         $('#search_global').keyup(function() { table.search(this.value).draw(); }); // Show entries
 
     });
+
+    function approveCertificate(id) {
+        if (confirm('Are you sure you want to approve this application?')) {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('citizen.approve') }}",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id
+                },
+                success: function(response) {
+                    if (response.status) {
+                        toastr.success(response.message);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error("Something went wrong!");
+                }
+            });
+        }
+    }
 </script>
 
 @endpush

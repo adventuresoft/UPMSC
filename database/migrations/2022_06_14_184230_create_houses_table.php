@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHousesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateHousesTable extends Migration
      */
     public function up()
     {
-        Schema::create('houses', function (Blueprint $table) {
+        if (!Schema::hasTable('houses')) {
+            Schema::create('houses', function (Blueprint $table) {
             $table->id();
             
             $table->string('house');
@@ -35,6 +36,7 @@ class CreateHousesTable extends Migration
             $table->double('house_price', 16, 2)->default(0.00)->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -46,4 +48,4 @@ class CreateHousesTable extends Migration
     {
         Schema::dropIfExists('houses');
     }
-}
+};

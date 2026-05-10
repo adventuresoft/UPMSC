@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRoadsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateRoadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('roads', function (Blueprint $table) {
+        if (!Schema::hasTable('roads')) {
+            Schema::create('roads', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
             $table->string('bn_name')->nullable();
@@ -30,6 +31,7 @@ class CreateRoadsTable extends Migration
             $table->string('current_condition')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -41,4 +43,4 @@ class CreateRoadsTable extends Migration
     {
         Schema::dropIfExists('roads');
     }
-}
+};

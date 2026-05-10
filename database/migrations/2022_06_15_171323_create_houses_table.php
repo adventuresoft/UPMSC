@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHousesTableUpdate extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateHousesTableUpdate extends Migration
      */
     public function up()
     {
-        Schema::create('houses', function (Blueprint $table) {
+        if (!Schema::hasTable('houses')) {
+            Schema::create('houses', function (Blueprint $table) {
             $table->id();
             $table->string('en_name');
             $table->string('bn_name');
@@ -30,6 +31,7 @@ class CreateHousesTableUpdate extends Migration
             $table->double('house_price', 8, 2)->default(0.00);
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -41,4 +43,4 @@ class CreateHousesTableUpdate extends Migration
     {
         Schema::dropIfExists('houses');
     }
-}
+};

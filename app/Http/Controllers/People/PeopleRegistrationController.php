@@ -71,7 +71,7 @@ class PeopleRegistrationController extends Controller
                     $user->password = Hash::make('12345678');
                 }
                 
-                $user->institute_id = Auth::user()->institute_id ?? ($loggedUser->institute_id ?? '');
+                $user->institute_id = Auth::user()->institute_id ?? ($loggedUser->institute_id ?? null);
                 $user->name = $request->name;
                 $user->email = $request->email;
                 $user->mobile = $request->mobile;

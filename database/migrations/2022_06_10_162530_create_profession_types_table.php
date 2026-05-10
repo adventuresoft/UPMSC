@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfessionTypesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateProfessionTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('profession_types', function (Blueprint $table) {
+        if (!Schema::hasTable('profession_types')) {
+            Schema::create('profession_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profession_id')->constrained('professions')->onDelete('cascade');
             $table->string('en_name');
@@ -24,6 +25,7 @@ class CreateProfessionTypesTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -35,4 +37,4 @@ class CreateProfessionTypesTable extends Migration
     {
         Schema::dropIfExists('profession_types');
     }
-}
+};

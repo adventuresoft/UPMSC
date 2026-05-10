@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInstitutesTableUpdate extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateInstitutesTableUpdate extends Migration
      */
     public function up()
     {
-        Schema::create('institutes', function (Blueprint $table) {
+        if (!Schema::hasTable('institutes')) {
+            Schema::create('institutes', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('institute_category_id');
             $table->bigInteger('institute_type_id');
@@ -26,6 +27,7 @@ class CreateInstitutesTableUpdate extends Migration
             $table->string('right_image')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -37,4 +39,4 @@ class CreateInstitutesTableUpdate extends Migration
     {
         Schema::dropIfExists('institutes');
     }
-}
+};

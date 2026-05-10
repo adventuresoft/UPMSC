@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHouseClassesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateHouseClassesTable extends Migration
      */
     public function up()
     {
-        Schema::create('house_classes', function (Blueprint $table) {
+        if (!Schema::hasTable('house_classes')) {
+            Schema::create('house_classes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('house_category_id')->constrained('house_categories')->onDelete('cascade');
             $table->string('en_name')->unique();
@@ -24,6 +25,7 @@ class CreateHouseClassesTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -35,4 +37,4 @@ class CreateHouseClassesTable extends Migration
     {
         Schema::dropIfExists('house_classes');
     }
-}
+};

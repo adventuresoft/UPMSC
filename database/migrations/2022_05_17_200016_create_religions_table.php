@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReligionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateReligionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('religions', function (Blueprint $table) {
+        if (!Schema::hasTable('religions')) {
+            Schema::create('religions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->nullable();
@@ -22,6 +23,7 @@ class CreateReligionsTable extends Migration
             $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -33,4 +35,4 @@ class CreateReligionsTable extends Migration
     {
         Schema::dropIfExists('religions');
     }
-}
+};

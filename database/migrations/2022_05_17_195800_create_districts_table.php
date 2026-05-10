@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDistrictsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateDistrictsTable extends Migration
      */
     public function up()
     {
-        Schema::create('districts', function (Blueprint $table) {
+        if (!Schema::hasTable('districts')) {
+            Schema::create('districts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('bn_name')->nullable();
@@ -25,6 +26,7 @@ class CreateDistrictsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        }
     }
 
     /**
@@ -36,4 +38,4 @@ class CreateDistrictsTable extends Migration
     {
         Schema::dropIfExists('districts');
     }
-}
+};
