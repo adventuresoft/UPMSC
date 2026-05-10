@@ -47,8 +47,8 @@
                                 <tr>
                                     <th>Sl.</th>
                                     <th>Financial Year</th>
-                                    <th>Institute Type</th>
-                                    <th>Org. Category</th>
+                                    <th>Type</th>
+                                    <th>Category</th>
                                     <th>Fees Head</th>
                                     <th>Category A</th>
                                     <th>Category B</th>
@@ -62,9 +62,14 @@
                                   @foreach ($fees as $key=>$fee)
                                     <tr>
                                       <td>{{++$key}}</td>
-                                      <td>{{$fee->taxYear->name}}</td>
-                                      <td>{{$fee->instituteType->name}}</td>
-                                      <td>{{$fee->organizationCategory->en_name}} -- {{$fee->organizationSubcategory->en_name}}</td>
+                                      <td>{{ $fee->taxYear->name ?? '-' }}</td>
+                                      <td>{{ $fee->instituteType->name ?? '-' }}</td>
+                                      <td>
+                                        {{ $fee->organizationCategory->en_name ?? '-' }}
+                                        @if(!empty($fee->organizationSubcategory?->en_name))
+                                          <small class="text-muted">({{ $fee->organizationSubcategory->en_name }})</small>
+                                        @endif
+                                      </td>
                                       <td>{{$fee->name}}</td>
                                       <td>{{$fee->category_a_fees}}</td>
                                       <td>{{$fee->category_b_fees}}</td>
@@ -104,4 +109,3 @@
 @endsection
 @push('script')
 @endpush
-

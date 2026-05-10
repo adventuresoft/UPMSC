@@ -67,6 +67,9 @@ public function getOrganizationBySystemId($system_id)
         'road',
         'villageArea',
         'village',
+        'category',
+        'type',
+        'institute.type',
         'ownership.user.familyInfo',
         'ownership.user.addressInfo'
     ])
@@ -137,6 +140,13 @@ public function getOrganizationBySystemId($system_id)
         'organization' => $organization,
         'organization_name' => $organization->name,
         'organization_address' => $address,
+        'type_name' => optional(optional($organization->institute)->type)->name
+            ?? optional($organization->type)->en_name
+            ?? optional($organization->type)->bn_name
+            ?? '-',
+        'category_name' => optional($organization->category)->en_name
+            ?? optional($organization->category)->bn_name
+            ?? '-',
         'owners' => $owners
     ], 200);
 }
@@ -497,6 +507,11 @@ public function getOrganizationBySystemId_01_05_26($system_id)
 
         if ($request->id) {
             $organization = Organization::findOrFail($request->id);
+
+            if (Schema::hasColumn('organizations', 'updated_by')) {
+                $payload['updated_by'] = Auth::id();
+            }
+
             $organization->update($payload);
         } else {
             // Resolve Institute ID and User context
@@ -546,7 +561,15 @@ public function getOrganizationBySystemId_01_05_26($system_id)
             }
 
             $payload['institute_id'] = $instituteId;
-            $payload['created_by'] = $createdBy;
+
+            if (Schema::hasColumn('organizations', 'created_by')) {
+                $payload['created_by'] = $createdBy;
+            }
+
+            if (Schema::hasColumn('organizations', 'updated_by')) {
+                $payload['updated_by'] = $createdBy;
+            }
+
             $payload['application_id'] = $this->generateApplicationId();
             $organization = Organization::create($payload);
         }

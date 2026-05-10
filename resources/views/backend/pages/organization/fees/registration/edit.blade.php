@@ -61,7 +61,7 @@
                                                 </select>
                                                 <small class="error tax_year_id-error text-danger"></small>
                                             </th>
-                                            <th>Institute Type</th>
+                                            <th>Type</th>
                                             <th>
 
                                                 <select class="form-control" id="institute_type_id" name="institute_type_id">
@@ -97,11 +97,11 @@
                                                 <small class="error organization_category_id-error text-danger"></small>
 
                                             </th>
-                                            <th>Organizaiton Subcategory</th>
+                                            <th>Organization Subcategory (Optional)</th>
                                             <th>
                                                 <select class="form-control" id="organization_subcategory_id"
                                                     name="organization_subcategory_id">
-                                                    <option value="">Select Org. Subcategory</option>
+                                                    <option value="">All Subcategories</option>
                                                     @if (count($organization_sub_categories))
                                                         @foreach ($organization_sub_categories as $organization_sub_category)
                                                             <option value="{{ $organization_sub_category->id }}" {{$fee->organization_subcategory_id ==  $organization_sub_category->id ? 'selected' : '' }} >
@@ -236,7 +236,7 @@
                         console.log("Searcing organization category");
                     },
                     success: function(response) {
-                        $('#organization_subcategory_id').html(response)
+                        $('#organization_subcategory_id').html('<option value="">All Subcategories</option>' + response)
                         $('#organization_subcategory_id').prop("disabled", false);
                     },
                     error: function(xhr, status, error) {
@@ -249,4 +249,3 @@
         })
     </script>
 @endpush
-

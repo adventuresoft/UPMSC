@@ -147,6 +147,24 @@
                                     </thead>
                                 </table>
 
+                                <table class="table table-bordered mb-3">
+                                    <thead>
+                                        <tr>
+                                            <th>Application ID</th>
+                                            <th>Approved ID</th>
+                                            <th>Organization Name</th>
+                                            <th>Type</th>
+                                            <th>Category</th>
+                                            <th>Tax Year</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="organization_meta_row">
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">Please search organization</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
                                 <table class="table table-bordered">
     <tbody class="owner_data_area">
         <tr>
@@ -248,6 +266,11 @@
                 $(".organization_name").text('');
                 $(".organization_address").text('');
                 $(".owner_data_area").html('');
+                $(".organization_meta_row").html(`
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">Loading organization info...</td>
+                    </tr>
+                `);
             },
 
             success: function (response) {
@@ -257,6 +280,22 @@
                 $(".organization_id").val(response.organization.id);
                 $(".organization_name").text(response.organization_name ?? '');
                 $(".organization_address").text(response.organization_address ?? '');
+
+                let selectedTaxYearText = $("#tax_year_id option:selected").text();
+                if (!$("#tax_year_id").val()) {
+                    selectedTaxYearText = '-';
+                }
+
+                $(".organization_meta_row").html(`
+                    <tr>
+                        <td>${response.organization.application_id ?? '-'}</td>
+                        <td>${response.organization.approved_id ?? '-'}</td>
+                        <td>${response.organization.name ?? '-'}</td>
+                        <td>${response.type_name ?? '-'}</td>
+                        <td>${response.category_name ?? '-'}</td>
+                        <td>${selectedTaxYearText}</td>
+                    </tr>
+                `);
 
                 let html = '';
 
@@ -319,6 +358,11 @@
                 _this_btn.prop("disabled", false);
                 let res = JSON.parse(xhr.responseText);
                 toastr.error(res.message);
+                $(".organization_meta_row").html(`
+                    <tr>
+                        <td colspan="6" class="text-center text-danger">Organization not found</td>
+                    </tr>
+                `);
             }
         });
 
@@ -411,6 +455,11 @@
 
     function findFees(organization_id){
         let tax_year_id = $("#tax_year_id").val();
+        if(!tax_year_id){
+            $("#load-fees").html('');
+            toastr.warning("Please select tax year first.");
+            return;
+        }
         if(organization_id){
             $.ajax({
                 type: "POST",
@@ -434,6 +483,20 @@
             });
         }
     }
+
+    $(document).on('change', '#tax_year_id', function(){
+        let orgId = $(".organization_id").val();
+
+        let selectedTaxYearText = $("#tax_year_id option:selected").text();
+        if (!$(this).val()) {
+            selectedTaxYearText = '-';
+        }
+        $(".organization_meta_row td:last").text(selectedTaxYearText);
+
+        if (orgId) {
+            findFees(orgId);
+        }
+    });
 
     $(function() {
         let prefillOrgId = "{{ request('org_id') }}";

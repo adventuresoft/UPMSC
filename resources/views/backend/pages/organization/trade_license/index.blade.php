@@ -112,9 +112,9 @@
 
                   <td>{{ $organization->name ?? '-' }}</td>
 
-                  <td>{{ $organization?->type?->en_name ?? $organization?->type?->bn_name ?? '-' }}</td>
+                  <td>{{ $organization?->institute?->type?->name ?? $organization?->type?->en_name ?? $organization?->type?->bn_name ?? '-' }}</td>
 
-                  <td>{{ $organization?->subcategory?->en_name ?? $organization?->category?->en_name ?? '-' }}</td>
+                  <td>{{ $organization?->category?->en_name ?? '-' }}</td>
 
                   <td>{{ $license?->taxYear?->name ?? '-' }}</td>
 
@@ -209,7 +209,7 @@
 
     $('#statusFilter').on('change', function() {
 
-      table.column(7).search(this.value).draw();
+      table.column(8).search(this.value).draw();
 
     });
 

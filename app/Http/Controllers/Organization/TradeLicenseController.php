@@ -107,6 +107,7 @@ class TradeLicenseController extends Controller
             'type',
             'category',
             'subcategory',
+            'institute.type',
             'ownership.user.people',
             'latestTradeLicense.taxYear',
         ])->where('status', 1)
