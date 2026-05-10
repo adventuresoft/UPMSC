@@ -10,7 +10,7 @@
 @section('title', 'Organization Trade License')
 
 @section('content')
-
+<!--
 <section class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
@@ -31,7 +31,7 @@
     </div>
   </div>
 </section>
-
+-->
 
 <section class="content">
   <div class="container-fluid">
@@ -60,19 +60,72 @@
 
           <div class="card-body">
 
-            <div class="row mb-3">
+            <!-- FILTER BAR -->
+            <div class="row mb-3 align-items-center g-2">
 
-              <div class="col-md-3">
-                <select id="statusFilter" class="form-control">
-                  <option value="">All Invoice Status</option>
+              <!-- Show Entries -->
+              <div class="col-md-1">
+                <select id="tableLength" class="form-control form-control-sm">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+
+              <!-- Application ID Filter -->
+              <div class="col-md-1">
+                <input type="text" id="search_app_id" class="form-control form-control-sm"
+                  placeholder="App ID">
+              </div>
+
+              <!-- Approved ID Filter -->
+              <div class="col-md-1">
+                <input type="text" id="search_approved_id" class="form-control form-control-sm"
+                  placeholder="Approved ID">
+              </div>
+
+              <!-- Organization Name Filter -->
+              <div class="col-md-2">
+                <input type="text" id="search_org_name" class="form-control form-control-sm"
+                  placeholder="Organization Name">
+              </div>
+
+              <!-- Type Filter -->
+              <div class="col-md-1">
+                <input type="text" id="search_type" class="form-control form-control-sm"
+                  placeholder="Type">
+              </div>
+
+              <!-- Category Filter -->
+              <div class="col-md-1">
+                <input type="text" id="search_category" class="form-control form-control-sm"
+                  placeholder="Category">
+              </div>
+
+              <!-- Tax Year Filter -->
+              <div class="col-md-1">
+                <input type="text" id="search_tax_year" class="form-control form-control-sm"
+                  placeholder="Tax Year">
+              </div>
+
+              <!-- Status Filter -->
+              <div class="col-md-1">
+                <select id="search_status" class="form-control form-control-sm">
+                  <option value="">All Status</option>
                   <option value="Not Generated">Not Generated</option>
                   <option value="unpaid">Unpaid</option>
                   <option value="paid">Paid</option>
                 </select>
               </div>
 
-            </div>
+              <!-- GLOBAL SEARCH -->
+              <div class="col-md-1">
+                <input type="text" id="search_global" class="form-control form-control-sm"
+                  placeholder="Search">
+              </div>
 
+            </div>
 
             <table id="example1" class="table table-bordered table-striped">
 
@@ -197,20 +250,55 @@
   $(function() {
 
     var table = $("#example1").DataTable({
-
+      dom: 'rtip',
       responsive: true,
       autoWidth: false,
       pageLength: 10,
-      ordering: true,
-      searching: true
-
+      lengthChange: false,
+      order: [[0, 'asc']],
+      columnDefs: [
+        { targets: 9, orderable: false }
+      ],
+      language: {
+        emptyTable: '<div class="empty-state"><i class="fas fa-folder-open"></i><h5>No data available</h5></div>',
+        zeroRecords: '<div class="empty-state"><i class="fas fa-folder-open"></i><h5>No matching records found</h5></div>'
+      }
     });
 
+    $('#search_app_id').keyup(function() {
+      table.column(1).search(this.value).draw();
+    });
 
-    $('#statusFilter').on('change', function() {
+    $('#search_approved_id').keyup(function() {
+      table.column(2).search(this.value).draw();
+    });
 
+    $('#search_org_name').keyup(function() {
+      table.column(3).search(this.value).draw();
+    });
+
+    $('#search_type').keyup(function() {
+      table.column(4).search(this.value).draw();
+    });
+
+    $('#search_category').keyup(function() {
+      table.column(5).search(this.value).draw();
+    });
+
+    $('#search_tax_year').keyup(function() {
+      table.column(6).search(this.value).draw();
+    });
+
+    $('#search_status').on('change', function() {
       table.column(8).search(this.value).draw();
+    });
 
+    $('#search_global').keyup(function() {
+      table.search(this.value).draw();
+    });
+
+    $('#tableLength').change(function() {
+      table.page.len($(this).val()).draw();
     });
 
   });
