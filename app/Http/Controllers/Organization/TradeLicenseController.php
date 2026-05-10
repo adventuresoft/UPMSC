@@ -392,28 +392,34 @@ public function onlinePayment($id)
     // Generate unique invoice (VERY IMPORTANT to avoid duplicate error)
     $invoice = 'TL-' . $license->id . '-' . time();
 
-    // API Request
-    $response = Http::asForm()->post('https://api.paystation.com.bd/initiate-payment', [
-        'invoice_number' => $invoice,
-        'currency' => 'BDT',
-        'payment_amount' => $totalfee ?? 1, // change based on your DB
-        'reference' => 'Trade License Payment #' . $license->id,
-        'cust_name' => $license->name ?? 'Customer',
-        'cust_phone' => $license->phone ?? '01700000000',
-        'cust_email' => $license->email ?? 'test@test.com',
-        'cust_address' => $license->address ?? 'Dhaka',
-        'callback_url' => route('organizationA.trade-license.payment.success', $license->id), // create this route
+    // API Request - Using IP with Host header to bypass DNS issues
+    try {
+        $response = Http::withHeaders([
+            'Host' => 'api.paystation.com.bd'
+        ])->asForm()->withoutVerifying()->timeout(10)->post('https://103.134.89.201/initiate-payment', [
+            'invoice_number' => $invoice,
+            'currency' => 'BDT',
+            'payment_amount' => $totalfee ?? 1, // change based on your DB
+            'reference' => 'Trade License Payment #' . $license->id,
+            'cust_name' => $license->name ?? 'Customer',
+            'cust_phone' => $license->phone ?? '01700000000',
+            'cust_email' => $license->email ?? 'test@test.com',
+            'cust_address' => $license->address ?? 'Dhaka',
+            'callback_url' => route('organizationA.trade-license.payment.success', $license->id), // create this route
 
-        'checkout_items' => json_encode([
-            [
-                "name" => "Trade License Fee",
-                "qty" => 1,
-                "price" => $totalfee ?? 1
-            ]
-        ]),
-        'merchantId' => "2573-1775021038",
-        'password' => "'poyt32@ft4e6hgc"
-    ]);
+            'checkout_items' => json_encode([
+                [
+                    "name" => "Trade License Fee",
+                    "qty" => 1,
+                    "price" => $totalfee ?? 1
+                ]
+            ]),
+            'merchantId' => "2573-1775021038",
+            'password' => "'poyt32@ft4e6hgc"
+        ]);
+    } catch (\Exception $e) {
+        return back()->withInput()->with('error', 'Payment service unreachable: ' . $e->getMessage());
+    }
 
     $result = $response->json();
 
