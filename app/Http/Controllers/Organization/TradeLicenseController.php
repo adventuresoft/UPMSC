@@ -98,6 +98,21 @@ class TradeLicenseController extends Controller
             'organization.ownership.user.addressInfo.permanentDistrict',
             'organization.ownership.user.familyInfo',
         ])->findOrFail($id);
+        // dd($data['license']->fees);
+ $fees = json_decode($data['license']->fees?? '{}', true);
+    $fees = is_array($fees) ? $fees : [];
+
+    $totalFee = 0;
+    foreach ($fees as $amount) {
+        $totalFee += (float) $amount;
+    }
+
+    if ($totalFee!=0) {
+        session()->put('trade_license_payment_amount', $totalFee);
+
+    }
+
+
         return view('backend.pages.organization.trade_license.invoice', $data);
     }
 
@@ -371,6 +386,8 @@ public function onlinePayment($id)
 {
     $license = TradeLicense::findOrFail($id);
 
+    $totalfee=session('trade_license_payment_amount');
+
 
     // Generate unique invoice (VERY IMPORTANT to avoid duplicate error)
     $invoice = 'TL-' . $license->id . '-' . time();
@@ -379,7 +396,7 @@ public function onlinePayment($id)
     $response = Http::asForm()->post('https://api.paystation.com.bd/initiate-payment', [
         'invoice_number' => $invoice,
         'currency' => 'BDT',
-        'payment_amount' => $license->fee ?? 1, // change based on your DB
+        'payment_amount' => $totalfee ?? 1, // change based on your DB
         'reference' => 'Trade License Payment #' . $license->id,
         'cust_name' => $license->name ?? 'Customer',
         'cust_phone' => $license->phone ?? '01700000000',
@@ -391,7 +408,7 @@ public function onlinePayment($id)
             [
                 "name" => "Trade License Fee",
                 "qty" => 1,
-                "price" => $license->fee ?? 1
+                "price" => $totalfee ?? 1
             ]
         ]),
         'merchantId' => "2573-1775021038",
