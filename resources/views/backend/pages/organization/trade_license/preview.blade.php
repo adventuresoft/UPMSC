@@ -7,7 +7,7 @@
         margin: 0;
     }
 
-    html,
+  /* html,
     body {
         margin: 0;
         padding: 0;
@@ -16,7 +16,7 @@
         line-height: 1.4;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-    }
+    } */
 
     .header-logos {
         margin-top: -18px;
@@ -265,7 +265,7 @@
         </div>
 
         <div class="validity-info">
-            নবায়ন/নতুন <br>
+            নবায়ন/নতুন<br>
             অর্থ বছর: {{ $license->taxYear->name }} <br>
             এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত
         </div>
