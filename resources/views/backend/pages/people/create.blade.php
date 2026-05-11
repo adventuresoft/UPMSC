@@ -25,9 +25,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <!-- Horizontal Form -->
-                    <div class="card card-info">
-                        <div class="card-header">
-                            @include('backend.pages.people.tabs.tab_header', ['user' => $user ?? false, 'active_tab' => 'personal'])
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-white border-bottom-0 pb-0">
+                            <div class="d-block">
+                                @include('backend.pages.people.tabs.tab_header', ['user' => $user ?? false, 'active_tab' => 'personal'])
+                            </div>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
@@ -156,11 +158,13 @@
 
                             </div>
                             <!-- /.card-body -->
-                            <div class="card-footer">
+                            <div class="card-footer bg-white border-top-0 mt-4">
                                 <div class="form-group row">
                                     <div class="col-sm-12 text-right">
-                                        <a href="{{ route('people.index') }}" class="btn btn-default">Cancel</a>
-                                        <button type="submit" class="btn btn-info ml-2">Save & Next</button>
+                                        <a href="{{ route('people.index') }}" class="btn btn-outline-secondary px-4">Cancel</a>
+                                        <button type="submit" class="btn btn-primary px-5 shadow-sm" style="background-color: #4f46e5; border-color: #4f46e5;">
+                                            Save & Next <i class="fas fa-arrow-right ml-1"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

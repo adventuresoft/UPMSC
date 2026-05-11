@@ -83,6 +83,7 @@ use App\Http\Controllers\FinancialInfoController;
 use App\Http\Controllers\FreedomFighterInfoController;
 use App\Http\Controllers\HealthInfoController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JulyFighterInfoController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\HouseOwnershipController;
 use App\Http\Controllers\InstituteCategoryController;
@@ -273,6 +274,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::get('/people/freedom/{userID}', [FreedomFighterInfoController::class, 'create'])->name('people.freedom');
     Route::post('/people/freedom-store', [FreedomFighterInfoController::class, 'store'])->name('people.freedomStore');
 
+    Route::get('/people/july-fighter/{userID}', [JulyFighterInfoController::class, 'create'])->name('people.july_fighter');
+    Route::post('/people/july-fighter-store', [JulyFighterInfoController::class, 'store'])->name('people.julyFighterStore');
+
     Route::get('/people/education/{userID}', [EducationalInfoController::class, 'create'])->name('people.education');
     Route::post('/people/education-store', [EducationalInfoController::class, 'store'])->name('people.educationStore');
     Route::get('/people/education-delete/{eduID}', [EducationalInfoController::class, 'destroy'])->name('people.educationDelete');
@@ -446,6 +450,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
          Route::get('/freedom/{user_id}', 'freedom')->name('freedom');
          Route::post('/freedomStore', 'freedomStore')->name('freedomStore');
 
+         Route::get('/july-fighter/{user_id}', 'july_fighter')->name('july_fighter');
+         Route::post('/july-fighter-store', 'storeJulyFighter')->name('julyFighterStore');
+
          Route::get('/area/{user_id}', 'area')->name('area');
          Route::post('/areaStore', 'areaStore')->name('areaStore');
     });
@@ -612,6 +619,9 @@ Route::prefix('people-portal')->name('people.')->group(function () {
                 
                 Route::get('/freedom/{id}', [PeopleRegistrationController::class, 'freedom'])->name('freedom');
                 Route::post('/freedom-store', [PeopleRegistrationController::class, 'storeFreedom'])->name('freedomStore');
+
+                Route::get('/july-fighter/{id}', [PeopleRegistrationController::class, 'july_fighter'])->name('july_fighter');
+                Route::post('/july-fighter-store', [PeopleRegistrationController::class, 'storeJulyFighter'])->name('julyFighterStore');
             });
         });
     });

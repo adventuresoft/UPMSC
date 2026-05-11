@@ -462,6 +462,39 @@ class PeopleRegistrationController extends Controller
                 return [
                     'status' => true,
                     'message' => "মুক্তিযোদ্ধা তথ্য সফলভাবে সংরক্ষিত হয়েছে।",
+                    'redirect_url' => route('people.applications.registration.july_fighter', $request->user_id)
+                ];
+            } catch (\Exception $e) {
+                return ['status' => false, 'message' => $e->getMessage()];
+            }
+        });
+
+        return response()->json($result, $result['status'] ? 200 : 500);
+    }
+    public function july_fighter($id)
+    {
+        $data['user'] = User::with('julyFighterInfo')->find($id);
+        $data['active_tab'] = 'july_fighter';
+        return view('people.registration.july_fighter', $data);
+    }
+
+    public function storeJulyFighter(Request $request)
+    {
+        $result = DB::transaction(function () use ($request) {
+            try {
+                \App\Models\People\JulyFighterInfo::updateOrCreate([
+                    'user_id' => $request->user_id
+                ], [
+                    'is_july_fighter' => $request->is_july_fighter ?? false,
+                    'fighter_type' => $request->is_july_fighter ? $request->fighter_type : null,
+                    'incident_location' => $request->is_july_fighter ? $request->incident_location : null,
+                    'injury_details' => $request->is_july_fighter ? $request->injury_details : null,
+                    'contribution_description' => $request->is_july_fighter ? $request->contribution_description : null,
+                ]);
+
+                return [
+                    'status' => true,
+                    'message' => "জুলাই ২৪ যোদ্ধার তথ্য সফলভাবে সংরক্ষিত হয়েছে।",
                     'redirect_url' => route('people.dashboard')
                 ];
             } catch (\Exception $e) {

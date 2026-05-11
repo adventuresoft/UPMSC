@@ -75,6 +75,7 @@ class FreedomFighterInfoController extends Controller
 
                     $data['status'] = true;
                     $data['message'] = "Freedom fighter information submitted successfully!";
+                    $data['redirect_url'] = route('people.july_fighter', $request->user_id);
                     $data['code'] = 200;
                     return $data;
                 } catch (\Throwable $th) {

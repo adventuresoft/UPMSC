@@ -238,7 +238,7 @@ class PeopleController extends Controller
             try {
                 $user = new User();
                 $user->role_id = 5; // 5 => User Role
-                $user->institute_id = Auth::user()->institute_id ?? '';
+                $user->institute_id = Auth::user()->institute_id;
 
                 $user->name = $request->name;
                 $user->email = $request->email;
@@ -265,12 +265,12 @@ class PeopleController extends Controller
                     $people->user_id = $user->id;
                     $people->bn_name = $request->bn_name;
                     $people->date_of_birth = $request->date_of_birth;
-                    $people->birth_place = $request->birth_place;
-                    $people->district_id = $request->district_id;
-                    $people->country_id = $request->country_id;
-                    $people->gender = $request->gender;
-                    $people->religion_id = $request->religion;
-                    $people->blood_group = $request->blood_group;
+                    $people->birth_place = $request->birth_place ?: null;
+                    $people->district_id = $request->district_id ?: null;
+                    $people->country_id = $request->country_id ?: null;
+                    $people->gender = $request->gender ?: null;
+                    $people->religion_id = $request->religion ?: null;
+                    $people->blood_group = $request->blood_group ?: null;
                     if ($people->save()) {
 
 
@@ -478,12 +478,12 @@ class PeopleController extends Controller
                     $people = People::firstOrNew(['user_id' => $userID]);
                     $people->bn_name = $request->bn_name;
                     $people->date_of_birth = $request->date_of_birth;
-                    $people->birth_place = $request->birth_place;
-                    $people->district_id = $request->district_id;
-                    $people->country_id = $request->country_id;
-                    $people->gender = $request->gender;
-                    $people->religion_id = $request->religion;
-                    $people->blood_group = $request->blood_group;
+                    $people->birth_place = $request->birth_place ?: null;
+                    $people->district_id = $request->district_id ?: null;
+                    $people->country_id = $request->country_id ?: null;
+                    $people->gender = $request->gender ?: null;
+                    $people->religion_id = $request->religion ?: null;
+                    $people->blood_group = $request->blood_group ?: null;
 
                     try {
                         $people->save();

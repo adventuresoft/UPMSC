@@ -175,12 +175,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <!-- Horizontal Form -->
-                    <div class="card card-info">
-                        <div class="card-header">
-                            @include('backend.pages.people.tabs.tab_header', [
-                                'user' => $user,
-                                'active_tab' => 'property',
-                            ])
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-white border-bottom-0 pb-0">
+                            <div class="d-block">
+                                @include('backend.pages.people.tabs.tab_header', [
+                                    'user' => $user,
+                                    'active_tab' => 'property',
+                                ])
+                            </div>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
@@ -782,18 +784,24 @@
 
 
                             <!-- /.card-body -->
-                            <div class="card-footer">
-                                <div class="form-group row">
-                                    <div class="col-sm-3">
+                            <div class="card-footer bg-white border-top-0 mt-4">
+                                <div class="form-group row align-items-center mb-0">
+                                    <div class="col-sm-4">
                                         <a href="{{ route('people.financial', $user->id) }}"
-                                            class="btn btn-danger btn-block">Financial</a>
+                                            class="btn btn-outline-secondary btn-block">
+                                            <i class="fas fa-arrow-left mr-1"></i> Financial
+                                        </a>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <button type="submit" class="btn btn-success btn-block">Save & Next</button>
+                                    <div class="col-sm-4">
+                                        <button type="submit" class="btn btn-primary btn-block shadow-sm" style="background-color: #4f46e5; border-color: #4f46e5;">
+                                            <i class="fas fa-save mr-1"></i> Save & Next
+                                        </button>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <a href="{{ route('people.disability', $user->id) }}"
-                                            class="btn btn-primary btn-block ">Disability</a>
+                                            class="btn btn-outline-primary btn-block">
+                                            Disability <i class="fas fa-arrow-right ml-1"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

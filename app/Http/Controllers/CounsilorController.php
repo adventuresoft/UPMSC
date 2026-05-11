@@ -897,7 +897,7 @@ class CounsilorController extends Controller
                 $data['status'] = true;
                 $data['message'] = "Freedom fighter information submitted successfully!";
                 $data['code'] = 200;
-                $data['redirect_url'] = route('chairman.area', $request->user_id);
+                $data['redirect_url'] = route('councilor.july_fighter', $request->user_id);
                 return $data;
             } catch (\Throwable $th) {
                 $data['status'] = false;
@@ -1006,5 +1006,58 @@ class CounsilorController extends Controller
             $data['errors'] = $th;
             return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
         }
+    }
+    public function july_fighter($id)
+    {
+        $data['user'] = User::with('julyFighterInfo')->find($id);
+        $data['active_tab'] = 'july_fighter';
+        return view('backend.pages.chairman.tabs.july_fighter', $data);
+    }
+
+    public function storeJulyFighter(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'is_july_fighter' => 'required',
+            'fighter_type' => 'nullable',
+            'incident_location' => 'nullable',
+            'injury_details' => 'nullable',
+            'contribution_description' => 'nullable',
+        ]);
+
+        if ($validate->fails()) {
+            $data['status'] = false;
+            $data['message'] = "Sorry! Invalid Entry.";
+            $data['errors'] = $validate->errors();
+            return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+        }
+
+        $result = DB::transaction(function () use ($request) {
+            try {
+                \App\Models\People\JulyFighterInfo::updateOrCreate([
+                    'user_id' => $request->user_id
+                ], [
+                    'is_july_fighter' => $request->is_july_fighter ?? false,
+                    'fighter_type' => $request->is_july_fighter ? $request->fighter_type : null,
+                    'incident_location' => $request->is_july_fighter ? $request->incident_location : null,
+                    'injury_details' => $request->is_july_fighter ? $request->injury_details : null,
+                    'contribution_description' => $request->is_july_fighter ? $request->contribution_description : null
+                ]);
+
+                $data['status'] = true;
+                $data['message'] = "July 24 Fighter information submitted successfully!";
+                $data['redirect_url'] = route('councilor.area', $request->user_id);
+                $data['code'] = 200;
+                return $data;
+            } catch (\Throwable $th) {
+                $data['status'] = false;
+                $data['message'] = "July 24 Fighter Information Save Failed!";
+                $data['code'] = 500;
+                $data['errors'] = $th;
+                return $data;
+            }
+        });
+
+        return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'])->header('Content-Type', 'application/json');
     }
 }
