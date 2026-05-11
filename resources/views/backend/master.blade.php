@@ -160,7 +160,7 @@ width:100%!important;
 
 <!-- sweetalert2 -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></scrip
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <!-- Summernote -->
 <script src="{{ asset('plugins')}}/summernote/summernote-bs4.min.js"></script>
 <!-- Select2 -->

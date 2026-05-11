@@ -9,179 +9,76 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Barryvdh\DomPDF\Facade\Pdf;
-
 
 class NidCorrectionCertificateController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('unionAdmin')->except('index', 'show');
-    }
-   
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $query = NidCorrectionCertificate::with('user');
-        
+        $query = NidCorrectionCertificate::with('user.people', 'user.addressInfo.permanentVillage', 'user.addressInfo.permanentWard', 'user.addressInfo.permanentPostOffice', 'user.institute.union.thana.district');
         if (Auth::user()->institute_id) {
             $query->whereHas('user', function($q1){
                 $q1->where('institute_id', Auth::user()->institute_id);
             });
         }
-
         $data['certificates'] = $query->latest()->get();
         return view('backend.pages.certificate.nid_correction.index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $data['users'] = []; // Switched to AJAX search
+        $data['users'] = []; // AJAX search used in view
         return view('backend.pages.certificate.nid_correction.create', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'user_id' => 'required',
-            'applicant_name' => 'required|string|max:255',
-            'applicant_nid' => 'required|string|max:20',
+            'user_id'        => 'required',
+            'applicant_name' => 'nullable|string|max:190',
+            'applicant_nid'  => 'nullable|string|max:20',
         ]);
 
         if ($validate->fails()) {
-            $data['status'] = false;
-            $data['message'] = "Sorry! Invalid Entry.";
-            $data['errors'] = $validate->errors();
-            return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+            return response()->json(['status' => false, 'message' => "Invalid Entry.", 'errors' => $validate->errors()], 400);
         }
 
         $result = DB::transaction(function () use ($request) {
             try {
                 $certificate = new NidCorrectionCertificate();
                 $certificate->fill($request->all());
+                
+                // Filter only active corrections for the JSON field if needed, 
+                // but we can just store the whole array
+                $certificate->correction_data = $request->correction_data;
+                
                 $certificate->created_by = Auth::id();
-                $certificate->status = 1; // Auto approved for admin submission
+                $certificate->payment_amount = $request->payment_amount ?: 0;
+                $certificate->status = 1; // Auto approved for admin
                 $certificate->save();
 
-                $data['status'] = true;
-                $data['message'] = "Certificate generated successfully!";
-                $data['result'] = $certificate;
-                $data['code'] = 200;
-                $data['redirect_url'] = route('nid-correction.index');
-                return $data;
+                return [
+                    'status' => true,
+                    'message' => "NID Correction application generated successfully!",
+                    'redirect_url' => route('nid-correction.index')
+                ];
             } catch (\Throwable $th) {
-                $data['status'] = false;
-                $data['message'] = "Something went wrong! Please try again...";
-                $data['errors'] = $th->getMessage();
-                return $data;
+                return ['status' => false, 'message' => "Error: " . $th->getMessage(), 'error' => $th->getMessage()];
             }
         });
 
-        return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'] ?? 500)->header('Content-Type', 'application/json');
+        return response()->json($result, $result['status'] ? 200 : 500);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Certificate\NidCorrectionCertificate  $nidCorrectionCertificate
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        $data['certificate'] = NidCorrectionCertificate::with(array('user' => function($q1){
-            $q1->with('people', 'familyInfo' )->with(array('addressInfo'=>function($q2){
-                $q2->with('permanentVillage', 'presentWard', 'presentArea', 'permanentArea');
-            }))->with(array('institute' => function($q3){
-                $q3->with(array('union'=>function($q4){
-                    $q4->with(array('thana'=>function($q5){
-                        $q5->with('district');
-                    }));
-                }));
-            }));
-        }))->find($id);
-        // return response()->json($data, 200);
+        $data['certificate'] = NidCorrectionCertificate::with('user.people', 'user.familyInfo', 'user.addressInfo', 'user.institute.union.thana.district')->findOrFail($id);
         return view('backend.pages.certificate.nid_correction.certificate', $data);
-        $html = view('backend.pages.certificate.nid_correction.certificate', $data)->render();
-        $pdf = PDF::loadHTML($html)->setPaper('a4', 'landscape')
-        ->setOptions([
-            'defaultFont' => 'sans-serif',
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true
-        ]);
-        return $pdf->stream('nid_correction-certificate.pdf');
     }
-    public function bn_certificate($id){
-        $data['certificate'] = NidCorrectionCertificate::with(array('user' => function($q1){
-            $q1->with('people', 'familyInfo' )->with(array('addressInfo'=>function($q2){
-                $q2->with('permanentVillage', 'presentWard', 'presentArea', 'permanentArea');
-            }))->with(array('institute' => function($q3){
-                $q3->with(array('union'=>function($q4){
-                    $q4->with(array('thana'=>function($q5){
-                        $q5->with('district');
-                    }));
-                }));
-            }));
-        }))->find($id);
-        // return response()->json($data, 200);
+
+    public function bn_certificate($id)
+    {
+        $data['certificate'] = NidCorrectionCertificate::with('user.people', 'user.familyInfo', 'user.addressInfo', 'user.institute.union.thana.district')->findOrFail($id);
         return view('backend.pages.certificate.nid_correction.bn_certificate', $data);
-        $html = view('backend.pages.certificate.nid_correction.certificate', $data)->render();
-        $pdf = PDF::loadHTML($html)->setPaper('a4', 'landscape')
-        ->setOptions([
-            'defaultFont' => 'sans-serif',
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true
-        ]);
-        return $pdf->stream('nid_correction-certificate.pdf');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Certificate\NidCorrectionCertificate  $nidCorrectionCertificate
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(NidCorrectionCertificate $nidCorrectionCertificate)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Certificate\NidCorrectionCertificate  $nidCorrectionCertificate
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, NidCorrectionCertificate $nidCorrectionCertificate)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Certificate\NidCorrectionCertificate  $nidCorrectionCertificate
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(NidCorrectionCertificate $nidCorrectionCertificate)
-    {
-        //
     }
 
     public function approve(Request $request)
@@ -190,16 +87,9 @@ class NidCorrectionCertificateController extends Controller
             $certificate = NidCorrectionCertificate::findOrFail($request->id);
             $certificate->status = 1;
             $certificate->save();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Application approved successfully!'
-            ]);
+            return response()->json(['status' => true, 'message' => 'Approved successfully!']);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Something went wrong!'
-            ]);
+            return response()->json(['status' => false, 'message' => 'Error approving!']);
         }
     }
 }

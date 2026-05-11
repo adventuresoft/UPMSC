@@ -10,8 +10,8 @@
   <body class="bg-[#f3f4f6] font-inter min-h-screen flex flex-col">
     <!-- top bar -->
     <div class="top-bar">
-      <div class="container mx-auto md:px-4 px-2 max-w-screen-xl">
-        <div class="flex flex-col md:flex-row justify-center items-center relative">
+      <div class="container mx-auto md:px-32 px-4 max-w-screen-xl">
+        <div class="flex flex-col md:flex-row md:justify-start justify-center items-center relative">
           <div class="w-full flex justify-end md:hidden absolute right-0">
             <button
               id="mobile-menu-btn"
@@ -27,10 +27,10 @@
               </svg>
             </button>
           </div>
-          <div class="flex flex-col md:flex-row items-center gap-4 py-1">
+          <div class="flex flex-col md:flex-row items-center gap-8 py-2">
             <img
               src="{{asset('assets/images/logo/govt-bd-logo.png')}}"
-              class="h-14 w-auto object-contain"
+              class="h-12 w-auto object-contain"
               alt="Govt Logo"
             />
             <div class="text-black text-center md:text-left">
@@ -46,9 +46,9 @@
 
     <!-- Navigation -->
     <nav class="navbar md:block hidden bg-[#046307] shadow-md sticky top-0 z-50">
-      <div class="container mx-auto max-w-screen-xl">
+      <div class="container mx-auto md:px-32 px-4 max-w-screen-xl">
         <!-- Navigation Links -->
-        <ul class="nav-links flex items-center justify-center gap-6 py-2 text-xs font-bold uppercase tracking-wider">
+        <ul class="nav-links flex items-center md:justify-start justify-center gap-10 py-2 text-xs font-bold uppercase tracking-wider">
           <li class="flex items-center">
             <a href="{{url('/')}}" class="inline-flex items-center gap-2">
               <span class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/30 text-white transition-all hover:bg-white/10" aria-hidden="true">
@@ -59,9 +59,9 @@
               </span>
             </a>
           </li>
-          <li><a href="{{ route('people.login') }}" class="text-white hover:opacity-80">নাগরিক লগইন</a></li>
-          <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80">অ্যাডমিন লগইন</a></li>
-          <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80">মনিটরিং লগইন</a></li>
+          <li><a href="{{ route('people.login') }}" class="text-white hover:opacity-80 flex items-center gap-2"><span class="text-red-500"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" /></svg></span>নাগরিক লগইন</a></li>
+          <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80 flex items-center gap-2"><span class="text-red-500"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" /></svg></span>অ্যাডমিন লগইন</a></li>
+          <li><a href="{{url('/')}}/login" class="text-white hover:opacity-80 flex items-center gap-2"><span class="text-red-500"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><path d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12Zm0 1.8c-3.6 0-6.8 2-6.8 5.2 0 .6.4 1 1 1h11.6c.6 0 1-.4 1-1 0-3.2-3.2-5.2-6.8-5.2Z" /></svg></span>মনিটরিং লগইন</a></li>
         </ul>
       </div>
     </nav>
