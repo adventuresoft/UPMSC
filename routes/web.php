@@ -228,6 +228,8 @@ Route::post('/citizen-certificate-approve', [CitizenCertificateController::class
     ->name('citizen.approve');
 Route::post('/nid-correction-approve', [NidCorrectionCertificateController::class, 'approve'])
     ->name('nid-correction.approve');
+Route::post('/voter-area-approve', [VoterAreaCertificateController::class, 'approve'])
+    ->name('voter-area.approve');
 
 Route::get('/profession-type-options-by-profession/{professionID}', [ProfessionTypeController::class, 'professionTypeOptions']);
 Route::get('/profession-category-options-by-profession-type/{professionTypeID}', [ProfessionCategoryController::class, 'professionCategoryOptions' ]);

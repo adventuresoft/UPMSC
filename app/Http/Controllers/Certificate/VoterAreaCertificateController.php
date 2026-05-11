@@ -26,10 +26,15 @@ class VoterAreaCertificateController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = VoterAreaCertificate::with('user')
-        ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
-        })->latest()->get();
+        $query = VoterAreaCertificate::with('user');
+        
+        if (Auth::user()->institute_id) {
+            $query->whereHas('user', function($q1){
+                $q1->where('institute_id', Auth::user()->institute_id);
+            });
+        }
+
+        $data['certificates'] = $query->latest()->get();
         return view('backend.pages.certificate.voter_area.index', $data);
     }
 
@@ -40,12 +45,7 @@ class VoterAreaCertificateController extends Controller
      */
     public function create()
     {
-        $data['users'] = User::with('people')
-        ->where('status', true)
-        ->where('role_id', 5)
-        ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
-        ->where('institute_id', Auth::user()->institute_id)
-        ->get();
+        $data['users'] = []; // Switched to AJAX search
         return view('backend.pages.certificate.voter_area.create', $data);
     }
 
@@ -59,6 +59,8 @@ class VoterAreaCertificateController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'user_id' => 'required',
+            'applicant_name' => 'required|string|max:255',
+            'applicant_nid' => 'required|string|max:20',
         ]);
 
         if ($validate->fails()) {
@@ -69,29 +71,28 @@ class VoterAreaCertificateController extends Controller
         }
 
         $result = DB::transaction(function () use ($request) {
-
-            $certificate = new VoterAreaCertificate();
-            $certificate->user_id = $request->user_id;
-            $certificate->created_by = Auth::id();
-
             try {
+                $certificate = new VoterAreaCertificate();
+                $certificate->fill($request->all());
+                $certificate->created_by = Auth::id();
+                $certificate->status = 1; // Auto approved for admin submission
                 $certificate->save();
+
                 $data['status'] = true;
                 $data['message'] = "Certificate generated successfully!";
                 $data['result'] = $certificate;
                 $data['code'] = 200;
                 $data['redirect_url'] = route('voter-area.index');
-                // $data['redirect_url'] = route('voter-area.show', $certificate->id);
                 return $data;
             } catch (\Throwable $th) {
                 $data['status'] = false;
                 $data['message'] = "Something went wrong! Please try again...";
-                $data['errors'] = $th;
+                $data['errors'] = $th->getMessage();
                 return $data;
             }
         });
 
-        return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'])->header('Content-Type', 'application/json');
+        return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'] ?? 500)->header('Content-Type', 'application/json');
     }
 
     /**
@@ -180,5 +181,24 @@ class VoterAreaCertificateController extends Controller
     public function destroy(VoterAreaCertificate $voterAreaCertificate)
     {
         //
+    }
+
+    public function approve(Request $request)
+    {
+        try {
+            $certificate = VoterAreaCertificate::findOrFail($request->id);
+            $certificate->status = 1;
+            $certificate->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Application approved successfully!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong!'
+            ]);
+        }
     }
 }

@@ -22,6 +22,47 @@
         display: none;
     }
 
+    /* Keep some premium elements */
+    .badge-nid {
+        background: #e9ecef;
+        color: #495057;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+    .badge-date {
+        background: #e9ecef;
+        color: #495057;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-badge.pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-badge.approved {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-badge.rejected {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
     .empty-state {
         text-align: center;
         padding: 40px 20px;
@@ -83,48 +124,33 @@
                                     placeholder="Certificate No">
                             </div>
 
-                            <!-- ID or Name Filter -->
+                            <!-- NID Number Filter -->
+                            <div class="col-md-2">
+                                <input type="text" id="search_nid" class="form-control form-control-sm"
+                                    placeholder="NID Number">
+                            </div>
+
+                            <!-- Name Filter -->
                             <div class="col-md-2">
                                 <input type="text" id="search_name" class="form-control form-control-sm"
-                                    placeholder="ID or Name">
+                                    placeholder="Name">
                             </div>
 
-                            <!-- Email Filter -->
+                            <!-- Status Filter -->
                             <div class="col-md-2">
-                                <input type="text" id="search_email" class="form-control form-control-sm"
-                                    placeholder="Email">
+                                <select id="search_status" class="form-control form-control-sm">
+                                    <option value="">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
                             </div>
-
-                            <!-- Address or Mobile Filter -->
-                            <div class="col-md-2">
-                                <input type="text" id="search_address" class="form-control form-control-sm"
-                                    placeholder="Address/Mobile">
-                            </div>
-
-                            <!-- Quantity Filter -->
-                            <!-- <div class="col-md-2">
-                                <input type="text" id="search_quantity" class="form-control form-control-sm"
-                                    placeholder="Quantity">
-                            </div> -->
-
-                            <!-- Created Date Filter -->
-                            <!-- <div class="col-md-2">
-                                <input type="date" id="search_date" class="form-control form-control-sm"
-                                    placeholder="Created Date">
-                            </div> -->
 
                             <!-- GLOBAL SEARCH -->
-                            <div class="col-md-2"> 
+                            <div class="col-md-3"> 
                                 <input type="text" id="search_global" class="form-control form-control-sm" 
                                     placeholder="Search"> 
                             </div>
-
-                            <!-- Reset Button -->
-                            <!-- <div class="col-md-2 mt-2">
-                                <button id="resetFilter" class="btn btn-secondary btn-sm w-100">
-                                    Reset
-                                </button>
-                            </div> -->
 
                         </div>
 
@@ -137,9 +163,9 @@
                                     <th>Photo</th>
                                     <th>Certificate No</th>
                                     <th>ID & Name</th>
-                                    <th>Email</th>
                                     <th>Address & Mobile</th>
-                                    <th>Quantity</th>
+                                    <th>Voter Area Details</th>
+                                    <th>Status</th>
                                     <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
@@ -149,48 +175,83 @@
                                 @if ($certificates && count($certificates) > 0)
                                     @foreach ($certificates as $key => $certificate)
                                     <tr>
-                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $key + 1 }}</td>
 
                                         <td>
-                                            <img src="{{ asset($certificate->user->photo ?? 'default.png') }}"
+                                            <img src="{{ asset($certificate->user->people->image ?? 'default.png') }}"
                                                 width="40"
                                                 height="40"
                                                 class="img-circle"
                                                 onerror="this.src='{{ asset('default.png') }}'">
                                         </td>
 
-                                        <td>{{ $certificate->certificate_number ?? bnValue($certificate->system_id ?? '') }}</td>
+                                        <td>
+                                            <span class="badge-nid">
+                                                {{ $certificate->certificate_number ?? bnValue($certificate->system_id ?? 'N/A') }}
+                                            </span>
+                                        </td>
 
                                         <td>
                                             <span class="citizen-id">
-                                                {{ bnValue($certificate->system_id ?? '') }}
+                                                {{ bnValue($certificate->user->system_id ?? '') }}
                                             </span><br>
-                                            {{ $certificate->user->name ?? '' }}
+                                            <strong>{{ $certificate->applicant_name ?? $certificate->user->name ?? 'N/A' }}</strong>
                                         </td>
 
-                                        <td>{{ $certificate->user->email ?? '' }}</td>
-
                                         <td>
-                                            {{ $certificate->user->address ?? '' }} <br>
-                                            <strong>{{ $certificate->user->mobile ?? '' }}</strong>
+                                            {{ $certificate->current_village_road ?? $certificate->user->address ?? 'N/A' }} <br>
+                                            <strong>{{ $certificate->transfer_phone_mobile ?? $certificate->user->mobile ?? 'N/A' }}</strong>
                                         </td>
 
-                                        <td>{{ $certificate->quantity ?? '' }}</td>
-
-                                        <td>{{ $certificate->created_at->format('d-m-Y') }}</td>
+                                        <td>
+                                            @if($certificate->current_voter_area_name)
+                                                <span class="badge badge-info">Current: {{ $certificate->current_voter_area_name }}</span><br>
+                                            @endif
+                                            @if($certificate->transfer_voter_area_name)
+                                                <span class="badge badge-success">Transfer: {{ $certificate->transfer_voter_area_name }}</span>
+                                            @endif
+                                        </td>
 
                                         <td>
-                                            <a target="_blank"
-                                                href="{{ route('voter-area.show', $certificate->id) }}"
-                                                class="btn btn-primary btn-sm">
-                                                <i class="fa fa-file-pdf"></i> EN
-                                            </a>
+                                            @php
+                                                $status = $certificate->status;
+                                                $statusText = 'Pending';
+                                                $statusClass = 'pending';
+                                                
+                                                if($status == 1 || $status == 'approved') {
+                                                    $statusText = 'Approved';
+                                                    $statusClass = 'approved';
+                                                } elseif($status == 2 || $status == 'rejected') {
+                                                    $statusText = 'Rejected';
+                                                    $statusClass = 'rejected';
+                                                }
+                                            @endphp
+                                            <span class="status-badge {{ $statusClass }}">
+                                                {{ $statusText }}
+                                            </span>
+                                        </td>
 
-                                            <a target="_blank"
-                                                href="{{ route('voter-area.bn_certificate', $certificate->id) }}"
-                                                class="btn btn-info btn-sm">
-                                                <i class="fa fa-file-pdf"></i> BN
-                                            </a>
+                                        <td>
+                                            <span class="badge-date">
+                                                {{ $certificate->created_at ? date('d-m-Y', strtotime($certificate->created_at)) : 'N/A' }}
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            @if($certificate->status == 0)
+                                                <button onclick="approveCertificate({{ $certificate->id }})" class="btn btn-success btn-sm">
+                                                    <i class="fa fa-check"></i> Approve
+                                                </button>
+                                            @else
+                                                <a target="_blank" href="{{ route('voter-area.show', $certificate->id) }}" 
+                                                    class="btn btn-primary btn-sm">
+                                                    <i class="fa fa-file-pdf"></i> EN
+                                                </a>
+                                                <a target="_blank" href="{{ route('voter-area.bn_certificate', $certificate->id) }}" 
+                                                    class="btn btn-info btn-sm">
+                                                    <i class="fa fa-file-pdf"></i> BN
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
@@ -198,7 +259,7 @@
                                     <tr>
                                         <td colspan="9" class="empty-state">
                                             <i class="fas fa-folder-open"></i>
-                                            <h5>No certificates found</h5>
+                                            <h5>No voter area certificates found</h5>
                                             <p class="text-muted">Get started by creating a new certificate.</p>
                                             @if (create_permission())
                                             <a href="{{ route('voter-area.create') }}" class="btn btn-primary mt-2">
@@ -253,34 +314,11 @@
             table.column(3).search(this.value).draw();
         });
 
-        // Email (Column 4)
-        $('#search_email').keyup(function() {
-            table.column(4).search(this.value).draw();
-        });
-
-        // Address & Mobile (Column 5)
-        $('#search_address').keyup(function() {
-            table.column(5).search(this.value).draw();
-        });
-
-        // Quantity (Column 6)
-        $('#search_quantity').keyup(function() {
+        // Status (Column 6)
+        $('#search_status').change(function() {
             table.column(6).search(this.value).draw();
         });
 
-        // Created Date (Column 7)
-        $('#search_date').on('change', function() {
-            if (this.value) {
-                // Convert YYYY-MM-DD to DD-MM-YYYY for searching
-                let dateParts = this.value.split('-');
-                let formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-                table.column(7).search(formattedDate).draw();
-            } else {
-                table.column(7).search('').draw();
-            }
-        });
-
-        // Global Search
         $('#search_global').keyup(function() { 
             table.search(this.value).draw(); 
         });
@@ -290,22 +328,33 @@
             table.page.len($(this).val()).draw();
         });
 
-        // Reset filter
-        $('#resetFilter').click(function() {
-            // Clear all input fields
-            $('#search_cert').val('');
-            $('#search_name').val('');
-            $('#search_email').val('');
-            $('#search_address').val('');
-            $('#search_quantity').val('');
-            $('#search_date').val('');
-            $('#search_global').val('');
-            
-            // Clear all searches
-            table.search('').columns().search('').draw();
-        });
-
     });
+
+    function approveCertificate(id) {
+        if (confirm('Are you sure you want to approve this application?')) {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('voter-area.approve') }}",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id
+                },
+                success: function(response) {
+                    if (response.status) {
+                        toastr.success(response.message);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error("Something went wrong!");
+                }
+            });
+        }
+    }
 </script>
 
 @endpush

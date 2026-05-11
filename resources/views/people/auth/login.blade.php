@@ -46,9 +46,11 @@
             </p>
           </div>
 
-          <div class="mt-12">
-            <p class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-2">Powered by</p>
-            <img src="{{ asset('frontend/img/adv_soft_logo.png') }}" class="h-6 brightness-0 invert opacity-80" alt="Adventure Soft">
+          <div class="mt-12 text-center">
+            <p class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-3">Powered by</p>
+            <div class="flex justify-center transform transition-transform hover:scale-110 duration-300">
+              <img src="{{ asset('frontend/img/adv_soft_logo.png') }}" class="h-12 brightness-0 invert opacity-90" alt="Adventure Soft">
+            </div>
           </div>
         </div>
 
