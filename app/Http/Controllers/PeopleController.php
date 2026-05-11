@@ -110,15 +110,16 @@ class PeopleController extends Controller
         foreach ($users as $user) {
             $address = $user->addressInfo;
             $people = $user->people;
+            $nid = $user->nid ?? ($people->nid ?? '');
 
             $areaName = $address ? (($address->permanentVillage->bn_name ?? '') . ', ' . ($address->permanentWard->bn_ward_no ?? '') . ' নং ওয়ার্ড') : '';
             $fullAddress = $address ? (($address->permanentVillage->bn_name ?? '') . ', ' . ($address->permanent_road ?? '') . ', ' . ($address->permanent_house ?? '')) : '';
             
             $results[] = [
                 'id' => $user->id,
-                'text' => ($people->approved_id ?? $user->system_id) . ' - ' . ($people->bn_name ?? $user->name) . ' - ' . ($people->nid ?? 'No NID') . ' - ' . ($user->mobile ?? $people->mobile ?? ''),
+                'text' => ($people->approved_id ?? $user->system_id) . ' - ' . ($people->bn_name ?? $user->name) . ' - ' . ($nid ?: 'No NID') . ' - ' . ($user->mobile ?? $people->mobile ?? ''),
                 'name' => $people->bn_name ?? $user->name,
-                'nid' => $people->nid ?? '',
+                'nid' => $nid,
                 'dob' => $people->date_of_birth ?? '',
                 'voter_area' => $areaName,
                 'thana' => $address->permanentThana->bn_name ?? '',

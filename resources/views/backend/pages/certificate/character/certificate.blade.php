@@ -166,7 +166,7 @@
                             ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
                             Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>
                             and Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
-                            NID No. <strong>{{ $certificate->user->people->nid ?? '' }}</strong>,
+                            NID No. <strong>{{ $certificate->user->nid ?? $certificate->user->people->nid ?? '' }}</strong>,
                             Date of Birth: {{ $certificate->user->people->date_of_birth ? date('d/m/Y', strtotime($certificate->user->people->date_of_birth)) : '' }},
                             Address: Village : - <span>{{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }}</span>,
                             Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},

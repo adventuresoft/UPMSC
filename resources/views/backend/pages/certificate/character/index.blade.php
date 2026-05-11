@@ -138,7 +138,7 @@
 
                                     <td>
                                         <span class="citizen-id">
-                                            {{ $certificate->user->people->nid ?? '' }}
+                                            {{ $certificate->user->nid ?? $certificate->user->people->nid ?? '' }}
                                         </span><br>
                                         {{ $certificate->user->name }}
                                     </td>
