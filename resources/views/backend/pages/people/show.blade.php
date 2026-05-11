@@ -682,6 +682,14 @@
         <div class="info-row"><span class="info-label">Commander :</span><span class="info-value">{{ $user->freedomFighterInfo->commander_name ?? '' }}</span></div>
         @endif
 
+        @if(isset($user->julyFighterInfo) && ($user->julyFighterInfo->is_july_fighter ?? false))
+        <div class="section-header">জুলাই ২৪ যোদ্ধা তথ্য / July 24 Fighter Information</div>
+        <div class="info-row"><span class="info-label">Fighter Type :</span><span class="info-value">{{ $user->julyFighterInfo->fighter_type ?? '' }}</span></div>
+        <div class="info-row"><span class="info-label">Incident Location :</span><span class="info-value">{{ $user->julyFighterInfo->incident_location ?? '' }}</span></div>
+        <div class="info-row"><span class="info-label">Injury Details :</span><span class="info-value">{{ $user->julyFighterInfo->injury_details ?? '' }}</span></div>
+        <div class="info-row"><span class="info-label">Contribution :</span><span class="info-value">{{ $user->julyFighterInfo->contribution_description ?? '' }}</span></div>
+        @endif
+
         {{-- Signature Area like Certificate --}}
         <div class="signature-area" style="margin-top: 100px;">
             <div class="sig-block">

@@ -25,12 +25,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <!-- Horizontal Form -->
-                    <div class="card card-info">
-                        <div class="card-header">
-                            @include('backend.pages.people.tabs.tab_header', [
-                                'user' => $user,
-                                'active_tab' => 'address',
-                            ])
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header bg-white border-bottom-0 pb-0">
+                            <div class="d-block">
+                                @include('backend.pages.people.tabs.tab_header', [
+                                    'user' => $user,
+                                    'active_tab' => 'address',
+                                ])
+                            </div>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
@@ -39,8 +41,8 @@
                             <input type="hidden" name="user_id" value="{{ $user->id }}">
                             
                             <!-- Permanent Address Section -->
-                            <div class="card-header">
-                                <h6 class="card-title">Permanent Address</h6>
+                            <div class="card-header bg-light py-2 px-3 border-0 mt-3 mx-3 rounded">
+                                <h6 class="card-title text-indigo font-weight-bold mb-0">Permanent Address</h6>
                             </div>
                             <div class="card-body">
                                 <!-- Row 1: Village, Post Office, Permanent Ward -->
@@ -107,8 +109,8 @@
                             </div>
 
                             <!-- Present Address Section -->
-                            <div class="card-header">
-                                <h6 class="card-title">Present Address</h6>
+                            <div class="card-header bg-light py-2 px-3 border-0 mt-3 mx-3 rounded">
+                                <h6 class="card-title text-indigo font-weight-bold mb-0">Present Address</h6>
                             </div>
                             <div class="card-body">
                                 <!-- Row 3: Division, District, Thana -->
@@ -215,21 +217,21 @@
                             </div>
 
                             <!-- Form Footer with Navigation -->
-                            <div class="card-footer">
+                            <div class="card-footer bg-white border-top-0 mt-4">
                                 <div class="form-group row">
                                     <div class="col-sm-4">
-                                        <a href="{{ route('people.family', $user->id) }}" class="btn btn-danger btn-block">
-                                            <i class="fas fa-arrow-left"></i> Family
+                                        <a href="{{ route('people.family', $user->id) }}" class="btn btn-outline-secondary btn-block">
+                                            <i class="fas fa-arrow-left mr-1"></i> Family
                                         </a>
                                     </div>
                                     <div class="col-sm-4">
-                                        <button type="submit" class="btn btn-success btn-block">
-                                            <i class="fas fa-save"></i> Save & Next
+                                        <button type="submit" class="btn btn-primary btn-block shadow-sm" style="background-color: #4f46e5; border-color: #4f46e5;">
+                                            <i class="fas fa-save mr-1"></i> Save & Next
                                         </button>
                                     </div>
                                     <div class="col-sm-4">
-                                        <a href="{{ route('people.education', $user->id) }}" class="btn btn-primary btn-block">
-                                            Education <i class="fas fa-arrow-right"></i>
+                                        <a href="{{ route('people.education', $user->id) }}" class="btn btn-outline-primary btn-block">
+                                            Education <i class="fas fa-arrow-right ml-1"></i>
                                         </a>
                                     </div>
                                 </div>

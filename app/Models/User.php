@@ -15,6 +15,7 @@ use App\Models\People\FreedomFighterInfo;
 use App\Models\People\HealthInfo;
 use App\Models\People\ProfessionalInfo;
 use App\Models\People\PropertyInfo;
+use App\Models\People\JulyFighterInfo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -106,6 +107,11 @@ class User extends Authenticatable
     public function freedomFighterInfo()
     {
         return $this->hasOne(FreedomFighterInfo::class, 'user_id', 'id');
+    }
+
+    public function julyFighterInfo()
+    {
+        return $this->hasOne(JulyFighterInfo::class, 'user_id', 'id');
     }
 
     public function educationInfos()

@@ -12,6 +12,7 @@
                 ['id' => 'property', 'label' => 'সম্পদ', 'icon' => 'fa-building', 'route' => 'people.applications.registration.property'],
                 ['id' => 'disability', 'label' => 'প্রতিবন্ধিতা', 'icon' => 'fa-wheelchair', 'route' => 'people.applications.registration.disability'],
                 ['id' => 'freedom', 'label' => 'মুক্তিযোদ্ধা', 'icon' => 'fa-medal', 'route' => 'people.applications.registration.freedom'],
+                ['id' => 'july_fighter', 'label' => 'জুলাই ২৪ যোদ্ধা', 'icon' => 'fa-fist-raised', 'route' => 'people.applications.registration.july_fighter'],
             ];
             
             $activeIndex = 0;
