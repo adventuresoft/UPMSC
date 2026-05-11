@@ -153,6 +153,45 @@
             color: #162536;
         }
 
+        .owner-info-wrap {
+            display: flex;
+            align-items: stretch;
+            flex-direction: row-reverse;
+        }
+
+        .owner-table-wrap {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .owner-photo-wrap {
+            width: 185px;
+            border-right: 1px solid #e6e6e6;
+            padding: 12px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            background: #fcfcfc;
+        }
+
+        .owner-photo-frame {
+            width: 140px;
+            height: 165px;
+            border: 1px solid #cdd8ce;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .owner-photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
         .signature-area {
             margin-top: 90px;
             display: flex;
@@ -183,6 +222,18 @@
             .license-page,
             .license-inner {
                 border: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .owner-info-wrap {
+                flex-direction: column-reverse;
+            }
+
+            .owner-photo-wrap {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e6e6e6;
             }
         }
     </style>
@@ -248,6 +299,12 @@
         ? ($vehicle->institutional_address ?? '--')
         : ($presentAddress ?: '--');
 
+    $ownerPhotoPath = $vehicle->ownership_type === 'institutional'
+        ? ($ownerOrganization?->image ?? null)
+        : ($ownerUser?->image ?? null);
+
+    $ownerPhotoUrl = $ownerPhotoPath ? asset($ownerPhotoPath) : asset('public/no-image-found.jpeg');
+
     $vehicleCompactRows = [
         ['label' => 'যানবাহন আইডি', 'value' => bnValue($vehicle->registration_id ?? $vehicle->id)],
         ['label' => 'যানবাহনের ধরন', 'value' => $vehicle->vehicle_type ?? '--'],
@@ -312,26 +369,35 @@
 
         <div class="section-card">
             <div class="section-title">মালিকের তথ্য</div>
-            <table class="info-table">
-                @foreach(collect($ownerCompactRows)->chunk(2) as $pair)
-                    @php($pair = $pair->values())
-                    <tr>
-                        <td class="label-cell">{{ $pair[0]['label'] }}</td>
-                        <td class="value-cell">{{ $pair[0]['value'] }}</td>
-                        @if(isset($pair[1]))
-                            <td class="label-cell">{{ $pair[1]['label'] }}</td>
-                            <td class="value-cell">{{ $pair[1]['value'] }}</td>
-                        @else
-                            <td class="label-cell"></td>
-                            <td class="value-cell"></td>
-                        @endif
-                    </tr>
-                @endforeach
-                <tr>
-                    <td class="full-label">{{ $ownerAddressLabel }}</td>
-                    <td class="full-value" colspan="3">{{ $ownerAddressValue }}</td>
-                </tr>
-            </table>
+            <div class="owner-info-wrap">
+                <div class="owner-table-wrap">
+                    <table class="info-table">
+                        @foreach(collect($ownerCompactRows)->chunk(2) as $pair)
+                            @php($pair = $pair->values())
+                            <tr>
+                                <td class="label-cell">{{ $pair[0]['label'] }}</td>
+                                <td class="value-cell">{{ $pair[0]['value'] }}</td>
+                                @if(isset($pair[1]))
+                                    <td class="label-cell">{{ $pair[1]['label'] }}</td>
+                                    <td class="value-cell">{{ $pair[1]['value'] }}</td>
+                                @else
+                                    <td class="label-cell"></td>
+                                    <td class="value-cell"></td>
+                                @endif
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td class="full-label">{{ $ownerAddressLabel }}</td>
+                            <td class="full-value" colspan="3">{{ $ownerAddressValue }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="owner-photo-wrap">
+                    <div class="owner-photo-frame">
+                        <img src="{{ $ownerPhotoUrl }}" alt="Owner Photo" onerror="this.src='{{ asset('public/no-image-found.jpeg') }}';">
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="signature-area">
