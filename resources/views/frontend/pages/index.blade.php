@@ -471,25 +471,7 @@
 
     </main>
 
-    <footer class="bg-gray-100 py-12 px-4 border-t border-gray-200">
-      <div class="container mx-auto max-w-screen-xl flex flex-col items-center text-center">
-        <div class="mb-8 flex flex-col items-center">
-            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-4">Powered By</span>
-            <a href="https://adventuresoft.com.bd" target="_blank" class="group transition-all duration-300 transform hover:scale-105">
-                <img src="{{asset('frontend/img/adv_soft_logo.png')}}" alt="Adventure Soft" class="h-14 mb-4 filter drop-shadow-sm grayscale hover:grayscale-0 transition-all duration-500">
-                <h4 class="text-xl font-bold tracking-tight text-gray-800 group-hover:text-blue-600 transition-colors">Adventure Soft</h4>
-                <p class="text-[10px] text-gray-400 mt-1 italic font-medium tracking-wider">...for comfortable life with technology</p>
-            </a>
-        </div>
-        
-        <div class="w-16 h-px bg-gray-300 mb-8"></div>
-        
-        <div class="flex flex-col space-y-2 text-gray-500 text-xs font-medium">
-            <p>© 2024 All rights reserved by <span class="font-bold text-gray-700">UPMS</span></p>
-            <p><a href="https://adventuresoft.com.bd" class="hover:text-blue-600 transition-colors">www.adventuresoft.com.bd</a></p>
-        </div>
-      </div>
-    </footer>
+
 
     <!-- Splide JS -->
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>

@@ -195,27 +195,10 @@
       </div>
     </main>
 
-    <footer class="bg-gray-900 py-12 px-4 text-white mt-auto border-t border-gray-800">
-      <div class="container mx-auto max-w-screen-xl flex flex-col items-center text-center">
-        <div class="mb-8 flex flex-col items-center">
-            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em] mb-4">Powered By</span>
-            <a href="https://adventuresoft.com.bd" target="_blank" class="group transition-all duration-300 transform hover:scale-105">
-                <img src="{{asset('frontend/img/adv_soft_logo.png')}}" alt="Adventure Soft" class="h-16 mb-4 filter drop-shadow-lg">
-                <h4 class="text-2xl font-black tracking-tight text-white group-hover:text-[#046307] transition-colors">Adventure Soft</h4>
-                <p class="text-[10px] text-gray-500 mt-1 italic font-medium tracking-wider">...for comfortable life with technology</p>
-            </a>
-        </div>
-        
-        <div class="w-16 h-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent mb-8"></div>
-        
-        <div class="flex flex-col space-y-2 opacity-60 text-xs">
-            <p>© 2024 All rights reserved by <span class="font-bold text-gray-300">UPMS</span></p>
-            <div class="flex items-center justify-center space-x-4">
-                <a href="https://adventuresoft.com.bd" class="hover:text-white transition-colors">www.adventuresoft.com.bd</a>
-                <span class="text-gray-700">|</span>
-                <span class="flex items-center"><i class="fas fa-shield-alt mr-1.5 text-[8px]"></i> Secured System</span>
-            </div>
-        </div>
+    <footer class="bg-gray-900 py-8 px-4 text-white mt-auto border-t border-gray-800">
+      <div class="container mx-auto max-w-screen-xl flex flex-col md:flex-row justify-between items-center text-sm opacity-70">
+        <p>© 2024 All rights reserved by <span class="font-bold text-gray-300">UPMS</span></p>
+        <p>Design & Maintained by <a href="https://adventuresoft.com.bd" class="hover:text-white transition-colors underline decoration-gray-700 underline-offset-4">Adventure Soft</a></p>
       </div>
     </footer>
     <script src="{{asset('assets/js/navbar.js')}}"></script>
