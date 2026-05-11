@@ -28034,6 +28034,8 @@ namespace App\Models\Certificate {
      * @property float $fees
      * @property string|null $marriage_place
      * @property string|null $marriage_date
+     * @property string|null $spouse_nid
+     * @property string|null $spouse_name
      * @property string|null $wife_system_id
      * @property mixed $wife_id
      * @property string|null $husband_system_id
@@ -28051,6 +28053,8 @@ namespace App\Models\Certificate {
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereHusbandSystemId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereWifeId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereWifeSystemId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereSpouseName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereSpouseNid($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereMarriageDate($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereMarriagePlace($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereFees($value)
