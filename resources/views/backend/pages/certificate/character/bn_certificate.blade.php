@@ -89,7 +89,7 @@
             padding: 0;
             margin: 0;
         }
-        
+
         .main-footer{
         display: none;
     }
@@ -166,16 +166,18 @@
                             আইডি নং <strong>{{ bnValue($certificate->user->people->approved_id ?? '') }}</strong>,
                             পিতাঃ <span>{{ $certificate->user->familyInfo->father_name_bn ?? '' }}</span>
                             এবং মাতাঃ <span>{{ $certificate->user->familyInfo->mother_name_bn ?? '' }}</span>,
+                            এনআইডি নং:<strong>{{ bnValue($certificate->user->people->nid ?? '') }}</strong>,
+                            জন্ম তারিখ: {{ $certificate->user->people->date_of_birth ? bnValue(date('d/m/Y', strtotime($certificate->user->people->date_of_birth))) : '' }},
                             ঠিকানাঃ গ্রাম: - <span>{{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }}</span>,
                             ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
-                            ডাকঘর: - 
+                            ডাকঘর: -
 {{ optional($certificate->user->addressInfo->permanentPostOffice)->bn_name ?? '' }}-
 @if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
 {{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }},
 @endif
                             উপজেলা: - <span>{{ $certificate->user->institute->union->thana->bn_name ?? '' }}</span>,
                             জেলা: - <span>{{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</span>।
-                            তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং অত্র ইউনিয়নের স্থায়ী বাসিন্দা। 
+                            তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং অত্র ইউনিয়নের স্থায়ী বাসিন্দা।
                             আমার জানা মতে তার স্বভাব-চরিত্র ভালো এবং তিনি আইন-শৃঙ্খলা ও রাষ্ট্র বিরোধী কোন অপরাধের সাথে জড়িত নন।
                         </p>
 
@@ -215,16 +217,16 @@
     <!-- Action Buttons -->
     <div class="text-center mt-2 mb-4">
         <!-- Cancel Button -->
-        <button 
-            id="cancelPageButton" 
+        <button
+            id="cancelPageButton"
             class="btn btn-danger btn-sm px-4"
             onclick="goToIndex();">
             Cancel
         </button>
 
         <!-- Print Button -->
-        <button 
-            id="printPageButton" 
+        <button
+            id="printPageButton"
             class="btn btn-success btn-sm px-4 ms-2"
             onclick="window.print();">
             Print

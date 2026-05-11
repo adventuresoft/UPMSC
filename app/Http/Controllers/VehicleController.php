@@ -98,11 +98,11 @@ class VehicleController extends Controller
             ];
             $catCode = $categoryMap[$request->vehicle_category] ?? '00';
 
-            $prefix = "{$year}-{$unionId}-{$catCode}";
+            $prefix = "VE{$year}-{$unionId}-{$catCode}";
             $registrationId = IdGenerator::generate([
                 'table' => 'vehicles',
                 'field' => 'registration_id',
-                'length' => 14, // YY-UUUU-CC (10) + SSSS (4) = 14
+                'length' => 16, // VE + YY-UUUU-CC (12) + SSSS (4) = 16
                 'prefix' => $prefix
             ]);
 
@@ -132,7 +132,7 @@ class VehicleController extends Controller
             ];
 
             \Log::info("Vehicle Store Payload:", $payload);
-            
+
             $vehicle = new Vehicle();
             foreach ($payload as $key => $value) {
                 $vehicle->{$key} = $value;
@@ -354,7 +354,7 @@ class VehicleController extends Controller
     public function invoiceShow($id)
     {
         $vehicle = Vehicle::findOrFail($id);
-        
+
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
             : null;
@@ -366,7 +366,7 @@ class VehicleController extends Controller
         $data['vehicle'] = $vehicle;
         $data['ownerUser'] = $ownerUser;
         $data['ownerOrganization'] = $ownerOrganization;
-        
+
         $data['fee'] = \App\Models\VehicleFee::where('vehicle_type', $vehicle->vehicle_type)
             ->where('vehicle_category', $vehicle->vehicle_category)
             ->where('fee_for', 'new')
@@ -378,7 +378,7 @@ class VehicleController extends Controller
     public function invoicePrint($id)
     {
         $vehicle = Vehicle::findOrFail($id);
-        
+
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
             : null;
@@ -390,7 +390,7 @@ class VehicleController extends Controller
         $data['vehicle'] = $vehicle;
         $data['ownerUser'] = $ownerUser;
         $data['ownerOrganization'] = $ownerOrganization;
-        
+
         $data['fee'] = \App\Models\VehicleFee::where('vehicle_type', $vehicle->vehicle_type)
             ->where('vehicle_category', $vehicle->vehicle_category)
             ->where('fee_for', 'new')

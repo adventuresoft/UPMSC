@@ -29,7 +29,7 @@ class TradeLicense extends Model
         parent::boot();
 
         self::creating(function ($model) {
-            $model->system_id = IdGenerator::generate(['table' => 'trade_licenses', 'field' => 'system_id', 'length' => 11, 'prefix' => date("Ymd") ]);
+            $model->system_id = IdGenerator::generate(['table' => 'trade_licenses', 'field' => 'system_id', 'length' => 13, 'prefix' => 'TR' . date("Ymd") ]);
         });
     }
 

@@ -89,7 +89,7 @@
             padding: 0;
             margin: 0;
         }
-        
+
         .main-footer{
         display: none;
     }
@@ -151,7 +151,7 @@
                     </div>
 
                     <div class="col-4 text-right">
-                        <strong>Date: </strong> {{ date('d/m/Y', strtotime($certificate->created_at)) }} 
+                        <strong>Date: </strong> {{ date('d/m/Y', strtotime($certificate->created_at)) }}
                     </div>
                 </div>
 
@@ -166,9 +166,11 @@
                             ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
                             Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>
                             and Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
+                            NID No. <strong>{{ $certificate->user->people->nid ?? '' }}</strong>,
+                            Date of Birth: {{ $certificate->user->people->date_of_birth ? date('d/m/Y', strtotime($certificate->user->people->date_of_birth)) : '' }},
                             Address: Village : - <span>{{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }}</span>,
                             Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},
-                            Post Office: - 
+                            Post Office: -
 {{ optional($certificate->user->addressInfo->permanentPostOffice)->name ?? '' }}-
 @if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
 {{ $certificate->user->addressInfo->permanentPostOffice->postal_code }},
@@ -215,16 +217,16 @@ To my knowledge, he is of good character and has not been involved in any crime 
     <!-- Action Buttons -->
     <div class="text-center mt-2 mb-4">
         <!-- Cancel Button -->
-        <button 
-            id="cancelPageButton" 
+        <button
+            id="cancelPageButton"
             class="btn btn-danger btn-sm px-4"
             onclick="goToIndex();">
             Cancel
         </button>
 
         <!-- Print Button -->
-        <button 
-            id="printPageButton" 
+        <button
+            id="printPageButton"
             class="btn btn-success btn-sm px-4 ms-2"
             onclick="window.print();">
             Print

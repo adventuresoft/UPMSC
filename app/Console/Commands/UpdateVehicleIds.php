@@ -31,19 +31,19 @@ class UpdateVehicleIds extends Command
         foreach ($vehicles as $vehicle) {
             $year = $vehicle->created_at ? $vehicle->created_at->format('y') : date('y');
             $catCode = $categoryMap[$vehicle->vehicle_category] ?? '00';
-            
-            $prefix = "{$year}-{$unionId}-{$catCode}";
-            
+
+            $prefix = "VE{$year}-{$unionId}-{$catCode}";
+
             $registrationId = IdGenerator::generate([
                 'table' => 'vehicles',
                 'field' => 'registration_id',
-                'length' => 14,
+                'length' => 16,
                 'prefix' => $prefix
             ]);
 
             $vehicle->registration_id = $registrationId;
             $vehicle->save();
-            
+
             $this->info("Updated Vehicle ID {$vehicle->id} to {$registrationId}");
         }
 
