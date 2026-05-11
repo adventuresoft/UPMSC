@@ -110,7 +110,7 @@
                                     <th>Sl</th>
                                     <th>Photo</th>
                                     <th>Certificate No</th>
-                                    <th>ID & Name</th>
+                                    <th>NID & Name</th>
                                     <th>Address & Mobile</th>
                                     <!-- <th>Quantity</th> -->
                                     <th>Created At</th>
@@ -138,7 +138,7 @@
 
                                     <td>
                                         <span class="citizen-id">
-                                            {{ bnValue($certificate->system_id ?? '') }}
+                                            {{ $certificate->user->people->nid ?? '' }}
                                         </span><br>
                                         {{ $certificate->user->name }}
                                     </td>
