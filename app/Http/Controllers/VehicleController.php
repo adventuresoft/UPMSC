@@ -351,6 +351,12 @@ class VehicleController extends Controller
         return view('backend.pages.vehicle.invoice_list', $data);
     }
 
+    public function licenseList()
+    {
+        $data['vehicles'] = Vehicle::where('status', 1)->latest()->get();
+        return view('backend.pages.vehicle.license_list', $data);
+    }
+
     public function invoiceShow($id)
     {
         $vehicle = Vehicle::findOrFail($id);
@@ -375,6 +381,25 @@ class VehicleController extends Controller
         return view('backend.pages.vehicle.invoice_show', $data);
     }
 
+    public function licenseShow($id)
+    {
+        $vehicle = Vehicle::where('status', 1)->findOrFail($id);
+
+        $ownerUser = $vehicle->ownership_type === 'personal'
+            ? $this->resolveOwnerUser($vehicle->owner_id)
+            : null;
+
+        $ownerOrganization = $vehicle->ownership_type === 'institutional'
+            ? $this->resolveOwnerOrganization($vehicle->owner_id, $vehicle->institutional_name)
+            : null;
+
+        $data['vehicle'] = $vehicle;
+        $data['ownerUser'] = $ownerUser;
+        $data['ownerOrganization'] = $ownerOrganization;
+
+        return view('backend.pages.vehicle.license_show', $data);
+    }
+
     public function invoicePrint($id)
     {
         $vehicle = Vehicle::findOrFail($id);
@@ -397,6 +422,25 @@ class VehicleController extends Controller
             ->first();
 
         return view('backend.pages.vehicle.printinvoice_show', $data);
+    }
+
+    public function licensePrint($id)
+    {
+        $vehicle = Vehicle::where('status', 1)->findOrFail($id);
+
+        $ownerUser = $vehicle->ownership_type === 'personal'
+            ? $this->resolveOwnerUser($vehicle->owner_id)
+            : null;
+
+        $ownerOrganization = $vehicle->ownership_type === 'institutional'
+            ? $this->resolveOwnerOrganization($vehicle->owner_id, $vehicle->institutional_name)
+            : null;
+
+        $data['vehicle'] = $vehicle;
+        $data['ownerUser'] = $ownerUser;
+        $data['ownerOrganization'] = $ownerOrganization;
+
+        return view('backend.pages.vehicle.printlicense_show', $data);
     }
 
     public function getFees($id)

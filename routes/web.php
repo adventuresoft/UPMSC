@@ -516,6 +516,9 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
     Route::get('vehicle/generate-invoice', [VehicleController::class, 'invoiceList'])->name('vehicle.invoice.list');
     Route::get('vehicle/generate-invoice/{id}/view', [VehicleController::class, 'invoiceShow'])->name('vehicle.invoice.show');
     Route::get('vehicle/generate-invoice/{id}/print', [VehicleController::class, 'invoicePrint'])->name('vehicle.invoice.print');
+    Route::get('vehicle/license', [VehicleController::class, 'licenseList'])->name('vehicle.license.list');
+    Route::get('vehicle/license/{id}/view', [VehicleController::class, 'licenseShow'])->name('vehicle.license.show');
+    Route::get('vehicle/license/{id}/print', [VehicleController::class, 'licensePrint'])->name('vehicle.license.print');
     Route::get('vehicle/get-fees/{id}', [VehicleController::class, 'getFees'])->name('vehicle.get.fees');
     Route::post('vehicle/approve', [VehicleController::class, 'approve'])->name('vehicle.approve');
     Route::get('vehicle/fees', [VehicleController::class, 'feesHub'])->name('vehicle.fees.hub');

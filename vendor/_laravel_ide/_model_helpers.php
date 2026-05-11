@@ -23567,6 +23567,10 @@ namespace App\Models {
     /**
      * App\Models\Vehicle
      *
+     * @property string|null $paid_at
+     * @property string|null $transaction_id
+     * @property string|null $payment_method
+     * @property string $payment_status
      * @property string|null $approved_at
      * @property mixed $approved_by
      * @property bool $status
@@ -23623,6 +23627,10 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle whereStatus($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle whereApprovedBy($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle whereApprovedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle wherePaymentStatus($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle wherePaymentMethod($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle whereTransactionId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle wherePaidAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<Vehicle>|Vehicle query()
@@ -28676,38 +28684,16 @@ namespace App\Models\Certificate {
     /**
      * App\Models\Certificate\NidCorrectionCertificate
      *
-     * @property string|null $purpose
-     * @property mixed $status
-     * @property string|null $identifier_address
-     * @property string|null $identifier_nid
-     * @property string|null $identifier_name
-     * @property string|null $transfer_reason
-     * @property string|null $staying_since
-     * @property string|null $transfer_post_code
-     * @property string|null $transfer_post_office
-     * @property string|null $transfer_phone_mobile
-     * @property string|null $transfer_house_holding
-     * @property string|null $transfer_village_road
-     * @property string|null $transfer_voter_area_no
-     * @property string|null $transfer_voter_area_name
-     * @property string|null $transfer_ward_no
-     * @property string|null $transfer_entity_name
-     * @property string|null $transfer_entity_type
-     * @property string|null $transfer_upazila_thana
-     * @property string|null $transfer_district
-     * @property string|null $current_house_holding
-     * @property string|null $current_village_road
-     * @property string|null $current_district
-     * @property string|null $current_upazila_thana
-     * @property string|null $current_voter_area_no
-     * @property string|null $current_voter_area_name
-     * @property string|null $current_voter_no
-     * @property string|null $applicant_dob
-     * @property string|null $applicant_nid
-     * @property string|null $applicant_name
-     * @property string|null $recipient_district
-     * @property string|null $recipient_upazila_thana_name
-     * @property string|null $recipient_upazila_thana
+     * @property array|null $correction_data
+     * @property string|null $attachments_list
+     * @property string|null $payment_receipt_no
+     * @property float $payment_amount
+     * @property string|null $guardian_nid
+     * @property string|null $guardian_name
+     * @property string|null $applicant_address
+     * @property string|null $applicant_blood_group
+     * @property string|null $applicant_husband_name
+     * @property string|null $applicant_name_en
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property mixed $created_by
@@ -28727,38 +28713,16 @@ namespace App\Models\Certificate {
      * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCreatedBy($value)
      * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereUpdatedAt($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereRecipientUpazilaThana($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereRecipientUpazilaThanaName($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereRecipientDistrict($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereApplicantName($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereApplicantNid($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereApplicantDob($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCurrentVoterNo($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCurrentVoterAreaName($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCurrentVoterAreaNo($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCurrentUpazilaThana($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCurrentDistrict($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCurrentVillageRoad($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCurrentHouseHolding($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferDistrict($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferUpazilaThana($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferEntityType($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferEntityName($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferWardNo($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferVoterAreaName($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferVoterAreaNo($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferVillageRoad($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferHouseHolding($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferPhoneMobile($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferPostOffice($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferPostCode($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereStayingSince($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereTransferReason($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereIdentifierName($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereIdentifierNid($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereIdentifierAddress($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereStatus($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate wherePurpose($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereApplicantNameEn($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereApplicantHusbandName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereApplicantBloodGroup($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereApplicantAddress($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereGuardianName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereGuardianNid($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate wherePaymentAmount($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate wherePaymentReceiptNo($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereAttachmentsList($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate whereCorrectionData($value)
      * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<NidCorrectionCertificate>|NidCorrectionCertificate query()
@@ -31250,6 +31214,38 @@ namespace App\Models\Certificate {
     /**
      * App\Models\Certificate\VoterAreaCertificate
      *
+     * @property string|null $purpose
+     * @property mixed $status
+     * @property string|null $identifier_address
+     * @property string|null $identifier_nid
+     * @property string|null $identifier_name
+     * @property string|null $transfer_reason
+     * @property string|null $staying_since
+     * @property string|null $transfer_post_code
+     * @property string|null $transfer_post_office
+     * @property string|null $transfer_phone_mobile
+     * @property string|null $transfer_house_holding
+     * @property string|null $transfer_village_road
+     * @property string|null $transfer_voter_area_no
+     * @property string|null $transfer_voter_area_name
+     * @property string|null $transfer_ward_no
+     * @property string|null $transfer_entity_name
+     * @property string|null $transfer_entity_type
+     * @property string|null $transfer_upazila_thana
+     * @property string|null $transfer_district
+     * @property string|null $current_house_holding
+     * @property string|null $current_village_road
+     * @property string|null $current_district
+     * @property string|null $current_upazila_thana
+     * @property string|null $current_voter_area_no
+     * @property string|null $current_voter_area_name
+     * @property string|null $current_voter_no
+     * @property string|null $applicant_dob
+     * @property string|null $applicant_nid
+     * @property string|null $applicant_name
+     * @property string|null $recipient_district
+     * @property string|null $recipient_upazila_thana_name
+     * @property string|null $recipient_upazila_thana
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property mixed $created_by
@@ -31269,6 +31265,38 @@ namespace App\Models\Certificate {
      * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereCreatedBy($value)
      * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereUpdatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereRecipientUpazilaThana($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereRecipientUpazilaThanaName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereRecipientDistrict($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereApplicantName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereApplicantNid($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereApplicantDob($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereCurrentVoterNo($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereCurrentVoterAreaName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereCurrentVoterAreaNo($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereCurrentUpazilaThana($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereCurrentDistrict($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereCurrentVillageRoad($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereCurrentHouseHolding($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferDistrict($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferUpazilaThana($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferEntityType($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferEntityName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferWardNo($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferVoterAreaName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferVoterAreaNo($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferVillageRoad($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferHouseHolding($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferPhoneMobile($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferPostOffice($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferPostCode($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereStayingSince($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereTransferReason($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereIdentifierName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereIdentifierNid($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereIdentifierAddress($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate whereStatus($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate wherePurpose($value)
      * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<VoterAreaCertificate>|VoterAreaCertificate query()

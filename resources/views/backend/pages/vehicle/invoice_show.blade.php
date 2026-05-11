@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Vehicle', 'subMenu' =>'VehicleLicense'])
+@extends('backend.master', ['mainMenu' => 'Vehicle', 'subMenu' =>'VehicleGenerateInvoice'])
 
 @push('style')
 <style>

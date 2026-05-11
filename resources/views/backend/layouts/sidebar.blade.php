@@ -1077,7 +1077,7 @@
 
         @if (view_permission())
         <li class="nav-item">
-          <a href="{{ route('vehicle.invoice.list') }}" class="nav-link @if( $subMenu == "VehicleLicense") active @endif">
+          <a href="{{ route('vehicle.license.list') }}" class="nav-link @if( $subMenu == "VehicleLicense") active @endif">
             <i class="far @if($subMenu == "VehicleLicense") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>License</p>
           </a>
