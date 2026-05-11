@@ -166,7 +166,7 @@
                             আইডি নং <strong>{{ bnValue($certificate->user->people->approved_id ?? '') }}</strong>,
                             পিতাঃ <span>{{ $certificate->user->familyInfo->father_name_bn ?? '' }}</span>
                             এবং মাতাঃ <span>{{ $certificate->user->familyInfo->mother_name_bn ?? '' }}</span>,
-                            এনআইডি নং:<strong>{{ bnValue($certificate->user->people->nid ?? '') }}</strong>,
+                            এনআইডি নং:<strong>{{ bnValue($certificate->user->nid ?? $certificate->user->people->nid ?? '') }}</strong>,
                             জন্ম তারিখ: {{ $certificate->user->people->date_of_birth ? bnValue(date('d/m/Y', strtotime($certificate->user->people->date_of_birth))) : '' }},
                             ঠিকানাঃ গ্রাম: - <span>{{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }}</span>,
                             ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},

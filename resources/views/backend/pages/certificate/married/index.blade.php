@@ -109,9 +109,9 @@
                             </div> -->
 
                             <!-- GLOBAL SEARCH -->
-                            <div class="col-md-2"> 
-                                <input type="text" id="search_global" class="form-control form-control-sm" 
-                                    placeholder="Search"> 
+                            <div class="col-md-2">
+                                <input type="text" id="search_global" class="form-control form-control-sm"
+                                    placeholder="Search">
                             </div>
 
                             <!-- Reset Button -->
@@ -129,15 +129,11 @@
                             <thead>
                                 <tr>
                                     <th>Sl</th>
-                                    <th>Photo (Husband)</th>
-                                    <th>Photo (Wife)</th>
+                                    <th>Photo</th>
                                     <th>Certificate No</th>
-                                    <th>Husband ID & Name</th>
-                                    <th>Wife ID & Name</th>
+                                    <th>Spouse ID & Name</th>
                                     <th>Address & Mobile</th>
                                     <th>Marriage Date</th>
-                                    <th>Marriage Place</th>
-                                    <th>Quantity</th>
                                     <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
@@ -148,50 +144,40 @@
                                     @foreach ($certificates as $key => $certificate)
                                     <tr>
                                         <td>{{ ++$key }}</td>
-                                        
+
                                         <td>
-                                            <img src="{{ asset($certificate->husband->photo ?? 'default.png') }}"
+                                            <img src="{{ asset($certificate->user->people->photo ?? 'default.png') }}"
                                                 width="40" height="40" class="img-circle">
                                         </td>
-                                        
-                                        <td>
-                                            <img src="{{ asset($certificate->wife->photo ?? 'default.png') }}"
-                                                width="40" height="40" class="img-circle">
-                                        </td>
-                                        
+
                                         <td>{{ $certificate->certificate_number ?? bnValue($certificate->system_id ?? '') }}</td>
-                                        
+
                                         <td>
+                                            @php
+                                                $husbandId = $certificate->husband_system_id ?? ($certificate->user->people->approved_id ?? '');
+                                                $spouseId = $certificate->spouse_nid ?? $certificate->wife_system_id ?? (optional(optional($certificate->wife)->people)->approved_id ?? '');
+                                                $husbandName = optional($certificate->husband)->name ?? $certificate->user->name ?? '';
+                                                $spouseName = $certificate->spouse_name ?? optional($certificate->wife)->name ?? '';
+                                            @endphp
                                             <span class="citizen-id">
-                                                {{ bnValue($certificate->husband_system_id ?? '') }}
+                                                {{ bnValue($husbandId) }} @if($spouseId) / {{ bnValue($spouseId) }} @endif
                                             </span><br>
-                                            {{ $certificate->husband->name ?? '' }}
+                                            {{ $husbandName }}@if($spouseName) & {{ $spouseName }}@endif
                                         </td>
-                                        
-                                        <td>
-                                            <span class="citizen-id">
-                                                {{ bnValue($certificate->wife_system_id ?? '') }}
-                                            </span><br>
-                                            {{ $certificate->wife->name ?? '' }}
-                                        </td>
-                                        
+
                                         <td>
                                             {{ $certificate->user->address ?? '' }} <br>
                                             <strong>{{ $certificate->user->mobile ?? '' }}</strong>
                                         </td>
-                                        
+
                                         <td>
-                                            {{ $certificate->marriage_date 
-                                                ? \Carbon\Carbon::parse($certificate->marriage_date)->format('d-m-Y') 
+                                            {{ $certificate->marriage_date
+                                                ? \Carbon\Carbon::parse($certificate->marriage_date)->format('d-m-Y')
                                                 : 'N/A' }}
                                         </td>
-                                        
-                                        <td>{{ $certificate->marriage_place ?? 'N/A' }}</td>
-                                        
-                                        <td>{{ $certificate->quantity ?? '' }}</td>
-                                        
+
                                         <td>{{ $certificate->created_at->format('d-m-Y') }}</td>
-                                        
+
                                         <td>
                                             <a target="_blank"
                                                 href="{{ route('married.show', $certificate->id) }}"
@@ -209,7 +195,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="12" class="text-center text-muted">
+                                        <td colspan="8" class="text-center text-muted">
                                             No married certificates found.
                                         </td>
                                     </tr>
@@ -240,56 +226,46 @@
             lengthChange: false,
             order: [[0, 'asc']],
             columnDefs: [
-                { targets: [1, 2], orderable: false }, // Disable sorting on photo columns
-                { targets: 11, orderable: false }      // Disable sorting on action column
+                { targets: [1], orderable: false }, // Disable sorting on photo column
+                { targets: [7], orderable: false }      // Disable sorting on action column
             ]
         });
 
-        // Certificate No (Column 3)
+        // Certificate No (Column 2)
         $('#search_cert').keyup(function() {
+            table.column(2).search(this.value).draw();
+        });
+
+        // Spouse ID & Name (Column 3)
+        $('#search_husband').keyup(function() {
             table.column(3).search(this.value).draw();
         });
 
-        // Husband ID & Name (Column 4)
-        $('#search_husband').keyup(function() {
+        // Spouse ID & Name (Column 3) - also search from wife filter
+        $('#search_wife').keyup(function() {
+            table.column(3).search(this.value).draw();
+        });
+
+        // Address & Mobile (Column 4)
+        $('#search_address').keyup(function() {
             table.column(4).search(this.value).draw();
         });
 
-        // Wife ID & Name (Column 5)
-        $('#search_wife').keyup(function() {
-            table.column(5).search(this.value).draw();
-        });
-
-        // Address & Mobile (Column 6)
-        $('#search_address').keyup(function() {
-            table.column(6).search(this.value).draw();
-        });
-
-        // Marriage Date (Column 7)
+        // Marriage Date (Column 5)
         $('#search_marriage_date').on('change', function() {
             if (this.value) {
                 // Convert YYYY-MM-DD to DD-MM-YYYY for searching
                 let dateParts = this.value.split('-');
                 let formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-                table.column(7).search(formattedDate).draw();
+                table.column(5).search(formattedDate).draw();
             } else {
-                table.column(7).search('').draw();
+                table.column(5).search('').draw();
             }
         });
 
-        // Marriage Place (Column 8)
-        $('#search_place').keyup(function() {
-            table.column(8).search(this.value).draw();
-        });
-
-        // Quantity (Column 9)
-        $('#search_quantity').keyup(function() {
-            table.column(9).search(this.value).draw();
-        });
-
         // Global Search
-        $('#search_global').keyup(function() { 
-            table.search(this.value).draw(); 
+        $('#search_global').keyup(function() {
+            table.search(this.value).draw();
         });
 
         // Change show entries
@@ -308,7 +284,7 @@
             $('#search_place').val('');
             $('#search_quantity').val('');
             $('#search_global').val('');
-            
+
             // Clear all searches
             table.search('').columns().search('').draw();
         });

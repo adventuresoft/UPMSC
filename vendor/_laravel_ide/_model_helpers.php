@@ -28032,13 +28032,31 @@ namespace App\Models\Certificate {
      * @property float $total_amount
      * @property mixed $quantity
      * @property float $fees
+     * @property string|null $marriage_place
+     * @property string|null $marriage_date
+     * @property string|null $spouse_nid
+     * @property string|null $spouse_name
+     * @property string|null $wife_system_id
+     * @property mixed $wife_id
+     * @property string|null $husband_system_id
+     * @property mixed $husband_id
      * @property mixed $user_id
      * @property string $system_id
      * @property int $id
      * @property-read \App\Models\User $user
+     * @property-read \App\Models\User $husband
+     * @property-read \App\Models\User $wife
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereSystemId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereUserId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereHusbandId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereHusbandSystemId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereWifeId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereWifeSystemId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereSpouseName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereSpouseNid($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereMarriageDate($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereMarriagePlace($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereFees($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereQuantity($value)
      * @method static \Illuminate\Database\Eloquent\Builder<MarriedCertificate>|MarriedCertificate whereTotalAmount($value)

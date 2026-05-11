@@ -1,7 +1,7 @@
 @extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Married'])
 @push('style')
 <style>
- 
+
 </style>
 @endpush
 @section('title', 'Married Certificate')
@@ -41,14 +41,16 @@
                             <div class="card-body">
 
                                 <div class="form-group row">
-                                    <label for="name" class="col-sm-2 col-form-label">People</label>
+                                    <label for="user_id" class="col-sm-2 col-form-label">People</label>
                                     <div class="col-sm-9">
-                                        <select required class="form-control select2" name="user_id" id="">
+                                        <select required class="form-control select2" name="user_id" id="user_id">
                                             <option value="">Select People</option>
                                             @if (count($users))
                                                 @foreach ($users as $user)
                                                     @if (isset($user->people->approved_id))
-                                                        <option value="{{$user->id}}">{{$user->people->approved_id}} - {{$user->name}} - {{$user->email}} - {{$user->mobile}}</option>
+                                                        <option value="{{$user->id}}" data-gender="{{$user->people->gender ?? ''}}">
+                                                            {{$user->people->approved_id}} - {{$user->name}} - {{$user->email}} - {{$user->mobile}}
+                                                        </option>
                                                     @endif
                                                 @endforeach
                                             @else
@@ -56,6 +58,32 @@
                                             @endif
 
                                         </select>
+                                        <small id="user_gender_hint" class="text-muted d-block mt-1"></small>
+                                        <small class="text-danger error user_id-error"></small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="spouse_name" class="col-sm-2 col-form-label">Spouse Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="spouse_name" id="spouse_name" placeholder="Spouse Name">
+                                        <small class="text-danger error spouse_name-error"></small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="spouse_nid" class="col-sm-2 col-form-label">Spouse NID</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="spouse_nid" id="spouse_nid" placeholder="Spouse NID">
+                                        <small class="text-danger error spouse_nid-error"></small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="marriage_date" class="col-sm-2 col-form-label">Marriage Date</label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" name="marriage_date" id="marriage_date">
+                                        <small class="text-danger error marriage_date-error"></small>
                                     </div>
                                 </div>
 
@@ -87,9 +115,41 @@
 
          $(document).ready(function() {
              $(".select2").select2();
+
+            function updatePeopleHint() {
+                let selected = $('#user_id option:selected');
+                let genderRaw = (selected.data('gender') || '').toString().trim().toLowerCase();
+                let isHusband = genderRaw === '1' || genderRaw === 'male' || genderRaw === 'm';
+                let hint = $('#user_gender_hint');
+
+                if (!$('#user_id').val()) {
+                    hint.removeClass('text-danger').addClass('text-muted').text('');
+                    return;
+                }
+
+                if (isHusband) {
+                    hint.removeClass('text-danger').addClass('text-muted').text('Selected person will be treated as husband. Enter spouse details manually.');
+                    return;
+                }
+
+                hint.removeClass('text-muted').addClass('text-danger').text('Selected person is not husband. Please select husband from People list.');
+            }
+
+            $('#user_id').on('change', updatePeopleHint);
+            updatePeopleHint();
+
             $("#certificateForm").on('submit', function(e) {
                 e.preventDefault();
                 let thisForm = $(this);
+                thisForm.find('.error').text('');
+
+                let selectedGenderRaw = ($('#user_id option:selected').data('gender') || '').toString().trim().toLowerCase();
+                let isHusband = selectedGenderRaw === '1' || selectedGenderRaw === 'male' || selectedGenderRaw === 'm';
+                if ($('#user_id').val() && !isHusband) {
+                    toastr.error('Please select husband from People list.');
+                    return;
+                }
+
                 $.ajax({
                     type: "POST",
                     url: "{{ route('married.store') }}",
