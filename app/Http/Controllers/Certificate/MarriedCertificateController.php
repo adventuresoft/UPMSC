@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -24,7 +25,7 @@ class MarriedCertificateController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = MarriedCertificate::with('user')
+        $data['certificates'] = MarriedCertificate::with(['user.people', 'husband.people', 'wife.people'])
         ->whereHas('user', function($q1){
             $q1->where('institute_id', Auth::user()->institute_id);
         })->latest()->get();
@@ -56,7 +57,10 @@ class MarriedCertificateController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'user_id' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'spouse_name' => 'required|string|max:190',
+            'spouse_nid' => 'required|string|max:190',
+            'marriage_date' => 'nullable|date',
         ]);
 
         if ($validate->fails()) {
@@ -67,9 +71,49 @@ class MarriedCertificateController extends Controller
         }
 
         $result = DB::transaction(function () use ($request) {
+            $user = User::with('people')
+                ->where('id', $request->user_id)
+                ->where('institute_id', Auth::user()->institute_id)
+                ->first();
+
+            if (!$user || !$user->people) {
+                return [
+                    'status' => false,
+                    'message' => "Selected people data was not found.",
+                    'errors' => [
+                        'user_id' => ['Selected people data was not found.'],
+                    ],
+                    'code' => 422,
+                ];
+            }
+
+            $gender = strtolower(trim((string) $user->people->gender));
+            $isHusband = in_array($gender, ['1', 'male', 'm'], true);
+            if (!$isHusband) {
+                return [
+                    'status' => false,
+                    'message' => "Please select husband from People list.",
+                    'errors' => [
+                        'user_id' => ['Please select husband from People list.'],
+                    ],
+                    'code' => 422,
+                ];
+            }
 
             $certificate = new MarriedCertificate();
-            $certificate->user_id = $request->user_id;
+            $hasSpouseNameColumn = Schema::hasColumn('married_certificates', 'spouse_name');
+            $hasSpouseNidColumn = Schema::hasColumn('married_certificates', 'spouse_nid');
+            $certificate->user_id = $user->id;
+            $certificate->husband_id = $user->id;
+            $certificate->husband_system_id = $user->people->approved_id ?? $user->system_id ?? null;
+            $certificate->wife_system_id = $request->spouse_nid;
+            if ($hasSpouseNameColumn) {
+                $certificate->spouse_name = $request->spouse_name;
+            }
+            if ($hasSpouseNidColumn) {
+                $certificate->spouse_nid = $request->spouse_nid;
+            }
+            $certificate->marriage_date = $request->marriage_date;
             $certificate->created_by = Auth::id();
 
             try {
@@ -82,9 +126,11 @@ class MarriedCertificateController extends Controller
                 // $data['redirect_url'] = route('married.show', $certificate->id);
                 return $data;
             } catch (\Throwable $th) {
+                report($th);
                 $data['status'] = false;
-                $data['message'] = "Something went wrong! Please try again...";
-                $data['errors'] = $th;
+                $data['message'] = config('app.debug') ? $th->getMessage() : "Something went wrong! Please try again...";
+                $data['errors'] = config('app.debug') ? $th->getTrace() : [];
+                $data['code'] = 500;
                 return $data;
             }
         });

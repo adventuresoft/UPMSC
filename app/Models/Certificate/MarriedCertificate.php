@@ -18,6 +18,14 @@ class MarriedCertificate extends Model
     protected $fillable = [
     'system_id',
     'user_id',
+    'husband_id',
+    'husband_system_id',
+    'wife_id',
+    'wife_system_id',
+    'spouse_name',
+    'spouse_nid',
+    'marriage_date',
+    'marriage_place',
     'fees',
     'quantity',
     'total_amount',
@@ -29,7 +37,17 @@ class MarriedCertificate extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    
+    public function husband()
+    {
+        return $this->belongsTo(User::class, 'husband_id', 'id');
+    }
+
+    public function wife()
+    {
+        return $this->belongsTo(User::class, 'wife_id', 'id');
+    }
+
+
     protected static function boot()
     {
         parent::boot();
@@ -38,7 +56,7 @@ class MarriedCertificate extends Model
             $model->system_id = self::generateSystemId('married_certificates');
         });
     }
-    
+
     // public static function boot()
     // {
     //     parent::boot();
