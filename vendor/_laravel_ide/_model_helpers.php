@@ -17470,6 +17470,8 @@ namespace App\Models {
      * @property \Illuminate\Support\Carbon|null $deleted_at
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property string|null $birth_certificate
+     * @property string|null $nid
      * @property mixed $blood_group
      * @property mixed $religion_id
      * @property mixed $gender
@@ -17510,6 +17512,8 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<People>|People whereGender($value)
      * @method static \Illuminate\Database\Eloquent\Builder<People>|People whereReligionId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<People>|People whereBloodGroup($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<People>|People whereNid($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<People>|People whereBirthCertificate($value)
      * @method static \Illuminate\Database\Eloquent\Builder<People>|People whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<People>|People whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<People>|People whereDeletedAt($value)

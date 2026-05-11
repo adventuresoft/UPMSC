@@ -168,10 +168,7 @@
                             ID No. <strong>{{ $certificate->user->people->approved_id }}</strong>,
                             Father: {{ $certificate->user->familyInfo->father_name ?? '' }},
                             Mother: {{ $certificate->user->familyInfo->mother_name ?? '' }},
-                            @if($certificate->user->people->nid || $certificate->user->people->birth_certificate)
-                            @if($certificate->user->people->nid)NID: {{ $certificate->user->people->nid }}{{ $certificate->user->people->birth_certificate ? ', ' : '' }}@endif
-                            @if($certificate->user->people->birth_certificate)Birth Reg. No.: {{ $certificate->user->people->birth_certificate }}@endif,
-                            @endif
+                            NID No.<strong>{{ $certificate->user->people->nid ?? '' }}</strong>,
                             Date of Birth: {{ $certificate->user->people->date_of_birth ? date('d/m/Y', strtotime($certificate->user->people->date_of_birth)) : '' }},
                             Address:
                             Village: - {{ $certificate->user?->addressInfo?->permanentVillage?->en_name ?? '' }},
