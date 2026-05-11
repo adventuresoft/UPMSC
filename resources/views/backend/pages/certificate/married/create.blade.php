@@ -64,6 +64,22 @@
                                 </div>
 
                                 <div class="form-group row">
+                                    <label for="spouse_identifier" class="col-sm-2 col-form-label">Spouse ID</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control" name="spouse_identifier" id="spouse_identifier" placeholder="Spouse Reg. ID (Optional)">
+                                            <input type="hidden" name="spouse_user_id" id="spouse_user_id">
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-secondary" id="find_spouse_btn">Find by ID</button>
+                                            </div>
+                                        </div>
+                                        <small id="spouse_lookup_hint" class="text-muted d-block mb-2">If spouse exists in Reg. People list, enter ID and click Find. Otherwise type spouse name and NID manually.</small>
+                                        <small class="text-danger error spouse_identifier-error"></small>
+                                        <small class="text-danger error spouse_user_id-error"></small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
                                     <label for="spouse_name" class="col-sm-2 col-form-label">Spouse Name</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="spouse_name" id="spouse_name" placeholder="Spouse Name">
@@ -114,6 +130,7 @@
     <script>
 
          $(document).ready(function() {
+             const spouseSearchUrlTemplate = @json(route('user.searchBySystemID', ['systemID' => '__KEY__']));
              $(".select2").select2();
 
             function updatePeopleHint() {
@@ -128,14 +145,111 @@
                 }
 
                 if (isHusband) {
-                    hint.removeClass('text-danger').addClass('text-muted').text('Selected person will be treated as husband. Enter spouse details manually.');
+                    hint.removeClass('text-danger').addClass('text-muted').text('Selected person will be treated as husband. Use spouse Reg. ID for auto-fill or type spouse details manually.');
                     return;
                 }
 
                 hint.removeClass('text-muted').addClass('text-danger').text('Selected person is not husband. Please select husband from People list.');
             }
 
+            function setSpouseLookupHint(message, type = 'muted') {
+                let hint = $('#spouse_lookup_hint');
+                hint.removeClass('text-muted text-danger text-success');
+                if (type === 'danger') {
+                    hint.addClass('text-danger');
+                } else if (type === 'success') {
+                    hint.addClass('text-success');
+                } else {
+                    hint.addClass('text-muted');
+                }
+                hint.text(message);
+            }
+
+            function clearSpouseRegSelection() {
+                $('#spouse_user_id').val('');
+            }
+
+            function fillSpouseFromUser(user) {
+                let people = user.people || {};
+                let spouseName = user.name || people.bn_name || '';
+                let spouseNid = user.nid || people.nid || '';
+                let spouseRegId = people.approved_id || user.system_id || '';
+
+                $('#spouse_user_id').val(user.id || '');
+                if (spouseRegId) {
+                    $('#spouse_identifier').val(spouseRegId);
+                }
+                if (spouseName) {
+                    $('#spouse_name').val(spouseName);
+                }
+                if (spouseNid) {
+                    $('#spouse_nid').val(spouseNid);
+                }
+                setSpouseLookupHint('Spouse found in Reg. People list. Name and NID were auto-filled.', 'success');
+            }
+
+            function findSpouseById() {
+                let spouseIdentifier = ($('#spouse_identifier').val() || '').trim();
+
+                if (!spouseIdentifier) {
+                    clearSpouseRegSelection();
+                    setSpouseLookupHint('If spouse exists in Reg. People list, enter ID and click Find. Otherwise type spouse name and NID manually.', 'muted');
+                    return;
+                }
+
+                let searchUrl = spouseSearchUrlTemplate.replace('__KEY__', encodeURIComponent(spouseIdentifier));
+                let findBtn = $('#find_spouse_btn');
+                findBtn.prop('disabled', true);
+
+                $.ajax({
+                    type: "GET",
+                    url: searchUrl,
+                    dataType: "json",
+                    success: function(response) {
+                        findBtn.prop('disabled', false);
+                        if (!response || !response.status || !response.user) {
+                            clearSpouseRegSelection();
+                            setSpouseLookupHint('Spouse not found in Reg. People list for this ID. Please type spouse name and NID manually.', 'danger');
+                            return;
+                        }
+
+                        let husbandUserId = ($('#user_id').val() || '').toString();
+                        if (husbandUserId && response.user.id && husbandUserId === response.user.id.toString()) {
+                            clearSpouseRegSelection();
+                            setSpouseLookupHint('Husband and spouse cannot be the same person. Please use spouse ID or type manual spouse details.', 'danger');
+                            return;
+                        }
+
+                        fillSpouseFromUser(response.user);
+                    },
+                    error: function() {
+                        findBtn.prop('disabled', false);
+                        clearSpouseRegSelection();
+                        setSpouseLookupHint('Spouse not found in Reg. People list for this ID. Please type spouse name and NID manually.', 'danger');
+                    }
+                });
+            }
+
             $('#user_id').on('change', updatePeopleHint);
+            $('#find_spouse_btn').on('click', findSpouseById);
+            $('#spouse_identifier').on('input', function() {
+                clearSpouseRegSelection();
+                setSpouseLookupHint('Click "Find by ID" to auto-fill from Reg. People list, or type spouse name and NID manually.', 'muted');
+            });
+            $('#spouse_identifier').on('keypress', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    findSpouseById();
+                }
+            });
+            $('#spouse_identifier').on('blur', function() {
+                if (($(this).val() || '').trim()) {
+                    findSpouseById();
+                } else {
+                    clearSpouseRegSelection();
+                    setSpouseLookupHint('If spouse exists in Reg. People list, enter ID and click Find. Otherwise type spouse name and NID manually.', 'muted');
+                }
+            });
             updatePeopleHint();
 
             $("#certificateForm").on('submit', function(e) {
@@ -147,6 +261,20 @@
                 let isHusband = selectedGenderRaw === '1' || selectedGenderRaw === 'male' || selectedGenderRaw === 'm';
                 if ($('#user_id').val() && !isHusband) {
                     toastr.error('Please select husband from People list.');
+                    return;
+                }
+
+                let spouseFromReg = ($('#spouse_user_id').val() || '').trim();
+                let spouseName = ($('#spouse_name').val() || '').trim();
+                let spouseNid = ($('#spouse_nid').val() || '').trim();
+                if (!spouseFromReg && (!spouseName || !spouseNid)) {
+                    if (!spouseName) {
+                        thisForm.find(".spouse_name-error").text("Spouse name is required when spouse is not found in Reg. list.");
+                    }
+                    if (!spouseNid) {
+                        thisForm.find(".spouse_nid-error").text("Spouse NID is required when spouse is not found in Reg. list.");
+                    }
+                    toastr.error('Enter spouse Reg. ID and find, or provide spouse name and NID manually.');
                     return;
                 }
 

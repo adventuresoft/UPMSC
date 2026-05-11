@@ -58,8 +58,10 @@ class MarriedCertificateController extends Controller
     {
         $validate = Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
-            'spouse_name' => 'required|string|max:190',
-            'spouse_nid' => 'required|string|max:190',
+            'spouse_identifier' => 'nullable|string|max:190',
+            'spouse_user_id' => 'nullable|integer|exists:users,id',
+            'spouse_name' => 'nullable|string|max:190',
+            'spouse_nid' => 'nullable|string|max:190',
             'marriage_date' => 'nullable|date',
         ]);
 
@@ -100,18 +102,103 @@ class MarriedCertificateController extends Controller
                 ];
             }
 
+            $spouseUser = null;
+            $spouseIdentifier = trim((string) $request->spouse_identifier);
+
+            if ($request->filled('spouse_user_id')) {
+                $spouseUser = User::with('people')
+                    ->where('id', $request->spouse_user_id)
+                    ->where('role_id', 5)
+                    ->where('institute_id', Auth::user()->institute_id)
+                    ->first();
+            }
+
+            if (!$spouseUser && $spouseIdentifier !== '') {
+                $spouseUserQuery = User::with('people')
+                    ->where('role_id', 5)
+                    ->where('institute_id', Auth::user()->institute_id)
+                    ->where(function ($query) use ($spouseIdentifier) {
+                        $query->where('system_id', $spouseIdentifier)
+                            ->orWhereHas('people', function ($q) use ($spouseIdentifier) {
+                                $q->where('approved_id', $spouseIdentifier);
+                            });
+
+                        if (ctype_digit($spouseIdentifier)) {
+                            $query->orWhere('id', (int) $spouseIdentifier);
+                        }
+                    });
+
+                $spouseUser = $spouseUserQuery->first();
+            }
+
+            if ($spouseUser && (int) $spouseUser->id === (int) $user->id) {
+                return [
+                    'status' => false,
+                    'message' => "Husband and spouse cannot be the same person.",
+                    'errors' => [
+                        'spouse_identifier' => ['Husband and spouse cannot be the same person.'],
+                    ],
+                    'code' => 422,
+                ];
+            }
+
+            $resolvedSpouseName = trim((string) $request->spouse_name);
+            $resolvedSpouseNid = trim((string) $request->spouse_nid);
+            $resolvedWifeSystemId = null;
+            $resolvedWifeUserId = null;
+
+            if ($spouseUser) {
+                $resolvedWifeUserId = $spouseUser->id;
+                $resolvedSpouseName = $spouseUser->name
+                    ?? optional($spouseUser->people)->bn_name
+                    ?? $resolvedSpouseName;
+                $resolvedSpouseNid = $spouseUser->nid
+                    ?? optional($spouseUser->people)->nid
+                    ?? $resolvedSpouseNid;
+                $resolvedWifeSystemId = optional($spouseUser->people)->approved_id
+                    ?? $spouseUser->system_id
+                    ?? ($spouseIdentifier ?: $resolvedSpouseNid);
+                if ($resolvedSpouseNid === '') {
+                    $resolvedSpouseNid = (string) ($spouseIdentifier ?: $resolvedWifeSystemId ?: '');
+                }
+            } else {
+                if ($resolvedSpouseName === '' || $resolvedSpouseNid === '') {
+                    $manualErrors = [];
+                    if ($resolvedSpouseName === '') {
+                        $manualErrors['spouse_name'] = ['Spouse name is required when spouse is not in Reg. list.'];
+                    }
+                    if ($resolvedSpouseNid === '') {
+                        $manualErrors['spouse_nid'] = ['Spouse NID is required when spouse is not in Reg. list.'];
+                    }
+                    return [
+                        'status' => false,
+                        'message' => "Spouse information is required.",
+                        'errors' => $manualErrors,
+                        'code' => 422,
+                    ];
+                }
+                $resolvedWifeSystemId = $resolvedSpouseNid;
+            }
+
             $certificate = new MarriedCertificate();
             $hasSpouseNameColumn = Schema::hasColumn('married_certificates', 'spouse_name');
             $hasSpouseNidColumn = Schema::hasColumn('married_certificates', 'spouse_nid');
+            $hasWifeIdColumn = Schema::hasColumn('married_certificates', 'wife_id');
+            $hasWifeSystemIdColumn = Schema::hasColumn('married_certificates', 'wife_system_id');
             $certificate->user_id = $user->id;
             $certificate->husband_id = $user->id;
             $certificate->husband_system_id = $user->people->approved_id ?? $user->system_id ?? null;
-            $certificate->wife_system_id = $request->spouse_nid;
+            if ($hasWifeIdColumn) {
+                $certificate->wife_id = $resolvedWifeUserId;
+            }
+            if ($hasWifeSystemIdColumn) {
+                $certificate->wife_system_id = $resolvedWifeSystemId;
+            }
             if ($hasSpouseNameColumn) {
-                $certificate->spouse_name = $request->spouse_name;
+                $certificate->spouse_name = $resolvedSpouseName;
             }
             if ($hasSpouseNidColumn) {
-                $certificate->spouse_nid = $request->spouse_nid;
+                $certificate->spouse_nid = $resolvedSpouseNid;
             }
             $certificate->marriage_date = $request->marriage_date;
             $certificate->created_by = Auth::id();
