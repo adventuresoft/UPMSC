@@ -101,7 +101,7 @@
         font-size: 14px;
         line-height: 1.6;
         text-align: justify;
-        margin: 40px 0 15px;
+        margin: 15px 0 10px;
     }
 
     .section-header {
@@ -128,28 +128,52 @@
         flex: 1;
     }
 
-    .fee-table {
+    .fees-table-new {
         width: 100%;
         border-collapse: collapse;
-        font-size: 12px;
+        margin-bottom: 20px;
     }
 
-    .fee-table td {
-        padding: 2px 6px;
+    .fees-table-new th {
+        background: #dcdcdc;
+        color: black;
+        padding: 8px;
+        text-align: center;
+        border: 1px solid #333;
+        font-size: 14px;
     }
 
-    .fee-table td:last-child {
+    .fees-table-new td {
+        border: 1px solid #333;
+        padding: 8px 12px;
+        font-size: 13px;
+        text-align: center;
+    }
+
+    .fees-table-new td:nth-child(2) {
+        text-align: left;
+        width: 50%;
+    }
+
+    .fees-table-new td:nth-child(3),
+    .fees-table-new td:nth-child(4) {
         text-align: right;
-        font-weight: 600;
+        width: 20%;
     }
 
-    .fee-total {
-        background: #f2f2f2;
+    .fees-total {
+        background: #f8f8f8;
         font-weight: bold;
     }
 
+    .fees-grand-total {
+        background: #dcdcdc;
+        font-weight: bold;
+        color: black;
+    }
+
     .signature-area {
-        margin-top: 200px;
+        margin-top: 100px;
         bottom: 15mm;
         display: flex;
         justify-content: space-between;
@@ -231,6 +255,10 @@
     $businessAddress = $businessAddress ?: '--';
 
     $fees = json_decode($license->fees ?? '{}', true) ?? [];
+    $totalFee = 0;
+    foreach ($fees as $amount) {
+        $totalFee += (float) $amount;
+    }
 
     if (!empty($license->taxYear?->name) && str_contains($license->taxYear->name, '-')) {
         [$start, $end] = explode('-', $license->taxYear->name);
@@ -262,7 +290,7 @@
         </div>
 
         <div class="doc-header">
-            <div style="margin-top: 50px;">
+            <div style="margin-top: 20px;">
                 নম্বর: <strong>{{ bnValue($license->system_id) }}</strong><br>
                 <img src="{{ $license->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;">
             </div>
@@ -340,6 +368,42 @@
                 <span class="info-value">{{ $value }}</span>
             </div>
         @endforeach
+
+        <div class="section-header">ব্যবসা প্রতিষ্ঠানের ফিস</div>
+        <table class="fees-table-new">
+            <thead>
+                <tr>
+                    <th>ক্রমিক নং</th>
+                    <th>ফি এর বিষয়</th>
+                    <th>বকেয়া</th>
+                    <th>টাকা</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(!empty($fees))
+                    @foreach($fees as $feeHead => $amount)
+                        <tr>
+                            <td>{{ bnValue($loop->iteration) }}</td>
+                            <td>{{ $feeHead }}</td>
+                            <td></td>
+                            <td>{{ currencyFormat((float) $amount) }}</td>
+                        </tr>
+                    @endforeach
+                    <tr class="fees-total">
+                        <td colspan="3" style="text-align: right; padding-right: 20px;">মোট:</td>
+                        <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
+                    </tr>
+                    <tr class="fees-grand-total">
+                        <td colspan="3" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
+                        <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
+                    </tr>
+                @else
+                    <tr>
+                        <td colspan="4" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
+                    </tr>
+                @endif
+            </tbody>
+        </table>
 
 
         <div class="signature-area">
