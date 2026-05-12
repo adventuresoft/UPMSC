@@ -65,7 +65,7 @@
                                             <option value="">Select Post Office</option>
                                             @if ($post_officeses)
                                                 @foreach ($post_officeses as $post_officese)
-                                                    <option value="{{$post_officese->id}}" {{$user->addressInfo ? ($user->addressInfo->permanent_post_office_id == $post_officese->id ? 'selected' : '' ) : ''}}>{{$post_officese->bn_name}}</option>
+                                                    <option value="{{$post_officese->id}}" {{$user->addressInfo ? ($user->addressInfo->permanent_post_office_id == $post_officese->id ? 'selected' : '' ) : ''}}>{{$post_officese->name}} {{$post_officese->bn_name ? '- '.$post_officese->bn_name : ''}}</option>
                                                 @endforeach
                                             @endif
                                         </select>
@@ -151,7 +151,7 @@
                                             <option value="">Select Post Office</option>
                                             @if ($post_officeses)
                                                 @foreach ($post_officeses as $post_officese)
-                                                    <option value="{{$post_officese->id}}" {{$user->addressInfo ? ($user->addressInfo->present_post_office_id == $post_officese->id ? 'selected' : '' ) : ''}}>{{$post_officese->bn_name}}</option>
+                                                    <option value="{{$post_officese->id}}" {{$user->addressInfo ? ($user->addressInfo->present_post_office_id == $post_officese->id ? 'selected' : '' ) : ''}}>{{$post_officese->name}} {{$post_officese->bn_name ? '- '.$post_officese->bn_name : ''}}</option>
                                                 @endforeach
                                             @endif
                                         </select>
