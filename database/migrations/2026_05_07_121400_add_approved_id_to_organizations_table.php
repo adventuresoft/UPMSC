@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('organizations', function (Blueprint $table) {
             if (!Schema::hasColumn('organizations', 'approved_id')) {
-                $table->string('approved_id', 30)->nullable()->after('application_id');
+                $table->string('approved_id', 30)->nullable();
                 $table->index('approved_id');
             }
         });

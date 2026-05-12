@@ -52,6 +52,7 @@
                                                 <th style="min-width: 150px;">Group</th>
                                                 <th style="min-width: 120px;">Grade</th>
                                                 <th style="min-width: 150px;">Board</th>
+                                                <th style="min-width: 120px;">Passing Year</th>
                                                 <th style="min-width: 250px;">Educational Institute</th>
                                                 <th style="width: 60px;" class="text-center">Action</th>
                                             </tr>
@@ -97,6 +98,14 @@
                                                                 <option value="5" @if($education->board_id == 5) selected @endif>Comilla</option>
                                                                 <option value="6" @if($education->board_id == 6) selected @endif>Sylhet</option>
                                                                 <option value="7" @if($education->board_id == 7) selected @endif>Chittagong</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select name="passing_yearU[{{$education->id}}]" class="form-control form-control-sm">
+                                                                <option value="">Select Year</option>
+                                                                @for($i = date('Y'); $i >= 1950; $i--)
+                                                                    <option value="{{$i}}" @if($education->passing_year == $i) selected @endif>{{$i}}</option>
+                                                                @endfor
                                                             </select>
                                                         </td>
                                                         <td>
@@ -148,6 +157,14 @@
                                                             <option value="5">Comilla</option>
                                                             <option value="6">Sylhet</option>
                                                             <option value="7">Chittagong</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select name="passing_year[]" class="form-control form-control-sm">
+                                                            <option value="">Select Year</option>
+                                                            @for($i = date('Y'); $i >= 1950; $i--)
+                                                                <option value="{{$i}}">{{$i}}</option>
+                                                            @endfor
                                                         </select>
                                                     </td>
                                                     <td>
@@ -248,6 +265,13 @@
                 row += '<td><select name="board_id[]" class="form-control form-control-sm">';
                 row += '<option value="1">Dhaka</option><option value="2">Rajshashi</option><option value="3">Rangpur</option>';
                 row += '<option value="4">Jessore</option><option value="5">Comilla</option><option value="6">Sylhet</option><option value="7">Chittagong</option>';
+                row += '</select></td>';
+                row += '<td><select name="passing_year[]" class="form-control form-control-sm">';
+                row += '<option value="">Select Year</option>';
+                let currentYear = new Date().getFullYear();
+                for(let i = currentYear; i >= 1950; i--) {
+                    row += '<option value="'+i+'">'+i+'</option>';
+                }
                 row += '</select></td>';
                 row += '<td><input type="text" name="institute[]" placeholder="Educational Institute" class="form-control form-control-sm"></td>';
                 row += '<td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-single-education"><i class="fas fa-times"></i></button></td>';
