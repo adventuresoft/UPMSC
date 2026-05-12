@@ -100,7 +100,7 @@
                     </div>
 
                     <div class="col-8 text-center">
-                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px;">
+                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -16px;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
                         <h2 class="text-success font-weight-bold mb-0" style="font-size:28px;">
@@ -128,8 +128,8 @@
                     </div>
 
                     <div class="col-4 text-center">
-                        <span class="badge bg-info text-light px-4 py-2"
-                              style="font-size:24px; border-radius:28px;">
+                        <span class="badge text-light px-4 py-2"
+                              style="font-size:24px; border-radius:28px; background-color: #2F318C;">
                             বয়সের সনদপত্র
                         </span>
                     </div>
@@ -149,8 +149,20 @@
                             {{ $certificate->user->people->gender == 1 ? 'জনাব' : 'জনাবা' }}
                             <strong>{{ $certificate->user->people->bn_name ?? '' }}</strong>,
                             আইডি নং <strong>{{ bnValue($certificate->user->people->approved_id ?? '') }}</strong>,
+                            @if($certificate->user->people->nid)
+                                এনআইডিঃ {{ bnValue($certificate->user->people->nid) }},
+                            @elseif($certificate->user->people->birth_certificate)
+                                জন্ম নিবন্ধন নং- {{ bnValue($certificate->user->people->birth_certificate) }},
+                            @endif
                             পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
                             মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }},
+@php
+    $dob = $certificate->user->people->date_of_birth ? \Carbon\Carbon::parse($certificate->user->people->date_of_birth) : null;
+    $now = \Carbon\Carbon::now();
+    $diff = $dob ? $dob->diff($now) : null;
+@endphp
+                            জন্ম তারিখঃ {{ $dob ? bnValue($dob->format('d/m/Y')) : '' }},
+                            বয়সঃ {{ $diff ? bnValue($diff->y) . ' বছর ' . bnValue($diff->m) . ' মাস ' . bnValue($diff->d) . ' দিন' : '' }},
                             ঠিকানাঃ 
                             গ্রাম: - {{ $certificate->user?->addressInfo?->permanentVillage?->bn_name ?? '' }},
                             ওয়ার্ড:- {{ $certificate->user?->addressInfo?->permanentWard?->bn_ward_no ?? '' }},
@@ -162,7 +174,6 @@
                             উপজেলা: - {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলা: - {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
                             তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং অত্র ইউনিয়নের স্থায়ী বাসিন্দা।
-                            আমার জানা মতে জন্ম নিবন্ধন অনুযায়ী তার বয়স-       বছর       মাস       দিন।
                         </p>
 
                         <p style="margin-left:40px;">

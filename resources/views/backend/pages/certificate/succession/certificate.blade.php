@@ -188,8 +188,7 @@
                     </div>
 
                     <div class="col-4 text-center">
-                        <span class="badge bg-info text-light px-4 py-2"
-                              style="font-size:24px; border-radius:28px;">
+                        <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px; background-color: #2F318C;">
                            Citizenship Certificate
                         </span>
                     </div>
@@ -207,7 +206,7 @@
                     </div>
 
                     <div class="col-4 text-center">
-                        <span class="badge bg-info text-light px-4 py-2" style="font-size:22px; border-radius:26px;">
+                        <span class="badge text-light px-4 py-2" style="font-size:22px; border-radius:26px;; background-color: #2F318C;">
                             Inheritance certificate
                         </span>
                     </div>

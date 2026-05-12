@@ -145,8 +145,8 @@
                     </div>
 
                     <div class="col-4 text-center">
-                        <span class="badge bg-info text-light px-4 py-2" style="font-size:24px; border-radius:28px;">
-                            Age certificate
+                        <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px; background-color: #2F318C;">
+                            Age Certificate
                         </span>
                     </div>
 
@@ -164,8 +164,20 @@
                             {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Mrs.' }}
                             <strong>{{ $certificate->user->people->name ?? '' }}</strong>,
                             ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
-                            Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>
-                            and Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
+                            @if($certificate->user->people->nid)
+                                NID: <span>{{ $certificate->user->people->nid }}</span>,
+                            @elseif($certificate->user->people->birth_certificate)
+                                Birth Reg. No.: <span>{{ $certificate->user->people->birth_certificate }}</span>,
+                            @endif
+                            Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>,
+                            Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
+@php
+    $dob = $certificate->user->people->date_of_birth ? \Carbon\Carbon::parse($certificate->user->people->date_of_birth) : null;
+    $now = \Carbon\Carbon::now();
+    $diff = $dob ? $dob->diff($now) : null;
+@endphp
+                            Date of Birth: <span>{{ $dob ? $dob->format('d/m/Y') : '' }}</span>,
+                            Age: <span>{{ $diff ? $diff->y . ' Years ' . $diff->m . ' Months ' . $diff->d . ' Days' : '' }}</span>,
                              Address: Village : - <span>{{ $certificate->user?->addressInfo?->permanentVillage?->en_name ?? '' }}</span>,
                             Word:- {{ $certificate->user?->addressInfo?->permanentWard?->en_ward_no ?? '' }},
                             Post Office: - 

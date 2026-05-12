@@ -160,7 +160,7 @@
                     </div>
 
                     <div class="col-8 text-center">
-                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px;">
+                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -16px;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
                         <h2 class="text-success font-weight-bold mb-0" style="font-size:28px;">
@@ -188,7 +188,7 @@
                     </div>
 
                     <div class="col-4 text-center">
-                        <span class="badge bg-info text-light px-4 py-2" style="font-size:22px; border-radius:26px;">
+                        <span class="badge text-light px-4 py-2" style="font-size:22px; border-radius:26px;; background-color: #2F318C;">
                             ওয়ারিশান সনদ
                         </span>
                     </div>
