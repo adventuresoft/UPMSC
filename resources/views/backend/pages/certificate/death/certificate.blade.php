@@ -144,7 +144,7 @@
                     </div>
 
                     <div class="col-4 text-center">
-                        <span class="badge bg-danger text-light px-4 py-2" style="font-size:24px; border-radius:28px;">
+                        <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px; background-color: #2F318C;">
                            Death Certificate
                         </span>
                     </div>
