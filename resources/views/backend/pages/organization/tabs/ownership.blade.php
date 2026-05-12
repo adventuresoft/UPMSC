@@ -523,6 +523,11 @@ $("#ownershipForm").on('submit', function(e) {
         success: function (response) {
             thisForm.find('button[type="submit"]').prop("disabled",false);
             toastr.success(response.message);
+            
+            let redirectUrl = response.redirect_url || "{{ route('organization.index') }}";
+            setTimeout(function () {
+                window.location.href = redirectUrl;
+            }, 500);
         },
 
         error: function(xhr) {

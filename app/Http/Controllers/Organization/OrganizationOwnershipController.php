@@ -201,7 +201,8 @@ public function saveNewOwnership(Request $request)
 
         return response()->json([
             'status' => true,
-            'message' => 'Ownership saved successfully'
+            'message' => 'Ownership saved successfully',
+            'redirect_url' => route('organization.index')
         ], 200);
 
     } catch (\Throwable $e) {
