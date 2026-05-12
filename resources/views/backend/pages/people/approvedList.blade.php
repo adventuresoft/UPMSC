@@ -178,8 +178,8 @@
 
     .btn-action i { font-size: 12px; }
 
-    .btn-edit { background-color: #eff6ff !important; color: #2563eb !important; border-color: #dbeafe !important; }
-    .btn-view { background-color: #f0f9ff !important; color: #0284c7 !important; border-color: #e0f2fe !important; }
+    .btn-edit { background-color: #dbeafe !important; color: #2563eb !important; border-color: #bfdbfe !important; }
+    .btn-view { background-color: #e0f2fe !important; color: #0284c7 !important; border-color: #bae6fd !important; }
     .btn-toggle { background-color: #f3f4f6 !important; color: #4b5563 !important; border-color: #e2e8f0 !important; }
     .btn-reset { background-color: #fffbeb !important; color: #d97706 !important; border-color: #fef3c7 !important; }
 
@@ -282,7 +282,7 @@
                                 <a href="{{ route('people.create') }}" class="btn btn-sm btn-primary font-weight-bold px-3">
                                     <i class="fas fa-plus-circle mr-1"></i> CREATE
                                 </a>
-                                <a href="{{ route('people.index') }}" class="btn btn-sm btn-outline-primary font-weight-bold px-3">
+                                <a href="{{ route('people.index') }}" class="btn btn-sm btn-secondary font-weight-bold px-3">
                                     <i class="fas fa-list mr-1"></i> APPLICANT LIST
                                 </a>
                                 @endif
@@ -310,9 +310,6 @@
                                     <input type="text" id="search_mobile" class="form-control form-control-sm" placeholder="Mobile No...">
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="text" id="search_email" class="form-control form-control-sm" placeholder="Email Address...">
-                                </div>
-                                <div class="col-md-2">
                                     <select id="search_gender" class="form-control form-control-sm">
                                         <option value="">All Genders</option>
                                         <option value="Male">Male</option>
@@ -334,7 +331,7 @@
                                     <th>Sl</th>
                                     <th>Photo</th>
                                     <th>Reg. ID & Name</th>
-                                    <th>Mobile & Email</th>
+                                    <th>Mobile</th>
                                     <th>Gender & DOB</th>
                                     <th>Profession</th>
                                     <th>Present Address</th>
@@ -365,18 +362,17 @@
                                         </td>
 
                                         <td>
-                                            <span class="citizen-id">
-                                                {{$user->people->approved_id}}
-                                            </span><br>
-                                            <strong>{{ $user->name ?? '' }}</strong>
+                                            <a href="{{ route('people.show', $user->id) }}" style="color: inherit; text-decoration: none;">
+                                                <span class="citizen-id">
+                                                    {{$user->people->approved_id}}
+                                                </span><br>
+                                                <strong>{{ $user->name ?? '' }}</strong>
+                                            </a>
                                         </td>
 
                                         <td>
                                             @if($user->mobile)
-                                                <a href="tel:{{ $user->mobile }}">{{ $user->mobile }}</a>
-                                            @endif
-                                            @if($user->email)
-                                                <br><a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                                                <span style="color: black;">{{ $user->mobile }}</span>
                                             @endif
                                         </td>
 
@@ -422,36 +418,17 @@
                                         <td>
                                                 <div class="table-action">
                                                     @if (view_permission())
-                                                    <a href="{{ route('people.edit', $user->id) }}" 
-                                                        class="btn-action btn-edit" title="Edit">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                    <a href="{{ route('people.show', $user->id) }}" 
-                                                        class="btn-action btn-view" title="View">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                    
-                                                    @if($user->people)
-                                                    <div class="reveal-box" id="reveal-box-{{ $user->people->id }}">
-                                                        <span class="password-masked" id="password-text-{{ $user->people->id }}">••••</span>
-                                                        <button class="btn btn-xs btn-link p-0 btn-reveal" data-id="{{ $user->people->id }}" title="Reveal Password">
-                                                            <i class="fas fa-eye text-primary"></i>
-                                                        </button>
-                                                    </div>
-                                                    
-                                                    <button class="btn-action btn-toggle btn-toggle-status" 
-                                                        data-id="{{ $user->people->id }}" 
-                                                        title="{{ $user->people->login_status === 'active' ? 'Suspend Portal Access' : 'Activate Portal Access' }}">
-                                                        <i class="fas {{ $user->people->login_status === 'active' ? 'fa-user-slash text-danger' : 'fa-user-check text-success' }}"></i>
-                                                    </button>
-                                                    
-                                                    <button class="btn-action btn-reset btn-reset-modal" 
-                                                        data-id="{{ $user->people->id }}" 
-                                                        data-name="{{ $user->name }}" 
-                                                        title="Reset Password">
-                                                        <i class="fas fa-key"></i>
-                                                    </button>
-                                                    @endif
+                                                        @if(Auth::user()->role_id == 1)
+                                                        <a href="{{ route('people.edit', $user->id) }}" 
+                                                            class="btn-action btn-edit" title="Edit">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        @endif
+                                                        
+                                                        <a href="{{ route('people.show', $user->id) }}" 
+                                                            class="btn-action btn-view" title="View">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
                                                     @endif
                                                 </div>
                                         </td>
@@ -459,7 +436,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="7" class="empty-state">
+                                        <td colspan="8" class="empty-state">
                                             <i class="fas fa-folder-open"></i>
                                             <h5>No people found</h5>
                                             <p class="text-muted">Get started by creating a new person.</p>

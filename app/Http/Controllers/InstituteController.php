@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use App\Services\AdaReachSmsService;
 use Illuminate\Support\Str;
 
 class InstituteController extends Controller
@@ -126,54 +127,80 @@ class InstituteController extends Controller
             'union' => 'nullable',
             'pourashava' => 'nullable',
             'city_corporation' => 'nullable',
+            'admin_name' => 'required|max:190',
+            'admin_email' => 'required|email|max:190|unique:users,email',
+            'admin_mobile' => 'required|max:15',
+            'admin_password' => 'required|min:6',
         ]);
 
         if ($validate->fails()) {
-            $data['status'] = false;
-            $data['message'] = "Sorry! Invalid Entry.";
-            $data['errors'] = $validate->errors();
-            return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+            return response()->json([
+                'status' => false,
+                'message' => "Validation failed. Please check your entries.",
+                'errors' => $validate->errors()
+            ], 400);
         }
 
-        $institute = Institute::where('institute_type_id', $request->institute_type)
-        ->where('institute_category_id', $request->institute_category )
-        ->where('institute_category_id', $request->institute_category )
-        ->where('union_id', $request->union)
-        ->where('pourashava_id', $request->pourashava)
-        ->where('city_corporation_id',$request->city_corporation)
-        ->first();
+        $existing = Institute::where('institute_type_id', $request->institute_type)
+            ->where('union_id', $request->union)
+            ->where('pourashava_id', $request->pourashava)
+            ->where('city_corporation_id', $request->city_corporation)
+            ->first();
 
-        if (!$institute) {
-            $institute = new Institute();
-            $institute->institute_category_id = $request->institute_category;
-            $institute->institute_subcategory_id = $request->institute_subcategory_id;
+        if ($existing) {
+            return response()->json(['status' => false, 'message' => "This institute already exists in our system."], 400);
+        }
 
-            $institute->institute_type_id = $request->institute_type;
-            $institute->union_id = $request->union ;
-            $institute->pourashava_id = $request->pourashava;
-            $institute->city_corporation_id = $request->city_corporation;
-            $institute->activation_time = $request->activation_time;
-
+        return DB::transaction(function() use ($request) {
             try {
+                $institute = new Institute();
+                $institute->institute_category_id = $request->institute_category;
+                $institute->institute_subcategory_id = $request->institute_subcategory_id;
+                $institute->institute_type_id = $request->institute_type;
+                $institute->union_id = $request->union;
+                $institute->pourashava_id = $request->pourashava;
+                $institute->city_corporation_id = $request->city_corporation;
+                $institute->activation_time = $request->activation_time;
                 $institute->save();
-                $data['status'] = true;
-                $data['code'] = 200;
-                $data['message'] = "Institute created successfully.";
-                $data['redirect_url'] = route('instituteA.adminCreate', $institute->id);
-                return response()->json($data, 200);
-            } catch (\Throwable $th) {
-                $data['status'] = false;
-                $data['code'] = 500;
-                $data['message'] = "Failed to create institute.";
-                $data['errors'] = $th;
-                return response()->json($data, 400);
-            }
-        } else {
-            $data['status'] = false;
-            $data['message'] = "Already available this institute.";
-            return response()->json($data, 400);
-        }
 
+                // Create Admin User
+                $user = new User();
+                $user->institute_id = $institute->id;
+                $user->role_id = 6; // Institutional Admin
+                $user->name = $request->admin_name;
+                $user->email = $request->admin_email;
+                $user->mobile = $request->admin_mobile;
+                $user->password = Hash::make($request->admin_password);
+                $user->status = 1; // Active
+                $user->save();
+
+                // Send Success SMS
+                try {
+                    $smsMessage = "Dear {$user->name}, your Institute Admin account has been created.\n"
+                        . "Login ID: {$user->email}\n"
+                        . "Password: {$request->admin_password}\n"
+                        . "URL: " . url('/login');
+                    
+                    $smsService = new AdaReachSmsService();
+                    $smsService->send($user->mobile, $smsMessage);
+                } catch (\Exception $e) {
+                    // Log SMS failure but continue
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'message' => "Institute and Admin created successfully.",
+                    'redirect_url' => route('instituteA.imagesCreate', $institute->id)
+                ], 200);
+
+            } catch (\Throwable $th) {
+                return response()->json([
+                    'status' => false,
+                    'message' => "System error occurred.",
+                    'errors' => $th->getMessage()
+                ], 500);
+            }
+        });
     }
 
     /**
@@ -184,7 +211,21 @@ class InstituteController extends Controller
      */
     public function show($id)
     {
-        return view('backend.pages.institute.show');
+        $institute = Institute::with(['type', 'category', 'superUser'])->find($id);
+        if (!$institute) {
+            return redirect()->route('institute.index')->with('error', 'Institute not found');
+        }
+
+        if ($institute->institute_type_id == 1) {
+            $institute->union = Union::with('thana.district.division')->find($institute->union_id);
+        } else if($institute->institute_type_id == 2) {
+            $institute->pourashava = Pourashava::find($institute->pourashava_id);
+        } else if($institute->institute_type_id == 3) {
+            $institute->cityCorporation = CityCorporation::find($institute->city_corporation_id);
+        }
+
+        $data['institute'] = $institute;
+        return view('backend.pages.institute.show', $data);
     }
 
     /**
@@ -305,57 +346,62 @@ class InstituteController extends Controller
             $data['errors'] = $validate->errors();
             return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
         }
-        $user = User::find($request->user_id);
-
+        // Find existing user for this institute or create new one
+        $user = User::where('institute_id', $request->institute_id)->first();
+        if (!$user && $request->user_id) {
+            $user = User::find($request->user_id);
+        }
+        
         if(!$user){
             $user = new User();
+            $user->institute_id = $request->institute_id;
+            $user->role_id = 6;
         } 
 
-        $user->institute_id = $request->institute_id;
-        $user->role_id = 6;
         $user->email = $request->email;
-        $user->status = true;
+        $user->status = 1; // Active
         $user->name = $request->name;
         $user->mobile = $request->mobile;
+        
         if($request->password){
             $user->password = Hash::make($request->password);
         }
 
         try {
-
             $user->save();
 
 
-            if ($request->email) {
-                $details = [
-                    'email' => $request->email,
-                    'password' => $request->password,
-                    'system_id' => $user->system_id
-                ];
-                Mail::to($request->email)->send(new ApplicationSuccessMail($details));
+            try {
+                if ($request->email) {
+                    $details = [
+                        'email' => $request->email,
+                        'password' => $request->password,
+                        'system_id' => $user->system_id ?? $user->id
+                    ];
+                    Mail::to($request->email)->send(new ApplicationSuccessMail($details));
+                }
+            } catch (\Exception $e) {
+                // Ignore mail error
             }
 
-            if($request->mobile){
-                $message = "User created successful! Application ID: ".$user->system_id. " Password: " .date('dmY', strtotime($request->date_of_birth)). " Login: http://bit.ly/3YH8zRw";
-                $response = Http::get('https://api.mobireach.com.bd/SendTextMessage', [
-                    'Username' => "advsoft", 
-                    'Password' => 'Dhaka@0088',
-                    'From' => '8801847050122',
-                    'To' => $request->mobile,
-                    'Message' => $message,
-
-                ]);
-                if ($response->failed()) {
-                    $data['SMS'] = "failed";
-                } else {
-                    $data['SMS'] = "success";                   
+            try {
+                if($request->mobile){
+                    $smsMessage = "Dear {$user->name}, your Admin account has been updated.\n"
+                        . "Login ID: {$user->email}\n"
+                        . "Password: " . ($request->password ? $request->password : 'Unchanged') . "\n"
+                        . "URL: " . url('/login');
+                    
+                    $smsService = new AdaReachSmsService();
+                    $smsService->send($user->mobile, $smsMessage);
                 }
+            } catch (\Exception $e) {
+                // Ignore SMS error
             }
 
 
             $data['status'] = true;
             $data['message'] = "Successfully Saved Admin Information!";
-            $data['redirect_url'] = route('instituteA.imagesCreate', $request->institute_id);
+            $data['redirect_url'] = route('institute.show', $request->institute_id);
             return response()->json($data, 200);
         } catch (\Throwable $th) {
             $data['status'] = false;

@@ -45,6 +45,33 @@
                                 <h6 class="card-title text-indigo font-weight-bold mb-0">Permanent Address</h6>
                             </div>
                             <div class="card-body">
+                                <!-- Row 0: District, Thana, Union -->
+                                <div class="form-group row">
+                                    <div class="col-sm-4">
+                                        <label for="permanent_district_id">District</label>
+                                        <select name="permanent_district_id" class="form-control select2 select2bs4" id="permanent_district_id">
+                                            <option value="">Select District</option>
+                                            @foreach($districts as $district)
+                                                <option value="{{ $district->id }}" {{ $user->addressInfo && $user->addressInfo->permanent_district_id == $district->id ? 'selected' : '' }}>{{ $district->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <small class="text-danger error permanent_district_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="permanent_thana_id">Thana</label>
+                                        <select name="permanent_thana_id" class="form-control select2 select2bs4" id="permanent_thana_id">
+                                            <option value="{{ $user->addressInfo->permanent_thana_id ?? '' }}">{{ $user->addressInfo?->permanentThana?->name ?? 'Select Thana' }}</option>
+                                        </select>
+                                        <small class="text-danger error permanent_thana_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="permanent_union_id">Union Parishad</label>
+                                        <select name="permanent_union_id" class="form-control select2 select2bs4" id="permanent_union_id">
+                                            <option value="{{ $user->addressInfo->permanent_union_id ?? '' }}">{{ $user->addressInfo?->permanentUnion?->name ?? 'Select Union' }}</option>
+                                        </select>
+                                        <small class="text-danger error permanent_union_id_error"></small>
+                                    </div>
+                                </div>
                                 <!-- Row 1: Village, Post Office, Permanent Ward -->
                                 <div class="form-group row">
                                     <div class="col-sm-4">
@@ -405,6 +432,85 @@
             } else {
                 present_village_id.html('<option value="">Select Village</option>');
                 present_village_id.prop("disabled", true);
+            }
+        });
+
+        // ── Permanent Address Cascade ──────────────────────────────────────
+
+        // District → Thana
+        $(document).on('change', '#permanent_district_id', function(e){
+            e.preventDefault();
+            let district_id = $(this).val();
+            let $thana = $('#permanent_thana_id');
+            let $union = $('#permanent_union_id');
+            let $village = $('#permanent_village_id');
+
+            $union.html('<option value="">Select Union</option>');
+            $village.html('<option value="">Select Village</option>');
+
+            if (district_id) {
+                $thana.prop('disabled', true).html('<option value="">Loading...</option>');
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("/get-thanas-by-district") }}/' + district_id,
+                    success: function(response) {
+                        $thana.html(response).prop('disabled', false);
+                    },
+                    error: function() {
+                        $thana.html('<option value="">Select Thana</option>').prop('disabled', false);
+                    }
+                });
+            } else {
+                $thana.html('<option value="">Select Thana</option>').prop('disabled', true);
+            }
+        });
+
+        // Thana → Union
+        $(document).on('change', '#permanent_thana_id', function(e){
+            e.preventDefault();
+            let thana_id = $(this).val();
+            let $union = $('#permanent_union_id');
+            let $village = $('#permanent_village_id');
+
+            $village.html('<option value="">Select Village</option>');
+
+            if (thana_id) {
+                $union.prop('disabled', true).html('<option value="">Loading...</option>');
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("/get-unions-by-thana") }}/' + thana_id,
+                    success: function(response) {
+                        $union.html(response).prop('disabled', false);
+                    },
+                    error: function() {
+                        $union.html('<option value="">Select Union</option>').prop('disabled', false);
+                    }
+                });
+            } else {
+                $union.html('<option value="">Select Union</option>').prop('disabled', true);
+            }
+        });
+
+        // Union → Village
+        $(document).on('change', '#permanent_union_id', function(e){
+            e.preventDefault();
+            let union_id = $(this).val();
+            let $village = $('#permanent_village_id');
+
+            if (union_id) {
+                $village.prop('disabled', true).html('<option value="">Loading...</option>');
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("/get-villages-by-union") }}/' + union_id,
+                    success: function(response) {
+                        $village.html(response.villageOptions || response).prop('disabled', false);
+                    },
+                    error: function() {
+                        $village.html('<option value="">Select Village</option>').prop('disabled', false);
+                    }
+                });
+            } else {
+                $village.html('<option value="">Select Village</option>').prop('disabled', true);
             }
         });
     </script>

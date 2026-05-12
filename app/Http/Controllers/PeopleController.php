@@ -159,7 +159,17 @@ class PeopleController extends Controller
         });
 
         if (Auth::user()->institute_id) {
-            $query->where('institute_id', Auth::user()->institute_id);
+            $institute = Auth::user()->institute;
+            $query->where(function($q) use ($institute) {
+                $q->where('institute_id', $institute->id);
+                
+                if ($institute->union_id) {
+                    $q->orWhereHas('addressInfo', function($sq) use ($institute) {
+                        $sq->where('permanent_union_id', $institute->union_id);
+                    });
+                }
+                // Add more location types if needed (pourashava, city corp)
+            });
         }
 
         $data['users'] = $query->latest()->get();
@@ -184,7 +194,16 @@ class PeopleController extends Controller
         });
 
         if (Auth::user()->institute_id) {
-            $query->where('institute_id', Auth::user()->institute_id);
+            $institute = Auth::user()->institute;
+            $query->where(function($q) use ($institute) {
+                $q->where('institute_id', $institute->id);
+                
+                if ($institute->union_id) {
+                    $q->orWhereHas('addressInfo', function($sq) use ($institute) {
+                        $sq->where('permanent_union_id', $institute->union_id);
+                    });
+                }
+            });
         }
 
         $data['users'] = $query->latest()->get();
@@ -215,8 +234,8 @@ class PeopleController extends Controller
         $validate = Validator::make($request->all(), [
             'name' => 'nullable|max:190',
             'bn_name' => 'nullable|max:190',
-            'date_of_birth' => 'nullable|max:190',
-            'birth_place' => 'nullable|max:190',
+            'date_of_birth' => 'required|max:190',
+            'birth_place' => 'required|max:190',
             'gender' => 'nullable|max:190',
             'religion' => 'nullable|max:190',
             'blood_group' => 'nullable|max:190',
@@ -428,15 +447,15 @@ class PeopleController extends Controller
         }
 
         $validate = Validator::make($request->all(), [
-            'name' => 'required|max:190',
-            'bn_name' => 'required|max:190',
-            'date_of_birth' => 'nullable|max:190',
-            'birth_place' => 'nullable|max:190',
+            'name' => 'nullable|max:190',
+            'bn_name' => 'nullable|max:190',
+            'date_of_birth' => 'required|max:190',
+            'birth_place' => 'required|max:190',
             'gender' => 'nullable|max:190',
             'religion' => 'nullable|max:190',
             'blood_group' => 'nullable|max:190',
             'mobile' => 'nullable|max:190',
-            'email' => 'required|max:190|email',
+            'email' => 'nullable|max:190|email',
             'birth_certificate' => 'nullable|max:190',
             'nid' => 'nullable|max:190',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
@@ -534,9 +553,8 @@ class PeopleController extends Controller
         // District ID 2 digit
         $districtPart = str_pad($district_id, 2, '0', STR_PAD_LEFT);
 
-        // একই district + DOB এর last serial বের করা
-        $last = People::where('district_id', $district_id)
-            ->whereNotNull('approved_id')
+        // একই district prefix এর last serial বের করা (column values inconsistent হতে পারে, prefix নিরাপদ)
+        $last = People::where('approved_id', 'like', $districtPart . '-%')
             ->orderBy('id', 'desc')
             ->first();
 
@@ -559,8 +577,8 @@ class PeopleController extends Controller
         try {
             DB::beginTransaction();
 
-            $people = People::findOrFail($id);
-            Log::info('[PeopleApproval] Starting process', ['id' => $id, 'name' => $people->name]);
+            $people = People::with(['user.addressInfo', 'user.institute'])->findOrFail($id);
+            Log::info('[PeopleApproval] Starting process', ['id' => $id, 'name' => ($people->user->name ?? $people->name)]);
 
             if (!empty($people->approved_id)) {
                 DB::rollBack();
@@ -571,22 +589,19 @@ class PeopleController extends Controller
                 ], 400);
             }
 
-            // Resilience: Fallbacks
-            $district_id = $people->district_id ?? 0;
+            // Resilience: Fallbacks for District ID (Zella Code)
+            $district_id = $people->district_id 
+                ?? ($people->user->addressInfo->permanent_district_id 
+                ?? ($people->user->addressInfo->present_district_id 
+                ?? ($people->user->institute->district_id ?? 0)));
+
             $dob = $people->date_of_birth ?? now()->format('Y-m-d');
 
             Log::info('[PeopleApproval] Generating IDs', ['dob' => $dob, 'district' => $district_id]);
             $approvedId = $this->generateApprovedId($dob, $district_id);
 
             // Auto-generate credentials
-            $emailCandidate = optional($people->user)->email ?? $people->email;
-
-            // Resilience: Ensure login_id is unique in the people table
-            if ($emailCandidate && !People::where('login_id', $emailCandidate)->exists()) {
-                $loginId = $emailCandidate;
-            } else {
-                $loginId = $approvedId; // Fallback to unique approved_id
-            }
+            $loginId = $approvedId;
 
             $password = Str::random(8);
 
@@ -610,12 +625,12 @@ class PeopleController extends Controller
             // ── Send welcome SMS ──────────────────────────────────────────
             $smsSent = false;
             $smsError = null;
-            $phone = optional($people->user)->mobile ?? $people->mobile;
+            $phone = $people->user->mobile ?? $people->mobile;
 
             if ($phone) {
                 Log::info('[PeopleApproval] Sending SMS', ['phone' => $phone]);
                 $smsMessage = AdaReachSmsService::buildApprovalMessage(
-                    optional($people->user)->name ?? ($people->name ?? 'Citizen'),
+                    $people->user->name ?? ($people->bn_name ?? ($people->name ?? 'Citizen')),
                     $loginId,
                     $password,
                     $approvedId
