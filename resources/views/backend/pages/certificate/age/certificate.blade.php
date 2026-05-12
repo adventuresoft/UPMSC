@@ -164,8 +164,15 @@
                             {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Mrs.' }}
                             <strong>{{ $certificate->user->people->name ?? '' }}</strong>,
                             ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
-                            Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>
-                            and Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
+                            Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>,
+                            Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
+@php
+    $dob = $certificate->user->people->date_of_birth ? \Carbon\Carbon::parse($certificate->user->people->date_of_birth) : null;
+    $now = \Carbon\Carbon::now();
+    $diff = $dob ? $dob->diff($now) : null;
+@endphp
+                            Date of Birth: <span>{{ $dob ? $dob->format('d/m/Y') : '' }}</span>,
+                            Age: <span>{{ $diff ? $diff->y . ' Years ' . $diff->m . ' Months ' . $diff->d . ' Days' : '' }}</span>,
                              Address: Village : - <span>{{ $certificate->user?->addressInfo?->permanentVillage?->en_name ?? '' }}</span>,
                             Word:- {{ $certificate->user?->addressInfo?->permanentWard?->en_ward_no ?? '' }},
                             Post Office: - 
