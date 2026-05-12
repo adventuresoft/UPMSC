@@ -146,7 +146,7 @@
 
                     <div class="col-4 text-center">
                         <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px; background-color: #2F318C;">
-                            Age certificate
+                            Age Certificate
                         </span>
                     </div>
 
