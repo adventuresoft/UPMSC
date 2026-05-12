@@ -164,6 +164,11 @@
                             {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Mrs.' }}
                             <strong>{{ $certificate->user->people->name ?? '' }}</strong>,
                             ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
+                            @if($certificate->user->people->nid)
+                                NID: <span>{{ $certificate->user->people->nid }}</span>,
+                            @elseif($certificate->user->people->birth_certificate)
+                                Birth Reg. No.: <span>{{ $certificate->user->people->birth_certificate }}</span>,
+                            @endif
                             Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>,
                             Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
 @php
