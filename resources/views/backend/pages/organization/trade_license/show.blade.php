@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Organization', 'subMenu' => 'TradeLicense'])
+@extends('backend.master', ['mainMenu' => 'Organization', 'subMenu' => 'GetTradeLicense'])
 
 @push('style')
 <style>
@@ -94,14 +94,14 @@
         text-align: center;
         font-size: 13px;
         margin-bottom: 10px;
-        margin-top: -60px;
+        margin-top: 10px;
     }
 
     .intro-text {
         font-size: 14px;
         line-height: 1.6;
         text-align: justify;
-        margin: 10px 0 15px;
+        margin: 40px 0 15px;
     }
 
     .section-header {
@@ -200,24 +200,37 @@
     $owner = $ownerships->firstWhere('is_trade_license', true)?->user
         ?? $ownerships->firstWhere('is_trade_license', 1)?->user
         ?? $ownerships->first()?->user;
-    $fees = json_decode($license->fees ?? '{}', true) ?? [];
-    $businessAddress = $organization?->address
-        ?? collect([$organization?->house, $organization?->road])->filter()->implode(', ');
+
+    $ownerAddress = $owner?->people?->bn_address ?? $owner?->people?->address;
+    if (!$ownerAddress && $owner?->addressInfo) {
+        $addr = $owner->addressInfo;
+        $ownerAddress = collect([
+            $addr->permanent_house ? 'বাড়ী নং: ' . $addr->permanent_house : null,
+            $addr->permanent_road ? 'রাস্তা: ' . $addr->permanent_road : null,
+            $addr->permanentVillage?->bn_name ?? $addr->permanentVillage?->name,
+            $addr->permanentUnion?->bn_name ?? $addr->permanentUnion?->name,
+            $addr->permanentThana?->bn_name ?? $addr->permanentThana?->name,
+            $addr->permanentDistrict?->bn_name ?? $addr->permanentDistrict?->name,
+        ])->filter()->implode(', ');
+    }
+    $ownerAddress = $ownerAddress ?: '--';
+
+    $businessType = $organization?->subcategory?->bn_name 
+        ?? $organization?->subcategory?->name 
+        ?? $organization?->category?->bn_name 
+        ?? $organization?->category?->name 
+        ?? '--';
+
+    $businessAddress = $organization?->address 
+        ?? collect([
+            $organization?->village?->bn_name ?? $organization?->village?->name,
+            $organization?->Union?->bn_name ?? $organization?->Union?->name,
+            $organization?->Thana?->bn_name ?? $organization?->Thana?->name,
+            $organization?->District?->bn_name ?? $organization?->District?->name,
+        ])->filter()->implode(', ');
     $businessAddress = $businessAddress ?: '--';
 
-    $feeList = [
-        ['label' => 'নতুন নিবন্ধন ফি', 'key' => 'New Registration Charge'],
-        ['label' => 'বার্ষিক ফি', 'key' => 'Yearly Charge'],
-        ['label' => 'ট্রেড লাইসেন্স নবায়ন ফি', 'key' => 'Renew Charge'],
-        ['label' => 'সাইনবোর্ড ফি', 'key' => 'Signboard Fees'],
-        ['label' => 'সারচার্জ', 'key' => 'Surcharge'],
-        ['label' => 'অন্যান্য ফি', 'key' => 'Others'],
-        ['label' => 'ভ্যাট', 'key' => 'VAT'],
-        ['label' => 'আয়কর/উৎসকর', 'key' => 'TAX'],
-        ['label' => 'জরিমানা', 'key' => 'Fine'],
-    ];
-
-    $total = 0;
+    $fees = json_decode($license->fees ?? '{}', true) ?? [];
 
     if (!empty($license->taxYear?->name) && str_contains($license->taxYear->name, '-')) {
         [$start, $end] = explode('-', $license->taxYear->name);
@@ -260,7 +273,7 @@
 
             <div style="text-align:right">
                 তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}<br>
-                <img src="{{ $owner?->people?->photo ?? asset('images/photo-placeholder.png') }}" style="width:80px;height:80px;object-fit:cover;">
+                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.5in;height:1.9in;object-fit:cover; border:1px solid #ddd;">
             </div>
         </div>
 
@@ -274,63 +287,61 @@
             স্থানীয় সরকার (প্রাদেশিক প্রশাসন) আইন, ২০০৯ (২০০৯ সনের ৬০ নং আইন) এর ধারা ৮৪ অনুযায়ী সরকার প্রণীত আদেশ ও বিধি অনুযায়ী, ২০১৬ সালের ১০ অনুচ্ছেদ অনুযায়ী অনুরূপ ব্যবসা, প্রতিষ্ঠান, দোকান বা শিল্পপ্রতিষ্ঠানের উপর আদায়কৃত কর এবং অন্যান্য ফি পরিশোধের ভিত্তিতে এই ট্রেড লাইসেন্সটি ইস্যু করা হলো।
         </p>
 
+        <div class="section-header">ব্যবসা প্রতিষ্ঠানের তথ্য</div>
+
+        <div class="info-row">
+            <span class="info-label"><span style="display:inline-block; width:30px;">১।</span> (ক) প্রতিষ্ঠানের নাম :</span>
+            <span class="info-value">{{ $organization?->bn_name ?? ($organization?->name ?? '--') }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><span style="display:inline-block; width:30px;"></span> (খ) প্রতিষ্ঠানের নাম (ইংরেজি) :</span>
+            <span class="info-value">{{ $organization?->en_name ?? ($organization?->name ?? '--') }}</span>
+        </div>
+
         @php
-        $businessInfo = [
-            '১। (ক) প্রতিষ্ঠানের নাম' => $organization?->name ?? '--',
-            '(খ) প্রতিষ্ঠানের নাম (ইংরেজি)' => $organization?->en_name ?? ($organization?->name ?? '--'),
-            '২। ব্যবসার ধরণ' => $organization?->subCategory?->name ?? $organization?->subcategory?->en_name ?? '--',
+        $otherBusinessInfo = [
+            '২। ব্যবসার ধরণ' => $businessType,
             '৩। প্রতিষ্ঠানের ধরণ' => $ownerships->count() == 1 ? 'একক প্রতিষ্ঠান' : ($ownerships->count() > 1 ? 'পার্টনারশিপ' : '--'),
-            '৪। প্রতিষ্ঠানের মূলধন' => currencyFormat($organization?->capital),
+            '৪। প্রতিষ্ঠানের মূলধন' => bnValue(currencyFormat($organization?->capital ?? 0)),
             '৬। ব্যবসা প্রতিষ্ঠানের ঠিকানা' => $businessAddress
         ];
         @endphp
 
-        <div class="section-header">ব্যবসা প্রতিষ্ঠানের তথ্য</div>
-        @foreach($businessInfo as $label => $value)
+        @foreach($otherBusinessInfo as $label => $value)
             <div class="info-row">
                 <span class="info-label">{{ $label }} :</span>
                 <span class="info-value">{{ $value }}</span>
             </div>
         @endforeach
 
+        <div class="section-header">মালিকের তথ্য</div>
+
+        <div class="info-row">
+            <span class="info-label"><span style="display:inline-block; width:30px;">১।</span> (ক) মালিকের নাম :</span>
+            <span class="info-value">{{ $owner?->people?->bn_name }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><span style="display:inline-block; width:30px;"></span> (খ) মালিকের নাম (ইংরেজি) :</span>
+            <span class="info-value">{{ $owner?->name ?? '--' }}</span>
+        </div>
+
         @php
-        $ownerInfo = [
-            '১। (ক) মালিকের নাম' => $owner?->people?->bn_name,
-            '(খ) মালিকের নাম (ইংরেজি)' => $owner?->name,
-            '২। মালিকের আইডি' => bnValue($owner?->id),
-            '৩। মালিকের এনআইডি' => bnValue($owner?->people?->nid),
-            '৪। মোবাইল নম্বর' => bnValue($owner?->mobile),
-            '৫। ই-মেইল' => $owner?->email,
-            '৬। মালিকের ঠিকানা' => $owner?->people?->bn_address
+        $otherOwnerInfo = [
+            '২। মালিকের আইডি' => bnValue($owner?->system_id ?: '--'),
+            '৩। মালিকের এনআইডি' => bnValue($owner?->people?->nid ?: ($owner?->nid ?: '--')),
+            '৪। মোবাইল নম্বর' => bnValue($owner?->mobile ?: '--'),
+            '৫। ই-মেইল' => $owner?->email ?: '--',
+            '৬। মালিকের ঠিকানা' => $ownerAddress ?: '--'
         ];
         @endphp
 
-        <div class="section-header">মালিকের তথ্য</div>
-        @foreach($ownerInfo as $label => $value)
+        @foreach($otherOwnerInfo as $label => $value)
             <div class="info-row">
                 <span class="info-label">{{ $label }} :</span>
                 <span class="info-value">{{ $value }}</span>
             </div>
         @endforeach
 
-        <div class="section-header">ব্যবসা প্রতিষ্ঠানের ফিস</div>
-        <table class="fee-table">
-            @foreach($feeList as $index => $item)
-                @php
-                    $amount = (float)($fees[$item['key']] ?? 0);
-                    $total += $amount;
-                @endphp
-                <tr>
-                    <td>{{ bnValue($index + 1) }}। {{ $item['label'] }} :</td>
-                    <td>{{ bnValue(currencyFormat($amount)) }}</td>
-                </tr>
-            @endforeach
-
-            <tr class="fee-total">
-                <td>সর্বমোট =</td>
-                <td>{{ bnValue(currencyFormat($total)) }}</td>
-            </tr>
-        </table>
 
         <div class="signature-area">
             @foreach(['লাইসেন্স ও বিজ্ঞাপন সুপারভাইজার', 'সীল', 'কর্তৃপক্ষ'] as $sign)

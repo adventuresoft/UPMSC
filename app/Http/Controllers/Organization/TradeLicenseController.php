@@ -58,16 +58,21 @@ class TradeLicenseController extends Controller
 
     public function preview($id)
     {
-        $data['license'] = TradeLicense::with(['organization'=>function($q1){
-            $q1->with(['ownership'=>function($q2){
-                $q2->with(['user' => function($q3){
-                    $q3->with('people');
-                }]);
-            }]);
-        }])->find($id);
+        $data['license'] = TradeLicense::with([
+            'taxYear',
+            'organization.category',
+            'organization.subcategory',
+            'organization.village',
+            'organization.Union',
+            'organization.Thana',
+            'organization.District',
+            'organization.ownership.user.people',
+            'organization.ownership.user.addressInfo.permanentVillage',
+            'organization.ownership.user.addressInfo.permanentUnion',
+            'organization.ownership.user.addressInfo.permanentThana',
+            'organization.ownership.user.addressInfo.permanentDistrict',
+        ])->findOrFail($id);
 
-        //dd($id);
-        // return response()->json($data, 200);
         return view('backend.pages.organization.trade_license.preview', $data);
     }
 
@@ -175,7 +180,16 @@ class TradeLicenseController extends Controller
         $trade->tax_year_id = $request->tax_year_id;
         $trade->organization_id = $request->organization_id;
         $trade->fees = json_encode($request->fees);
-        $trade->institute_id =Auth::user()->institute_id;
+        $trade->institute_id = Auth::user()->institute_id;
+
+        // Calculate total amount from fees
+        $totalAmount = 0;
+        if ($request->fees && is_array($request->fees)) {
+            foreach ($request->fees as $amt) {
+                $totalAmount += (float)$amt;
+            }
+        }
+        $trade->total_amount = $totalAmount;
 
         try {
             $trade->save();
@@ -203,24 +217,24 @@ class TradeLicenseController extends Controller
      */
     public function show($id)
     {
+        $data['license'] = TradeLicense::with([
+            'taxYear',
+            'organization.category',
+            'organization.subcategory',
+            'organization.village',
+            'organization.Union',
+            'organization.Thana',
+            'organization.District',
+            'organization.ownership.user.people',
+            'organization.ownership.user.addressInfo.permanentVillage',
+            'organization.ownership.user.addressInfo.permanentUnion',
+            'organization.ownership.user.addressInfo.permanentThana',
+            'organization.ownership.user.addressInfo.permanentDistrict',
+        ])->findOrFail($id);
 
-        //  $data['license'] = TradeLicense::with(['organization'=>function($q1){
-        //     $q1->with(['ownership'=>function($q2){
-        //         $q2->with(['user' => function($q3){
-        //             $q3->with('people');
-        //         }]);
-        //     }]);
-        // }])->find($id);
-         $data['license'] = TradeLicense::with([
-        'organization',
-        'organization.subCategory',
-        'organization.ownership.user.people',
-        'taxYear'
-    ])->findOrFail($id);
-
-
-        return view('backend.pages.organization.trade_license.show',$data);
+        return view('backend.pages.organization.trade_license.show', $data);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -280,13 +294,23 @@ class TradeLicenseController extends Controller
             'time' => Carbon::now()->toDateTimeString(),
         ]);
 
+        $totalAmount = $license->total_amount;
+        if ($totalAmount <= 0) {
+            $fees = json_decode($license->fees ?? '{}', true);
+            if (is_array($fees)) {
+                foreach ($fees as $amt) {
+                    $totalAmount += (float)$amt;
+                }
+            }
+        }
+
         TradeLicenseManualPayment::create([
             'trade_license_id' => $license->id,
-            'invoice_no' => $license->invoice_no,
+            'invoice_no' => $license->invoice_no ?? $license->system_id,
             'payment_details' => $request->payment_details,
             'transaction_id' => $request->transaction_id,
             'note' => $request->note,
-            'amount' => $license->total_amount ?? 0,
+            'amount' => $totalAmount,
             'created_by' => auth()->id(),
         ]);
 
@@ -295,6 +319,7 @@ class TradeLicenseController extends Controller
         $license->payment_details = $request->payment_details;
         $license->transaction_id = $request->transaction_id;
         $license->payment_note = $request->note;
+        $license->total_amount = $totalAmount; // Update license total as well
         $license->paid_at = now();
         $license->save();
 

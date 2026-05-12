@@ -181,7 +181,7 @@
 
 
                       <a target="_blank"
-                        href="{{ $license->status == 2 ? route('organizationA.trade-license.preview', $license->id) :'#' }}"
+                        href="{{ route('organizationA.trade-license.preview', $license->id) }}?print=1"
                         title="Print"
                         class="btn btn-sm btn-primary">
 
