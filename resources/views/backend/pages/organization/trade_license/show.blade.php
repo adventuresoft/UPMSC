@@ -262,25 +262,24 @@
         </div>
 
         <div class="doc-header">
-            <div>
+            <div style="margin-top: 50px;">
                 নম্বর: <strong>{{ bnValue($license->system_id) }}</strong><br>
                 <img src="{{ $license->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;">
             </div>
 
             <div class="doc-title-block">
                 <div class="doc-title">ট্রেড লাইসেন্স</div>
+                <div class="validity-info">
+                    নবায়ন/নতুন <br>
+                    অর্থ বছর: {{ $license->taxYear?->name ?? '--' }} <br>
+                    এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত
+                </div>
             </div>
 
             <div style="text-align:right">
                 তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}<br>
                 <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.5in;height:1.9in;object-fit:cover; border:1px solid #ddd;">
             </div>
-        </div>
-
-        <div class="validity-info">
-            নবায়ন/নতুন <br>
-            অর্থ বছর: {{ $license->taxYear?->name ?? '--' }} <br>
-            এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত
         </div>
 
         <p class="intro-text">
