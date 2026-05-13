@@ -128,9 +128,40 @@
                             
                                 </div>
 
+                                <hr>
+                                <h5 class="mb-4 text-primary"><i class="fas fa-user-shield mr-2"></i> Admin Account Information</h5>
                                 
-                            
-                            
+                                <div class="form-group row">
+                                    <label for="admin_name" class="col-sm-2 col-form-label">Admin Name <span class="text-danger">*</span></label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="admin_name" name="admin_name" placeholder="Full name of the administrator" class="form-control" required>
+                                        <small class="error admin_name_error text-danger"></small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="admin_email" class="col-sm-2 col-form-label">Admin Email <span class="text-danger">*</span></label>
+                                    <div class="col-sm-9">
+                                        <input type="email" id="admin_email" name="admin_email" placeholder="Login email address" class="form-control" required>
+                                        <small class="error admin_email_error text-danger"></small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="admin_mobile" class="col-sm-2 col-form-label">Admin Mobile <span class="text-danger">*</span></label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="admin_mobile" name="admin_mobile" placeholder="Mobile number for SMS alerts" class="form-control" required>
+                                        <small class="error admin_mobile_error text-danger"></small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="admin_password" class="col-sm-2 col-form-label">Login Password <span class="text-danger">*</span></label>
+                                    <div class="col-sm-9">
+                                        <input type="password" id="admin_password" name="admin_password" placeholder="At least 6 characters" class="form-control" required>
+                                        <small class="error admin_password_error text-danger"></small>
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">

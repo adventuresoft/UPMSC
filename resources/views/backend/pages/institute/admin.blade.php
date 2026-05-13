@@ -31,9 +31,7 @@
                     <div class="card card-info">
                         <div class="card-header">
                             <h3 class="card-title">
-                               <a class="linked" href="{{route('institute.edit', $institute->id)}}"> <span class="text-dark">Institute Create Info |</span></a>   
-                                <span class="text-light">Institutional Admin |</span> 
-                                <a class="linked" href="{{route('instituteA.imagesCreate', $institute->id)}}"> <span class="text-dark">Institutional Images</span> </a>
+                                <i class="fas fa-user-shield mr-2"></i> Update Institutional Admin Credentials
                             </h3>
                         </div>
                         <!-- /.card-header -->

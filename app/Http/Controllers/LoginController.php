@@ -180,19 +180,25 @@ class LoginController extends Controller
         $login = $request->input('login_id');
         $password = $request->input('password');
 
-        // Check if input is email or system_id
-        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'system_id';
+        // Try to find the user by email, system_id, or mobile
+        $user = User::where(function($query) use ($login) {
+            $query->where('email', $login)
+                  ->orWhere('system_id', $login)
+                  ->orWhere('mobile', $login);
+        })->where('status', 1)->first();
 
-        $credentials = [
-            $field => $login,
-            'password' => $password,
-        ];
+        if ($user) {
+            $credentials = [
+                'email' => $user->email,
+                'password' => $password,
+            ];
 
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard');
-        } else {
-            return redirect()->route('login')->with('error', 'Invalid credentials. Please try again.');
+            if (Auth::attempt($credentials)) {
+                return redirect()->route('dashboard');
+            }
         }
+
+        return redirect()->route('login')->with('error', 'Invalid credentials. Please try again.');
     }
 
     public function profile()

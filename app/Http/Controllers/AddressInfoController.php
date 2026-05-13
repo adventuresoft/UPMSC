@@ -40,7 +40,9 @@ class AddressInfoController extends Controller
     {
         $user = User::with( 'institute')
         ->with(array('addressInfo' => function($address){
-            $address->with('presentUnion', 'permanentHouse', 'presentHouse', 'presentRoad', 'permanentRoad',  'presentVillage', 'presentDistrict', 'presentThana');
+        $address->with('presentUnion', 'permanentHouse', 'presentHouse', 'presentRoad', 'permanentRoad',
+                'presentVillage', 'presentDistrict', 'presentThana',
+                'permanentThana', 'permanentUnion');
         }))
         ->find($id);
 
@@ -77,6 +79,7 @@ class AddressInfoController extends Controller
 
         }
         $data['divisions'] = Division::where('status', true)->get();
+        $data['districts'] = District::where('status', true)->orderBy('name')->get();
 
         if (! empty($user->addressInfo->present_union_id)) {
             $data['present_villages'] = Village::where('union_id', $user->addressInfo->present_union_id)->get();

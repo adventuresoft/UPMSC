@@ -54,8 +54,8 @@
                                 <!-- Row 2: Date of Birth, Age, Birth Place -->
                                 <div class="form-group row">
                                     <div class="col-sm-4">
-                                        <label for="date_of_birth">Date of Birth</label>
-                                        <input type="date" value="{{ $user->people->date_of_birth ?? '' }}" name="date_of_birth" class="form-control" id="date_of_birth">
+                                        <label for="date_of_birth">Date of Birth <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
+                                        <input type="date" value="{{ $user->people->date_of_birth ?? '' }}" name="date_of_birth" required class="form-control" id="date_of_birth">
                                         <small class="error date_of_birth-error text-danger"></small>
                                     </div>
                                     <div class="col-sm-4">
@@ -64,8 +64,8 @@
                                         <small class="error age-error text-danger"></small>
                                     </div>
                                     <div class="col-sm-4">
-                                        <label for="birth_place">Birth Place</label>
-                                        <select name="birth_place" class="form-control" id="birth_place">
+                                        <label for="birth_place">Birth Place <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
+                                        <select name="birth_place" class="form-control" id="birth_place" required>
                                             <option value="">Select Birth Place</option>
                                             @if (count($districts))
                                                 @foreach ($districts as $district)
@@ -143,7 +143,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <label for="email">Email</label>
-                                        <input type="email" required value="{{ $user->email ?? '' }}" name="email" placeholder="Email" class="form-control" id="email">
+                                        <input type="email" value="{{ $user->email ?? '' }}" name="email" placeholder="Email" class="form-control" id="email">
                                         <small class="error email-error text-danger"></small>
                                     </div>
                                 </div>

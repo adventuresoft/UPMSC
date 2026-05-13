@@ -120,15 +120,10 @@ class AdaReachSmsService
         string $password,
         string $approvedId
     ): string {
-        $portalUrl = rtrim(config('app.url'), '/') . '/people-portal/login';
-
-        return "প্রিয় {$name},\n"
-            . "আপনার আবেদন অনুমোদিত হয়েছে।\n"
-            . "নাগরিক আইডি: {$approvedId}\n"
-            . "লগইন আইডি: {$loginId}\n"
-            . "পাসওয়ার্ড: {$password}\n"
-            . "পোর্টাল: {$portalUrl}\n"
-            . "প্রথম লগইনের পর পাসওয়ার্ড পরিবর্তন করুন।";
+        return "Mr. {$name} Your application approved\n"
+            . "Reg ID: {$approvedId}\n"
+            . "Password: {$password}\n"
+            . "ধন্যবাদ।";
     }
 
     // ──────────────────────────────────────────────────────────────────────────
