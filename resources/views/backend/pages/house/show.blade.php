@@ -100,19 +100,22 @@
     }
 
     .info-label {
-        width: 220px;
+        display: inline-block;
+        width: 105px;
         font-weight: bold;
         color: #2c3e4e;
+        vertical-align: top;
     }
 
     .info-value {
         flex: 1;
         color: #1e2a36;
+        margin-left: 5px;
     }
 
     .two-columns {
         display: flex;
-        gap: 30px;
+        gap: 20px;
         margin-top: 10px;
     }
 
@@ -224,19 +227,19 @@
         
         <div class="two-columns">
             <div class="col">
-                <div class="info-row"><span class="info-label">House/Holding Number :</span><span class="info-value">{{ $house->house }}</span></div>
-                <div class="info-row"><span class="info-label">House/Holding No (Bangla) :</span><span class="info-value">{{ $house->house_bn }}</span></div>
-                <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $house->village->en_name ?? '--' }}</span></div>
-                <div class="info-row"><span class="info-label">Block/Sec/Sector :</span><span class="info-value">{{ $house->block_section ?? '--' }}</span></div>
-                <div class="info-row"><span class="info-label">Ward No :</span><span class="info-value">{{ $house->unionWard->en_ward_no ?? '--' }}</span></div>
-                <div class="info-row"><span class="info-label">Room Usage :</span><span class="info-value">{{ $house->room_usage ?? '--' }}</span></div>
+                <div class="info-row"><span class="info-label">House/Holding Number</span> : <span class="info-value">{{ $house->house }}</span></div>
+                <div class="info-row"><span class="info-label">House/Holding No (Bangla)</span> : <span class="info-value">{{ $house->house_bn }}</span></div>
+                <div class="info-row"><span class="info-label">Village</span> : <span class="info-value">{{ $house->village->en_name ?? '--' }}</span></div>
+                <div class="info-row"><span class="info-label">Block/Sec/Sector</span> : <span class="info-value">{{ $house->block_section ?? '--' }}</span></div>
+                <div class="info-row"><span class="info-label">Ward No</span> : <span class="info-value">{{ $house->unionWard->en_ward_no ?? '--' }}</span></div>
+                <div class="info-row"><span class="info-label">Room Usage</span> : <span class="info-value">{{ $house->room_usage ?? '--' }}</span></div>
             </div>
             <div class="col">
-                <div class="info-row"><span class="info-label">Land Quantity :</span><span class="info-value">{{ $house->land_quantity ?? '0.00' }} একর</span></div>
-                <div class="info-row"><span class="info-label">Total Land Price :</span><span class="info-value">{{ number_format((float) ($house->land_price ?? 0), 2) }} BDT</span></div>
-                <div class="info-row"><span class="info-label">Total Building Price :</span><span class="info-value">{{ number_format((float) ($house->house_price ?? 0), 2) }} BDT</span></div>
-                <div class="info-row"><span class="info-label font-weight-bold" style="color: #006600;">Total Grand Price :</span><span class="info-value font-weight-bold" style="color: #006600;">{{ number_format((float) ($house->grand_total_price ?? 0), 2) }} BDT</span></div>
-                <div class="info-row"><span class="info-label">Number of Buildings :</span><span class="info-value">{{ $house->number_of_rooms ?? '0' }}</span></div>
+                <div class="info-row"><span class="info-label">Land Quantity</span> : <span class="info-value">{{ $house->land_quantity ?? '0.00' }} একর</span></div>
+                <div class="info-row"><span class="info-label">Total Land Price</span> : <span class="info-value">{{ number_format((float) ($house->land_price ?? 0), 2) }} BDT</span></div>
+                <div class="info-row"><span class="info-label">Total Building Price</span> : <span class="info-value">{{ number_format((float) ($house->house_price ?? 0), 2) }} BDT</span></div>
+                <div class="info-row"><span class="info-label font-weight-bold" style="color: #006600;">Total Grand Price</span> : <span class="info-value font-weight-bold" style="color: #006600;">{{ number_format((float) ($house->grand_total_price ?? 0), 2) }} BDT</span></div>
+                <div class="info-row"><span class="info-label">Number of Buildings</span> : <span class="info-value">{{ $house->number_of_rooms ?? '0' }}</span></div>
             </div>
         </div>
 
@@ -268,16 +271,18 @@
                     <div class="owner-header">Owner #{{ $index + 1 }}</div>
                     <div class="two-columns">
                         <div class="col">
-                            <div class="info-row"><span class="info-label">Name :</span><span class="info-value">{{ $owner->name }}</span></div>
-                            <div class="info-row"><span class="info-label">NID/Birth ID :</span><span class="info-value">{{ $owner->nid ?? '--' }}</span></div>
-                            <div class="info-row"><span class="info-label">Is this Union? :</span><span class="info-value text-capitalize">{{ $owner->is_union ?? 'no' }}</span></div>
-                            @if(($owner->is_union ?? 'no') == 'yes')
-                                <div class="info-row"><span class="info-label">Owner ID :</span><span class="info-value">{{ $owner->owner_id ?? '--' }}</span></div>
-                            @endif
+                            <div class="info-row"><span class="info-label">Name</span> : <span class="info-value">{{ $owner->name }}</span></div>
+                            <div class="info-row"><span class="info-label">Mobile</span> : <span class="info-value">{{ $owner->mobile ?? '--' }}</span></div>
+                            <div class="info-row"><span class="info-label">Is this Union?</span> : <span class="info-value text-capitalize">{{ $owner->is_union ?? 'no' }}</span></div>
+                            
                         </div>
                         <div class="col">
-                            <div class="info-row"><span class="info-label">Mobile :</span><span class="info-value">{{ $owner->mobile ?? '--' }}</span></div>
-                            <div class="info-row"><span class="info-label">Address :</span><span class="info-value">{{ $owner->address ?? '--' }}</span></div>
+                            
+                            <div class="info-row"><span class="info-label">NID/Birth ID</span> : <span class="info-value">{{ $owner->nid ?? '--' }}</span></div>
+                            <div class="info-row"><span class="info-label">Address</span> : <span class="info-value">{{ $owner->address ?? '--' }}</span></div>
+                             @if(($owner->is_union ?? 'no') == 'yes')
+                                <div class="info-row"><span class="info-label">Owner ID</span> : <span class="info-value">{{ $owner->owner_id ?? '--' }}</span></div>
+                            @endif
                         </div>
                     </div>
                 </div>
