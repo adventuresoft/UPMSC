@@ -107,11 +107,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">গ্রাম/রাস্তা/বাসা/হোল্ডিং</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" name="current_village_road" id="current_village_road" class="form-control" placeholder="ঠিকানা">
-                                    </div>
-                                </div>
+                                     <label class="col-sm-3 col-form-label text-right">গ্রাম/রাস্তা/বাসা/হোল্ডিং</label>
+                                     <div class="col-sm-4">
+                                         <input type="text" name="current_village_road" id="current_village_road" class="form-control" placeholder="গ্রাম/রাস্তা/বাসা">
+                                     </div>
+                                     <label class="col-sm-2 col-form-label text-right">হোল্ডিং নম্বর</label>
+                                     <div class="col-sm-3">
+                                         <input type="text" name="current_house_holding" id="current_house_holding" class="form-control" placeholder="হোল্ডিং">
+                                     </div>
+                                 </div>
 
                                 <div class="form-group row bg-light p-2 mb-4">
                                     <h5 class="col-12 mb-0 font-weight-bold">৩. যে এলাকায় স্থানান্তর হইতে ইচ্ছুক</h5>
@@ -141,20 +145,27 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">ওয়ার্ড নং ও ভোটার এলাকা</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" name="transfer_ward_no" class="form-control" placeholder="ওয়ার্ড">
-                                    </div>
-                                    <div class="col-sm-7">
-                                        <input type="text" name="transfer_voter_area_name" class="form-control" placeholder="ভোটার এলাকার নাম">
-                                    </div>
-                                </div>
+                                     <label class="col-sm-3 col-form-label text-right">ওয়ার্ড নং ও ভোটার এলাকা</label>
+                                     <div class="col-sm-2">
+                                         <input type="text" name="transfer_ward_no" class="form-control" placeholder="ওয়ার্ড">
+                                     </div>
+                                     <div class="col-sm-4">
+                                         <input type="text" name="transfer_voter_area_name" class="form-control" placeholder="ভোটার এলাকার নাম">
+                                     </div>
+                                     <div class="col-sm-3">
+                                         <input type="text" name="transfer_voter_area_no" class="form-control" placeholder="ভোটার এলাকা নম্বর">
+                                     </div>
+                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">গ্রাম/রাস্তা/বাসা/হোল্ডিং</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" name="transfer_village_road" class="form-control">
-                                    </div>
-                                </div>
+                                     <label class="col-sm-3 col-form-label text-right">গ্রাম/রাস্তা/বাসা/হোল্ডিং</label>
+                                     <div class="col-sm-5">
+                                         <input type="text" name="transfer_village_road" class="form-control" placeholder="গ্রাম/রাস্তা/বাসা">
+                                     </div>
+                                     <label class="col-sm-1 col-form-label text-right">হোল্ডিং</label>
+                                     <div class="col-sm-3">
+                                         <input type="text" name="transfer_house_holding" class="form-control" placeholder="হোল্ডিং নম্বর">
+                                     </div>
+                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label text-right">ডাকঘর ও পোস্ট কোড</label>
                                     <div class="col-sm-4">
@@ -199,6 +210,12 @@
                                     <label class="col-sm-3 col-form-label text-right">সনাক্তকারীর ঠিকানা</label>
                                     <div class="col-sm-9">
                                         <input type="text" name="identifier_address" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label text-right">উদ্দেশ্য (Purpose)</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="purpose" class="form-control" placeholder="কি কারণে প্রয়োজন">
                                     </div>
                                 </div>
                             </div>

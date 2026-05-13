@@ -173,9 +173,12 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group shadow-sm">
+                                            @if(edit_permission('roles'))
                                             <a href="{{ route('role.edit', $r->id) }}" class="btn btn-sm btn-light border" title="Modify Matrix Architecture">
                                                 <i class="fas fa-edit text-primary"></i>
                                             </a>
+                                            @endif
+                                            @if(delete_permission('roles'))
                                             <form action="{{ route('role.destroy', $r->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
@@ -183,6 +186,7 @@
                                                     <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </form>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

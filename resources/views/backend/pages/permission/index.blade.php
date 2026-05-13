@@ -84,9 +84,12 @@
                                     </td>
                                     <td>
                                         <div class="btn-group shadow-sm">
+                                            @if(edit_permission('roles'))
                                             <a href="{{route('permission.edit',$value->id)}}" class="btn btn-sm btn-light border" title="Modify Identifier">
                                                 <i class="fas fa-edit text-primary"></i>
                                             </a>
+                                            @endif
+                                            @if(delete_permission('roles'))
                                             <form action="{{route('permission.destroy', $value->id)}}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
@@ -94,6 +97,7 @@
                                                     <i class="fas fa-trash text-danger"></i>
                                                 </button>
                                             </form>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

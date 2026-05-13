@@ -418,14 +418,16 @@
     @endif
 
 
+      @if(access_management_permission())
       <li class="nav-item {{ $isAccessManagement ? 'menu-open' : '' }}">
-               <a href="{{ route('role.index') }}" class="nav-link {{ $isAccessManagement ? 'active' : '' }}">
+               <a href="{{ route('user.index') }}" class="nav-link {{ $isAccessManagement ? 'active' : '' }}">
                  <i class="nav-icon fas fa-shield-alt"></i>
                  <p>
                    Access Management
                  </p>
                </a>
              </li>
+      @endif
 
     @if (institute_permissions())
     {{-- Institute Settings --}}

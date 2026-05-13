@@ -61,6 +61,32 @@ class VoterAreaCertificateController extends Controller
             'user_id' => 'required',
             'applicant_name' => 'required|string|max:255',
             'applicant_nid' => 'required|string|max:20',
+            'applicant_dob' => 'nullable|date',
+            'current_voter_no' => 'nullable|string|max:100',
+            'current_voter_area_name' => 'nullable|string|max:255',
+            'current_voter_area_no' => 'nullable|string|max:100',
+            'current_upazila_thana' => 'nullable|string|max:255',
+            'current_district' => 'nullable|string|max:255',
+            'current_village_road' => 'nullable|string|max:255',
+            'current_house_holding' => 'nullable|string|max:255',
+            'transfer_district' => 'nullable|string|max:255',
+            'transfer_upazila_thana' => 'nullable|string|max:255',
+            'transfer_entity_type' => 'nullable|string|max:100',
+            'transfer_entity_name' => 'nullable|string|max:255',
+            'transfer_ward_no' => 'nullable|string|max:50',
+            'transfer_voter_area_name' => 'nullable|string|max:255',
+            'transfer_voter_area_no' => 'nullable|string|max:100',
+            'transfer_village_road' => 'nullable|string|max:255',
+            'transfer_house_holding' => 'nullable|string|max:100',
+            'transfer_phone_mobile' => 'nullable|string|max:20',
+            'transfer_post_office' => 'nullable|string|max:255',
+            'transfer_post_code' => 'nullable|string|max:20',
+            'staying_since' => 'nullable|string|max:255',
+            'transfer_reason' => 'nullable|string',
+            'identifier_name' => 'nullable|string|max:255',
+            'identifier_nid' => 'nullable|string|max:20',
+            'identifier_address' => 'nullable|string',
+            'purpose' => 'nullable|string|max:255',
         ]);
 
         if ($validate->fails()) {
@@ -113,17 +139,9 @@ class VoterAreaCertificateController extends Controller
                     }));
                 }));
             }));
-        }))->find($id);
-        // return response()->json($data, 200);
+        }))->findOrFail($id);
+
         return view('backend.pages.certificate.voter_area.certificate', $data);
-        $html = view('backend.pages.certificate.voter_area.certificate', $data)->render();
-        $pdf = PDF::loadHTML($html)->setPaper('a4', 'landscape')
-        ->setOptions([
-            'defaultFont' => 'sans-serif',
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true
-        ]);
-        return $pdf->stream('voter_area-certificate.pdf');
     }
     public function bn_certificate($id){
         $data['certificate'] = VoterAreaCertificate::with(array('user' => function($q1){
@@ -136,17 +154,9 @@ class VoterAreaCertificateController extends Controller
                     }));
                 }));
             }));
-        }))->find($id);
-        // return response()->json($data, 200);
+        }))->findOrFail($id);
+
         return view('backend.pages.certificate.voter_area.bn_certificate', $data);
-        $html = view('backend.pages.certificate.voter_area.certificate', $data)->render();
-        $pdf = PDF::loadHTML($html)->setPaper('a4', 'landscape')
-        ->setOptions([
-            'defaultFont' => 'sans-serif',
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true
-        ]);
-        return $pdf->stream('voter_area-certificate.pdf');
     }
 
     /**
@@ -155,9 +165,10 @@ class VoterAreaCertificateController extends Controller
      * @param  \App\Models\Certificate\VoterAreaCertificate  $voterAreaCertificate
      * @return \Illuminate\Http\Response
      */
-    public function edit(VoterAreaCertificate $voterAreaCertificate)
+    public function edit($id)
     {
-        //
+        $data['certificate'] = VoterAreaCertificate::findOrFail($id);
+        return view('backend.pages.certificate.voter_area.edit', $data);
     }
 
     /**
@@ -167,9 +178,62 @@ class VoterAreaCertificateController extends Controller
      * @param  \App\Models\Certificate\VoterAreaCertificate  $voterAreaCertificate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, VoterAreaCertificate $voterAreaCertificate)
+    public function update(Request $request, $id)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'applicant_name' => 'required|string|max:255',
+            'applicant_nid' => 'required|string|max:20',
+            'applicant_dob' => 'nullable|date',
+            'current_voter_no' => 'nullable|string|max:100',
+            'current_voter_area_name' => 'nullable|string|max:255',
+            'current_voter_area_no' => 'nullable|string|max:100',
+            'current_upazila_thana' => 'nullable|string|max:255',
+            'current_district' => 'nullable|string|max:255',
+            'current_village_road' => 'nullable|string|max:255',
+            'current_house_holding' => 'nullable|string|max:255',
+            'transfer_district' => 'nullable|string|max:255',
+            'transfer_upazila_thana' => 'nullable|string|max:255',
+            'transfer_entity_type' => 'nullable|string|max:100',
+            'transfer_entity_name' => 'nullable|string|max:255',
+            'transfer_ward_no' => 'nullable|string|max:50',
+            'transfer_voter_area_name' => 'nullable|string|max:255',
+            'transfer_voter_area_no' => 'nullable|string|max:100',
+            'transfer_village_road' => 'nullable|string|max:255',
+            'transfer_house_holding' => 'nullable|string|max:100',
+            'transfer_phone_mobile' => 'nullable|string|max:20',
+            'transfer_post_office' => 'nullable|string|max:255',
+            'transfer_post_code' => 'nullable|string|max:20',
+            'staying_since' => 'nullable|string|max:255',
+            'transfer_reason' => 'nullable|string',
+            'identifier_name' => 'nullable|string|max:255',
+            'identifier_nid' => 'nullable|string|max:20',
+            'identifier_address' => 'nullable|string',
+            'purpose' => 'nullable|string|max:255',
+        ]);
+
+        if ($validate->fails()) {
+            $data['status'] = false;
+            $data['message'] = "Sorry! Invalid Entry.";
+            $data['errors'] = $validate->errors();
+            return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+        }
+
+        try {
+            $certificate = VoterAreaCertificate::findOrFail($id);
+            $certificate->fill($request->all());
+            $certificate->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Certificate updated successfully!',
+                'redirect_url' => route('voter-area.index')
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong! ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

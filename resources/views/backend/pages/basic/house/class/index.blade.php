@@ -64,7 +64,9 @@
                                     <td>{{date('d M, Y', strtotime($item->updated_at))}}</td>
                                     <td>
                                       <div style="display: inline-block">
-                                          <a class="btn btn-primary" href="{{route('basic-settings.house-class.edit', $item->id)}}">Edit</a>
+                                          @if(edit_permission())
+<a class="btn btn-primary" href="{{route('basic-settings.house-class.edit', $item->id)}}">Edit</a>
+@endif
                                           <form class="deleteClass" method="post">
                                             @csrf
                                             @method('DELETE')

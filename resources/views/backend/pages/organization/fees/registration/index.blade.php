@@ -123,7 +123,9 @@
                                       <td>
                                         <div class="d-flex">
                                           @if ( basic_settings_permissions() )
-                                              <a href="{{ route('organizationA.registration-fees.edit', $fee->id) }}" title="Edit" class="btn btn-primary mx-2"><i class="fa fa-edit"></i></a>
+                                              @if(edit_permission())
+<a href="{{ route('organizationA.registration-fees.edit', $fee->id) }}" title="Edit" class="btn btn-primary mx-2"><i class="fa fa-edit"></i></a>
+@endif
                                               <form class="deleteOrganzationFee" method="post">
                                                 @csrf
                                                 @method('Delete')

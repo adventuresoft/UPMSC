@@ -24,9 +24,29 @@ class UserController extends Controller
        // $this->middleware('auth:admin');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with(['roles'])->orderBy('id', 'desc')->paginate(10);
+        $query = User::with(['roles', 'roles.permissions']);
+
+        if (is_institutional_admin()) {
+            // Institutional admins only see users they created
+            $query->where('created_by', Auth::id());
+        }
+        // Superadmin sees all users (no filter)
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('mobile', 'like', "%{$search}%")
+                  ->orWhere('system_id', 'like', "%{$search}%")
+                  ->orWhere('area', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->orderBy('id', 'desc')->paginate(15)->withQueryString();
         return view('backend.pages.user.index', compact('users'))->with(['title' => 'Operator Directory', 'page' => 'user']);
     }
 
@@ -38,6 +58,16 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
+
+        // Institutional admins can only assign sub-user roles
+        if (is_institutional_admin()) {
+            $institutionalAdminRoleId = Auth::user()->role_id;
+            // Map admin roles to their corresponding sub-user roles
+            $subUserRoleMap = [6 => 7, 8 => 9, 10 => 11];
+            $allowedRoleId = $subUserRoleMap[$institutionalAdminRoleId] ?? null;
+            $roles = $allowedRoleId ? Role::where('id', $allowedRoleId)->get() : collect();
+        }
+
         return view('backend.pages.user.create', compact('roles'))->with(['title' => 'New Operator', 'page' => 'user']);
     }
 
@@ -72,6 +102,11 @@ class UserController extends Controller
             $user->syncRoles($role->name);
         }
 
+        // Track institute and creator
+        $user->institute_id = Auth::user()->institute_id;
+        $user->created_by = Auth::id();
+        $user->save();
+
         session()->flash("success", "Operator Registered Successfully");
         return redirect(route('user.index'));
     }
@@ -97,7 +132,21 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::with(['roles'])->find($id);
+
+        // Institutional admins can only edit users they created
+        if (is_institutional_admin() && $user->created_by !== Auth::id()) {
+            abort(403, 'You can only edit users you created.');
+        }
+
         $roles = Role::all();
+        // Restrict roles for institutional admins
+        if (is_institutional_admin()) {
+            $institutionalAdminRoleId = Auth::user()->role_id;
+            $subUserRoleMap = [6 => 7, 8 => 9, 10 => 11];
+            $allowedRoleId = $subUserRoleMap[$institutionalAdminRoleId] ?? null;
+            $roles = $allowedRoleId ? Role::where('id', $allowedRoleId)->get() : collect();
+        }
+
         return view('backend.pages.user.edit', compact('user', 'roles'))->with(['title' => 'Edit Operator', 'page' => 'user']);
     }
 
@@ -110,11 +159,17 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $user = User::find($id);
+
+        // Institutional admins can only update users they created
+        if (is_institutional_admin() && $user->created_by !== Auth::id()) {
+            abort(403, 'You can only update users you created.');
+        }
+
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required',
         ]);
-        $user = User::find($id);
 
         $image =  $user ->image;
         if ($request->hasFile('image')) {
@@ -189,6 +244,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
         if ($user) {
+            // Institutional admins can only delete users they created
+            if (is_institutional_admin() && $user->created_by !== Auth::id()) {
+                abort(403, 'You can only revoke access for users you created.');
+            }
             $user->delete();
             session()->flash("success", "Operator Access Revoked Successfully");
         }

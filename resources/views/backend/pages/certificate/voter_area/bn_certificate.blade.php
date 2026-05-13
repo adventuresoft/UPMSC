@@ -107,64 +107,64 @@
         <table style="width: 100%; border: none;">
             <tr>
                 <td style="width: 40px; vertical-align: top;">১।</td>
-                <td>আবেদনকারীর নাম : <span class="dotted-line" style="width: calc(100% - 130px);">{{ $certificate->applicant_name }}</span></td>
+                <td>আবেদনকারীর নাম : <span class="dotted-line" style="min-width: 400px;">{{ $certificate->applicant_name }}</span></td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">২।</td>
-                <td>জাতীয় পরিচয়পত্র নম্বর (NID) : <span class="dotted-line" style="width: calc(100% - 210px);">{{ bnValue($certificate->applicant_nid) }}</span>
+                <td>জাতীয় পরিচয়পত্র নম্বর (NID) : <span class="dotted-line" style="min-width: 300px;">{{ bnValue($certificate->applicant_nid) }}</span>
                     <div style="text-align: right; padding-right: 50px; font-size: 14px; margin-top: 5px;">(জাতীয় পরিচয়পত্রের ছায়ালিপি সংযুক্ত করিতে হইবে)</div>
                 </td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">৩।</td>
-                <td>জন্ম তারিখ : <span class="dotted-line" style="width: calc(100% - 90px);">{{ $certificate->applicant_dob ? bnValue(date('d/m/Y', strtotime($certificate->applicant_dob))) : '' }}</span></td>
+                <td>জন্ম তারিখ : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->applicant_dob ? bnValue(date('d/m/Y', strtotime($certificate->applicant_dob))) : '' }}</span></td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">৪।</td>
-                <td>বর্তমান তালিকাভুক্তি সংক্রান্ত তথ্যাদি-
+                <td>বর্তমান তালিকাভুক্তি সংক্রান্ত তথ্যাদি
                     <table style="width: 100%; margin-left: 30px; line-height: 2;">
                         <tr>
-                            <td colspan="2">ভোটার নম্বর : <span class="dotted-line" style="width: calc(100% - 120px);">{{ bnValue($certificate->current_voter_no) }}</span></td>
+                            <td colspan="2">ভোটার নম্বর : <span class="dotted-line" style="min-width: 300px;">{{ bnValue($certificate->current_voter_no) }}</span></td>
                         </tr>
                         <tr>
-                            <td style="width: 50%;">ভোটার এলাকার নাম: <span class="dotted-line" style="width: calc(100% - 150px);">{{ $certificate->current_voter_area_name }}</span></td>
-                            <td style="width: 50%;">ভোটার এলাকার নম্বর : <span class="dotted-line" style="width: calc(100% - 160px);">{{ bnValue($certificate->current_voter_area_no) }}</span></td>
+                            <td style="width: 50%;">ভোটার এলাকার নাম: <span class="dotted-line" style="min-width: 200px;">{{ $certificate->current_voter_area_name }}</span></td>
+                            <td style="width: 50%;">ভোটার এলাকার নম্বর : <span class="dotted-line" style="min-width: 150px;">{{ bnValue($certificate->current_voter_area_no) }}</span></td>
                         </tr>
                         <tr>
-                            <td>উপজেলা/থানা : <span class="dotted-line" style="width: calc(100% - 120px);">{{ $certificate->current_upazila_thana }}</span></td>
-                            <td>জেলা : <span class="dotted-line" style="width: calc(100% - 60px);">{{ $certificate->current_district }}</span></td>
+                            <td style="width: 50%;">উপজেলা/থানা : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->current_upazila_thana }}</span></td>
+                            <td style="width: 50%;">জেলা : <span class="dotted-line" style="min-width: 150px;">{{ $certificate->current_district }}</span></td>
                         </tr>
                         <tr>
-                            <td>গ্রাম/রাস্তার নাম ও নম্বর : <span class="dotted-line" style="width: calc(100% - 170px);">{{ $certificate->current_village_road }}</span></td>
-                            <td>বাসা/হোল্ডিং নম্বর : <span class="dotted-line" style="width: calc(100% - 140px);">{{ bnValue($certificate->current_house_holding) }}</span></td>
+                            <td style="width: 50%;">গ্রাম/রাস্তার নাম ও নম্বর : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->current_village_road }}</span></td>
+                            <td style="width: 50%;">বাসা/হোল্ডিং নম্বর : <span class="dotted-line" style="min-width: 150px;">{{ bnValue($certificate->current_house_holding) }}</span></td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">৫।</td>
-                <td>যে এলাকায় স্থানান্তর হইতে ইচ্ছুক-
+                <td>যে এলাকায় স্থানান্তর হইতে ইচ্ছুক
                     <table style="width: 100%; margin-left: 30px; line-height: 2;">
                         <tr>
-                            <td style="width: 40%;">জেলা : <span class="dotted-line" style="width: calc(100% - 60px);">{{ $certificate->transfer_district }}</span></td>
-                            <td style="width: 60%;">উপজেলা/থানা : <span class="dotted-line" style="width: calc(100% - 120px);">{{ $certificate->transfer_upazila_thana }}</span></td>
+                            <td style="width: 40%;">জেলা : <span class="dotted-line" style="min-width: 150px;">{{ $certificate->transfer_district }}</span></td>
+                            <td style="width: 60%;">উপজেলা/থানা : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_upazila_thana }}</span></td>
                         </tr>
                         <tr>
-                            <td colspan="2">সিটি কর্পোরেশন/পৌরসভা/ইউনিয়ন/ক্যান্ট: বোর্ড : <span class="dotted-line" style="width: 35%;">{{ $certificate->transfer_entity_name }}</span> ওয়ার্ড নম্বর : <span class="dotted-line" style="width: 15%;">{{ bnValue($certificate->transfer_ward_no) }}</span></td>
+                            <td colspan="2">{{ $certificate->transfer_entity_type ?? 'সিটি কর্পোরেশন/পৌরসভা/ইউনিয়ন' }} : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_entity_name }}</span> ওয়ার্ড নম্বর : <span class="dotted-line" style="min-width: 80px;">{{ bnValue($certificate->transfer_ward_no) }}</span></td>
                         </tr>
                         <tr>
-                            <td style="width: 50%;">ভোটার এলাকার নাম : <span class="dotted-line" style="width: calc(100% - 150px);">{{ $certificate->transfer_voter_area_name }}</span></td>
-                            <td style="width: 50%;">ভোটার এলাকার নম্বর : <span class="dotted-line" style="width: calc(100% - 160px);">{{ bnValue($certificate->transfer_voter_area_no) }}</span></td>
+                            <td style="width: 50%;">ভোটার এলাকার নাম : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_voter_area_name }}</span></td>
+                            <td style="width: 50%;">ভোটার এলাকার নম্বর : <span class="dotted-line" style="min-width: 150px;">{{ bnValue($certificate->transfer_voter_area_no) }}</span></td>
                         </tr>
                         <tr>
-                            <td style="width: 50%;">গ্রাম/রাস্তার নাম ও নম্বর : <span class="dotted-line" style="width: calc(100% - 170px);">{{ $certificate->transfer_village_road }}</span></td>
-                            <td style="width: 50%;">বাসা/হোল্ডিং নম্বর : <span class="dotted-line" style="width: calc(100% - 140px);">{{ bnValue($certificate->transfer_house_holding) }}</span></td>
+                            <td style="width: 50%;">গ্রাম/রাস্তার নাম ও নম্বর : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_village_road }}</span></td>
+                            <td style="width: 50%;">বাসা/হোল্ডিং নম্বর : <span class="dotted-line" style="min-width: 150px;">{{ bnValue($certificate->transfer_house_holding) }}</span></td>
                         </tr>
                         <tr>
-                            <td colspan="2">টেলিফোন/মোবাইল ফোন নম্বর : <span class="dotted-line" style="width: calc(100% - 210px);">{{ bnValue($certificate->transfer_phone_mobile) }}</span></td>
+                            <td colspan="2">টেলিফোন/মোবাইল ফোন নম্বর : <span class="dotted-line" style="min-width: 250px;">{{ bnValue($certificate->transfer_phone_mobile) }}</span></td>
                         </tr>
                         <tr>
-                            <td style="width: 60%;">ডাকঘর : <span class="dotted-line" style="width: calc(100% - 70px);">{{ $certificate->transfer_post_office }}</span></td>
+                            <td style="width: 60%;">ডাকঘর : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_post_office }}</span></td>
                             <td style="width: 40%;">পোস্ট কোড : 
                                 <div class="post-code-box">
                                     @php $pc = str_split($certificate->transfer_post_code ?? '    '); @endphp
@@ -179,11 +179,11 @@
             </tr>
             <tr>
                 <td style="vertical-align: top;">৬।</td>
-                <td>৫ নম্বর ক্রমিকে বর্ণিত ঠিকানায় যে সময় হইতে অবস্থান করিতেছেন : <span class="dotted-line" style="width: calc(100% - 440px);">{{ $certificate->staying_since }}</span></td>
+                <td>৫ নম্বর ক্রমিকে বর্ণিত ঠিকানায় যে সময় হইতে অবস্থান করিতেছেন : <span class="dotted-line" style="min-width: 250px;">{{ $certificate->staying_since }}</span></td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">৭।</td>
-                <td>স্থানান্তরের কারণ: <span class="dotted-line" style="width: calc(100% - 140px);">{{ $certificate->transfer_reason }}</span></td>
+                <td>স্থানান্তরের কারণ: <span class="dotted-line" style="min-width: 400px;">{{ $certificate->transfer_reason }}</span></td>
             </tr>
         </table>
     </div>
@@ -252,8 +252,8 @@
         </div>
 
         <div style="line-height: 2.5;">
-            জনাব/বেগম <span class="dotted-line" style="width: 70%;">{{ $certificate->applicant_name }}</span> এর আবেদন ফরম গৃহীত হইল।<br>
-            আবেদন ফরম নম্বর <span class="dotted-line" style="width: 50%;">{{ bnValue($certificate->system_id) }}</span>
+            জনাব/বেগম <strong>{{ $certificate->applicant_name }}</strong> এর আবেদন ফরম গৃহীত হইল।<br>
+            আবেদন ফরম নম্বর <strong>{{ bnValue($certificate->system_id) }}</strong>
         </div>
 
         <div style="text-align: right; margin-top: 80px;">

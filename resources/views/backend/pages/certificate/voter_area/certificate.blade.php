@@ -107,64 +107,64 @@
         <table style="width: 100%; border: none;">
             <tr>
                 <td style="width: 40px; vertical-align: top;">1.</td>
-                <td>Applicant's Name : <span class="dotted-line" style="width: calc(100% - 150px);">{{ $certificate->applicant_name }}</span></td>
+                <td>Applicant's Name : <span class="dotted-line" style="min-width: 400px;">{{ $certificate->applicant_name }}</span></td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">2.</td>
-                <td>National Identity Card Number (NID) : <span class="dotted-line" style="width: calc(100% - 280px);">{{ $certificate->applicant_nid }}</span>
+                <td>National Identity Card Number (NID) : <span class="dotted-line" style="min-width: 300px;">{{ $certificate->applicant_nid }}</span>
                     <div style="text-align: right; padding-right: 50px; font-size: 13px; margin-top: 5px;">(Photocopy of National Identity Card must be attached)</div>
                 </td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">3.</td>
-                <td>Date of Birth : <span class="dotted-line" style="width: calc(100% - 120px);">{{ $certificate->applicant_dob ? date('d/m/Y', strtotime($certificate->applicant_dob)) : '' }}</span></td>
+                <td>Date of Birth : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->applicant_dob ? date('d/m/Y', strtotime($certificate->applicant_dob)) : '' }}</span></td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">4.</td>
-                <td>Information regarding current enrollment-
+                <td>Information regarding current enrollment
                     <table style="width: 100%; margin-left: 30px; line-height: 2;">
                         <tr>
-                            <td colspan="2">Voter Number : <span class="dotted-line" style="width: calc(100% - 120px);">{{ $certificate->current_voter_no }}</span></td>
+                            <td colspan="2">Voter Number : <span class="dotted-line" style="min-width: 300px;">{{ $certificate->current_voter_no }}</span></td>
                         </tr>
                         <tr>
-                            <td style="width: 50%;">Voter Area Name: <span class="dotted-line" style="width: calc(100% - 140px);">{{ $certificate->current_voter_area_name }}</span></td>
-                            <td style="width: 50%;">Voter Area Number : <span class="dotted-line" style="width: calc(100% - 160px);">{{ $certificate->current_voter_area_no }}</span></td>
+                            <td style="width: 50%;">Voter Area Name: <span class="dotted-line" style="min-width: 200px;">{{ $certificate->current_voter_area_name }}</span></td>
+                            <td style="width: 50%;">Voter Area Number : <span class="dotted-line" style="min-width: 150px;">{{ $certificate->current_voter_area_no }}</span></td>
                         </tr>
                         <tr>
-                            <td>Upazila/Thana : <span class="dotted-line" style="width: calc(100% - 120px);">{{ $certificate->current_upazila_thana }}</span></td>
-                            <td>District : <span class="dotted-line" style="width: calc(100% - 80px);">{{ $certificate->current_district }}</span></td>
+                            <td style="width: 50%;">Upazila/Thana : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->current_upazila_thana }}</span></td>
+                            <td style="width: 50%;">District : <span class="dotted-line" style="min-width: 150px;">{{ $certificate->current_district }}</span></td>
                         </tr>
                         <tr>
-                            <td>Village/Road Name & Number : <span class="dotted-line" style="width: calc(100% - 220px);">{{ $certificate->current_village_road }}</span></td>
-                            <td>House/Holding Number : <span class="dotted-line" style="width: calc(100% - 180px);">{{ $certificate->current_house_holding }}</span></td>
+                            <td style="width: 50%;">Village/Road Name & Number : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->current_village_road }}</span></td>
+                            <td style="width: 50%;">House/Holding Number : <span class="dotted-line" style="min-width: 150px;">{{ $certificate->current_house_holding }}</span></td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">5.</td>
-                <td>Area willing to transfer to-
+                <td>Area willing to transfer to
                     <table style="width: 100%; margin-left: 30px; line-height: 2;">
                         <tr>
-                            <td style="width: 40%;">District : <span class="dotted-line" style="width: calc(100% - 80px);">{{ $certificate->transfer_district }}</span></td>
-                            <td style="width: 60%;">Upazila/Thana : <span class="dotted-line" style="width: calc(100% - 120px);">{{ $certificate->transfer_upazila_thana }}</span></td>
+                            <td style="width: 40%;">District : <span class="dotted-line" style="min-width: 150px;">{{ $certificate->transfer_district }}</span></td>
+                            <td style="width: 60%;">Upazila/Thana : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_upazila_thana }}</span></td>
                         </tr>
                         <tr>
-                            <td colspan="2">City Corp/Municipality/Union/Cant: Board : <span class="dotted-line" style="width: 30%;">{{ $certificate->transfer_entity_name }}</span> Ward Number : <span class="dotted-line" style="width: 15%;">{{ $certificate->transfer_ward_no }}</span></td>
+                            <td colspan="2">{{ $certificate->transfer_entity_type ?? 'City Corp/Municipality/Union' }} : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_entity_name }}</span> Ward Number : <span class="dotted-line" style="min-width: 80px;">{{ $certificate->transfer_ward_no }}</span></td>
                         </tr>
                         <tr>
-                            <td style="width: 50%;">Voter Area Name : <span class="dotted-line" style="width: calc(100% - 140px);">{{ $certificate->transfer_voter_area_name }}</span></td>
-                            <td style="width: 50%;">Voter Area Number : <span class="dotted-line" style="width: calc(100% - 160px);">{{ $certificate->transfer_voter_area_no }}</span></td>
+                            <td style="width: 50%;">Voter Area Name : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_voter_area_name }}</span></td>
+                            <td style="width: 50%;">Voter Area Number : <span class="dotted-line" style="min-width: 150px;">{{ $certificate->transfer_voter_area_no }}</span></td>
                         </tr>
                         <tr>
-                            <td style="width: 50%;">Village/Road Name & No. : <span class="dotted-line" style="width: calc(100% - 190px);">{{ $certificate->transfer_village_road }}</span></td>
-                            <td style="width: 50%;">House/Holding No. : <span class="dotted-line" style="width: calc(100% - 150px);">{{ $certificate->transfer_house_holding }}</span></td>
+                            <td style="width: 50%;">Village/Road Name & No. : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_village_road }}</span></td>
+                            <td style="width: 50%;">House/Holding No. : <span class="dotted-line" style="min-width: 150px;">{{ $certificate->transfer_house_holding }}</span></td>
                         </tr>
                         <tr>
-                            <td colspan="2">Telephone/Mobile Number : <span class="dotted-line" style="width: calc(100% - 210px);">{{ $certificate->transfer_phone_mobile }}</span></td>
+                            <td colspan="2">Telephone/Mobile Number : <span class="dotted-line" style="min-width: 250px;">{{ $certificate->transfer_phone_mobile }}</span></td>
                         </tr>
                         <tr>
-                            <td style="width: 60%;">Post Office : <span class="dotted-line" style="width: calc(100% - 100px);">{{ $certificate->transfer_post_office }}</span></td>
+                            <td style="width: 60%;">Post Office : <span class="dotted-line" style="min-width: 200px;">{{ $certificate->transfer_post_office }}</span></td>
                             <td style="width: 40%;">Post Code : 
                                 <div class="post-code-box">
                                     @php $pc = str_split($certificate->transfer_post_code ?? '    '); @endphp
@@ -179,11 +179,11 @@
             </tr>
             <tr>
                 <td style="vertical-align: top;">6.</td>
-                <td>Staying at the address mentioned in serial no. 5 since : <span class="dotted-line" style="width: calc(100% - 400px);">{{ $certificate->staying_since }}</span></td>
+                <td>Staying at the address mentioned in serial no. 5 since : <span class="dotted-line" style="min-width: 250px;">{{ $certificate->staying_since }}</span></td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">7.</td>
-                <td>Reason for transfer: <span class="dotted-line" style="width: calc(100% - 160px);">{{ $certificate->transfer_reason }}</span></td>
+                <td>Reason for transfer: <span class="dotted-line" style="min-width: 400px;">{{ $certificate->transfer_reason }}</span></td>
             </tr>
         </table>
     </div>
@@ -252,8 +252,8 @@
         </div>
 
         <div style="line-height: 2.5;">
-            Mr./Mrs. <span class="dotted-line" style="width: 60%;">{{ $certificate->applicant_name }}</span> 's application form has been accepted.<br>
-            Application Form Number <span class="dotted-line" style="width: 50%;">{{ $certificate->system_id }}</span>
+            Mr./Mrs. <strong>{{ $certificate->applicant_name }}</strong> 's application form has been accepted.<br>
+            Application Form Number <strong>{{ $certificate->system_id }}</strong>
         </div>
 
         <div style="text-align: right; margin-top: 80px;">

@@ -63,7 +63,9 @@
                                       <td>{{date('d M, Y', strtotime($ward->created_at))}}</td>
                                       <td>
                                         <div style="display: flex; gap:8px">
-                                            <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.city-corporation-ward.edit', $ward->id)}}"><i class="fa fa-edit"></i></a>
+                                            @if(edit_permission())
+<a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.city-corporation-ward.edit', $ward->id)}}"><i class="fa fa-edit"></i></a>
+@endif
                                             <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('basic-settings.city-corporation-ward.show', $ward->id)}}"><i class="fa fa-eye"></i></a>
 
                                             <form class="deleteWard" method="post">

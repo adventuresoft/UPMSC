@@ -67,7 +67,9 @@
 
                                         <div class="table-action">
                                             @if (Auth::user()->institute_id && create_permission() )
+                                            @if(edit_permission())
                                                 <a href="{{ route('house.edit', $house->id) }}" title="Edit" data-toggle="tooltip" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
+                                            @endif
                                                 <form class="deleteHouse" method="post">
                                                   @csrf
                                                   @method('Delete')

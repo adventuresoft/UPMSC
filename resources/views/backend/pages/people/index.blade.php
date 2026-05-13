@@ -425,7 +425,7 @@ Permanent:</strong>
                                                     </button>
                                                 @endif
 
-                                                @if(Auth::user()->role_id == 1)
+                                                @if(edit_permission('people'))
                                                 <a href="{{ route('people.edit', $user->id) }}" 
                                                     class="btn-action btn-edit" title="Edit">
                                                     <i class="fa fa-edit"></i>

@@ -15,11 +15,18 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
      public function __construct() {
-        // $this->middleware('auth:admin');
+        // Restrict role management to superadmins only
+    }
+
+    private function guardSuperadmin() {
+        if (!is_superadmin()) {
+            abort(403, 'Only Superadmins can manage Roles.');
+        }
     }
     
     public function index()
     {
+        $this->guardSuperadmin();
         $roles = Role::with('permissions')->paginate(10);
         $permissions = Permission::all();
         
@@ -49,6 +56,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $this->guardSuperadmin();
         $this->validate($request, [
             'name' => 'required|unique:roles,name',
         ]);
@@ -81,6 +89,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        $this->guardSuperadmin();
         $role = Role::with('permissions')->find($id);
         $roles = Role::with('permissions')->paginate(10);
         $permissions = Permission::all();
@@ -102,6 +111,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->guardSuperadmin();
         $this->validate($request, [
             'name' => 'required|unique:roles,name,' . $id,
         ]);
@@ -127,6 +137,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
+        $this->guardSuperadmin();
         $role = Role::find($id);
         if ($role) {
             $role->delete();
