@@ -133,10 +133,14 @@
             $(document).on('change', '.is_union_radio', function() {
                 let container = $(this).closest('.signle-ownership');
                 let detailsContainer = container.find('.ownership_details_container');
+                let val = $(this).val();
+                
+                // Update hidden input for array submission
+                container.find('.is_union_hidden').val(val);
                 
                 detailsContainer.show(); // Show details when any option is selected
 
-                if ($(this).val() === 'yes') {
+                if (val === 'yes') {
                     container.find('.system_id_group').show();
                     container.find('.owner_name, .owner_nid, .owner_mobile, .owner_address').prop('readonly', true);
                 } else {
@@ -146,10 +150,10 @@
                 }
             });
 
-            // Search User by System ID
-            $(document).on('change', '.system_id_input', function() {
-                let systemID = $(this).val();
-                let container = $(this).closest('.signle-ownership');
+            // Search User by System ID (Triggered by button or change)
+            function searchUser(inputElement) {
+                let systemID = inputElement.val();
+                let container = inputElement.closest('.signle-ownership');
                 if (systemID) {
                     $.ajax({
                         type: "GET",
@@ -197,6 +201,14 @@
                         }
                     });
                 }
+            }
+
+            $(document).on('click', '.find_user_btn', function() {
+                searchUser($(this).closest('.input-group').find('.system_id_input'));
+            });
+
+            $(document).on('change', '.system_id_input', function() {
+                searchUser($(this));
             });
         })
 

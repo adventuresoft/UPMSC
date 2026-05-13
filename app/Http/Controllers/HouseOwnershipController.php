@@ -67,6 +67,8 @@ class HouseOwnershipController extends Controller
         }
 
         $ids = $request->id;
+        $is_unions = $request->is_union;
+        $owner_ids = $request->owner_id;
         $names = $request->name;
         $nids = $request->nid;
         $mobiles = $request->mobile;
@@ -82,6 +84,8 @@ class HouseOwnershipController extends Controller
                 }
 
                 $ownership->house_id  = $request->house_id;
+                $ownership->is_union  = $is_unions[$key] ?? 'no';
+                $ownership->owner_id  = $owner_ids[$key] ?? null;
                 $ownership->name  = $name;
                 $ownership->nid  = $nids[$key];
                 $ownership->mobile  = $mobiles[$key] ?? null;

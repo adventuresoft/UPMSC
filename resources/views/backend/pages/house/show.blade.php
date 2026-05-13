@@ -270,6 +270,10 @@
                         <div class="col">
                             <div class="info-row"><span class="info-label">Name :</span><span class="info-value">{{ $owner->name }}</span></div>
                             <div class="info-row"><span class="info-label">NID/Birth ID :</span><span class="info-value">{{ $owner->nid ?? '--' }}</span></div>
+                            <div class="info-row"><span class="info-label">Is this Union? :</span><span class="info-value text-capitalize">{{ $owner->is_union ?? 'no' }}</span></div>
+                            @if(($owner->is_union ?? 'no') == 'yes')
+                                <div class="info-row"><span class="info-label">Owner ID :</span><span class="info-value">{{ $owner->owner_id ?? '--' }}</span></div>
+                            @endif
                         </div>
                         <div class="col">
                             <div class="info-row"><span class="info-label">Mobile :</span><span class="info-value">{{ $owner->mobile ?? '--' }}</span></div>

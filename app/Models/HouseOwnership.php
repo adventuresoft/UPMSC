@@ -13,6 +13,8 @@ class HouseOwnership extends Model
     protected $table = "house_ownerships";
     protected $fillable = [
         'house_id', 
+        'is_union',
+        'owner_id',
         'name', 
         'nid', 
         'mobile', 
