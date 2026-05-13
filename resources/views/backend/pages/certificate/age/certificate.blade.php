@@ -164,10 +164,14 @@
                             {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Mrs.' }}
                             <strong>{{ $certificate->user->people->name ?? '' }}</strong>,
                             ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
-                            @if($certificate->user->people->nid)
-                                NID: <span>{{ $certificate->user->people->nid }}</span>,
-                            @elseif($certificate->user->people->birth_certificate)
-                                Birth Reg. No.: <span>{{ $certificate->user->people->birth_certificate }}</span>,
+                            @php 
+                                $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
+                                $bc = $certificate->user->birth_certificate ?? $certificate->user->people->birth_certificate ?? '';
+                            @endphp
+                            @if($nid && $nid != '1111111114')
+                                NID: <span>{{ $nid }}</span>,
+                            @elseif($bc)
+                                Birth Reg. No.: <span>{{ $bc }}</span>,
                             @endif
                             Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>,
                             Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,

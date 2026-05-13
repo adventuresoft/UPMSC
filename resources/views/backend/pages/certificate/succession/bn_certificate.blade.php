@@ -211,6 +211,15 @@
                             আইডি নং <strong>{{ bnValue($certificate->user->people->approved_id?? '') }}</strong>,
                             পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
                             মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }}।
+                            @php 
+                                $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
+                                $bc = $certificate->user->birth_certificate ?? $certificate->user->people->birth_certificate ?? '';
+                            @endphp
+                            @if($nid && $nid != '1111111114')
+                                এনআইডিঃ {{ bnValue($nid) }},
+                            @elseif($bc)
+                                জন্ম নিবন্ধন নং- {{ bnValue($bc) }},
+                            @endif
                             ঠিকানাঃ গ্রাম- {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
                             ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
                             ডাকঘর: - 

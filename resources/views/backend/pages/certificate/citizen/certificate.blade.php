@@ -167,7 +167,15 @@
                             ID No. <strong>{{ $certificate->user->people->approved_id }}</strong>,
                             Father: {{ $certificate->user->familyInfo->father_name ?? '' }},
                             Mother: {{ $certificate->user->familyInfo->mother_name ?? '' }},
-                            NID No.<strong>{{ $certificate->user->nid ?? $certificate->user->people->nid ?? '' }}</strong>,
+                            @php 
+                                $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
+                                $bc = $certificate->user->birth_certificate ?? $certificate->user->people->birth_certificate ?? '';
+                            @endphp
+                            @if($nid && $nid != '1111111114')
+                                NID No. <strong>{{ $nid }}</strong>,
+                            @elseif($bc)
+                                Birth Certificate No. <strong>{{ $bc }}</strong>,
+                            @endif
                             Date of Birth: {{ $certificate->user->people->date_of_birth ? date('d/m/Y', strtotime($certificate->user->people->date_of_birth)) : '' }},
                             Address:
                             Village: - {{ $certificate->user?->addressInfo?->permanentVillage?->en_name ?? '' }},

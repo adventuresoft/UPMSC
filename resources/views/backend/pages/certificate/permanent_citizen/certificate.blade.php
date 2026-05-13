@@ -159,6 +159,15 @@
                             ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
                             Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>
                             and Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
+                            @php 
+                                $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
+                                $bc = $certificate->user->birth_certificate ?? $certificate->user->people->birth_certificate ?? '';
+                            @endphp
+                            @if($nid && $nid != '1111111114')
+                                NID No. <strong>{{ $nid }}</strong>,
+                            @elseif($bc)
+                                Birth Certificate No. <strong>{{ $bc }}</strong>,
+                            @endif
                             Address: Village : - <span>{{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }}</span>,
                             Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},
                             Post Office: - 
