@@ -112,17 +112,19 @@ class HouseController extends Controller
             'house' => 'required|max:190',
             'house_bn' => 'required|max:190',
             'village_id' => 'nullable|max:190',
-            'village_area_id' => 'nullable',
+            'block_section' => 'nullable|max:190',
             'union_ward_id' => 'nullable|max:190',
-            'house_type_id' => 'nullable|max:190',
-            'house_category_id' => 'nullable|max:190',
-            'house_owner_type_id' => 'nullable|max:190',
-            'mouza_id' => 'nullable|max:190',
-            'brs_khatian' => 'nullable|max:190',
-            'brs_dag' => 'nullable|max:190',
+            'number_of_rooms' => 'nullable|integer',
+            'room_usage' => 'nullable|max:190',
+            'room_area' => 'nullable|array',
+            'room_type' => 'nullable|array',
+            'price_per_sq_ft' => 'nullable|array',
             'land_quantity' => 'nullable|max:190',
-            'house_price' => 'nullable|max:190',
+            'house_price' => 'nullable|numeric',
+            'land_price' => 'nullable|numeric',
+            'grand_total_price' => 'nullable|numeric',
         ]);
+
 
         if ($validate->fails()) {
             $data['status'] = false;
@@ -132,41 +134,51 @@ class HouseController extends Controller
         }
 
         try {
+            $roomDetails = [];
+            if ($request->has('room_area') && is_array($request->room_area)) {
+                foreach ($request->room_area as $key => $area) {
+                    $roomDetails[] = [
+                        'area' => $area,
+                        'type' => $request->room_type[$key] ?? '',
+                        'price_per_sq_ft' => $request->price_per_sq_ft[$key] ?? ''
+                    ];
+                }
+            }
+            $roomDetailsJson = json_encode($roomDetails, JSON_UNESCAPED_UNICODE);
+
+            $payload = [
+                'house' => $request->house,
+                'house_bn' => $request->house_bn,
+                'village_id' => $request->village_id,
+                'block_section' => $request->block_section,
+                'union_ward_id' => $request->union_ward_id,
+                'number_of_rooms' => $request->number_of_rooms,
+                'room_details' => $roomDetailsJson,
+                'room_usage' => $request->room_usage,
+                // Reset legacy fields
+                'village_area_id' => null,
+                'house_type_id' => null,
+                'house_category_id' => null,
+                'house_owner_type_id' => null,
+                'mouza_id' => null,
+                'brs_khatian' => null,
+                'brs_dag' => null,
+                'land_quantity' => $request->land_quantity ?: 0,
+                'house_price' => $request->house_price ?: 0,
+                'land_price' => $request->land_price ?: 0,
+                'grand_total_price' => $request->grand_total_price ?: 0,
+            ];
 
             if ($request->id) {
-                $house = House::where('id', $request->id)->update([
-                    'house' => $request->house,
-                    'house_bn' => $request->house_bn,
-                    'village_id' => $request->village_id,
-                    'village_area_id' => $request->village_area_id,
-                    'union_ward_id' => $request->union_ward_id,
-                    'house_type_id' => $request->house_type_id,
-                    'house_category_id' => $request->house_category_id,
-                    'house_owner_type_id' => $request->house_owner_type_id,
-                    'mouza_id' => $request->mouza_id,
-                    'brs_khatian' => $request->brs_khatian,
-                    'brs_dag' => $request->brs_dag,
-                    'land_quantity' => $request->land_quantity,
-                    'house_price' => $request->house_price,
-                ]);
+                $house = House::where('id', $request->id)->first();
+                if ($house) {
+                    $house->update($payload);
+                }
             } else {
-                $house = House::create([
-                    'institute_id' => Auth::user()->institute_id,
-                    'house' => $request->house,
-                    'house_bn' => $request->house_bn,
-                    'village_id' => $request->village_id,
-                    'village_area_id' => $request->village_area_id,
-                    'union_ward_id' => $request->union_ward_id,
-                    'house_type_id' => $request->house_type_id,
-                    'house_category_id' => $request->house_category_id,
-                    'house_owner_type_id' => $request->house_owner_type_id,
-                    'mouza_id' => $request->mouza_id,
-                    'brs_khatian' => $request->brs_khatian,
-                    'brs_dag' => $request->brs_dag,
-                    'land_quantity' => $request->land_quantity,
-                    'house_price' => $request->house_price,
-                ]);
+                $payload['institute_id'] = Auth::user()->institute_id;
+                $house = House::create($payload);
             }
+
 
            
             $data['status'] = true;
@@ -177,8 +189,8 @@ class HouseController extends Controller
             return response()->json($data, 200);
         } catch (\Throwable $th) {
             $data['status'] = false;
-            $data['message'] = "Something went wrong! Please try again...";
-            $data['errors'] = $th;
+            $data['message'] = "Error: " . $th->getMessage();
+            $data['errors'] = $th->getMessage();
             return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
         }
     }
@@ -191,7 +203,11 @@ class HouseController extends Controller
      */
     public function show($id)
     {
-        return view('backend.pages.house.show');
+        $data['house'] = House::with(['village', 'unionWard', 'ownership'])->find($id);
+        if (!$data['house']) {
+            return redirect()->back()->with('error', 'House not found.');
+        }
+        return view('backend.pages.house.show', $data);
     }
 
     /**
@@ -256,7 +272,7 @@ class HouseController extends Controller
             } catch (\Throwable $th) {
                 $data['status'] = false;
                 $data['message'] = "Failed to delete";
-                $data['errors'] = $th;
+                $data['errors'] = $th->getMessage(); \Log::error($th->getMessage());
                 return response()->json($data, 500);
             }
 

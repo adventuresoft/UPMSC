@@ -71,7 +71,7 @@ class HouseOwnershipController extends Controller
         $nids = $request->nid;
         $mobiles = $request->mobile;
         $addresses = $request->address;
-        $quantities = $request->quantity;
+        $quantities = $request->quantity ?? [];
 
         if(!empty($names)){
             foreach ($names as $key => $name) {
@@ -84,14 +84,15 @@ class HouseOwnershipController extends Controller
                 $ownership->house_id  = $request->house_id;
                 $ownership->name  = $name;
                 $ownership->nid  = $nids[$key];
-                $ownership->mobile  = $mobiles[$key];
-                $ownership->address  = $addresses[$key];
-                $ownership->quantity  = $quantities[$key];
+                $ownership->mobile  = $mobiles[$key] ?? null;
+                $ownership->address  = $addresses[$key] ?? null;
+                $ownership->quantity  = $quantities[$key] ?? null;
                 $ownership->save();
             }
 
             $data['status'] = true;
             $data['message'] = "House ownership submitted successfully!";
+            $data['redirect_url'] = route('house.index');
             return response()->json($data, 200);
         }
 

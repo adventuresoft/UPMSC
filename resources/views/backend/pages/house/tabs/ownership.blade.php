@@ -112,7 +112,11 @@
                     success: function (response) {
                         thisForm.find('button[type="submit"]').prop("disabled",false);
                         toastr.success(response.message);
-                        location.reload();
+                        if (response.redirect_url) {
+                            window.location.href = response.redirect_url;
+                        } else {
+                            location.reload();
+                        }
                     },
                     error: function(xhr, status, error) {
                         thisForm.find('button[type="submit"]').prop("disabled",false);
@@ -124,6 +128,76 @@
                     }
                 });
             })
+
+            // Toggle System ID Group and Details Container
+            $(document).on('change', '.is_union_radio', function() {
+                let container = $(this).closest('.signle-ownership');
+                let detailsContainer = container.find('.ownership_details_container');
+                
+                detailsContainer.show(); // Show details when any option is selected
+
+                if ($(this).val() === 'yes') {
+                    container.find('.system_id_group').show();
+                    container.find('.owner_name, .owner_nid, .owner_mobile, .owner_address').prop('readonly', true);
+                } else {
+                    container.find('.system_id_group').hide();
+                    container.find('.system_id_input').val('');
+                    container.find('.owner_name, .owner_nid, .owner_mobile, .owner_address').val('').prop('readonly', false);
+                }
+            });
+
+            // Search User by System ID
+            $(document).on('change', '.system_id_input', function() {
+                let systemID = $(this).val();
+                let container = $(this).closest('.signle-ownership');
+                if (systemID) {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url('/search-user-by-system-id') }}/" + systemID,
+                        beforeSend: function() {
+                            container.find('.owner_name').val('Loading...');
+                        },
+                        success: function(response) {
+                            if (response.status) {
+                                let user = response.user;
+                                let people = user.people || {};
+                                
+                                container.find('.owner_name').val(people.bn_name || user.name || '');
+                                container.find('.owner_nid').val(user.nid || people.nid || '');
+                                container.find('.owner_mobile').val(user.mobile || people.mobile || '');
+                                
+                                // Address logic using addressInfo from backend
+                                let address = user.address_info || user.addressInfo || {};
+                                let parts = [];
+                                if (address.present_village || address.presentVillage) {
+                                    parts.push((address.presentVillage ? address.presentVillage.bn_name : address.present_village.bn_name));
+                                }
+                                if (address.present_ward || address.presentWard) {
+                                    parts.push("Ward: " + (address.presentWard ? address.presentWard.en_ward_no : address.present_ward.en_ward_no));
+                                }
+                                if (address.present_road || address.presentRoad) {
+                                    parts.push("Road: " + (address.presentRoad ? address.presentRoad : address.present_road));
+                                }
+                                if (address.present_house || address.presentHouse) {
+                                    parts.push("House: " + (address.presentHouse ? address.presentHouse : address.present_house));
+                                }
+                                
+                                let fullAddress = parts.join(', ');
+                                container.find('.owner_address').val(fullAddress || 'N/A');
+                                
+                                toastr.success("Information loaded successfully!");
+                            } else {
+                                toastr.error("User not found!");
+                                container.find('.owner_name, .owner_nid, .owner_mobile, .owner_address').val('');
+                            }
+                        },
+                        error: function() {
+                            toastr.error("User not found or connection error!");
+                            container.find('.owner_name, .owner_nid, .owner_mobile, .owner_address').val('');
+                        }
+                    });
+                }
+            });
         })
 
         $(document).on('click', '#addMoreOwner', function(e){
