@@ -138,7 +138,14 @@
 
                                     <td>
                                         <span class="citizen-id">
-                                            {{ $certificate->user->nid ?? $certificate->user->people->nid ?? '' }}
+                                            @php 
+                                                $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
+                                            @endphp
+                                            @if($nid && $nid != '1111111114')
+                                                {{ $nid }}
+                                            @else
+                                                No NID
+                                            @endif
                                         </span><br>
                                         {{ $certificate->user->name }}
                                     </td>
