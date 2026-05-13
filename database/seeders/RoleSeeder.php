@@ -29,6 +29,11 @@ class RoleSeeder extends Seeder
             ['id' => 10, 'name' => 'City Corporation Admin', 'slug' => 'city-corporation-admin', 'description' => 'City Corporation Admin', 'status' => true, 'created_by' => 1],
             ['id' => 11, 'name' => 'City Corporation User', 'slug' => 'city-corporation-user', 'description' => 'City Corporation User', 'status' => true, 'created_by' => 1],
         ];
-        DB::table('roles')->insert($records);
+        foreach ($records as $record) {
+            DB::table('roles')->updateOrInsert(
+                ['id' => $record['id']],
+                $record
+            );
+        }
     }
 }

@@ -37,9 +37,11 @@
                             @endif
                         </form>
 
+                        @if(create_permission('users'))
                         <a href="{{ route('user.create') }}" class="btn btn-premium-save btn-sm px-4 shadow-sm">
                             <i class="fas fa-plus-circle mr-1"></i> Register New Operator
                         </a>
+                        @endif
                     </div>
                 </div>
                 <div class="rbac-card-body p-0">

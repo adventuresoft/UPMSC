@@ -49,9 +49,10 @@
                                 <tr>
                                     <th>Sl.</th>
                                     <th>Name</th>
+                                    <th>Assigned Area</th>
                                     <th>Email</th>
                                     <th>Mobile</th>
-                                    <td>Created at</td>
+                                    <th>Created at</th>
                                     <th>Action</th>
                                 </tr>
                               </thead>
@@ -61,6 +62,7 @@
                                       <tr>
                                           <td>{{++$key}}</td>
                                           <td>{{$admin->name}} </td>
+                                          <td><span class="badge badge-info">{{$admin->assigned_area}}</span></td>
                                           <td>{{$admin->email}}</td>
                                           <td>{{$admin->mobile}}</td>
                                           <td>

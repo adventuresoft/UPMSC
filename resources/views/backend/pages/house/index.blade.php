@@ -70,12 +70,14 @@
                                             @if(edit_permission())
                                                 <a href="{{ route('house.edit', $house->id) }}" title="Edit" data-toggle="tooltip" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                                             @endif
+                                            @if(delete_permission())
                                                 <form class="deleteHouse" method="post">
                                                   @csrf
                                                   @method('Delete')
                                                   <input type="hidden" class="deleteUrl" name="delete_url" value="{{route('house.destroy', $house->id)}}">
                                                   <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></button>
                                                 </form>
+                                            @endif
                                             @endif
                                         </div>
                                         

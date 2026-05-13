@@ -27,7 +27,7 @@ class ChildlessCertificateController extends Controller
     {
         $data['certificates'] = ChildlessCertificate::with('user')
         ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
+            $q1->applyMultitenancy();
         })->latest()->get();
         return view('backend.pages.certificate.childless.index', $data);
     }
@@ -42,8 +42,8 @@ class ChildlessCertificateController extends Controller
         $data['users'] = User::with('people')
         ->where('status', true)
         ->where('role_id', 5)
+        ->applyMultitenancy()
         ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
-        ->where('institute_id', Auth::user()->institute_id)
         ->get();
         
         return view('backend.pages.certificate.childless.create', $data);

@@ -26,11 +26,13 @@ class VoterAreaCertificateController extends Controller
      */
     public function index()
     {
-        $query = VoterAreaCertificate::with('user');
+        $query = VoterAreaCertificate::with(['user' => function($q) {
+            $q->applyMultitenancy();
+        }]);
         
         if (Auth::user()->institute_id) {
             $query->whereHas('user', function($q1){
-                $q1->where('institute_id', Auth::user()->institute_id);
+                $q1->applyMultitenancy();
             });
         }
 

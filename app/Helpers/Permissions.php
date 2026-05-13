@@ -22,13 +22,22 @@ use Illuminate\Support\Facades\Auth;
 
 if (! function_exists('is_superadmin')) {
     function is_superadmin() {
-        return Auth::check() && in_array(Auth::user()->role_id, [1, 4]);
+        if (!Auth::check()) return false;
+        $user = Auth::user();
+        // A user with an institute_id is a tenant, NOT a true superadmin
+        // even if their role_id is 1 (Admin)
+        if ($user->institute_id) return false;
+        return in_array($user->role_id, [1, 4]);
     }
 }
 
 if (! function_exists('is_institutional_admin')) {
     function is_institutional_admin() {
-        return Auth::check() && in_array(Auth::user()->role_id, [6, 8, 10]);
+        if (!Auth::check()) return false;
+        $user = Auth::user();
+        
+        // If they have an institute_id and are not the top-level developer (4), they are a tenant
+        return ($user->institute_id && $user->role_id != 4) || in_array($user->role_id, [6, 8, 10]);
     }
 }
 
@@ -72,7 +81,11 @@ if (! function_exists('create_permission')) {
 
         $user = Auth::user();
         if ($module) {
-            return $user->hasPermissionTo($module . '.create');
+            try {
+                return $user->hasPermissionTo($module . '.create');
+            } catch (\Exception $e) {
+                return false; // Permission doesn't exist in DB
+            }
         }
         // Generic: has any create permission
         return is_institutional_admin()
@@ -93,7 +106,11 @@ if (! function_exists('edit_permission')) {
 
         $user = Auth::user();
         if ($module) {
-            return $user->hasPermissionTo($module . '.update');
+            try {
+                return $user->hasPermissionTo($module . '.update');
+            } catch (\Exception $e) {
+                return false;
+            }
         }
         // Generic: has any update permission
         return $user->getAllPermissions()->contains(fn($p) => str_ends_with($p->name, '.update'));
@@ -113,7 +130,11 @@ if (! function_exists('view_permission')) {
 
         $user = Auth::user();
         if ($module) {
-            return $user->hasPermissionTo($module . '.read');
+            try {
+                return $user->hasPermissionTo($module . '.read');
+            } catch (\Exception $e) {
+                return false;
+            }
         }
         // Generic: has any read permission
         return $user->getAllPermissions()->contains(fn($p) => str_ends_with($p->name, '.read'));
@@ -133,7 +154,11 @@ if (! function_exists('delete_permission')) {
 
         $user = Auth::user();
         if ($module) {
-            return $user->hasPermissionTo($module . '.delete');
+            try {
+                return $user->hasPermissionTo($module . '.delete');
+            } catch (\Exception $e) {
+                return false;
+            }
         }
         // Generic: has any delete permission
         return $user->getAllPermissions()->contains(fn($p) => str_ends_with($p->name, '.delete'));

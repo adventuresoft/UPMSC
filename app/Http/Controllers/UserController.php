@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Str;
 use App\Models\User;
-use Hash;
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\Union;
+use App\Models\Pourashava;
+use App\Models\CityCorporation;
+use Hash;
 
 class UserController extends Controller
 {
@@ -28,11 +31,8 @@ class UserController extends Controller
     {
         $query = User::with(['roles', 'roles.permissions']);
 
-        if (is_institutional_admin()) {
-            // Institutional admins only see users they created
-            $query->where('created_by', Auth::id());
-        }
-        // Superadmin sees all users (no filter)
+        // Apply strict multitenancy so tenants only see their own area's users
+        $query->applyMultitenancy();
 
         // Search filter
         if ($request->filled('search')) {
@@ -62,13 +62,24 @@ class UserController extends Controller
         // Institutional admins can only assign sub-user roles
         if (is_institutional_admin()) {
             $institutionalAdminRoleId = Auth::user()->role_id;
-            // Map admin roles to their corresponding sub-user roles
-            $subUserRoleMap = [6 => 7, 8 => 9, 10 => 11];
+            // Map admin roles (6, 8, 10) to their corresponding sub-user roles (7, 9, 11)
+            $subUserRoleMap = [
+                6 => 7,  // Union Admin -> Union User
+                8 => 9,  // Pourashava Admin -> Pourashava User
+                10 => 11 // City Corporation Admin -> City Corporation User
+            ];
             $allowedRoleId = $subUserRoleMap[$institutionalAdminRoleId] ?? null;
-            $roles = $allowedRoleId ? Role::where('id', $allowedRoleId)->get() : collect();
+            $roles = Role::where('id', $allowedRoleId)->get();
         }
 
-        return view('backend.pages.user.create', compact('roles'))->with(['title' => 'New Operator', 'page' => 'user']);
+        $assigned_area = Auth::user()->assigned_area;
+        
+        // Fetch all potential jurisdictions for the dropdown
+        $unions = Union::orderBy('name')->get();
+        $pourashavas = Pourashava::orderBy('name')->get();
+        $city_corps = CityCorporation::orderBy('name')->get();
+
+        return view('backend.pages.user.create', compact('roles', 'assigned_area', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'New Operator', 'page' => 'user']);
     }
 
 
@@ -90,7 +101,10 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->email = $request->email;
         $user->mobile = $request->mobile;
-        $user->area = $request->area;
+        
+        // Auto-populate area if institutional admin, otherwise use request
+        $user->area = is_institutional_admin() ? Auth::user()->assigned_area : $request->area;
+        
         $user->status = $request->status;
         
         $role = Role::where('id', $request->roles)->orWhere('name', $request->roles)->first();
@@ -142,12 +156,23 @@ class UserController extends Controller
         // Restrict roles for institutional admins
         if (is_institutional_admin()) {
             $institutionalAdminRoleId = Auth::user()->role_id;
-            $subUserRoleMap = [6 => 7, 8 => 9, 10 => 11];
+            $subUserRoleMap = [
+                6 => 7,  // Union Admin -> Union User
+                8 => 9,  // Pourashava Admin -> Pourashava User
+                10 => 11 // City Corporation Admin -> City Corporation User
+            ];
             $allowedRoleId = $subUserRoleMap[$institutionalAdminRoleId] ?? null;
-            $roles = $allowedRoleId ? Role::where('id', $allowedRoleId)->get() : collect();
+            $roles = Role::where('id', $allowedRoleId)->get();
         }
 
-        return view('backend.pages.user.edit', compact('user', 'roles'))->with(['title' => 'Edit Operator', 'page' => 'user']);
+        $assigned_area = Auth::user()->assigned_area;
+        
+        // Fetch all potential jurisdictions for the dropdown
+        $unions = Union::orderBy('name')->get();
+        $pourashavas = Pourashava::orderBy('name')->get();
+        $city_corps = CityCorporation::orderBy('name')->get();
+
+        return view('backend.pages.user.edit', compact('user', 'roles', 'assigned_area', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'Edit Operator', 'page' => 'user']);
     }
 
     /**
@@ -181,7 +206,35 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->mobile = $request->mobile;
-        $user->area = $request->area;
+        
+        // Update area and sync with Institute
+        if (is_institutional_admin()) {
+            $user->area = Auth::user()->assigned_area;
+        } else {
+            $user->area = $request->area;
+            
+            // If it's an institutional admin, sync the underlying Institute record
+            if ($user->institute_id && $request->area) {
+                $institute = $user->institute;
+                $areaParts = explode(':', $request->area);
+                if (count($areaParts) == 2) {
+                    $type = trim($areaParts[0]);
+                    $idVal = trim($areaParts[1]);
+                    
+                    // Reset all and set the new one
+                    $institute->union_id = null;
+                    $institute->pourashava_id = null;
+                    $institute->city_corporation_id = null;
+                    
+                    if ($type == 'Union') $institute->union_id = $idVal;
+                    if ($type == 'Pourashava') $institute->pourashava_id = $idVal;
+                    if ($type == 'City Corp') $institute->city_corporation_id = $idVal;
+                    
+                    $institute->save();
+                }
+            }
+        }
+        
         $user->status = $request->status;
         
         $role = Role::where('id', $request->roles)->orWhere('name', $request->roles)->first();

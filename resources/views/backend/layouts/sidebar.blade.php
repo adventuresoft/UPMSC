@@ -157,14 +157,16 @@
         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 
         {{-- Dashboard --}}
+        @can('dashboard.read')
         <li class="nav-item menu-open">
           <a href="{{route('dashboard')}}" class="nav-link  @if($subMenu == "dashboard") active @endif">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>Dashboard</p>
           </a>
         </li>
+        @endcan
 
-        @if (basic_settings_permissions())
+        @can('basic-settings.read')
         {{-- Basic Settings --}}
         <li class="nav-item {{ $isBasicSettings ? 'menu-open' : '' }}">
         <a href="#" class="nav-link">
@@ -333,7 +335,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="{{route('basic-settings.profession-subcategory.index')}}" class="nav-link {{$subMenu == 'ProfessionSubcategory'?'active':''}} @">
+          <a href="{{route('basic-settings.profession-subcategory.index')}}" class="nav-link {{$subMenu == 'ProfessionSubcategory'?'active':''}}">
             <i class="far fa-circle nav-icon"></i>
             <p>Profession Subcategory</p>
           </a>
@@ -415,10 +417,10 @@
 
       </ul>
     </li>
-    @endif
+    @endcan
 
 
-      @if(access_management_permission())
+      @can('user.read')
       <li class="nav-item {{ $isAccessManagement ? 'menu-open' : '' }}">
                <a href="{{ route('user.index') }}" class="nav-link {{ $isAccessManagement ? 'active' : '' }}">
                  <i class="nav-icon fas fa-shield-alt"></i>
@@ -427,9 +429,9 @@
                  </p>
                </a>
              </li>
-      @endif
+      @endcan
 
-    @if (institute_permissions())
+    @can('institute.read')
     {{-- Institute Settings --}}
     <li class="nav-item {{ $isInstituteSettings ? 'menu-open' : '' }}">
     <a href="#" class="nav-link">
@@ -472,9 +474,9 @@
       </li>
     </ul>
   </li>
-  @endif
+  @endcan
 
-  @if(create_permission())
+  @can('institutional-admin.read')
   <li class="nav-item {{ ($subMenu == "AdminCreate" || $subMenu == "AdminList" || $subMenu == "AdminShow") ? 'menu-open' : '' }}">
     <a href="#" class="nav-link">
       <i class="nav-icon fas fa-users"></i>
@@ -502,9 +504,10 @@
     </ul>
 
   </li>
-  @endif
+  @endcan
 
   {{-- People Info --}}
+  @can('people.read')
   <li class="nav-item {{ $isPeopleInfo ? 'menu-open' : '' }}">
     <a href="#" class="nav-link">
       <i class="nav-icon fas fa-users"></i>
@@ -515,19 +518,14 @@
     </a>
     <ul class="nav nav-treeview">
 
-      @if(create_permission())
-
+      @can('people.create')
       <li class="nav-item">
         <a href="{{route('people.create')}}" class="nav-link @if($subMenu == "Create") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Create</p>
         </a>
       </li>
-
-      @endif
-
-      @if(view_permission())
-
+      @endcan
 
       <li class="nav-item">
         <a href="{{route('people.index')}}" class="nav-link @if($subMenu == "View") active @endif">
@@ -536,7 +534,6 @@
         </a>
       </li>
 
-
       <li class="nav-item">
         <a href="{{route('peopleapprovedlist')}}" class="nav-link @if($subMenu == "approvedList") active @endif">
           <i class="far fa-circle nav-icon"></i>
@@ -544,13 +541,12 @@
         </a>
       </li>
 
-      @endif
-
-
     </ul>
   </li>
+  @endcan
 
   {{-- Certificate --}}
+  @can('certificate.read')
   <li class="nav-item {{ $isCertificate ? 'menu-open' : '' }}">
     <a href="#" class="nav-link">
       <i class="nav-icon fas fa-certificate"></i>
@@ -723,8 +719,10 @@
 
     </ul>
   </li>
+  @endcan
 
   {{-- Organization Info --}}
+  @can('organization.read')
   <li class="nav-item {{ $isOrganization ? 'menu-open' : '' }}">
   <a href="#" class="nav-link">
     <i class="nav-icon fas fa-briefcase"></i>
@@ -735,67 +733,60 @@
   </a>
   <ul class="nav nav-treeview">
 
-    @if (create_permission())
+    @can('organization.create')
     <li class="nav-item">
       <a href="{{route('organization.create')}}" class="nav-link @if($subMenu == "OrganizationCreate") active @endif">
         <i class="far fa-circle nav-icon"></i>
         <p>Create</p>
       </a>
     </li>
-    @endif
+    @endcan
 
-    @if (view_permission())
     <li class="nav-item">
       <a href="{{route('organization.index')}}" class="nav-link @if($subMenu == "OrganizationList") active @endif">
         <i class="far fa-circle nav-icon"></i>
         <p>Applicant Org. List</p>
       </a>
     </li>
-    @endif
-    @if (view_permission())
+
     <li class="nav-item">
       <a href="{{route('orgapproved_index')}}" class="nav-link @if($subMenu == "ApprovedOrganizationList") active @endif">
         <i class="far fa-circle nav-icon"></i>
         <p>Approved Org. List</p>
       </a>
     </li>
-    @endif
 
-    @if (basic_settings_permissions())
     <li class="nav-item">
       <a href="{{route('organizationA.registration-fees.index')}}" class="nav-link @if($subMenu == "RegistrationFees") active @endif">
         <i class="far fa-circle nav-icon"></i>
         <p>Fees</p>
       </a>
     </li>
-    @endif
 
-
-
-    @if (view_permission())
     <li class="nav-item">
       <a href="{{route('organizationA.trade-license.index')}}" class="nav-link @if($subMenu == "TradeLicense") active @endif">
         <i class="far fa-circle nav-icon"></i>
         <p>Generate Invoice </p>
       </a>
     </li>
-    @endif
 
-    @if (create_permission())
+    @can('organization.create')
     <li class="nav-item">
       <a href="{{route('organizationA.trade-license.getTradeLicense')}}" class="nav-link @if($subMenu == "GetTradeLicense") active @endif">
         <i class="far fa-circle nav-icon"></i>
         <p>Trade License</p>
       </a>
     </li>
-    @endif
+    @endcan
 
   </ul>
 </li>
+@endcan
 
 
 
 {{-- Tax --}}
+@can('tax.read')
 <li class="nav-item {{ $isTax ? 'menu-open' : '' }}">
 <a href="#" class="nav-link">
   <i class="nav-icon fas fa-money-bill"></i>
@@ -806,53 +797,30 @@
 </a>
 <ul class="nav nav-treeview">
 
-  @if (create_permission())
   <li class="nav-item">
     <a href="{{route('tax.create')}}" class="nav-link  @if($subMenu == "TaxGenerate") active @endif">
       <i class="far fa-circle nav-icon"></i>
       <p>Tax Generate</p>
     </a>
   </li>
-  @endif
 
-  @if (view_permission())
   <li class="nav-item">
     <a href="{{route('tax.index')}}" class="nav-link @if($subMenu == "TaxList") active @endif">
       <i class="far fa-circle nav-icon"></i>
       <p>View</p>
     </a>
   </li>
-  @endif
 
-  @if (view_permission())
-  {{-- <li class="nav-item">
-    <a href="{{route('taxes.tax-rate.index')}}" class="nav-link {{$subMenu == 'TaxRateList'? 'active':''}} ">
-      <i class="far fa-circle nav-icon"></i>
-      <p>Tax Rate</p>
-    </a>
-  </li> --}}
-  @endif
-
-  @if (view_permission())
-  {{-- <li class="nav-item">
-    <a href="{{route('taxes.tax.receipt')}}" class="nav-link @if($subMenu == "TaxReceipt") active @endif">
-      <i class="far fa-circle nav-icon"></i>
-      <p>Tax Recipt</p>
-    </a>
-  </li> --}}
-  @endif
-
-  @if (view_permission())
   <li class="nav-item">
     <a href="{{route('taxes.tax.received')}}" class="nav-link @if($subMenu == "TaxReceived") active @endif">
       <i class="far fa-circle nav-icon"></i>
       <p>Tax Received</p>
     </a>
   </li>
-  @endif
 
 </ul>
 </li>
+@endcan
 
 {{-- Relief --}}
           <!-- <li class="nav-item">
@@ -933,6 +901,7 @@
           </li> -->
 
           {{-- House Info --}}
+          @can('house.read')
           <li class="nav-item {{ $isHouse ? 'menu-open' : '' }}">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-home"></i>
@@ -943,30 +912,28 @@
           </a>
           <ul class="nav nav-treeview">
 
-            @if(create_permission())
+            @can('house.create')
             <li class="nav-item">
               <a href="{{route('house.create')}}" class="nav-link @if($subMenu == "HouseCreate") active @endif">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Create</p>
               </a>
             </li>
-            @endif
+            @endcan
 
-
-            @if(view_permission())
             <li class="nav-item">
               <a href="{{route('house.index')}}" class="nav-link @if($subMenu == "HouseList") active @endif">
                 <i class="far fa-circle nav-icon"></i>
                 <p>View</p>
               </a>
             </li>
-            @endif
-
 
           </ul>
         </li>
+        @endcan
 
         {{-- Land Info --}}
+        @can('land.read')
         <li class="nav-item {{ $isLand ? 'menu-open' : '' }}">
         <a href="#" class="nav-link">
           <i class="nav-icon fas fa-bacon"></i>
@@ -977,16 +944,14 @@
         </a>
         <ul class="nav nav-treeview">
 
-          @if(create_permission())
+          @can('land.create')
           <li class="nav-item">
             <a href="{{route('land.create')}}" class="nav-link @if($subMenu == "LandCreate") active @endif">
               <i class="far fa-circle nav-icon"></i>
               <p>Create</p>
             </a>
           </li>
-
-          @endif
-          @if(view_permission())
+          @endcan
 
           <li class="nav-item">
             <a href="{{route('land.index')}}" class="nav-link @if($subMenu == "LandList") active @endif">
@@ -995,14 +960,14 @@
             </a>
           </li>
 
-          @endif
-
         </ul>
       </li>
+      @endcan
 
 
 
       {{-- Vehicle Info --}}
+      @can('vehicle.read')
       <li class="nav-item {{ $isVehicle ? 'menu-open' : '' }}">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-truck"></i>
@@ -1013,34 +978,29 @@
       </a>
       <ul class="nav nav-treeview">
 
-        @if (view_permission())
+        @can('vehicle.create')
         <li class="nav-item">
           <a href="{{route('vehicle.create')}}" class="nav-link @if( $subMenu == "VehicleCreate") active @endif">
             <i class="far @if($subMenu == "VehicleCreate") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>Create</p>
           </a>
         </li>
-        @endif
+        @endcan
 
-        @if (view_permission())
         <li class="nav-item">
           <a href="{{route('vehicle.index')}}" class="nav-link @if( $subMenu == "VehicleList") active @endif">
             <i class="far @if($subMenu == "VehicleList") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>Application List</p>
           </a>
         </li>
-        @endif
 
-        @if (view_permission())
         <li class="nav-item">
           <a href="{{ route('vehicle.approval.list') }}" class="nav-link @if( $subMenu == "VehicleApprovalList") active @endif">
             <i class="far @if($subMenu == "VehicleApprovalList") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>Approval List</p>
           </a>
         </li>
-        @endif
 
-        @if (view_permission())
         <li class="nav-item has-treeview @if($subMenu == "VehicleAddFeesNewSetup" || $subMenu == "VehicleAddFeesList") menu-open @endif">
           <a href="#" class="nav-link @if($subMenu == "VehicleAddFeesNewSetup" || $subMenu == "VehicleAddFeesList") active @endif">
             <i class="far @if($subMenu == "VehicleAddFeesNewSetup" || $subMenu == "VehicleAddFeesList") fa-dot-circle @else fa-circle @endif nav-icon"></i>
@@ -1064,29 +1024,21 @@
             </li>
           </ul>
         </li>
-        @endif
 
-        @if (view_permission())
         <li class="nav-item">
           <a href="{{ route('vehicle.invoice.list') }}" class="nav-link @if( $subMenu == "VehicleGenerateInvoice") active @endif">
             <i class="far @if($subMenu == "VehicleGenerateInvoice") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>Generate Invoice</p>
           </a>
         </li>
-        @endif
 
-
-
-        @if (view_permission())
         <li class="nav-item">
           <a href="{{ route('vehicle.license.list') }}" class="nav-link @if( $subMenu == "VehicleLicense") active @endif">
             <i class="far @if($subMenu == "VehicleLicense") fa-dot-circle @else fa-circle @endif nav-icon"></i>
             <p>License</p>
           </a>
         </li>
-        @endif
 
-        @if (view_permission())
         <li class="nav-item has-treeview @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") menu-open @endif">
           <a href="#" class="nav-link @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") active @endif">
             <i class="far @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") fa-dot-circle @else fa-circle @endif nav-icon"></i>
@@ -1110,16 +1062,12 @@
             </li>
           </ul>
         </li>
-        @endif
-
-
-
-
 
       </ul>
     </li>
 
     {{-- Road Info --}}
+    @can('road.read')
     <li class="nav-item {{ $isRoad ? 'menu-open' : '' }}">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-road"></i>
@@ -1130,28 +1078,28 @@
       </a>
       <ul class="nav nav-treeview">
 
-        @if (create_permission())
+        @can('road.create')
         <li class="nav-item">
           <a href="{{route('road.create')}}" class="nav-link @if($subMenu == "RoadCreate") active  @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Create</p>
           </a>
         </li>
-        @endif
+        @endcan
 
-        @if (view_permission())
         <li class="nav-item">
           <a href="{{route('road.index')}}" class="nav-link @if($subMenu == "RoadList") active  @endif ">
             <i class="far fa-circle nav-icon"></i>
             <p>View</p>
           </a>
         </li>
-        @endif
 
       </ul>
     </li>
+    @endcan
 
     {{-- Bridge Info --}}
+    @can('bridge.read')
     <li class="nav-item {{ $isPath(['bridge*']) ? 'menu-open' : '' }}">
       <a href="#" class="nav-link">
       <i class="nav-icon fas fa-archway"></i>
@@ -1162,29 +1110,28 @@
     </a>
     <ul class="nav nav-treeview">
 
-      @if (create_permission())
+      @can('bridge.create')
       <li class="nav-item">
         <a href="{{route('bridge.create')}}" class="nav-link @if($subMenu == "BridgeCreate") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Create</p>
         </a>
       </li>
-      @endif
+      @endcan
 
-      @if (view_permission())
       <li class="nav-item">
         <a href="{{route('bridge.index')}}" class="nav-link @if($subMenu == "BridgeList") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>View</p>
         </a>
       </li>
-      @endif
-
 
     </ul>
   </li>
+  @endcan
 
   {{-- Market Info --}}
+  @can('market.read')
   <li class="nav-item {{ ($subMenu == "MarketCreate" || $subMenu == "MarketList") ? 'menu-open' : '' }}">
     <a href="#" class="nav-link">
       <i class="nav-icon fas fa-store"></i>
@@ -1194,26 +1141,25 @@
       </p>
     </a>
     <ul class="nav nav-treeview">
-      @if (create_permission())
+      @can('market.create')
       <li class="nav-item">
         <a href="{{route('market.create')}}" class="nav-link @if($subMenu == "MarketCreate") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Create</p>
         </a>
       </li>
-      @endif
+      @endcan
 
-      @if (view_permission())
       <li class="nav-item">
         <a href="{{route('market.index')}}" class="nav-link @if($subMenu == "MarketList") active @endif ">
           <i class="far fa-circle nav-icon"></i>
           <p>View</p>
         </a>
       </li>
-      @endif
 
     </ul>
   </li>
+  @endcan
 
   {{-- Ferry Info --}}
           <!-- <li class="nav-item">
@@ -1344,6 +1290,7 @@
           </li> -->
 
           {{-- Wedding --}}
+          @can('marriage.read')
           <li class="nav-item {{ $isWedding ? 'menu-open' : '' }}">
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-ring"></i>
@@ -1354,47 +1301,44 @@
          </a>
          <ul class="nav nav-treeview">
 
-          @if (create_permission())
+          @can('marriage.create')
           <li class="nav-item">
             <a href="{{route('marriage.create')}}" class="nav-link @if($subMenu ==  "MarriageCreate") active @endif ">
               <i class="far fa-circle nav-icon"></i>
               <p>Marriage Reg.</p>
             </a>
           </li>
-          @endif
+          @endcan
 
-
-          @if (view_permission())
           <li class="nav-item">
             <a href="{{route('marriage.index')}}" class="nav-link @if($subMenu ==  "MarriageList") active @endif">
               <i class="far fa-circle nav-icon"></i>
               <p>View Marriage List</p>
             </a>
           </li>
-          @endif
 
-          @if (create_permission())
+          @can('marriage.create')
           <li class="nav-item">
             <a href="{{route('divorce.create')}}" class="nav-link @if($subMenu ==  "DivorceCreate") active @endif">
               <i class="far fa-circle nav-icon"></i>
               <p>Divorce Reg</p>
             </a>
           </li>
-          @endif
+          @endcan
 
-          @if (view_permission())
           <li class="nav-item">
             <a href="{{route('divorce.index')}}" class="nav-link {{$subMenu =='DivorceList' ?'active':'' }}">
               <i class="far fa-circle nav-icon"></i>
               <p>View Divorce List</p>
             </a>
           </li>
-          @endif
 
         </ul>
       </li>
+      @endcan
 
       {{-- Chairman Info --}}
+      @can('chairman.read')
       <li class="nav-item {{ $isChairman ? 'menu-open' : '' }}">
         <a href="#" class="nav-link">
           <i class="nav-icon fas fa-user-tie"></i>
@@ -1405,37 +1349,28 @@
         </a>
         <ul class="nav nav-treeview">
 
-
+          @can('chairman.create')
           <li class="nav-item ">
             <a href="{{route('chairman.create')}}" class="nav-link {{$subMenu ==  'chairmanCreate'?'active':''}}">
               <i class="far fa-circle nav-icon"></i>
               <p>Add New Chairman</p>
             </a>
           </li>
+          @endcan
 
-
-          @if (view_permission())
           <li class="nav-item ">
             <a href="{{route('chairman.index')}}" class="nav-link {{$subMenu ==  'chairmanList'?'active':''}}">
               <i class="far fa-circle nav-icon"></i>
               <p>View</p>
             </a>
           </li>
-          @endif
-
-          @if (view_permission())
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>View Ex Chairman</p>
-            </a>
-          </li>
-          @endif
 
         </ul>
       </li>
+      @endcan
 
       {{-- Member/Councilor Info --}}
+      @can('councilor.read')
       <li class="nav-item {{ $isCouncilor ? 'menu-open' : '' }}">
         <a href="#" class="nav-link">
           <i class="nav-icon fas fa-user-friends"></i>
@@ -1446,48 +1381,15 @@
         </a>
         <ul class="nav nav-treeview">
 
-
+          @can('councilor.create')
           <li class="nav-item">
             <a href="{{route('councilor.create')}}" class="nav-link {{$subMenu ==  'councilorCreate'?'active':''}}">
               <i class="far fa-circle nav-icon"></i>
               <p>Add New Member</p>
             </a>
-          </li>
-
-
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>View</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>View Ex Member</p>
-            </a>
-          </li>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Add New Resv. Member</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>View Resv. Member</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>View Ex Resv. Member</p>
-              </a>
-            </li>
-          </ul>
-        </li>
+          @endcan
+        </ul>
+      </li>
 
         {{-- Member/Commitee  --}}
         <li class="nav-item">
@@ -1525,7 +1427,9 @@
 
 
 
-        @endif
+        @endcan
+      @endcan
+      @endif
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

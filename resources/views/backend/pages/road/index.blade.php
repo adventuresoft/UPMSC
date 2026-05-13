@@ -35,7 +35,9 @@
                                     <h3 class="card-title">Road List</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
+                                    @if(create_permission('roads'))
                                     <a href="{{ route('road.create') }}" class="btn btn-primary">Create</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -73,6 +75,7 @@
                                                                 class="fa fa-edit"></i></a>
 @endif
 
+                                                        @if(delete_permission('roads'))
                                                         <form class="deleteRoad" method="post">
                                                             @csrf
                                                             @method('DELETE')
@@ -84,6 +87,7 @@
                                                                 class="btn btn-sm btn-danger"><i
                                                                     class="fa fa-trash"></i></button>
                                                         </form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
