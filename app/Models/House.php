@@ -26,7 +26,13 @@ class House extends Model
         'brs_khatian', 
         'brs_dag',  
         'land_quantity', 
-        'house_price'
+        'house_price',
+        'number_of_rooms',
+        'room_details',
+        'room_usage',
+        'block_section',
+        'land_price',
+        'grand_total_price'
     ];
 
     public function ownership()

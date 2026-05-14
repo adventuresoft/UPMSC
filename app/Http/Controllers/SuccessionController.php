@@ -55,7 +55,7 @@ class SuccessionController extends Controller
     {
         $validate = Validator::make($request->all(), [
                 'applicant_id' => 'required|exists:users,system_id',
-                'death_certificate_id' => 'required|exists:death_certificates,system_id',
+                'death_certificate_id' => 'nullable|exists:death_certificates,system_id',
             ]);
 
         if ($validate->fails()) {
@@ -66,8 +66,12 @@ class SuccessionController extends Controller
         }
 
         $user = User::where('system_id', $request->applicant_id)->first();
-        $death_certificate = DeathCertificate::where('system_id', $request->death_certificate_id)->first();
-        if (!$user || !$death_certificate) {
+        $death_certificate = null;
+        if ($request->filled('death_certificate_id')) {
+            $death_certificate = DeathCertificate::where('system_id', $request->death_certificate_id)->first();
+        }
+        
+        if (!$user) {
             $data['status'] = false;
             $data['message'] = "Invalid input contains! Please check your entries...";
             $data['errors'] = [];
@@ -77,7 +81,7 @@ class SuccessionController extends Controller
         try {
             $new_succession = new Succession();
             $new_succession->user_id = $user->id;
-            $new_succession->death_certificate_id  = $death_certificate->id;
+            $new_succession->death_certificate_id  = $death_certificate ? $death_certificate->id : null;
             $new_succession->members = $request->members ? json_encode($request->members) : NULL;
             $new_succession->created_by = Auth::id();
             $new_succession->save();
@@ -136,7 +140,7 @@ class SuccessionController extends Controller
                     }));
                 }));
             }));
-        }))->find($id);
+        }))->with('deathPerson')->find($id);
         return view('backend.pages.certificate.succession.certificate', $data);
         $html = view('backend.pages.certificate.succession.certificate', $data)->render();
         $pdf = PDF::loadHTML($html)->setPaper('a4', 'landscape')
@@ -161,7 +165,7 @@ class SuccessionController extends Controller
                     }));
                 }));
             }));
-        }))->find($id);
+        }))->with('deathPerson')->find($id);
         return view('backend.pages.certificate.succession.bn_certificate', $data);
         $html = view('backend.pages.certificate.succession.bn_certificate', $data)->render();
         $pdf = PDF::loadHTML($html)->setPaper('a4', 'landscape')

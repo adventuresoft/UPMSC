@@ -35,38 +35,34 @@
                         <form id="successionCertificateForm" method="post">
                             @csrf
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label for="applicant_id">Applicant ID</label>
-                                                    <!--<input type="text" required class="form-control" name="applicant_id" id="applicant_id">-->
-                                                     <select required class="form-control select2" name="applicant_id" id="">
-                                            <option value="">Select People</option>
-                                            @if (count($users))
-                                                @foreach ($users as $user)
-                                                    @if (isset($user->people->approved_id))
-                                                        <option value="{{$user->id}}">{{$user->people->approved_id}} - {{$user->name}} - {{$user->email}} - {{$user->mobile}}</option>
-                                                    @endif
-                                                @endforeach
-                                            @else
-                                                <option value="">No People Found</option>
-                                            @endif
-
-                                        </select>
-                                                    <small class="error applicant_id-error text-danger"></small>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label for="death_certificate_id">Death Certificate ID</label>
-                                                    <input type="text" required class="form-control" name="death_certificate_id" id="death_certificate_id">
-                                                    <small class="error death_certificate_id-error text-danger"></small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="applicant_id">Applicant ID</label>
+                                            <select required class="form-control select2" name="applicant_id" id="applicant_id">
+                                                <option value="">Select People</option>
+                                                @if (count($users))
+                                                    @foreach ($users as $user)
+                                                        @if (isset($user->people->approved_id))
+                                                            <option value="{{$user->system_id}}">{{$user->people->approved_id}} - {{$user->name}} - {{$user->mobile}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                @else
+                                                    <option value="">No People Found</option>
+                                                @endif
+                                            </select>
+                                            <small class="error applicant_id-error text-danger"></small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <div class="form-group">
+                                            <label for="death_certificate_id" style="display: block;">Death Certificate ID</label>
+                                            <input type="text" class="form-control form-control-sm d-inline-block" name="death_certificate_id" id="death_certificate_id" style="width: 150px;">
+                                            <br>
+                                            <small class="error death_certificate_id-error text-danger"></small>
+                                        </div>
+                                    </div>
+                                </div>
                                     @php
                                         $php_unique_id = uniqid();
                                     @endphp

@@ -48,7 +48,9 @@ class PeopleController extends Controller
     {
         $searchKey = trim((string) $system_id);
 
-        $user = User::with('people', 'familyInfo')
+        $user = User::with(['people', 'familyInfo', 'addressInfo' => function($q) {
+            $q->with(['presentVillage', 'presentWard', 'presentRoad', 'presentHouse']);
+        }])
             ->where(function ($query) use ($searchKey) {
                 $query->where('system_id', $searchKey)
                     ->orWhereHas('people', function ($q) use ($searchKey) {

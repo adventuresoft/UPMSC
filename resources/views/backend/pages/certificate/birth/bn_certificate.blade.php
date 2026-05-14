@@ -149,6 +149,11 @@
                             {{ $certificate->user->people->gender == 1 ? 'জনাব' : 'জনাবা' }}
                             <strong>{{ $certificate->user->people->bn_name ?? '' }}</strong>,
                             আইডি নং <strong>{{ bnValue($certificate->user->system_id ?? '') }}</strong>,
+                            @if($certificate->user->people->nid)
+                                এনআইডিঃ {{ bnValue($certificate->user->people->nid) }},
+                            @elseif($certificate->user->people->birth_certificate)
+                                জন্ম নিবন্ধন নং- {{ bnValue($certificate->user->people->birth_certificate) }},
+                            @endif
                             পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
                             মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }},
                             ঠিকানাঃ 

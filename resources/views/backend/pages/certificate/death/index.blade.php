@@ -143,18 +143,18 @@
                                                 class="img-circle">
                                         </td>
 
-                                        <td>{{ $certificate->certificate_number ?? bnValue($certificate->system_id ?? '') }}</td>
+                                        <td>{{ $certificate->certificate_number ?? ($certificate->system_id ?? '') }}</td>
 
                                         <td>
                                             <span class="citizen-id">
-                                                {{ bnValue($certificate->system_id ?? '') }}
+                                                {{ ($certificate->system_id ?? '') }}
                                             </span><br>
                                             {{ $certificate->user->name ?? '' }}
                                         </td>
 
                                         <td>
-                                            {{ $certificate->death_date 
-                                                ? \Carbon\Carbon::parse($certificate->death_date)->format('d-m-Y') 
+                                            {{ $certificate->date_of_death 
+                                                ? \Carbon\Carbon::parse($certificate->date_of_death)->format('d-m-Y') 
                                                 : 'N/A' }}
                                         </td>
 

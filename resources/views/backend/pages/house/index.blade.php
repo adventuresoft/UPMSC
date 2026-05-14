@@ -68,6 +68,7 @@
                                         <div class="table-action">
                                             @if (Auth::user()->institute_id && create_permission() )
                                             @if(edit_permission())
+                                                <a href="{{ route('house.show', $house->id) }}" title="View" data-toggle="tooltip" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
                                                 <a href="{{ route('house.edit', $house->id) }}" title="Edit" data-toggle="tooltip" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                                             @endif
                                             @if(delete_permission())
