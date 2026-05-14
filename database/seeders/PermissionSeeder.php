@@ -21,8 +21,9 @@ class PermissionSeeder extends Seeder
 
         // Comprehensive module list from sidebar/web.php
         $modules = [
-            'basic_settings',
-            'institutional_admin',
+            'basic-settings',
+            'institutional-admin',
+            'certificate',
             'bridge',
             'market',
             'people',

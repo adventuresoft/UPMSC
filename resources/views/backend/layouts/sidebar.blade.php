@@ -157,14 +157,14 @@
         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 
         {{-- Dashboard --}}
-        @can('dashboard.read')
+        @if(is_institutional_admin() || Auth::user()->can('dashboard.read'))
         <li class="nav-item menu-open">
           <a href="{{route('dashboard')}}" class="nav-link  @if($subMenu == "dashboard") active @endif">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>Dashboard</p>
           </a>
         </li>
-        @endcan
+        @endif
 
         @can('basic-settings.read')
         {{-- Basic Settings --}}
@@ -420,7 +420,7 @@
     @endcan
 
 
-      @can('user.read')
+      @if(is_institutional_admin() || Auth::user()->can('user.read'))
       <li class="nav-item {{ $isAccessManagement ? 'menu-open' : '' }}">
                <a href="{{ route('user.index') }}" class="nav-link {{ $isAccessManagement ? 'active' : '' }}">
                  <i class="nav-icon fas fa-shield-alt"></i>
@@ -429,7 +429,7 @@
                  </p>
                </a>
              </li>
-      @endcan
+      @endif
 
     @can('institute.read')
     {{-- Institute Settings --}}
@@ -507,7 +507,7 @@
   @endcan
 
   {{-- People Info --}}
-  @can('people.read')
+  @if(is_institutional_admin() || Auth::user()->can('people.read'))
   <li class="nav-item {{ $isPeopleInfo ? 'menu-open' : '' }}">
     <a href="#" class="nav-link">
       <i class="nav-icon fas fa-users"></i>
@@ -518,14 +518,14 @@
     </a>
     <ul class="nav nav-treeview">
 
-      @can('people.create')
+      @if(is_institutional_admin() || Auth::user()->can('people.create'))
       <li class="nav-item">
         <a href="{{route('people.create')}}" class="nav-link @if($subMenu == "Create") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Create</p>
         </a>
       </li>
-      @endcan
+      @endif
 
       <li class="nav-item">
         <a href="{{route('people.index')}}" class="nav-link @if($subMenu == "View") active @endif">
@@ -543,10 +543,10 @@
 
     </ul>
   </li>
-  @endcan
+  @endif
 
   {{-- Certificate --}}
-  @can('certificate.read')
+  @if(is_superadmin() || Auth::user()->can('certificate.read'))
   <li class="nav-item {{ $isCertificate ? 'menu-open' : '' }}">
     <a href="#" class="nav-link">
       <i class="nav-icon fas fa-certificate"></i>
@@ -719,7 +719,7 @@
 
     </ul>
   </li>
-  @endcan
+  @endif
 
   {{-- Organization Info --}}
   @can('organization.read')
