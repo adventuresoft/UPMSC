@@ -582,6 +582,8 @@ class ThanaSeeder extends Seeder
             ['id' => '562', 'district_id' => '72', 'name' => 'Tongi East Thana', 'bn_name' => 'টঙ্গী পূর্ব থানা', 'url' => 'debidwar.comilla.gov.bd'],
         ];
 
-        DB::table('thanas')->insert($thanas);
+        foreach ($thanas as $thana) {
+            DB::table('thanas')->updateOrInsert(['id' => $thana['id']], $thana);
+        }
     }
 }

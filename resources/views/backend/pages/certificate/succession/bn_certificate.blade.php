@@ -163,15 +163,30 @@
                         <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -16px;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
+                        @php
+                            $institute = $certificate->user->institute;
+                            $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+                            $thanaBn = '';
+                            $districtBn = '';
+                            
+                            if ($institute->union && $institute->union->thana) {
+                                $thanaBn = $institute->union->thana->bn_name ?? '';
+                                $districtBn = $institute->union->thana->district->bn_name ?? '';
+                            } elseif ($institute->pourashava) {
+                                $districtBn = $institute->pourashava->District->bn_name ?? '';
+                            } elseif ($institute->cityCorporation) {
+                                $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+                            }
+                        @endphp
                         <h2 class="text-success font-weight-bold mb-0" style="font-size:28px;">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            {{ $auth->bn_name ?? '' }}
                         </h2>
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:32px;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
+                            {{ $auth->name ?? '' }}
                         </h3>
                         <p class="mb-0" style="font-size:15px;">
-                            থানাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
+                            @if($thanaBn) থানাঃ {{ $thanaBn }}, @endif
+                            জেলাঃ {{ $districtBn }},
                             বাংলাদেশ।
                         </p>
                     </div>
@@ -228,8 +243,8 @@
 @if(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code)
     {{ bnValue(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code) }},
 @endif
-                            উপজেলা- {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            জেলা- {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
+                            @if($thanaBn) উপজেলা- {{ $thanaBn }}, @endif
+                            জেলা- {{ $districtBn }}।
                             তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ছিলেন। গত 
                             <strong>
                                 @if($certificate->deathPerson)
@@ -309,8 +324,8 @@
                         <p class="mb-0">চেয়ারম্যান</p>
                         <p class="mb-0">৩ নং শুকতাইল ইউনিয়ন পরিষদ</p>
                         <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}
+                            @if($thanaBn) {{ $thanaBn }}, @endif
+                            {{ $districtBn }}
                         </p>
                     </div>
                 </div>

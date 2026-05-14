@@ -134,11 +134,7 @@ class SuccessionController extends Controller
             $q1->with('people', 'familyInfo' )->with(array('addressInfo'=>function($q2){
                 $q2->with('permanentVillage', 'presentWard');
             }))->with(array('institute' => function($q3){
-                $q3->with(array('union'=>function($q4){
-                    $q4->with(array('thana'=>function($q5){
-                        $q5->with('district');
-                    }));
-                }));
+                $q3->with('union.thana.district', 'pourashava.District', 'cityCorporation.District');
             }));
         }))->with('deathPerson')->find($id);
         return view('backend.pages.certificate.succession.certificate', $data);
@@ -159,11 +155,7 @@ class SuccessionController extends Controller
             $q1->with('people', 'familyInfo' )->with(array('addressInfo'=>function($q2){
                 $q2->with('permanentVillage', 'presentWard');
             }))->with(array('institute' => function($q3){
-                $q3->with(array('union'=>function($q4){
-                    $q4->with(array('thana'=>function($q5){
-                        $q5->with('district');
-                    }));
-                }));
+                $q3->with('union.thana.district', 'pourashava.District', 'cityCorporation.District');
             }));
         }))->with('deathPerson')->find($id);
         return view('backend.pages.certificate.succession.bn_certificate', $data);

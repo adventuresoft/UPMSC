@@ -163,15 +163,30 @@
                         <h2 class="text- font-Tahoma-bold mb-0" style="font-size:16px;">
                           Government of the People's Republic of Bangladesh
                         </h2>
+                        @php
+                            $institute = $certificate->user->institute;
+                            $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+                            $thana = '';
+                            $district = '';
+                            
+                            if ($institute->union && $institute->union->thana) {
+                                $thana = str_replace('Upazila', '', $institute->union->thana->name);
+                                $district = $institute->union->thana->district->name ?? '';
+                            } elseif ($institute->pourashava) {
+                                $district = $institute->pourashava->District->name ?? '';
+                            } elseif ($institute->cityCorporation) {
+                                $district = $institute->cityCorporation->District->name ?? '';
+                            }
+                        @endphp
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:28px;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
+                            {{ $auth->name ?? '' }}
                         </h3>
                         <h4 class="text-success font-Nikosh-bold mb-0" style="font-size:24px;">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            {{ $auth->bn_name ?? '' }}
                         </h4>
                         <p class="mb-0" style="font-size:15px;">
-                            Thana: {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            District: {{ $certificate->user->institute->union->thana->district->name ?? '' }},
+                            @if($thana) Thana: {{ $thana }}, @endif
+                            District: {{ $district }},
                             Bangladesh
                         </p>
                     </div>
