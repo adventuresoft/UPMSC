@@ -258,14 +258,14 @@
                             </div>
 
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @can('people.create')
                                 <a href="{{ route('people.create') }}" class="btn btn-sm btn-primary font-weight-bold px-3">
                                     <i class="fas fa-plus-circle mr-1"></i> CREATE
                                 </a>
                                 <a href="{{ route('people.index') }}" class="btn btn-sm btn-secondary font-weight-bold px-3">
                                     <i class="fas fa-list mr-1"></i> LIST
                                 </a>
-                                @endif
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -416,6 +416,7 @@ Permanent:</strong>
 
                                         <td>
                                             <div class="table-action">
+                                                @can('people.update')
                                                 @if(empty($user->people->approved_id))
                                                     <button class="btn-action btn-approve-people btn-approve-people-trigger" 
                                                         data-id="{{ $user->people->id }}" 
@@ -425,17 +426,18 @@ Permanent:</strong>
                                                     </button>
                                                 @endif
 
-                                                @if(Auth::user()->role_id == 1)
                                                 <a href="{{ route('people.edit', $user->id) }}" 
                                                     class="btn-action btn-edit" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                @endif
+                                                @endcan
 
+                                                @can('people.read')
                                                 <a href="{{ route('people.show', $user->id) }}" 
                                                     class="btn-action btn-view" title="View">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
+                                                @endcan
                                             </div>
                                         </td>
                                     </tr>
@@ -446,11 +448,11 @@ Permanent:</strong>
                                             <i class="fas fa-folder-open"></i>
                                             <h5>No people found</h5>
                                             <p class="text-muted">Get started by creating a new person.</p>
-                                            @if (create_permission())
+                                            @can('people.create')
                                             <a href="{{ route('people.create') }}" class="btn btn-primary mt-2">
                                                 <i class="fas fa-plus-circle mr-1"></i> Create New
                                             </a>
-                                            @endif
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endif

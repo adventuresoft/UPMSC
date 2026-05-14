@@ -32,7 +32,7 @@ class AgeCertificateController extends Controller
             'user.institute.union.thana.district'
         ])
         ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
+            $q1->applyMultitenancy();
         })
         ->latest()
         ->get();
@@ -49,8 +49,8 @@ class AgeCertificateController extends Controller
         $data['users'] = User::with('people')
         ->where('status', true)
         ->where('role_id', 5)
+        ->applyMultitenancy()
         ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
-        ->where('institute_id', Auth::user()->institute_id)
         ->get();        
         return view('backend.pages.certificate.age.create', $data);
     }

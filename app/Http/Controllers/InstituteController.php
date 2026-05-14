@@ -168,6 +168,7 @@ class InstituteController extends Controller
                 $user->institute_id = $institute->id;
                 $user->role_id = 6; // Institutional Admin
                 $user->name = $request->admin_name;
+                $user->area = $this->getInstituteName($institute->institute_type_id, $institute->union_id, $institute->pourashava_id, $institute->city_corporation_id)->name ?? 'N/A';
                 $user->email = $request->admin_email;
                 $user->mobile = $request->admin_mobile;
                 $user->password = Hash::make($request->admin_password);
@@ -361,6 +362,13 @@ class InstituteController extends Controller
         $user->email = $request->email;
         $user->status = 1; // Active
         $user->name = $request->name;
+        
+        // Update area text
+        $institute = Institute::find($request->institute_id);
+        if ($institute) {
+            $user->area = $this->getInstituteName($institute->institute_type_id, $institute->union_id, $institute->pourashava_id, $institute->city_corporation_id)->name ?? $user->area;
+        }
+
         $user->mobile = $request->mobile;
         
         if($request->password){

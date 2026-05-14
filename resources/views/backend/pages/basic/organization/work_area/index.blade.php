@@ -68,7 +68,9 @@
                                       <td>{{$area->subcategory->en_name ?? ''}}</td>
                                       <td>
                                         <div class="table-action">
-                                          <a class="btn btn-sm btn-primary" data-toggle="tooltip" title="Edit" href="{{route('basic-settings.organization-work-area.edit', $area->id)}}"><i class="fa fa-edit"></i></a>
+                                          @if(edit_permission())
+<a class="btn btn-sm btn-primary" data-toggle="tooltip" title="Edit" href="{{route('basic-settings.organization-work-area.edit', $area->id)}}"><i class="fa fa-edit"></i></a>
+@endif
                                           <a class="btn btn-sm btn-info" data-toggle="tooltip" title="Show" href="{{route('basic-settings.organization-work-area.show', $area->id)}}"><i class="fa fa-eye"></i></a>
 
                                           <form class="deleteSubCategory" method="post">

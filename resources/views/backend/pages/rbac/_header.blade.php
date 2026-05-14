@@ -2,9 +2,13 @@
     $currentRoute = Route::currentRouteName();
     $tabs = [
         ['name' => 'Users Directory', 'route' => 'user.index', 'icon' => 'fas fa-users'],
-        ['name' => 'Role Definitions', 'route' => 'role.index', 'icon' => 'fas fa-user-tag'],
-        ['name' => 'Permission Pool', 'route' => 'permission.index', 'icon' => 'fas fa-key'],
     ];
+
+    // Only superadmins can manage roles and permissions
+    if (is_superadmin()) {
+        $tabs[] = ['name' => 'Role Definitions', 'route' => 'role.index', 'icon' => 'fas fa-user-tag'];
+        $tabs[] = ['name' => 'Permission Pool', 'route' => 'permission.index', 'icon' => 'fas fa-key'];
+    }
 @endphp
 
 <style>

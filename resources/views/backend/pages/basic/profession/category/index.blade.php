@@ -70,12 +70,14 @@
 
                                               <td style="width:10%">
                                                   <div class="table-action">
-                                                      <a class="btn btn-sm btn-primary"
+                                                      @if(edit_permission())
+<a class="btn btn-sm btn-primary"
                                                           title="Edit"
                                                           data-toggle="tooltip"
                                                           href="{{ route('basic-settings.profession-category.edit', $category->id) }}">
                                                           <i class="fa fa-edit"></i>
                                                         </a>
+@endif
 
                                                         <a class="btn btn-sm btn-info"
                                                           title="Show"

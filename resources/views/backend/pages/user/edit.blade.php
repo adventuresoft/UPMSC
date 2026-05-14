@@ -36,8 +36,30 @@
                                         <input type="text" name="mobile" class="form-control form-control-premium" value="{{$user->mobile}}" id="mobile" required>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="area" class="font-weight-bold">Assigned Area (Text)</label>
-                                        <input type="text" name="area" class="form-control form-control-premium" value="{{$user->area}}" id="area" required>
+                                        <label for="area" class="font-weight-bold">Assigned Area</label>
+                                        @if(is_institutional_admin())
+                                            <input type="text" name="area" class="form-control form-control-premium" id="area" value="{{ $assigned_area }}" readonly style="background-color:#e9ecef;">
+                                            <small class="text-muted font-italic">This operator is restricted to your jurisdiction.</small>
+                                        @else
+                                            <select name="area" id="area" class="form-control select2" required>
+                                                <option value="">-- Select Area --</option>
+                                                <optgroup label="Unions">
+                                                    @foreach($unions as $union)
+                                                        <option value="{{ $union->name }}" {{ $user->area == $union->name ? 'selected' : '' }}>{{ $union->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                                <optgroup label="Pourashavas">
+                                                    @foreach($pourashavas as $p)
+                                                        <option value="{{ $p->name }}" {{ $user->area == $p->name ? 'selected' : '' }}>{{ $p->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                                <optgroup label="City Corporations">
+                                                    @foreach($city_corps as $c)
+                                                        <option value="{{ $c->name }}" {{ $user->area == $c->name ? 'selected' : '' }}>{{ $c->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                            </select>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

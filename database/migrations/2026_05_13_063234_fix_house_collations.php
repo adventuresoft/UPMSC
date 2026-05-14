@@ -12,6 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('houses', function (Blueprint $table) {
+            if (!Schema::hasColumn('houses', 'room_usage')) {
+                $table->string('room_usage')->nullable();
+            }
+            if (!Schema::hasColumn('houses', 'block_section')) {
+                $table->string('block_section')->nullable();
+            }
+            
             $table->string('room_usage')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->nullable()->change();
             $table->string('block_section')->charset('utf8mb4')->collation('utf8mb4_unicode_ci')->nullable()->change();
         });

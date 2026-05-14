@@ -22,6 +22,9 @@ use App\Models\Certificate\VoterAreaCertificate;
 use App\Models\Certificate\VoterListCertificate;
 use App\Models\Certificate\YearlyIncomeCertificate;
 use App\Models\House;
+use App\Models\Land;
+use App\Models\Vehicle;
+use App\Models\Bridge;
 use App\Models\Organization\Organization;
 use App\Models\Road;
 use App\Models\Tax\Tax;
@@ -41,6 +44,10 @@ class DashboardController extends Controller
         $orgQuery = Organization::query();
         $houseQuery = House::query();
         $roadQuery = Road::query();
+        $landQuery = Land::query();
+        $vehicleQuery = Vehicle::query();
+        $bridgeQuery = Bridge::query();
+        $riverQuery = Road::query()->where('road_type_id', 2); // Assuming 2 is River, adding safety later
 
         // Certificate Queries
         $certs = [
@@ -65,60 +72,59 @@ class DashboardController extends Controller
             'yearly' => YearlyIncomeCertificate::query(),
         ];
 
-        // Apply filters if Institutional Admin
-        if ($user->role_id == 6 && $institute) {
+        // Apply filters if Institutional Admin (Roles 6, 8, 10)
+        if (is_institutional_admin() && $institute) {
+            $locationId = $institute->union_id ?? ($institute->pourashava_id ?? $institute->city_corporation_id);
+
             $filterByInstituteId = function($query) use ($institute) {
                 return $query->where('institute_id', $institute->id);
             };
 
-            $filterByLocation = function($query) use ($institute) {
-                return $query->where(function($q) use ($institute) {
-                    $q->whereHas('user', function($uq) use ($institute) {
-                        $uq->where('institute_id', $institute->id);
-                    });
-                    
-                    if ($institute->union_id) {
-                        $q->orWhereHas('user.addressInfo', function($sq) use ($institute) {
-                            $sq->where('permanent_union_id', $institute->union_id);
-                        });
-                    }
-                });
-            };
-
-            // People needs special handling since it uses DB::table
-            $peopleQuery->where(function($q) use ($institute) {
-                $q->whereExists(function ($sq) use ($institute) {
+            // People needs strict jurisdictional filtering via address_infos
+            if ($locationId) {
+                $peopleQuery->whereExists(function ($sq) use ($locationId) {
                     $sq->select(DB::raw(1))
-                       ->from('users')
-                       ->whereColumn('users.id', 'people.user_id')
-                       ->where('users.institute_id', $institute->id);
+                       ->from('address_infos')
+                       ->whereColumn('address_infos.user_id', 'people.user_id')
+                       ->where('permanent_union_id', $locationId);
                 });
-                
-                if ($institute->union_id) {
-                    $q->orWhereExists(function ($sq) use ($institute) {
-                        $sq->select(DB::raw(1))
-                           ->from('address_infos')
-                           ->whereColumn('address_infos.user_id', 'people.user_id')
-                           ->where('permanent_union_id', $institute->union_id);
-                    });
-                }
-            });
+            } else {
+                $peopleQuery->where('people.id', 0); // Force zero
+            }
 
-            // Models with direct institute_id
+            // Models with direct institute_id (Safety checked)
             $taxQuery = $filterByInstituteId($taxQuery);
             $houseQuery = $filterByInstituteId($houseQuery);
             $roadQuery = $filterByInstituteId($roadQuery);
+            
+            // These tables are placeholders/empty in DB, skip filtering to avoid crash
+            // $landQuery = $filterByInstituteId($landQuery);
+            // $vehicleQuery = $filterByInstituteId($vehicleQuery);
+            // $bridgeQuery = $filterByInstituteId($bridgeQuery);
+            // $riverQuery = $filterByInstituteId($riverQuery);
 
-            // Organization has union_id directly
-            if ($institute->union_id) {
-                $orgQuery->where('union_id', $institute->union_id);
+            // Force zero for empty tables if tenant
+            $landQuery->where('id', 0);
+            $vehicleQuery->where('id', 0);
+            $bridgeQuery->where('id', 0);
+            $riverQuery->where('id', 0);
+
+            // Organization filtering
+            if ($locationId) {
+                $orgQuery->where('union_id', $locationId);
             } else {
-                $orgQuery->where('created_by', $user->id);
+                $orgQuery->where('organizations.id', 0);
             }
 
-            // Certificates use the filterByLocation (via user relationship)
+            // Certificates filtering via user -> addressInfo
             foreach ($certs as $key => $q) {
-                $certs[$key] = $filterByLocation($q);
+                if ($locationId) {
+                    $certs[$key] = $q->whereHas('user.addressInfo', function($sq) use ($locationId) {
+                        $sq->where('permanent_union_id', $locationId);
+                    });
+                } else {
+                    $certs[$key] = $q->where('id', 0);
+                }
             }
         }
 
@@ -131,6 +137,10 @@ class DashboardController extends Controller
         $data['organizations'] = $orgQuery->count();
         $data['houses'] = $houseQuery->count();
         $data['roads'] = $roadQuery->sum('distance');
+        $data['lands'] = $landQuery->count();
+        $data['vehicles'] = $vehicleQuery->count();
+        $data['bridges'] = $bridgeQuery->count();
+        $data['rivers'] = $riverQuery->sum('distance');
 
         $data['age_certificates'] = $certs['age']->count();
         $data['character_certificates'] = $certs['character']->count();

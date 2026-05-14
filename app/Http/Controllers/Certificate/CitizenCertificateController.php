@@ -34,7 +34,7 @@ class CitizenCertificateController extends Controller
             'user.institute.union.thana.district'
         ])
         ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
+            $q1->applyMultitenancy();
         })
         ->latest()
         ->get();
@@ -50,14 +50,14 @@ class CitizenCertificateController extends Controller
         // ->where('role_id', 5)
         // ->where('institute_id', Auth::user()->institute_id)
         // ->get();
-        $data['users'] = User::with('people' )
-    ->where('status', true)
-    ->where('role_id', 5)
-    ->where('institute_id', Auth::user()->institute_id)
-    ->whereHas('people', function ($q) {
-        $q->whereNotNull('approved_id');
-    })
-    ->get();
+        $data['users'] = User::with('people')
+            ->where('status', true)
+            ->where('role_id', 5)
+            ->applyMultitenancy()
+            ->whereHas('people', function ($q) {
+                $q->whereNotNull('approved_id');
+            })
+            ->get();
         return view('backend.pages.certificate.citizen.create', $data);
     }
 

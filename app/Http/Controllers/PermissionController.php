@@ -16,7 +16,13 @@ class PermissionController extends Controller
      * @return \Illuminate\Http\Response
      */
      public function __construct() {
-        // $this->middleware('auth:admin');
+        // Restrict permission management to superadmins only
+    }
+
+    private function guardSuperadmin() {
+        if (!is_superadmin()) {
+            abort(403, 'Only Superadmins can manage Permissions.');
+        }
     }
     
     public function index()
@@ -43,6 +49,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->guardSuperadmin();
         $this->validate($request, [
             'name' => 'required',            
         ]);
@@ -70,6 +77,7 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
+        $this->guardSuperadmin();
         $permission = Permission::find($id);
         $permissions = Permission::paginate(20);
         return view('backend.pages.permission.index', compact('permission', 'permissions'))->with('title', 'Edit Complain Type')->with('page', 'comType');
@@ -84,6 +92,7 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->guardSuperadmin();
         $this->validate($request, [
             'name' => 'required',            
         ]);
@@ -102,6 +111,7 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
+        $this->guardSuperadmin();
         $permission = Permission::find($id);
         if ($permission) {
             $permission->delete();

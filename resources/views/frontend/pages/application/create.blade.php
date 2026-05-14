@@ -364,8 +364,8 @@
                     বর্তমান ঠিকানা
                 </div>
                 <div class="flex items-center gap-2 text-sm font-normal text-gray-600 bg-gray-100 px-3 py-1 rounded-full border border-gray-200">
-                    <input type="checkbox" name="same_present_addres" id="same_as_present_address" class="w-4 h-4 accent-[#046307]">
-                    <label for="same_as_present_address" class="cursor-pointer">স্থায়ী ঠিকানার মতই?</label>
+                    <input type="checkbox" name="same_as_permanent_address" id="same_as_permanent_address" class="w-4 h-4 accent-[#046307]">
+                    <label for="same_as_permanent_address" class="cursor-pointer">স্থায়ী ঠিকানার মতই?</label>
                 </div>
             </div>
 
@@ -500,14 +500,6 @@
                 setAgeFromDob($(this).val());
             });
 
-            $(document).on('change', '#same_as_present_address', function(e){
-                if ($(this).is(':checked')) {
-                    $("#same-as-permanent-address-section").slideUp();
-                } else {
-                    $("#same-as-permanent-address-section").slideDown();
-                }
-            });
-
             $(document).on('submit', "#applicationForm", function(e) {
                 e.preventDefault();
                 let thisForm = $(this);
@@ -516,7 +508,7 @@
                 
                 $.ajax({
                     type: "POST",
-                    url: "{{url('/')}}/api/application-store",
+                    url: "{{url('/')}}/application/store",
                     data: new FormData(this),
                     dataType: "json",
                     contentType: false,
@@ -544,7 +536,7 @@
             });
 
             // Dynamic Location Loading
-            $(document).on('change', "#permanent_division, #permanent_district, #permanent_thana, #present_division, #present_district, #present_thana", function() {
+            $(document).on('change', "#permanent_division, #permanent_district, #permanent_thana, #permanent_union, #present_division, #present_district, #present_thana, #present_union", function() {
                 let _this = $(this);
                 let _this_id = _this.attr('id');
                 let prefix = _this_id.split("_")[0];
@@ -555,7 +547,9 @@
                 } else if (_this_id.includes('district')) {
                     findThana(val, prefix);
                 } else if (_this_id.includes('thana')) {
-                    findUnion(val, prefix);
+                    findThanaDependencies(val, prefix);
+                } else if (_this_id.includes('union')) {
+                    findUnionDependencies(val, prefix);
                 }
             });
 
@@ -573,12 +567,58 @@
                 });
             }
 
-            function findUnion(thana, prefix) {
+            function findThanaDependencies(thana, prefix) {
                 if (!thana) return;
+                // Load Unions
                 $.get("{{ url('/get-unions-by-thana') }}/" + thana, {id: prefix}, function(res) {
-                    $('#' + prefix + "_union").html(res);
+                    $('#' + prefix + "_union").html(res).trigger('change');
+                });
+                // Load Post Offices
+                $.get("{{ url('/get-post-offices-by-thana') }}/" + thana, {id: prefix}, function(res) {
+                    $('#' + prefix + "_post_office_id").html(res);
                 });
             }
+
+            function findUnionDependencies(union, prefix) {
+                if (!union) return;
+                // Load Wards
+                $.get("{{ url('/get-word-by-union') }}/" + union, {id: prefix}, function(res) {
+                    $('#' + prefix + "_ward").html(res);
+                });
+                // Load Villages
+                $.get("{{ url('/get-villages-by-union') }}/" + union, {id: prefix}, function(res) {
+                    $('#' + prefix + "_village").html(res.villageOptions || res);
+                });
+            }
+
+            // Same as Permanent Address Logic
+            $(document).on('change', '#same_as_permanent_address', function() {
+                if($(this).is(':checked')) {
+                    // Copy select values and trigger change
+                    const fields = [
+                        'division', 'district', 'thana', 'union', 
+                        'post_office_id', 'ward', 'village'
+                    ];
+
+                    fields.forEach(function(field) {
+                        const permSelect = $('#permanent_' + field);
+                        const presSelect = $('#present_' + field);
+                        
+                        presSelect.html(permSelect.html());
+                        presSelect.val(permSelect.val()).trigger('change');
+                    });
+                    
+                    // Copy text inputs
+                    const inputFields = ['road', 'house_no', 'house_no_en'];
+                    inputFields.forEach(function(field) {
+                        $('#present_' + field).val($('#permanent_' + field).val());
+                    });
+
+                    $("#same-as-permanent-address-section").slideUp();
+                } else {
+                    $("#same-as-permanent-address-section").slideDown();
+                }
+            });
         });
     </script>
     <script src="{{asset('assets/js/navbar.js')}}"></script>

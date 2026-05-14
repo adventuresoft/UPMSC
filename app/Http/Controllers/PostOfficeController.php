@@ -3,9 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PostOffice;
 
 class PostOfficeController extends Controller
 {
+    public function postOfficesByThana(Request $request, $id)
+    {
+        $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Post Office</option>';
+
+        $postOffices = PostOffice::where('thana_id', $id)->get();
+
+        if(count($postOffices)) {
+            foreach ($postOffices as $postOffice) {
+               $bn_name = $postOffice->bn_name ? ' - ' . $postOffice->bn_name : '';
+               $html .='<option value="'.$postOffice->id.'">'.$postOffice->name . $bn_name . '</option>';
+            }
+        }
+
+        return $html;
+    }
     /**
      * Display a listing of the resource.
      *

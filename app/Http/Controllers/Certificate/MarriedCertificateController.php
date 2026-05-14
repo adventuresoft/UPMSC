@@ -27,7 +27,7 @@ class MarriedCertificateController extends Controller
     {
         $data['certificates'] = MarriedCertificate::with(['user.people', 'husband.people', 'wife.people'])
         ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
+            $q1->applyMultitenancy();
         })->latest()->get();
         return view('backend.pages.certificate.married.index', $data);
     }
@@ -43,7 +43,7 @@ class MarriedCertificateController extends Controller
         ->where('status', true)
         ->where('role_id', 5)
         ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
-        ->where('institute_id', Auth::user()->institute_id)
+        ->applyMultitenancy()
         ->get();
         return view('backend.pages.certificate.married.create', $data);
     }
@@ -75,7 +75,7 @@ class MarriedCertificateController extends Controller
         $result = DB::transaction(function () use ($request) {
             $user = User::with('people')
                 ->where('id', $request->user_id)
-                ->where('institute_id', Auth::user()->institute_id)
+                ->applyMultitenancy()
                 ->first();
 
             if (!$user || !$user->people) {
@@ -109,14 +109,14 @@ class MarriedCertificateController extends Controller
                 $spouseUser = User::with('people')
                     ->where('id', $request->spouse_user_id)
                     ->where('role_id', 5)
-                    ->where('institute_id', Auth::user()->institute_id)
+                    ->applyMultitenancy()
                     ->first();
             }
 
             if (!$spouseUser && $spouseIdentifier !== '') {
                 $spouseUserQuery = User::with('people')
                     ->where('role_id', 5)
-                    ->where('institute_id', Auth::user()->institute_id)
+                    ->applyMultitenancy()
                     ->where(function ($query) use ($spouseIdentifier) {
                         $query->where('system_id', $spouseIdentifier)
                             ->orWhereHas('people', function ($q) use ($spouseIdentifier) {

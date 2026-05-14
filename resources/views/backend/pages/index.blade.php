@@ -139,14 +139,14 @@
                     <!-- small box -->
                     <div class="small-box bg-dark">
                         <div class="inner">
-                            <h3>400</h3>
+                            <h3>{{$lands}}</h3>
 
                             <p>Total Land</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-bacon"></i>
                         </div>
-                        <p class="small-box-footer">Land: 300 Others: 100</p>
+                        <p class="small-box-footer">Land: {{$lands}} Others: 0</p>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -154,14 +154,14 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>560</h3>
+                            <h3>{{$vehicles}}</h3>
 
                             <p>Total Vehicle</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-truck"></i>
                         </div>
-                        <p class="small-box-footer">Auto: 200 Others: 360</p>
+                        <p class="small-box-footer">Auto: 0 Others: {{$vehicles}}</p>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -169,14 +169,14 @@
                     <!-- small box -->
                     <div class="small-box bg-secondary">
                         <div class="inner">
-                            <h3>30</h3>
+                            <h3>{{$bridges}}</h3>
 
                             <p>Total Bridge</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-archway"></i>
                         </div>
-                        <p class="small-box-footer">Concrit: 18 Others: 12</p>
+                        <p class="small-box-footer">Concrit: 0 Others: {{$bridges}}</p>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -184,14 +184,14 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>12</h3>
+                            <h3>{{$rivers}}</h3>
 
                             <p>Total River KM</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-water"></i>
                         </div>
-                        <p class="small-box-footer">River: 6 Others: 6</p>
+                        <p class="small-box-footer">River: {{$rivers}} Others: 0</p>
                     </div>
                 </div>
                 <!-- ./col -->

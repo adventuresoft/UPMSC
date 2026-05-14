@@ -129,9 +129,11 @@
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{route('roleuser.edit',['role_id'=>$value->role_id,'user_id'=>$value->model_id])}}" class="btn btn-sm btn-outline-primary" style="border-radius: 50px 0 0 50px;"> 
+                                            @if(edit_permission())
+<a href="{{route('roleuser.edit',['role_id'=>$value->role_id,'user_id'=>$value->model_id])}}" class="btn btn-sm btn-outline-primary" style="border-radius: 50px 0 0 50px;"> 
                                                 <i class="fa fa-edit"></i> 
                                             </a>
+@endif
                                             <a href="#" class="btn btn-sm btn-outline-danger" style="border-radius: 0 50px 50px 0;"
                                                onclick="if (confirm('De-authorize this identity mapping?')){event.preventDefault();document.getElementById('delete-form{{$unique}}').submit();}else{event.stopPropagation(); event.preventDefault();};">
                                                 <i class="fa fa-trash-alt"></i> 

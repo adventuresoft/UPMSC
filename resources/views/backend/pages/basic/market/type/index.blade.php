@@ -65,7 +65,9 @@
                                     <td>{{date('d M, Y', strtotime($item->updated_at))}}</td>
                                     <td>
                                       <div style="display: inline-block">
-                                          <a class="btn btn-primary" href="{{route('basic-settings.market-type.edit', $item->id)}}">Edit</a>
+                                          @if(edit_permission())
+<a class="btn btn-primary" href="{{route('basic-settings.market-type.edit', $item->id)}}">Edit</a>
+@endif
                                           <form class="deleteCategory" method="post">
                                             @csrf
                                             @method('DELETE')

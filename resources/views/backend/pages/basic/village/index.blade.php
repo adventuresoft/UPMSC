@@ -71,7 +71,9 @@
                                       <td>{{$village->union->name}}</td>
                                       <td>
                                         <div class="table-action">
-                                            <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.village.edit', $village->id)}}"><i class="fa fa-edit"></i></a>
+                                            @if(edit_permission())
+<a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.village.edit', $village->id)}}"><i class="fa fa-edit"></i></a>
+@endif
                                             <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('basic-settings.village.show', $village->id)}}"><i class="fa fa-eye"></i></a>
 
                                             <form class="deleteVillage" method="post">

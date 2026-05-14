@@ -75,7 +75,9 @@
                                       </td>
                                       <td>
                                         <div class="table-action">
-                                            <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.union.edit', $union->id)}}"><i class="fa fa-edit"></i></a>
+                                            @if(edit_permission())
+<a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.union.edit', $union->id)}}"><i class="fa fa-edit"></i></a>
+@endif
 
                                             <form class="deleteUnion" method="post">
                                               @csrf
