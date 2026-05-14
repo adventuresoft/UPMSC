@@ -188,8 +188,8 @@
                         <span>
                              {{ $certificate->user->people->gender == 1 ? 'He ' : 'She ' }}
                             <strong>
-                                {{ $certificate->death_date 
-                                    ? \Carbon\Carbon::parse($certificate->death_date)->format('d/m/Y')
+                                {{ $certificate->date_of_death 
+                                    ? \Carbon\Carbon::parse($certificate->date_of_death)->format('d/m/Y')
                                     : 'Don\'t mention' }}
                             </strong>
                          Died on.

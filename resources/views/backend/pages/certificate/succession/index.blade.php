@@ -132,11 +132,11 @@
                                             class="img">
                                     </td>
 
-                                    <td>{{ bnValue($certificate->system_id) }}</td>
+                                    <td>{{ ($certificate->system_id) }}</td>
 
                                     <td>
                                         <span class="citizen-id">
-                                            {{ bnValue($certificate->system_id ?? '') }}
+                                            {{ ($certificate->system_id ?? '') }}
                                         </span><br>
                                         {{ $certificate->user->name }}
                                     </td>

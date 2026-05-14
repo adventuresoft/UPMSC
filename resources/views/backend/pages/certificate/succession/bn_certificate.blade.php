@@ -232,15 +232,27 @@
                             জেলা- {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
                             তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ছিলেন। গত 
                             <strong>
-                                {{ $certificate->death_date 
-                                    ? bnValue(date('d/m/Y', strtotime($certificate->death_date))) 
-                                    : '০০/০০/০০০০' }}
+                                @if($certificate->deathPerson)
+                                    {{ $certificate->deathPerson->date_of_death ? bnValue(date('d/m/Y', strtotime($certificate->deathPerson->date_of_death))) : '০০/০০/০০০০' }}
+                                @else
+                                    {{ $certificate->date_of_death ? bnValue(date('d/m/Y', strtotime($certificate->date_of_death))) : '০০/০০/০০০০' }}
+                                @endif
                             </strong> খ্রিঃ তারিখে 
                             <strong>
-                                {{ $certificate->death_cause ?? 'অজ্ঞাত কারণ' }}
+                                @if($certificate->deathPerson)
+                                    {{ deathCauseBn($certificate->deathPerson->cause_of_death ?? 'অজ্ঞাত কারণ') }}
+                                @else
+                                    {{ deathCauseBn($certificate->death_cause ?? 'অজ্ঞাত কারণ') }}
+                                @endif
                             </strong> জনিত কারণে তিনি মৃত্যুবরণ করেন।
                             তার মৃত্যু নিবন্ধন নম্বর - 
-                            <strong>{{ bnValue($certificate->death_reg_no ?? '') }}</strong>।
+                            <strong>
+                                @if($certificate->deathPerson)
+                                    {{ bnValue($certificate->deathPerson->system_id ?? '') }}
+                                @else
+                                    {{ bnValue($certificate->death_reg_no ?? '') }}
+                                @endif
+                            </strong>।
                             আমার জানা মতে মৃত্যুর সময় তিনি নিম্ন ছকে বর্ণিত উত্তরাধিকারী/ওয়ারিশগণকে রেখে গিয়েছেন।
                         </p>
 

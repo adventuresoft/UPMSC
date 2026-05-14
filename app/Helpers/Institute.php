@@ -85,4 +85,20 @@ if (!function_exists('currencyFormat')) {
     
 }
 
+if (!function_exists('deathCauseBn')) {
+    function deathCauseBn($value)
+    {
+        $causes = [
+            'natural' => 'স্বাভাবিক',
+            'accident' => 'দুর্ঘটনা',
+            'suicide' => 'আত্মহত্যা',
+            'homicide' => 'হত্যাকাণ্ড',
+            'stroke' => 'স্ট্রোক',
+            'cancer' => 'ক্যান্সার',
+            'other' => 'অন্যান্য',
+        ];
+        return $causes[strtolower($value)] ?? $value;
+    }
+}
+
 

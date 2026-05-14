@@ -181,7 +181,7 @@
                     </div>
                 </div>
 
-                <!-- ================= Title ================= -->
+                <!-- ================= Title ================= 
                 <div class="row mt-3 align-items-center">
                     <div class="col-4 text-left">
                         <strong> NO: </strong >  <span style="font-weight:bold;color:blue">      {{ $certificate->system_id ?? '' }}   </span>
@@ -198,6 +198,7 @@
                         {{ date('d/m/Y', strtotime($certificate->created_at)) }}
                     </div>
                 </div>
+                -->
 
                 <!-- ================= Body ================= -->
                 <div class="row mt-2 align-items-center">
@@ -207,7 +208,7 @@
 
                     <div class="col-4 text-center">
                         <span class="badge text-light px-4 py-2" style="font-size:22px; border-radius:26px;; background-color: #2F318C;">
-                            Inheritance certificate
+                            Certificate of Inheritance
                         </span>
                     </div>
 
@@ -246,17 +247,29 @@
 @endif
                             Upzila:- <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,
                             District: - <span>{{ $certificate->user->institute->union->thana->district->name ?? '' }}</span>.
-                            তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ছিলেন। গত 
+                            He was a permanent resident of this union. Last
                             <strong>
-                                {{ $certificate->death_date 
-                                    ? date('d/m/Y', strtotime($certificate->death_date))
-                                    : '00/00/0000' }}
+                                @if($certificate->deathPerson)
+                                    {{ $certificate->deathPerson->date_of_death ? date('d/m/Y', strtotime($certificate->deathPerson->date_of_death)) : '00/00/0000' }}
+                                @else
+                                    {{ $certificate->date_of_death ? date('d/m/Y', strtotime($certificate->date_of_death)) : '00/00/0000' }}
+                                @endif
                             </strong> Date 
                             <strong>
-                                {{ $certificate->death_cause??''}}
+                                @if($certificate->deathPerson)
+                                    {{ $certificate->deathPerson->cause_of_death ?? '' }}
+                                @else
+                                    {{ $certificate->death_cause ?? '' }}
+                                @endif
                             </strong> He died of causes related to his death.
 His death registration number is -
-                            <strong>{{ $certificate->death_reg_no??"" }}</strong>।
+                            <strong>
+                                @if($certificate->deathPerson)
+                                    {{ $certificate->deathPerson->system_id ?? '' }}
+                                @else
+                                    {{ $certificate->death_reg_no ?? '' }}
+                                @endif
+                            </strong>।
                             To the best of my knowledge, at the time of his death he left behind the heirs/heirs mentioned in the table below.
                         </p>
 

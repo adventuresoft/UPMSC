@@ -196,7 +196,7 @@
 
                         <span >
                             মৃত্যুর কারণঃ 
-                            <strong>{{ $certificate->cause_of_death ?? 'উল্লেখ নেই' }}</strong>
+                            <strong>{{ deathCauseBn($certificate->cause_of_death ?? 'উল্লেখ নেই') }}</strong>
                         </span>
 
                         <span>
