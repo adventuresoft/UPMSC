@@ -49,9 +49,10 @@
                                 <tr>
                                     <th>Sl.</th>
                                     <th>Name</th>
+                                    <th>Assigned Area</th>
                                     <th>Email</th>
                                     <th>Mobile</th>
-                                    <td>Created at</td>
+                                    <th>Created at</th>
                                     <th>Action</th>
                                 </tr>
                               </thead>
@@ -61,6 +62,7 @@
                                       <tr>
                                           <td>{{++$key}}</td>
                                           <td>{{$admin->name}} </td>
+                                          <td><span class="badge badge-info">{{$admin->assigned_area}}</span></td>
                                           <td>{{$admin->email}}</td>
                                           <td>{{$admin->mobile}}</td>
                                           <td>
@@ -68,7 +70,9 @@
                                           </td>
                                           <td style="width: 10%">
                                             <div class="table-action">
+                                            @if(edit_permission())
                                               <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('institutional-admin.edit', $admin->id)}}"><i class="fa fa-edit"></i></a>
+                                            @endif
                                               <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('institutional-admin.show', $admin->id)}}"><i class="fa fa-eye"></i></a>
 
                                               <form class="deleteInstitute" method="post">

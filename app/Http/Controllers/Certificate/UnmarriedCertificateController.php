@@ -29,7 +29,7 @@ class UnmarriedCertificateController extends Controller
     {
         $data['certificates'] = UnmarriedCertificate::with('user')
         ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
+            $q1->applyMultitenancy();
         })->latest()->get();
         return view('backend.pages.certificate.unmarried.index', $data);
     }
@@ -44,7 +44,7 @@ class UnmarriedCertificateController extends Controller
         $data['users'] = User::with('people')
         ->where('status', true)
         ->where('role_id', 5)
-        ->where('institute_id', Auth::user()->institute_id)
+        ->applyMultitenancy()
         ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
         ->get();
         return view('backend.pages.certificate.unmarried.create', $data);

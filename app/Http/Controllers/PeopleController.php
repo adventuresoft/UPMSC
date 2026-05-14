@@ -160,19 +160,7 @@ class PeopleController extends Controller
             $q->whereNull('approved_id');
         });
 
-        if (Auth::user()->institute_id) {
-            $institute = Auth::user()->institute;
-            $query->where(function($q) use ($institute) {
-                $q->where('institute_id', $institute->id);
-                
-                if ($institute->union_id) {
-                    $q->orWhereHas('addressInfo', function($sq) use ($institute) {
-                        $sq->where('permanent_union_id', $institute->union_id);
-                    });
-                }
-                // Add more location types if needed (pourashava, city corp)
-            });
-        }
+        $query->applyMultitenancy();
 
         $data['users'] = $query->latest()->get();
         return view('backend.pages.people.index', $data);
@@ -195,18 +183,7 @@ class PeopleController extends Controller
             $q->whereNotNull('approved_id');
         });
 
-        if (Auth::user()->institute_id) {
-            $institute = Auth::user()->institute;
-            $query->where(function($q) use ($institute) {
-                $q->where('institute_id', $institute->id);
-                
-                if ($institute->union_id) {
-                    $q->orWhereHas('addressInfo', function($sq) use ($institute) {
-                        $sq->where('permanent_union_id', $institute->union_id);
-                    });
-                }
-            });
-        }
+        $query->applyMultitenancy();
 
         $data['users'] = $query->latest()->get();
         return view('backend.pages.people.approvedList', $data);

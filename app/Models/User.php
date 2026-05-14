@@ -44,7 +44,9 @@ class User extends Authenticatable
         'mobile',
         'area',
         'password',
-        'status'
+        'status',
+        'created_by',
+        'updated_by',
     ];
 
     /**
@@ -152,5 +154,54 @@ class User extends Authenticatable
     public function birthCertificate()
     {
         return $this->hasMany(BirthCertificate::class, 'user_id', 'id');
+    }
+
+    public function getAssignedAreaAttribute()
+    {
+        if (!$this->institute_id) return 'System Admin';
+
+        // Priority 1: Use the manual 'area' text you just updated in the user list
+        if ($this->area) {
+            return $this->area;
+        }
+        
+        $institute = $this->institute;
+        if (!$institute) return 'Institutional Admin';
+
+        // Priority 2: Try to fetch names from relationships if manual area is empty
+        if ($institute->union_id && $institute->union) {
+            return "Union: " . $institute->union->name;
+        }
+        if ($institute->pourashava_id && $institute->pourashava) {
+            return "Pourashava: " . $institute->pourashava->name;
+        }
+        if ($institute->city_corporation_id && $institute->cityCorporation) {
+            return "City Corp: " . $institute->cityCorporation->name;
+        }
+
+        return 'Institutional Admin';
+    }
+
+    public function scopeApplyMultitenancy($query)
+    {
+        $user = auth()->user();
+        if (!$user || !$user->institute_id) {
+            return $query;
+        }
+
+        $institute = $user->institute;
+        return $query->where(function($q) use ($institute) {
+            // First, filter by direct institute association
+            $q->where('institute_id', $institute->id);
+            
+            // Second, filter by geographical location (Address)
+            $locationId = $institute->union_id ?? ($institute->pourashava_id ?? $institute->city_corporation_id);
+            
+            if ($locationId) {
+                $q->orWhereHas('addressInfo', function($sq) use ($locationId) {
+                    $sq->where('permanent_union_id', $locationId);
+                });
+            }
+        });
     }
 }

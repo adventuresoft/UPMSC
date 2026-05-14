@@ -75,7 +75,9 @@
                                       </td>
                                       <td>
                                         <div class="table-action">
-                                            <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.city-corporation.edit', $cityCorporation->id)}}"><i class="fa fa-edit"></i></a>
+                                            @if(edit_permission())
+<a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.city-corporation.edit', $cityCorporation->id)}}"><i class="fa fa-edit"></i></a>
+@endif
 
                                             <form class="deleteCityCorporation" method="post">
                                               @csrf

@@ -70,7 +70,9 @@
                                     </td>
                                     <td>
                                       <div style="display: inline-block">
-                                        <a class="btn btn-primary" href="{{route('basic-settings.organization-class.edit', $class->id)}}">Edit</a>
+                                        @if(edit_permission())
+<a class="btn btn-primary" href="{{route('basic-settings.organization-class.edit', $class->id)}}">Edit</a>
+@endif
                                         <form class="deleteClass" method="post">
                                           @csrf
                                           @method('DELETE')

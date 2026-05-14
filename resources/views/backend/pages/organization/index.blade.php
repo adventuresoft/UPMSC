@@ -112,7 +112,7 @@
                                         </td>
                                         <td>
                                           <div class="d-flex">
-                                            @if (edit_permission())
+                                            @if (edit_permission('tradelicenses'))
                                             @if( $organization->status==0)
                                                 <a href="{{ route('organization.edit', $organization->id) }}" title="Edit" class="btn btn-primary btn-sm mx-1"><i class="fa fa-edit"></i></a>
                                                  @endif

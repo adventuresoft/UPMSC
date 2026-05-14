@@ -183,7 +183,7 @@ class ApplicationController extends Controller
 
             /* ================= PRESENT ADDRESS ================= */
 
-            if($request->same_as_present_address){
+            if($request->same_as_permanent_address){
 
                 $address->present_division_id = $request->permanent_division;
                 $address->present_district_id = $request->permanent_district;

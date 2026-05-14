@@ -237,21 +237,35 @@
                                             </span>
                                         </td>
 
-                                        <td>
-                                            @if($certificate->status == 0)
-                                                <button onclick="approveCertificate({{ $certificate->id }})" class="btn btn-success btn-sm">
-                                                    <i class="fa fa-check"></i> Approve
-                                                </button>
-                                            @else
-                                                <a target="_blank" href="{{ route('voter-area.show', $certificate->id) }}" 
-                                                    class="btn btn-primary btn-sm">
-                                                    <i class="fa fa-file-pdf"></i> EN
-                                                </a>
-                                                <a target="_blank" href="{{ route('voter-area.bn_certificate', $certificate->id) }}" 
-                                                    class="btn btn-info btn-sm">
-                                                    <i class="fa fa-file-pdf"></i> BN
-                                                </a>
-                                            @endif
+                                        <td style="white-space: nowrap;">
+                                            <div class="d-flex align-items-center justify-content-center" style="gap: 5px;">
+                                                @if($certificate->status == 0)
+                                                    <button onclick="approveCertificate({{ $certificate->id }})" class="btn btn-success btn-sm">
+                                                        <i class="fa fa-check"></i> Approve
+                                                    </button>
+                                                    @if (edit_permission('certificates'))
+                                                    <a href="{{ route('voter-area.edit', $certificate->id) }}" 
+                                                        class="btn btn-warning btn-sm" title="Edit">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    @endif
+                                                @else
+                                                    @if (edit_permission('certificates'))
+                                                    <a href="{{ route('voter-area.edit', $certificate->id) }}" 
+                                                        class="btn btn-warning btn-sm" title="Edit">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    @endif
+                                                    <a target="_blank" href="{{ route('voter-area.show', $certificate->id) }}" 
+                                                        class="btn btn-primary btn-sm" title="English Certificate">
+                                                        <i class="fa fa-file-pdf"></i> EN
+                                                    </a>
+                                                    <a target="_blank" href="{{ route('voter-area.bn_certificate', $certificate->id) }}" 
+                                                        class="btn btn-info btn-sm" title="Bengali Certificate">
+                                                        <i class="fa fa-file-pdf"></i> BN
+                                                    </a>
+                                                @endif
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach

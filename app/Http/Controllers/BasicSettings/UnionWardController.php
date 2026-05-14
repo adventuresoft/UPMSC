@@ -13,7 +13,22 @@ class UnionWardController extends Controller
 
     public function __construct()
     {
-        $this->middleware('admin');
+        $this->middleware('admin')->except('wordByUnion');
+    }
+
+    public function wordByUnion(Request $request, $id)
+    {
+        $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Ward</option>';
+
+        $wards = UnionWard::where('status', true)->get();
+
+        if(count($wards)) {
+            foreach ($wards as $ward) {
+               $html .='<option value="'.$ward->id.'">'.$ward->en_ward_no.'</option>';
+            }
+        }
+
+        return $html;
     }
     /**
      * Display a listing of the resource.

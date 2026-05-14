@@ -17,7 +17,7 @@ class NidCorrectionCertificateController extends Controller
         $query = NidCorrectionCertificate::with('user.people', 'user.addressInfo.permanentVillage', 'user.addressInfo.permanentWard', 'user.addressInfo.permanentPostOffice', 'user.institute.union.thana.district');
         if (Auth::user()->institute_id) {
             $query->whereHas('user', function($q1){
-                $q1->where('institute_id', Auth::user()->institute_id);
+                $q1->applyMultitenancy();
             });
         }
         $data['certificates'] = $query->latest()->get();

@@ -117,9 +117,11 @@
                                             </td>
                                             <td>
                                                 <div class="table-action">
-                                                    <a class="btn btn-sm btn-primary" href="{{ route('vehicle.edit', $vehicle->id) }}" title="Edit">
+                                                    @if(edit_permission())
+<a class="btn btn-sm btn-primary" href="{{ route('vehicle.edit', $vehicle->id) }}" title="Edit">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
+@endif
                                                     <a class="btn btn-sm btn-info" href="{{ route('vehicle.show', $vehicle->id) }}" title="View">
                                                         <i class="fa fa-eye"></i>
                                                     </a>

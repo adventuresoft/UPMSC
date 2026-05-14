@@ -29,7 +29,7 @@ class VoterListCertificateController extends Controller
     {
         $data['certificates'] = VoterListCertificate::with('user')
         ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
+            $q1->applyMultitenancy();
         })->latest()->get();
         return view('backend.pages.certificate.voter_list.index', $data);
     }

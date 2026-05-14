@@ -105,7 +105,9 @@
                                     <h3 class="card-title">Tax List</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
+                                    @if(create_permission('taxes'))
                                     <a href="{{route('tax.create')}}" class="btn btn-primary">Generate</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -145,8 +147,12 @@
                                         </td>
                                         <td>
                                           <div class="table-action">
+                                            @if(view_permission('taxes'))
                                             <a href="{{route('tax.show', $tax->id)}}" title="Show" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
+                                            @endif
+                                            @if(view_permission('taxes'))
                                             <a href="{{route('taxes.receipt', $tax->id)}}" title="Print" class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a>
+                                            @endif
                                           </div>
                                         </td>
                                     </tr>

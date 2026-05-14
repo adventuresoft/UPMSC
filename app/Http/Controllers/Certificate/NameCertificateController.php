@@ -29,7 +29,7 @@ class NameCertificateController extends Controller
     {
         $data['certificates'] = NameCertificate::with('user')
         ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
+            $q1->applyMultitenancy();
         })->latest()->get();
         return view('backend.pages.certificate.name.index', $data);
     }
@@ -45,7 +45,7 @@ class NameCertificateController extends Controller
         ->where('status', true)
         ->where('role_id', 5)
         ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
-        ->where('institute_id', Auth::user()->institute_id)
+        ->applyMultitenancy()
         ->get();
         return view('backend.pages.certificate.name.create', $data);
     }

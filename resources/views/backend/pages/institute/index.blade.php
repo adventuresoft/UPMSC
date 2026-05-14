@@ -74,7 +74,9 @@
                                           <td>{{date("d M, Y", strtotime($institute->activation_time))}}</td>
                                           <td style="width: 10%">
                                             <div class="table-action">
+                                            @if(edit_permission('institutes'))
                                                 <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('institute.edit', $institute->id)}}"><i class="fa fa-edit"></i></a>
+                                            @endif
                                                 <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('institute.show', $institute->id)}}"><i class="fa fa-eye"></i></a>
 
                                                 <form class="deleteInstitute" method="post">

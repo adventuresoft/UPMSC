@@ -45,15 +45,24 @@
                                 <h6 class="card-title text-indigo font-weight-bold mb-0">Permanent Address</h6>
                             </div>
                             <div class="card-body">
-                                <!-- Row 0: District, Thana, Union -->
+                                <!-- Row 0: Division, District, Thana -->
                                 <div class="form-group row">
+                                    <div class="col-sm-4">
+                                        <label for="permanent_division_id">Division</label>
+                                        <select name="permanent_division_id" class="form-control select2 select2bs4" id="permanent_division_id">
+                                            <option value="">Select Division</option>
+                                            @if ($divisions)
+                                                @foreach ($divisions as $division)
+                                                    <option value="{{ $division->id }}" {{$user->addressInfo ? ($user->addressInfo->permanent_division_id == $division->id ? 'selected' : '') : ''}}>{{ $division->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <small class="text-danger error permanent_division_id_error"></small>
+                                    </div>
                                     <div class="col-sm-4">
                                         <label for="permanent_district_id">District</label>
                                         <select name="permanent_district_id" class="form-control select2 select2bs4" id="permanent_district_id">
-                                            <option value="">Select District</option>
-                                            @foreach($districts as $district)
-                                                <option value="{{ $district->id }}" {{ $user->addressInfo && $user->addressInfo->permanent_district_id == $district->id ? 'selected' : '' }}>{{ $district->name }}</option>
-                                            @endforeach
+                                            <option value="{{$user->addressInfo->permanent_district_id ?? ''}}">{{$user->addressInfo?->permanentDistrict?->name ?? 'Select District'}}</option>
                                         </select>
                                         <small class="text-danger error permanent_district_id_error"></small>
                                     </div>
@@ -64,16 +73,24 @@
                                         </select>
                                         <small class="text-danger error permanent_thana_id_error"></small>
                                     </div>
+                                </div>
+
+                                <!-- Row 1: Post Office, UP, Village -->
+                                <div class="form-group row">
                                     <div class="col-sm-4">
-                                        <label for="permanent_union_id">Union Parishad</label>
+                                        <label for="permanent_post_office_id">Post Office</label>
+                                        <select name="permanent_post_office_id" class="form-control select2 select2bs4" id="permanent_post_office_id">
+                                            <option value="{{$user->addressInfo->permanent_post_office_id ?? ''}}">{{$user->addressInfo?->permanentPostOffice?->name ?? 'Select Post Office'}}</option>
+                                        </select>
+                                        <small class="text-danger error permanent_post_office_id_error"></small>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label for="permanent_union_id">UP (Union Parishad)</label>
                                         <select name="permanent_union_id" class="form-control select2 select2bs4" id="permanent_union_id">
                                             <option value="{{ $user->addressInfo->permanent_union_id ?? '' }}">{{ $user->addressInfo?->permanentUnion?->name ?? 'Select Union' }}</option>
                                         </select>
                                         <small class="text-danger error permanent_union_id_error"></small>
                                     </div>
-                                </div>
-                                <!-- Row 1: Village, Post Office, Permanent Ward -->
-                                <div class="form-group row">
                                     <div class="col-sm-4">
                                         <label for="permanent_village_id">Village</label>
                                         <select name="permanent_village_id" class="form-control select2 select2bs4" id="permanent_village_id">
@@ -86,20 +103,12 @@
                                         </select>
                                         <small class="text-danger error permanent_village_id_error"></small>
                                     </div>
+                                </div>
+
+                                <!-- Row 2: Ward, Road, House -->
+                                <div class="form-group row">
                                     <div class="col-sm-4">
-                                        <label for="permanent_post_office_id">Post Office</label>
-                                        <select name="permanent_post_office_id" class="form-control select2 select2bs4" id="permanent_post_office_id">
-                                            <option value="">Select Post Office</option>
-                                            @if ($post_officeses)
-                                                @foreach ($post_officeses as $post_officese)
-                                                    <option value="{{$post_officese->id}}" {{$user->addressInfo ? ($user->addressInfo->permanent_post_office_id == $post_officese->id ? 'selected' : '' ) : ''}}>{{$post_officese->name}} {{$post_officese->bn_name ? '- '.$post_officese->bn_name : ''}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <small class="text-danger error permanent_post_office_id_error"></small>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <label for="permanent_ward_id">Permanent Ward</label>
+                                        <label for="permanent_ward_id">Ward</label>
                                         <select name="permanent_ward_id" class="form-control select2 select2bs4" id="permanent_ward_id">
                                             <option value="">Select Ward</option>
                                             @if ($wards)
@@ -110,10 +119,6 @@
                                         </select>
                                         <small class="text-danger error permanent_ward_id_error"></small>
                                     </div>
-                                </div>
-
-                                <!-- Row 2: Road, House, House (Bangla) -->
-                                <div class="form-group row">
                                     <div class="col-sm-4">
                                         <label for="permanent_road">Road</label>
                                         <input type="text" name="permanent_road" class="form-control" id="permanent_road"
@@ -126,7 +131,11 @@
                                             value="{{ $user->addressInfo->permanent_house ?? '' }}" placeholder="Permanent House">
                                         <small class="text-danger error permanent_house_error"></small>
                                     </div>
-                                    <div class="col-sm-4">
+                                </div>
+
+                                <!-- Row 3: House (Bangla) -->
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
                                         <label for="permanent_house_bn">House (Bangla)</label>
                                         <input type="text" name="permanent_house_bn" class="form-control" id="permanent_house_bn"
                                             value="{{ $user->addressInfo->permanent_house_bn ?? '' }}" placeholder="স্থায়ী বাড়ি">
@@ -136,8 +145,12 @@
                             </div>
 
                             <!-- Present Address Section -->
-                            <div class="card-header bg-light py-2 px-3 border-0 mt-3 mx-3 rounded">
+                            <div class="card-header bg-light py-2 px-3 border-0 mt-3 mx-3 rounded d-flex justify-content-between align-items-center">
                                 <h6 class="card-title text-indigo font-weight-bold mb-0">Present Address</h6>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="same_as_permanent">
+                                    <label class="custom-control-label font-weight-normal text-muted" for="same_as_permanent" style="cursor:pointer; padding-top: 2px;">Same as Permanent Address</label>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <!-- Row 3: Division, District, Thana -->
@@ -379,7 +392,9 @@
             e.preventDefault();
             let thana_id = $(this).val();
             let present_union_id = $('#present_union_id');
+            let present_post_office_id = $('#present_post_office_id');
             if (thana_id) {
+                // Get Unions
                 $.ajax({
                     type: "GET",
                     url: "{{ url('/get-unions-by-thana') }}/"+thana_id,
@@ -393,13 +408,30 @@
                     },
                     error: function(xhr, status, error) {
                         present_union_id.prop("disabled", false);
-                        var responseText = jQuery.parseJSON(xhr.responseText);
-                        toastr.error(responseText.message);
+                    }
+                });
+
+                // Get Post Offices
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-post-offices-by-thana') }}/"+thana_id,
+                    beforeSend: function() {
+                        present_post_office_id.prop("disabled", true);
+                        present_post_office_id.html('<option value="">Loading...</option>');
+                    },
+                    success: function(response) {
+                        present_post_office_id.html(response);
+                        present_post_office_id.prop("disabled", false);
+                    },
+                    error: function(xhr, status, error) {
+                        present_post_office_id.prop("disabled", false);
                     }
                 });
             } else {
                 present_union_id.html('<option value="">Select Union</option>');
                 present_union_id.prop("disabled", true);
+                present_post_office_id.html('<option value="">Select Post Office</option>');
+                present_post_office_id.prop("disabled", true);
             }
         });
 
@@ -437,6 +469,32 @@
 
         // ── Permanent Address Cascade ──────────────────────────────────────
 
+        // Division → District
+        $(document).on('change', '#permanent_division_id', function(e){
+            e.preventDefault();
+            let division_id = $(this).val();
+            let $district = $('#permanent_district_id');
+            let $thana = $('#permanent_thana_id');
+
+            $thana.html('<option value="">Select Thana</option>');
+
+            if (division_id) {
+                $district.prop('disabled', true).html('<option value="">Loading...</option>');
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("/get-districts-by-division") }}/' + division_id,
+                    success: function(response) {
+                        $district.html(response).prop('disabled', false);
+                    },
+                    error: function() {
+                        $district.html('<option value="">Select District</option>').prop('disabled', false);
+                    }
+                });
+            } else {
+                $district.html('<option value="">Select District</option>').prop('disabled', true);
+            }
+        });
+
         // District → Thana
         $(document).on('change', '#permanent_district_id', function(e){
             e.preventDefault();
@@ -465,16 +523,18 @@
             }
         });
 
-        // Thana → Union
+        // Thana → Union & Post Office
         $(document).on('change', '#permanent_thana_id', function(e){
             e.preventDefault();
             let thana_id = $(this).val();
             let $union = $('#permanent_union_id');
+            let $post_office = $('#permanent_post_office_id');
             let $village = $('#permanent_village_id');
 
             $village.html('<option value="">Select Village</option>');
 
             if (thana_id) {
+                // Get Unions
                 $union.prop('disabled', true).html('<option value="">Loading...</option>');
                 $.ajax({
                     type: 'GET',
@@ -486,8 +546,22 @@
                         $union.html('<option value="">Select Union</option>').prop('disabled', false);
                     }
                 });
+
+                // Get Post Offices
+                $post_office.prop('disabled', true).html('<option value="">Loading...</option>');
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("/get-post-offices-by-thana") }}/' + thana_id,
+                    success: function(response) {
+                        $post_office.html(response).prop('disabled', false);
+                    },
+                    error: function() {
+                        $post_office.html('<option value="">Select Post Office</option>').prop('disabled', false);
+                    }
+                });
             } else {
                 $union.html('<option value="">Select Union</option>').prop('disabled', true);
+                $post_office.html('<option value="">Select Post Office</option>').prop('disabled', true);
             }
         });
 
@@ -511,6 +585,32 @@
                 });
             } else {
                 $village.html('<option value="">Select Village</option>').prop('disabled', true);
+            }
+        });
+
+        // Same as Permanent Address Logic
+        $(document).on('change', '#same_as_permanent', function() {
+            if($(this).is(':checked')) {
+                // Copy select values and trigger change for select2
+                const selectFields = [
+                    'division_id', 'district_id', 'thana_id', 
+                    'post_office_id', 'union_id', 'village_id', 'ward_id'
+                ];
+
+                selectFields.forEach(function(field) {
+                    const permSelect = $('#permanent_' + field);
+                    const presSelect = $('#present_' + field);
+                    
+                    // Copy options HTML to ensure the value exists in the target select
+                    presSelect.html(permSelect.html());
+                    presSelect.val(permSelect.val()).trigger('change');
+                });
+                
+                // Copy text inputs
+                const inputFields = ['road', 'house', 'house_bn'];
+                inputFields.forEach(function(field) {
+                    $('#present_' + field).val($('#permanent_' + field).val());
+                });
             }
         });
     </script>

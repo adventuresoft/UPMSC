@@ -36,9 +36,15 @@ class InstitutionalAdminController extends Controller
      */
     public function index()
     {
-        $data['admins'] = User::where('role_id', 6)
-        ->where('institute_id', Auth::user()->institute_id)
-        ->get();
+        $user = Auth::user();
+        $query = User::where('role_id', 6);
+        
+        // If not system admin, restrict to own institute
+        if ($user->institute_id) {
+            $query->where('institute_id', $user->institute_id);
+        }
+
+        $data['admins'] = $query->get();
         return view('backend.pages.institutional_admin.index', $data);
     }
 
@@ -49,8 +55,8 @@ class InstitutionalAdminController extends Controller
      */
     public function create()
     {
-        return view('backend.pages.institutional_admin.create');
-
+        $data['assigned_area'] = Auth::user()->assigned_area;
+        return view('backend.pages.institutional_admin.create', $data);
     }
 
     /**
@@ -76,10 +82,11 @@ class InstitutionalAdminController extends Controller
         }
 
         try {
-           
             $user = new User();
             $user->role_id = 6;
+            // Force same institute as the person creating it
             $user->institute_id = Auth::user()->institute_id;
+            $user->area = Auth::user()->assigned_area; // Save the area text
             $user->email = $request->email;
             $user->mobile = $request->mobile;
             $user->password = Hash::make($request->password);
@@ -87,6 +94,9 @@ class InstitutionalAdminController extends Controller
             $user->status = true;
             $user->created_by = Auth::id();
             $user->save();
+
+            // Assign 'Institutional Admin' role via Spatie
+            $user->assignRole('union-admin'); // Defaulting to union-admin for role 6 scope
 
             $data['status'] = true;
             $data['message'] = "Successfully Saved Admin Information!";
@@ -120,6 +130,7 @@ class InstitutionalAdminController extends Controller
     public function edit($id)
     {
         $data['admin'] = User::find($id);
+        $data['assigned_area'] = Auth::user()->assigned_area;
         return view('backend.pages.institutional_admin.edit', $data);
     }
 
@@ -147,6 +158,7 @@ class InstitutionalAdminController extends Controller
 
         try {
             $user =  User::find($id);
+            $user->area = Auth::user()->assigned_area; // Ensure area text is updated
             $user->email = $request->email;
             $user->mobile = $request->mobile;
             $user->name = $request->name;

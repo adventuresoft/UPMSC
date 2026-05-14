@@ -124,9 +124,11 @@
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{route('userper.edit',['model_id'=>$value->model_id,'permission_id'=>$value->permission_id])}}" class="btn btn-sm btn-outline-primary" style="border-radius: 50px 0 0 50px;"> 
+                                            @if(edit_permission())
+<a href="{{route('userper.edit',['model_id'=>$value->model_id,'permission_id'=>$value->permission_id])}}" class="btn btn-sm btn-outline-primary" style="border-radius: 50px 0 0 50px;"> 
                                                 <i class="fa fa-edit"></i> 
                                             </a>
+@endif
                                             <a href="#" class="btn btn-sm btn-outline-danger" style="border-radius: 0 50px 50px 0;"
                                                onclick="if (confirm('Revoke this individual override?')){event.preventDefault();document.getElementById('delete-form{{$key}}').submit();}else{event.stopPropagation(); event.preventDefault();};">
                                                 <i class="fa fa-trash-alt"></i> 

@@ -42,6 +42,13 @@
 
                             <div class="card-body">
                                 <div class="form-group row">
+                                    <label for="assigned_area" class="col-sm-2 col-form-label">Assigned Area</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="assigned_area" value="{{ $assigned_area }}" class="form-control" readonly style="background-color: #e9ecef; font-weight: bold;">
+                                        <small class="text-muted">This admin's jurisdictional area.</small>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="name" class="col-sm-2 col-form-label">Admin Name <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                     <div class="col-sm-9">
                                         <input type="text" id="name" value="{{$admin->name}}" placeholder="Institinal Super Admin Name" name="name" class="form-control" required>
