@@ -330,14 +330,9 @@
                                          
 
                                         <td>
-                                            @php
-                                                $imagePath = $user->image && file_exists(public_path($user->image)) 
-                                                    ? asset($user->image) 
-                                                    : asset('default.png');
-                                            @endphp
-                                            <img src="{{ $imagePath }}"
-                                                width="40"
-                                                height="50"
+                                            <img src="{{ asset($user->image ?? 'default.png') }}"
+                                                width="55"
+                                                height="65"
                                                 class="img-table"
                                                 onerror="this.src='{{ asset('default.png') }}'">
                                         </td>

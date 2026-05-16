@@ -38,7 +38,7 @@
                                 <div class="row">
                                     <div class="col-md-8">
                                         <div class="form-group">
-                                            <label for="applicant_id">Applicant ID</label>
+                                            <label for="applicant_id">ID & Name</label>
                                             <select required class="form-control select2" name="applicant_id" id="applicant_id">
                                                 <option value="">Select People</option>
                                                 @if (count($users))

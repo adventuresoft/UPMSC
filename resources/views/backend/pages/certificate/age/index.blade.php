@@ -118,7 +118,7 @@
                                     <th>Sl</th>
                                     <th>Photo</th>
                                     <th>Certificate No</th>
-                                    <th>NID & Name</th>
+                                    <th>ID & Name</th>
                                     <th>Address & Mobile</th>
                                     <!-- <th>Quantity</th> -->
                                     <th>Created At</th>
@@ -139,16 +139,17 @@
                                         <img src="{{ asset($certificate->user->image ?? 'default.png') }}"
                                             width="55"
                                             height="65"
-                                            class="img">
+                                            class="img"
+                                            onerror="this.src='{{ asset('default.png') }}'">
                                     </td>
 
                                     <td>{{ bnValue($certificate->system_id) }}</td>
 
                                     <td>
                                         <span class="citizen-id">
-                                            {{ bnValue($certificate->user->people->nid ?? '') }}
+                                            {{ $certificate->user->people->approved_id ?? 'No ID' }}
                                         </span><br>
-                                        {{ $certificate->user->name }}
+                                        {{ $certificate->user->name ?? '' }}
                                     </td>
 
                                     <td>
