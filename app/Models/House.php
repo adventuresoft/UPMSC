@@ -50,6 +50,11 @@ class House extends Model
       return $this->belongsTo(UnionWard::class, 'union_ward_id', 'id');
     }
 
+    public function villageArea()
+    {
+      return $this->belongsTo(VillageArea::class, 'village_area_id', 'id');
+    }
+
    
 
 

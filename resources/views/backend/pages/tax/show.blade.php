@@ -80,7 +80,7 @@
                                             <tr>
                                                 <th>ওয়ার্ড নং</th>
                                                 <th>{{$tax->unionWard->bn_ward_no ?? ''}}</th>
-                                                <th>এলাকা</th>
+                                                <th>ব্লক/সেকশন/সেক্টর</th>
                                                 <th>{{$tax->villageArea->bn_name ?? ''}}</th>
                                             </tr>
                                             <tr>
