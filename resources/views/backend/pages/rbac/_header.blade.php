@@ -110,20 +110,46 @@
 
     .btn-premium-save {
         background: var(--rbac-primary) !important;
+        color: white !important;
         border-radius: 8px !important;
         padding: 10px 24px !important;
         font-size: 0.875rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        border: none !important;
+        font-weight: 500 !important;
+    }
+
+    .btn-premium-save i {
+        color: white !important;
     }
 
     .btn-premium-save:hover {
         background: var(--rbac-secondary) !important;
+        color: white !important;
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2) !important;
     }
 
     .btn-premium-reset {
+        background: #f8fafc !important;
+        color: var(--rbac-text-light) !important;
+        border: 1px solid var(--rbac-border) !important;
         border-radius: 8px !important;
         padding: 10px 20px !important;
         font-size: 0.875rem !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .btn-premium-reset:hover {
+        background: white !important;
+        color: var(--rbac-text) !important;
+        border-color: var(--rbac-text-light) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
     }
 
     .form-control-premium {

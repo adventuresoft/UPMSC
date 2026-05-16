@@ -158,15 +158,25 @@ class User extends Authenticatable
 
     public function getAssignedAreaAttribute()
     {
-        if (!$this->institute_id) return 'System Admin';
+        if (!$this->institute_id && !in_array($this->role_id, [2, 3])) return 'System Admin';
 
-        // Priority 1: Use the manual 'area' text you just updated in the user list
+        // Priority 1: Use the manual 'area' text or structured area info
         if ($this->area) {
+            if (str_contains($this->area, 'Thana:')) {
+                $thanaId = str_replace('Thana:', '', $this->area);
+                $thana = Thana::find($thanaId);
+                return $thana ? "Thana: " . $thana->name : "Thana ID: " . $thanaId;
+            }
+            if (str_contains($this->area, 'District:')) {
+                $districtId = str_replace('District:', '', $this->area);
+                $district = District::find($districtId);
+                return $district ? "District: " . $district->name : "District ID: " . $districtId;
+            }
             return $this->area;
         }
         
         $institute = $this->institute;
-        if (!$institute) return 'Institutional Admin';
+        if (!$institute) return in_array($this->role_id, [2, 3]) ? 'Administrative Area' : 'Institutional Admin';
 
         // Priority 2: Try to fetch names from relationships if manual area is empty
         if ($institute->union_id && $institute->union) {
@@ -185,23 +195,67 @@ class User extends Authenticatable
     public function scopeApplyMultitenancy($query)
     {
         $user = auth()->user();
-        if (!$user || !$user->institute_id) {
-            return $query;
+        if (!$user) return $query;
+        
+        // Superadmins see everything
+        if (is_superadmin()) return $query;
+
+        // If user has an institute_id, filter by that or geographical area
+        if ($user->institute_id) {
+            $institute = $user->institute;
+            return $query->where(function($q) use ($institute) {
+                // Strict institute check
+                $q->where('institute_id', $institute->id);
+                
+                // Address-based check (Only for Citizens/People, not for Staff/Operators)
+                // We check if the query is not specifically for staff roles (1-4, 6, 8, 10, etc.)
+                $locationId = $institute->union_id ?? ($institute->pourashava_id ?? $institute->city_corporation_id);
+                if ($locationId) {
+                    $q->orWhere(function($sq) use ($locationId) {
+                        $sq->whereNull('role_id') // Likely a citizen
+                           ->orWhereIn('role_id', [5]) // Standard "User" role
+                           ->whereHas('addressInfo', function($asq) use ($locationId) {
+                                $asq->where('permanent_union_id', $locationId);
+                           });
+                    });
+                }
+            });
         }
 
-        $institute = $user->institute;
-        return $query->where(function($q) use ($institute) {
-            // First, filter by direct institute association
-            $q->where('institute_id', $institute->id);
-            
-            // Second, filter by geographical location (Address)
-            $locationId = $institute->union_id ?? ($institute->pourashava_id ?? $institute->city_corporation_id);
-            
-            if ($locationId) {
-                $q->orWhereHas('addressInfo', function($sq) use ($locationId) {
-                    $sq->where('permanent_union_id', $locationId);
+        // Handle high-level admins (ENO/DC) who filter by Thana or District
+        if ($user->area) {
+            if (str_contains($user->area, 'Thana:')) {
+                $thanaId = str_replace('Thana:', '', $user->area);
+                return $query->where(function($q) use ($thanaId) {
+                    $q->whereHas('institute.union', function($sq) use ($thanaId) {
+                        $sq->where('thana_id', $thanaId);
+                    })->orWhere(function($sq) use ($thanaId) {
+                        $sq->where(function($rsq) {
+                            $rsq->whereNull('role_id')->orWhereIn('role_id', [5]);
+                        })->whereHas('addressInfo', function($asq) use ($thanaId) {
+                            $asq->where('permanent_thana_id', $thanaId);
+                        });
+                    });
                 });
             }
-        });
+            
+            if (str_contains($user->area, 'District:')) {
+                $districtId = str_replace('District:', '', $user->area);
+                return $query->where(function($q) use ($districtId) {
+                    $q->whereHas('institute.union.thana', function($sq) use ($districtId) {
+                        $sq->where('district_id', $districtId);
+                    })->orWhere(function($sq) use ($districtId) {
+                        $sq->where(function($rsq) {
+                            $rsq->whereNull('role_id')->orWhereIn('role_id', [5]);
+                        })->whereHas('addressInfo', function($asq) use ($districtId) {
+                            $asq->where('permanent_district_id', $districtId);
+                        });
+                    });
+                });
+            }
+        }
+
+        // If no filtering criteria found, but user is not superadmin, restrict them to themselves at least
+        return $query->where('id', $user->id);
     }
 }

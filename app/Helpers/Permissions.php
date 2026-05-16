@@ -37,7 +37,7 @@ if (! function_exists('is_institutional_admin')) {
         $user = Auth::user();
         
         // If they have an institute_id and are not the top-level developer (4), they are a tenant
-        return ($user->institute_id && $user->role_id != 4) || in_array($user->role_id, [6, 8, 10]);
+        return ($user->institute_id && $user->role_id != 4) || in_array($user->role_id, [2, 3, 6, 8, 10]);
     }
 }
 

@@ -43,19 +43,34 @@
                                         @else
                                             <select name="area" id="area" class="form-control select2" required>
                                                 <option value="">-- Select Area --</option>
+                                                <optgroup label="Districts (for DC)">
+                                                    @foreach($districts as $d)
+                                                        @php $val = "District:".$d->id; @endphp
+                                                        <option value="{{ $val }}" {{ $user->area == $val ? 'selected' : '' }}>{{ $d->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                                <optgroup label="Thanas (for UNO/ENO)">
+                                                    @foreach($thanas as $t)
+                                                        @php $val = "Thana:".$t->id; @endphp
+                                                        <option value="{{ $val }}" {{ $user->area == $val ? 'selected' : '' }}>{{ $t->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
                                                 <optgroup label="Unions">
                                                     @foreach($unions as $union)
-                                                        <option value="{{ $union->name }}" {{ $user->area == $union->name ? 'selected' : '' }}>{{ $union->name }}</option>
+                                                        @php $val = "Union:".$union->id; @endphp
+                                                        <option value="{{ $val }}" {{ ($user->area == $val || $user->area == $union->name) ? 'selected' : '' }}>{{ $union->name }}</option>
                                                     @endforeach
                                                 </optgroup>
                                                 <optgroup label="Pourashavas">
                                                     @foreach($pourashavas as $p)
-                                                        <option value="{{ $p->name }}" {{ $user->area == $p->name ? 'selected' : '' }}>{{ $p->name }}</option>
+                                                        @php $val = "Pourashava:".$p->id; @endphp
+                                                        <option value="{{ $val }}" {{ ($user->area == $val || $user->area == $p->name) ? 'selected' : '' }}>{{ $p->name }}</option>
                                                     @endforeach
                                                 </optgroup>
                                                 <optgroup label="City Corporations">
                                                     @foreach($city_corps as $c)
-                                                        <option value="{{ $c->name }}" {{ $user->area == $c->name ? 'selected' : '' }}>{{ $c->name }}</option>
+                                                        @php $val = "City Corp:".$c->id; @endphp
+                                                        <option value="{{ $val }}" {{ ($user->area == $val || $user->area == $c->name) ? 'selected' : '' }}>{{ $c->name }}</option>
                                                     @endforeach
                                                 </optgroup>
                                             </select>
