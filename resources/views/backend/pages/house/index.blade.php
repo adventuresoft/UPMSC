@@ -51,7 +51,9 @@
                                 <tr>
                                     <th>Sl.</th>
                                     <th>House Name</th>
+                                    <th>Owner Name & ID</th>
                                     <th>Village / Ward No.</th>
+                                    <th>Block/Section/Sector</th>
                                     <th>Action</th>
                                 </tr>
                               </thead>
@@ -62,7 +64,24 @@
                                     <tr>
                                       <td>{{++$key}}</td>
                                       <td>{{$house->house}}</td>
+                                      <td>
+                                        @php
+                                            $ownership = $house->ownership->first();
+                                            $ownerName = $ownership->name ?? '';
+                                            $ownerIdDisplay = '';
+                                            if ($ownership) {
+                                                if ($ownership->owner && $ownership->owner->people && $ownership->owner->people->approved_id) {
+                                                    $ownerIdDisplay = $ownership->owner->people->approved_id;
+                                                } elseif ($ownership->nid) {
+                                                    $ownerIdDisplay = '(' . $ownership->nid . ')';
+                                                }
+                                            }
+                                        @endphp
+                                        {{ $ownerName }} <br>
+                                        <small class="text-muted">{{ $ownerIdDisplay }}</small>
+                                      </td>
                                       <td>{{$house->village->en_name ?? ''}} / Ward {{$house->unionWard->en_ward_no ?? ''}}</td>
+                                      <td>{{ $house->villageArea->en_name ?? $house->block_section ?? '' }}</td>
                                       <td style="width: 10%">
 
                                         <div class="table-action">

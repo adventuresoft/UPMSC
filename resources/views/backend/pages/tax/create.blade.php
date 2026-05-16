@@ -84,10 +84,10 @@
                                                         @endif
                                                     </select>
                                                 </th>
-                                                <th>এলাকা</th>
+                                                <th>ব্লক/সেকশন/সেক্টর</th>
                                                 <th>
                                                     <select class="form-control" id="area_id" name="area_id">
-                                                        <option value="">Select Area</option>
+                                                        <option value="">Select block/section/sector</option>
                                                     </select>
                                                 </th>
                                             </tr>

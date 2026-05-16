@@ -2,13 +2,13 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label font-weight-bold">Is this Union?</label>
         <div class="col-sm-9">
-            <input type="hidden" name="is_union[]" class="is_union_hidden" value="{{ $ownership->is_union ?? 'no' }}">
+            <input type="hidden" name="is_union[]" class="is_union_hidden" value="{{ $ownership->is_union ?? '' }}">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-outline-primary {{ ($ownership->is_union ?? 'no') == 'no' ? 'active' : '' }}">
-                    <input type="radio" class="is_union_radio" value="no" autocomplete="off" {{ ($ownership->is_union ?? 'no') == 'no' ? 'checked' : '' }}> No
+                <label class="btn btn-outline-primary {{ isset($ownership) && $ownership->is_union == 'no' ? 'active' : '' }}">
+                    <input type="radio" class="is_union_radio" value="no" autocomplete="off" {{ isset($ownership) && $ownership->is_union == 'no' ? 'checked' : '' }}> No
                 </label>
-                <label class="btn btn-outline-primary {{ ($ownership->is_union ?? 'no') == 'yes' ? 'active' : '' }}">
-                    <input type="radio" class="is_union_radio" value="yes" autocomplete="off" {{ ($ownership->is_union ?? 'no') == 'yes' ? 'checked' : '' }}> Yes
+                <label class="btn btn-outline-primary {{ isset($ownership) && $ownership->is_union == 'yes' ? 'active' : '' }}">
+                    <input type="radio" class="is_union_radio" value="yes" autocomplete="off" {{ isset($ownership) && $ownership->is_union == 'yes' ? 'checked' : '' }}> Yes
                 </label>
             </div>
             <small class="text-muted d-block mt-1">Please select an option to continue</small>

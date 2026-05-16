@@ -26,4 +26,9 @@ class HouseOwnership extends Model
     {
         return $this->belongsTo(House::class, 'house_id', 'id');
     }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id', 'system_id');
+    }
 }
