@@ -63,7 +63,12 @@ class TaxController extends Controller
         $institute = Institute::find(Auth::user()->institute_id);
         $data['tax_years'] = TaxYear::latest()->get();
         $data['union_wards'] = UnionWard::get();
-        $data['villages'] = Village::where('union_id', $institute->union_id ?? 0 )->get();
+        
+        if ($institute) {
+            $data['villages'] = Village::where('union_id', $institute->union_id)->get();
+        } else {
+            $data['villages'] = Village::latest()->get();
+        }
         return view('backend.pages.tax.create', $data);
     }
 
@@ -161,6 +166,29 @@ class TaxController extends Controller
             $data['status'] = false;
             $data['message'] = "Nothing found to update";
             return response()->json($data, 404);
+        }
+    }
+
+    public function storeManualPayment(Request $request, $id)
+    {
+        $request->validate([
+            'payment_details' => 'required|string|max:255',
+            'transaction_id' => 'required|string|max:255',
+            'note' => 'nullable|string|max:1000',
+        ]);
+
+        $tax = Tax::findOrFail($id);
+
+        try {
+            $tax->payment_details = $request->payment_details;
+            $tax->transaction_id = $request->transaction_id;
+            $tax->note = $request->note;
+            $tax->status = 1; // Mark as paid
+            $tax->save();
+
+            return redirect()->back()->with('success', 'Manual payment saved successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong! ' . $e->getMessage());
         }
     }
 

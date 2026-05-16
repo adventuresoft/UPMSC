@@ -144,8 +144,8 @@ class HouseController extends Controller
             }
 
         }else {
-            $data['villages'] = [];
-            $data['mouzas'] = [];
+            $data['villages'] = Village::latest()->get();
+            $data['mouzas'] = Mouza::get();
         }
         $data['villageAreas'] = [];
         $data['union_wards'] = UnionWard::where('status', true)->orderBy('en_ward_no', 'asc')->get();
@@ -281,8 +281,8 @@ class HouseController extends Controller
                 $data['mouzas'] = Mouza::where('thana_id', $union->thana_id)->get();
             }
         }else {
-            $data['villages'] = [];
-            $data['mouzas'] = [];
+            $data['villages'] = Village::latest()->get();
+            $data['mouzas'] = Mouza::get();
         }
         
         $data['union_wards'] = UnionWard::where('status', true)->orderBy('en_ward_no', 'asc')->get();
