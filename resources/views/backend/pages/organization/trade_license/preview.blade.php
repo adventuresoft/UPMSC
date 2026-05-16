@@ -190,12 +190,22 @@
     }
 
     @media print {
-        body {
+        @page {
+            size: auto;
             margin: 0;
         }
-
-        .no-print {
+        body {
+            margin: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        .no-print, .main-footer, .navbar, .sidebar {
             display: none !important;
+        }
+        .certificate-page {
+            margin: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
         }
     }
 
@@ -364,40 +374,57 @@
         @endforeach
 
         <div class="section-header">ব্যবসা প্রতিষ্ঠানের ফিস</div>
-        <table class="fees-table-new">
-            <thead>
-                <tr>
-                    <th>ক্রমিক নং</th>
-                    <th>ফি এর বিষয়</th>
-                    <th>বকেয়া</th>
-                    <th>টাকা</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if(!empty($fees))
-                    @foreach($fees as $feeHead => $amount)
-                        <tr>
-                            <td>{{ bnValue($loop->iteration) }}</td>
-                            <td>{{ $feeHead }}</td>
-                            <td></td>
-                            <td>{{ currencyFormat((float) $amount) }}</td>
-                        </tr>
-                    @endforeach
-                    <tr class="fees-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">মোট:</td>
-                        <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
-                    </tr>
-                    <tr class="fees-grand-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
-                        <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
-                    </tr>
-                @else
-                    <tr>
-                        <td colspan="4" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
+        @php
+            $feeMapping = [
+                'New Registration Charge' => 'নতুন নিবন্ধন ফি',
+                'Yearly Charge' => 'বার্ষিক ফি',
+                'Renew Charge' => 'নবায়ন ফি',
+                'Signboard Fees' => 'সাইনবোর্ড ফি',
+                'Surcharge' => 'সারচার্জ',
+                'Others' => 'অন্যান্য',
+                'VAT' => 'ভ্যাট',
+                'TAX' => 'ট্যাক্স',
+                'Fine' => 'জরিমানা',
+                'Trade License Fee' => 'ট্রেড লাইসেন্স ফি',
+                'Business Tax' => 'ব্যবসা কর',
+                'Signboard Tax' => 'সাইনবোর্ড কর',
+                'Professional Tax' => 'পেশা কর',
+                'Sanitation Fee' => 'স্যানিটেশন ফি',
+                'Environmental Fee' => 'পরিবেশ ফি',
+                'Application Fee' => 'আবেদন ফি',
+                'Service Charge' => 'সার্ভিস চার্জ',
+                'Other Fee' => 'অন্যান্য ফি',
+                'Penalty' => 'জরিমানা',
+            ];
+        @endphp
+
+        <div style="margin-top: 10px;">
+            @if(!empty($fees))
+                @foreach($fees as $feeHead => $amount)
+                    <div style="display: flex; margin-bottom: 2px; font-size: 14px; align-items: center;">
+                        <div style="width: 180px; display: flex; justify-content: space-between; font-weight: bold;">
+                            <span>{{ bnValue($loop->iteration) }}। {{ $feeMapping[$feeHead] ?? $feeHead }}</span>
+                            <span>:</span>
+                        </div>
+                        <div style="flex: 1; text-align: right; padding-right: 10px;">
+                            {{ bnValue(currencyFormat((float) $amount)) }}/-
+                        </div>
+                    </div>
+                @endforeach
+                
+                <div style="display: flex; margin-top: 8px; border-top: 1px solid #333; padding-top: 5px; font-size: 15px; font-weight: bold; align-items: center;">
+                    <div style="width: 180px; display: flex; justify-content: space-between;">
+                        <span>সর্বমোট</span>
+                        <span>:</span>
+                    </div>
+                    <div style="flex: 1; text-align: right; padding-right: 10px;">
+                        {{ bnValue(currencyFormat($totalFee)) }}/-
+                    </div>
+                </div>
+            @else
+                <div class="text-center py-2" style="font-size: 13px;">কোন ফি নির্ধারণ করা নেই</div>
+            @endif
+        </div>
 
 
         {{-- Signature --}}
