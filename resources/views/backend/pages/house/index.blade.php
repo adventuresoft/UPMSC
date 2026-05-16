@@ -35,7 +35,7 @@
                                     <h3 class="card-title">House List</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                  @if (Auth::user()->institute_id && create_permission() )
+                                  @if ((is_superadmin() || Auth::user()->institute_id) && create_permission() )
                                     <a href="{{route('house.create')}}" class="btn btn-primary">Create</a>
                                    @endif
                                 </div>
@@ -85,7 +85,7 @@
                                       <td style="width: 10%">
 
                                         <div class="table-action">
-                                            @if (Auth::user()->institute_id && create_permission() )
+                                            @if ((is_superadmin() || Auth::user()->institute_id) && view_permission() )
                                             @if(edit_permission())
                                                 <a href="{{ route('house.show', $house->id) }}" title="View" data-toggle="tooltip" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
                                                 <a href="{{ route('house.edit', $house->id) }}" title="Edit" data-toggle="tooltip" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>

@@ -245,7 +245,7 @@ Permanent Address:</strong>
 
                                         <td>
                                             <div class="table-action">
-                                                @if (Auth::user()->institute_id && create_permission())
+                                                @if ((is_superadmin() || Auth::user()->institute_id) && create_permission())
                                                 <a href="{{ route('people.edit', $user->id) }}" 
                                                     class="btn btn-primary btn-sm btn-action" title="Edit">
                                                     <i class="fa fa-edit"></i>

@@ -413,7 +413,7 @@
                                         <td>
                                                 <div class="table-action">
                                                     @if (view_permission())
-                                                        @if(Auth::user()->role_id == 1)
+                                                        @if(is_superadmin())
                                                         <a href="{{ route('people.edit', $user->id) }}" 
                                                             class="btn-action btn-edit" title="Edit">
                                                             <i class="fa fa-edit"></i>

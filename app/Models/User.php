@@ -78,6 +78,17 @@ class User extends Authenticatable
         });
     }
 
+    /**
+     * Override the Illuminate can() method to grant full access to superadmins.
+     */
+    public function can($abilities, $arguments = []): bool
+    {
+        if (in_array($this->role_id, [1, 4])) {
+            return true;
+        }
+        return parent::can($abilities, $arguments);
+    }
+
 
     public function institute()
     {
