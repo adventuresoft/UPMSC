@@ -89,7 +89,7 @@
                                             <i class="fas fa-phone-alt mr-1 text-muted"></i> {{ $user->mobile ?? 'N/A' }}
                                         </div>
                                         <div class="small text-primary">
-                                            <i class="fas fa-map-marker-alt mr-1"></i> {{ $user->area ?? 'N/A' }}
+                                            <i class="fas fa-map-marker-alt mr-1"></i> {{ $user->assigned_area ?? 'N/A' }}
                                         </div>
                                     </td>
                                     {{-- Roles Column --}}
