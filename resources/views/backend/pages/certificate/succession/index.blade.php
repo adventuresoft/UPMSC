@@ -129,14 +129,15 @@
                                         <img src="{{ asset($certificate->user->image ?? 'default.png') }}"
                                             width="55"
                                             height="65"
-                                            class="img">
+                                            class="img"
+                                            onerror="this.src='{{ asset('default.png') }}'">
                                     </td>
 
                                     <td>{{ ($certificate->system_id) }}</td>
 
                                     <td>
                                         <span class="citizen-id">
-                                            {{ ($certificate->system_id ?? '') }}
+                                            {{ $certificate->user->people->approved_id ?? 'No ID' }}
                                         </span><br>
                                         {{ $certificate->user->name }}
                                     </td>

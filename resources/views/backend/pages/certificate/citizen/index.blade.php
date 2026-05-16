@@ -109,7 +109,7 @@
                                     <th>Sl</th>
                                     <th>Photo</th>
                                     <th>Certificate No</th>
-                                    <th>NID & Name</th>
+                                    <th>ID & Name</th>
                                     <th>Address & Mobile</th>
                                     <!-- <th>Quantity</th> -->
                                     <th>Status</th>
@@ -130,21 +130,15 @@
                                         <img src="{{ asset($certificate->user->image ?? 'default.png') }}"
                                             width="55"
                                             height="65"
-                                            class="img">
+                                            class="img"
+                                            onerror="this.src='{{ asset('default.png') }}'">
                                     </td>
 
                                     <td>{{ bnValue($certificate->system_id) }}</td>
 
                                     <td>
                                         <span class="citizen-id">
-                                            @php 
-                                                $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
-                                            @endphp
-                                            @if($nid && $nid != '1111111114')
-                                                {{ $nid }}
-                                            @else
-                                                No NID
-                                            @endif
+                                            {{ $certificate->user->people->approved_id ?? 'No ID' }}
                                         </span><br>
                                         {{ $certificate->user->name }}
                                     </td>

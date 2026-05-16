@@ -127,7 +127,7 @@
                             <!-- NID Number Filter -->
                             <div class="col-md-2">
                                 <input type="text" id="search_nid" class="form-control form-control-sm"
-                                    placeholder="NID Number">
+                                    placeholder="ID or Name">
                             </div>
 
                             <!-- Name Filter -->
@@ -178,10 +178,10 @@
                                         <td>{{ $key + 1 }}</td>
 
                                         <td>
-                                            <img src="{{ asset($certificate->user->people->image ?? 'default.png') }}"
-                                                width="40"
-                                                height="40"
-                                                class="img-circle"
+                                            <img src="{{ asset($certificate->user->image ?? 'default.png') }}"
+                                                width="55"
+                                                height="65"
+                                                class="img"
                                                 onerror="this.src='{{ asset('default.png') }}'">
                                         </td>
 
@@ -193,7 +193,7 @@
 
                                         <td>
                                             <span class="citizen-id">
-                                                {{ bnValue($certificate->user->system_id ?? '') }}
+                                                {{ $certificate->user->people->approved_id ?? 'No ID' }}
                                             </span><br>
                                             <strong>{{ $certificate->applicant_name ?? $certificate->user->name ?? 'N/A' }}</strong>
                                         </td>

@@ -48,7 +48,7 @@
                             <!-- People Select -->
 
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">People ID</label>
+                                <label class="col-sm-2 col-form-label">ID & Name</label>
 
                                 <div class="col-sm-9">
 
