@@ -34,21 +34,15 @@ class UserController extends Controller
     {
         $query = User::with(['roles', 'roles.permissions']);
 
-        // Apply strict multitenancy
+        // Apply strict multitenancy (handles both staff and citizen visibility)
         $query->applyMultitenancy();
 
-        // Strict Operator Registry Filter:
-        // 1. Must be in the same institute OR 
-        // 2. Must have an administrative role (Role ID != 5 and Role is not null)
-        $user = auth()->user();
+        // Ensure we only show staff/administrative users in the Operator Registry for local admins
+        // Superadmins see every user in the system
         if (!is_superadmin()) {
-            $query->where(function($q) use ($user) {
-                // Anyone in my institute (regardless of role)
-                $q->where('institute_id', $user->institute_id)
-                // OR anyone with an admin role (even if no institute_id yet)
-                  ->orWhereHas('roles', function($rq) {
-                      $rq->whereNotIn('id', [5]); 
-                  });
+            $query->where(function($q) {
+                $q->whereNotIn('role_id', [5])
+                  ->orWhereNotNull('institute_id');
             });
         }
 

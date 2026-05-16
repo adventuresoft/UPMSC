@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Birth'])
+@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' => 'Birth'])
 
 @push('style')
 <style>
@@ -121,14 +121,14 @@
                           Government of the People's Republic of Bangladesh
                         </h2>
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:30px;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
+                            {{ $certificate->user?->institute?->union?->name ?? '' }}
                         </h3>
                         <h2 class="text-success font-Nikosh-bold mb-0" style="font-size:28px;">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            {{ $certificate->user?->institute?->union?->bn_name ?? '' }}
                         </h2>
                         <p class="mb-0" style="font-size:15px;">
-                            Thana: {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            District: {{ $certificate->user->institute->union->thana->district->name ?? '' }},
+                            Thana: {{ $certificate->user?->institute?->union?->thana?->name ?? '' }},
+                            District: {{ $certificate->user?->institute?->union?->thana?->district?->name ?? '' }},
                             Bangladesh
                         </p>
                     </div>
@@ -162,14 +162,14 @@
                         <p>
                             <span style="margin-left:40px;"></span>
                             This is to certify that ,
-                            {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Mrs.' }}
-                            <strong>{{ $certificate->user->name ?? '' }}</strong>,
-                            ID No. <strong>{{ $certificate->user->people->approved_id }}</strong>,
-                            Father: {{ $certificate->user->familyInfo->father_name ?? '' }},
-                            Mother: {{ $certificate->user->familyInfo->mother_name ?? '' }},
+                            {{ $certificate->user?->people?->gender == 1 ? 'Mr.' : 'Mrs.' }}
+                            <strong>{{ $certificate->user?->name ?? '' }}</strong>,
+                            ID No. <strong>{{ $certificate->user?->people?->approved_id }}</strong>,
+                            Father: {{ $certificate->user?->familyInfo?->father_name ?? '' }},
+                            Mother: {{ $certificate->user?->familyInfo?->mother_name ?? '' }},
                             @php 
-                                $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
-                                $bc = $certificate->user->birth_certificate ?? $certificate->user->people->birth_certificate ?? '';
+                                $nid = $certificate->user?->nid ?? $certificate->user?->people?->nid ?? '';
+                                $bc  = $certificate->user?->birth_certificate ?? $certificate->user?->people?->birth_certificate ?? '';
                             @endphp
                             @if($nid && $nid != '1111111114')
                                 NID No. <strong>{{ $nid }}</strong>,
@@ -177,15 +177,15 @@
                                 Birth Certificate No. <strong>{{ $bc }}</strong>,
                             @endif
                             Address:  
-                            Village: - {{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }},
-                            Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},
+                            Village: - {{ $certificate->user?->addressInfo?->permanentVillage?->en_name ?? '' }},
+                            Word:- {{ $certificate->user?->addressInfo?->permanentWard?->en_ward_no ?? '' }},
                             Post Office - 
-{{ optional($certificate->user->addressInfo->permanentPostOffice)->name ?? '' }} -
-@if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
-{{ $certificate->user->addressInfo->permanentPostOffice->postal_code }},
+{{ optional($certificate->user?->addressInfo?->permanentPostOffice)->name ?? '' }} -
+@if(optional($certificate->user?->addressInfo?->permanentPostOffice)->postal_code)
+{{ $certificate->user?->addressInfo?->permanentPostOffice?->postal_code }},
 @endif
-                            Upzila - {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            District: - {{ $certificate->user->institute->union->thana->district->name ?? '' }} .
+                            Upzila - {{ $certificate->user?->institute?->union?->thana?->name ?? '' }},
+                            District: - {{ $certificate->user?->institute?->union?->thana?->district?->name ?? '' }} .
                            He is a Bangladeshi citizen by birth and a permanent resident of this union.
 To my knowledge, he is not involved in any law and order or anti-state activities.
                         </p>
@@ -206,10 +206,10 @@ To my knowledge, he is not involved in any law and order or anti-state activitie
                         <div style="height:40px;"></div>
                         <p class="mb-1">(Mohammad Rana)</p>
                         <p class="mb-0">Chairman</p>
-                        <p class="mb-0"> {{ $certificate->user->institute->union->name ?? '' }} </p>
+                        <p class="mb-0"> {{ $certificate->user?->institute?->union?->name ?? '' }} </p>
                         <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->name ?? '' }}
+                            {{ $certificate->user?->institute?->union?->thana?->name ?? '' }},
+                            {{ $certificate->user?->institute?->union?->thana?->district?->name ?? '' }}
                         </p>
                     </div>
                 </div>
@@ -226,7 +226,7 @@ To my knowledge, he is not involved in any law and order or anti-state activitie
     <!-- ================= Buttons ================= -->
     <div class="text-center mt-2 mb-4">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
-                onclick="window.location.href='{{ route('citizen.index') }}'">
+                onclick="window.location.href='{{ route('certificate/birth.index') }}'">
             Cancel
         </button>
 

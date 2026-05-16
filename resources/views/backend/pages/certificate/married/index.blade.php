@@ -146,7 +146,7 @@
                                         <td>{{ ++$key }}</td>
 
                                         <td>
-                                            <img src="{{ asset($certificate->user->image ?? 'default.png') }}"
+                                            <img src="{{ asset($certificate->user?->image ?? 'default.png') }}"
                                                 width="55"
                                                 height="65"
                                                 class="img"
@@ -157,9 +157,9 @@
 
                                         <td>
                                             @php
-                                                $husbandId = $certificate->husband_system_id ?? ($certificate->user->people->approved_id ?? '');
+                                                $husbandId = $certificate->husband_system_id ?? ($certificate->user?->people?->approved_id ?? '');
                                                 $spouseId = $certificate->spouse_nid ?? $certificate->wife_system_id ?? (optional(optional($certificate->wife)->people)->approved_id ?? '');
-                                                $husbandName = optional($certificate->husband)->name ?? $certificate->user->name ?? '';
+                                                $husbandName = optional($certificate->husband)->name ?? $certificate->user?->name ?? '';
                                                 $spouseName = $certificate->spouse_name ?? optional($certificate->wife)->name ?? '';
                                             @endphp
                                             <span class="citizen-id">
@@ -169,8 +169,8 @@
                                         </td>
 
                                         <td>
-                                            {{ $certificate->user->address ?? '' }} <br>
-                                            <strong>{{ $certificate->user->mobile ?? '' }}</strong>
+                                            {{ $certificate->user?->address ?? '' }} <br>
+                                            <strong>{{ $certificate->user?->mobile ?? '' }}</strong>
                                         </td>
 
                                         <td>

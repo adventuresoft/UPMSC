@@ -5,11 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\Multitenantable;
+
 class Vehicle extends Model
 {
-    use HasFactory;
+    use HasFactory, Multitenantable;
 
     protected $fillable = [
+        'registration_id',
+        'institute_id',
+        'union_id',
+        'thana_id',
+        'district_id',
         'vehicle_type',
         'vehicle_category',
         'vehicle_model',
@@ -31,5 +38,15 @@ class Vehicle extends Model
         'width',
         'tyre_size',
         'color',
+        'status',
+        'approved_by',
+        'approved_at',
+        'payment_status',
+        'payment_method',
+        'transaction_id',
+        'paid_at',
+        'created_by',
+        'updated_by',
     ];
+
 }

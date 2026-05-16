@@ -147,21 +147,21 @@
 
                                     <td>
                                         <span class="citizen-id">
-                                            {{ $certificate->user->people->approved_id ?? 'No ID' }}
+                                            {{ $certificate->user?->people?->approved_id ?? 'No ID' }}
                                         </span><br>
-                                        {{ $certificate->user->name ?? '' }}
+                                        {{ $certificate->user?->name ?? '' }}
                                     </td>
 
                                     <td>
-                                        <strong>{{ $certificate->user->mobile }}</strong> <br>
-                                   {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                            ওয়ার্ড নং-{{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
-                                   {{ optional($certificate->user->addressInfo->permanentPostOffice)->bn_name ?? '' }} -
-                                     @if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
-                                   {{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }},
+                                        <strong>{{ $certificate->user?->mobile ?? 'N/A' }}</strong> <br>
+                                   {{ $certificate->user?->addressInfo?->permanentVillage?->bn_name ?? '' }},
+                            ওয়ার্ড নং-{{ $certificate->user?->addressInfo?->permanentWard?->bn_ward_no ?? '' }},
+                                   {{ optional($certificate->user?->addressInfo?->permanentPostOffice)->bn_name ?? '' }} -
+                                     @if(optional($certificate->user?->addressInfo?->permanentPostOffice)->postal_code)
+                                   {{ bnValue($certificate->user?->addressInfo?->permanentPostOffice?->postal_code) }},
                                   @endif <br>
-                                   {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                                   {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
+                                   {{ $certificate->user?->institute?->union?->thana?->bn_name ?? '' }},
+                                   {{ $certificate->user?->institute?->union?->thana?->district?->bn_name ?? '' }}।
                                     </td>
 
                                     <!-- <td>{{ $certificate->quantity }}</td> -->

@@ -28,14 +28,13 @@ class CitizenCertificateController extends Controller
     public function index()
     {
         $data['certificates'] = CitizenCertificate::with([
+            'user.people',
             'user.addressInfo.permanentVillage',
             'user.addressInfo.permanentWard',
             'user.addressInfo.permanentPostOffice',
             'user.institute.union.thana.district'
         ])
-        ->whereHas('user', function($q1){
-            $q1->applyMultitenancy();
-        })
+        ->applyMultitenancy()
         ->latest()
         ->get();
     

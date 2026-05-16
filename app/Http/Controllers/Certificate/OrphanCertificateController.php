@@ -27,10 +27,15 @@ class OrphanCertificateController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = OrphanCertificate::with('user')
-        ->whereHas('user', function($q1){
-            $q1->applyMultitenancy();
-        })->latest()->get();
+        $data['certificates'] = OrphanCertificate::with([
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district'
+        ])
+        ->applyMultitenancy()
+        ->latest()
+        ->get();
         return view('backend.pages.certificate.orphan.index', $data);
     }
 

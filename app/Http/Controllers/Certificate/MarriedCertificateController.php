@@ -25,10 +25,18 @@ class MarriedCertificateController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = MarriedCertificate::with(['user.people', 'husband.people', 'wife.people'])
-        ->whereHas('user', function($q1){
-            $q1->applyMultitenancy();
-        })->latest()->get();
+        $data['certificates'] = MarriedCertificate::with([
+            'user.people',
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district',
+            'husband.people',
+            'wife.people'
+        ])
+        ->applyMultitenancy()
+        ->latest()
+        ->get();
         return view('backend.pages.certificate.married.index', $data);
     }
 

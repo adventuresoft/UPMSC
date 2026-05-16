@@ -31,9 +31,7 @@ class AgeCertificateController extends Controller
             'user.addressInfo.permanentPostOffice',
             'user.institute.union.thana.district'
         ])
-        ->whereHas('user', function($q1){
-            $q1->applyMultitenancy();
-        })
+        ->applyMultitenancy()
         ->latest()
         ->get();
         return view('backend.pages.certificate.age.index', $data);

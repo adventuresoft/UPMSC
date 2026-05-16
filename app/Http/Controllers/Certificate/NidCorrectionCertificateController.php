@@ -14,13 +14,10 @@ class NidCorrectionCertificateController extends Controller
 {
     public function index()
     {
-        $query = NidCorrectionCertificate::with('user.people', 'user.addressInfo.permanentVillage', 'user.addressInfo.permanentWard', 'user.addressInfo.permanentPostOffice', 'user.institute.union.thana.district');
-        if (Auth::user()->institute_id) {
-            $query->whereHas('user', function($q1){
-                $q1->applyMultitenancy();
-            });
-        }
-        $data['certificates'] = $query->latest()->get();
+        $data['certificates'] = NidCorrectionCertificate::with('user.people', 'user.addressInfo.permanentVillage', 'user.addressInfo.permanentWard', 'user.addressInfo.permanentPostOffice', 'user.institute.union.thana.district')
+            ->applyMultitenancy()
+            ->latest()
+            ->get();
         return view('backend.pages.certificate.nid_correction.index', $data);
     }
 

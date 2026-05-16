@@ -23,9 +23,9 @@ class TaxController extends Controller
      */
     public function index()
     {
-        $data['taxes'] = Tax::with(array('user'=>function($q1){
-            $q1->with('people', 'familyInfo');
-        }))->where('institute_id', Auth::user()->institute_id)->get();
+        $data['taxes'] = Tax::with(['user.people', 'user.familyInfo'])
+            ->applyMultitenancy()
+            ->get();
         return view('backend.pages.tax.index', $data);
     }
 
@@ -39,9 +39,9 @@ class TaxController extends Controller
 
     public function taxReceived()
     {
-        $data['taxes'] = Tax::with(array('user'=>function($q1){
-            $q1->with('people', 'familyInfo');
-        }))->where('institute_id', Auth::user()->institute_id)->get();
+        $data['taxes'] = Tax::with(['user.people', 'user.familyInfo'])
+            ->applyMultitenancy()
+            ->get();
         return view('backend.pages.tax.received', $data);
     }
 
@@ -172,9 +172,9 @@ class TaxController extends Controller
      */
     public function show($id)
     {
-        $data['tax'] = Tax::with(array('user'=>function($q1){
-            $q1->with('people', 'familyInfo');
-        }))->find($id);
+        $data['tax'] = Tax::with(['user.people', 'user.familyInfo'])
+            ->applyMultitenancy()
+            ->findOrFail($id);
         return view('backend.pages.tax.show', $data);
     }
 

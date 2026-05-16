@@ -21,12 +21,16 @@ class SuccessionController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = Succession::with('user')
-        ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
-        })
-        ->with('deathPerson.user')
-        ->latest()->get();
+        $data['certificates'] = Succession::with([
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district',
+            'deathPerson.user'
+        ])
+        ->applyMultitenancy()
+        ->latest()
+        ->get();
         return view('backend.pages.certificate.succession.index', $data);
     }
 

@@ -26,9 +26,9 @@ class DeathCertificateController extends Controller
     public function index()
     {
         $data['certificates'] = DeathCertificate::with('user')
-        ->whereHas('user', function($q1){
-            $q1->applyMultitenancy();
-        })->latest()->get();
+            ->applyMultitenancy()
+            ->latest()
+            ->get();
         return view('backend.pages.certificate.death.index', $data);
     }
 
