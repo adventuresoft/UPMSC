@@ -72,7 +72,7 @@ class UserController extends Controller
         $roles = Role::all();
 
         // Institutional admins can only assign sub-user roles
-        if (is_institutional_admin()) {
+        if (is_institutional_admin() && !is_superadmin()) {
             $institutionalAdminRoleId = Auth::user()->role_id;
             // Map admin roles to their corresponding sub-user roles
             $subUserRoleMap = [
@@ -164,13 +164,13 @@ class UserController extends Controller
         $user = User::with(['roles'])->find($id);
 
         // Institutional admins can only edit users they created
-        if (is_institutional_admin() && $user->created_by !== Auth::id()) {
+        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id()) {
             abort(403, 'You can only edit users you created.');
         }
 
         $roles = Role::all();
         // Restrict roles for institutional admins
-        if (is_institutional_admin()) {
+        if (is_institutional_admin() && !is_superadmin()) {
             $institutionalAdminRoleId = Auth::user()->role_id;
             $subUserRoleMap = [
                 2 => [3, 6, 8, 10, 5, 7, 9, 11],
@@ -207,7 +207,7 @@ class UserController extends Controller
         $user = User::find($id);
 
         // Institutional admins can only update users they created
-        if (is_institutional_admin() && $user->created_by !== Auth::id()) {
+        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id()) {
             abort(403, 'You can only update users you created.');
         }
 
@@ -318,7 +318,7 @@ class UserController extends Controller
         $user = User::find($id);
         if ($user) {
             // Institutional admins can only delete users they created
-            if (is_institutional_admin() && $user->created_by !== Auth::id()) {
+            if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id()) {
                 abort(403, 'You can only revoke access for users you created.');
             }
             $user->delete();
