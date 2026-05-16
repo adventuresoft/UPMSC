@@ -10,9 +10,12 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\District;
+use App\Models\Thana;
 use App\Models\Union;
 use App\Models\Pourashava;
 use App\Models\CityCorporation;
+use App\Models\Institute;
 use Hash;
 
 class UserController extends Controller
@@ -31,8 +34,23 @@ class UserController extends Controller
     {
         $query = User::with(['roles', 'roles.permissions']);
 
-        // Apply strict multitenancy so tenants only see their own area's users
+        // Apply strict multitenancy
         $query->applyMultitenancy();
+
+        // Strict Operator Registry Filter:
+        // 1. Must be in the same institute OR 
+        // 2. Must have an administrative role (Role ID != 5 and Role is not null)
+        $user = auth()->user();
+        if (!is_superadmin()) {
+            $query->where(function($q) use ($user) {
+                // Anyone in my institute (regardless of role)
+                $q->where('institute_id', $user->institute_id)
+                // OR anyone with an admin role (even if no institute_id yet)
+                  ->orWhereHas('roles', function($rq) {
+                      $rq->whereNotIn('id', [5]); 
+                  });
+            });
+        }
 
         // Search filter
         if ($request->filled('search')) {
@@ -62,24 +80,28 @@ class UserController extends Controller
         // Institutional admins can only assign sub-user roles
         if (is_institutional_admin()) {
             $institutionalAdminRoleId = Auth::user()->role_id;
-            // Map admin roles (6, 8, 10) to their corresponding sub-user roles (7, 9, 11)
+            // Map admin roles to their corresponding sub-user roles
             $subUserRoleMap = [
-                6 => 7,  // Union Admin -> Union User
-                8 => 9,  // Pourashava Admin -> Pourashava User
-                10 => 11 // City Corporation Admin -> City Corporation User
+                2 => [3, 6, 8, 10, 5, 7, 9, 11], // DC can create UNO/ENO and all local admins
+                3 => [6, 8, 10, 5, 7, 9, 11],    // UNO/ENO can create Union/Pourashava/CityCorp admins
+                6 => [6, 7],  // Union Admin -> can create Union Admin & User
+                8 => [8, 9],  // Pourashava Admin -> can create Pourashava Admin & User
+                10 => [10, 11] // City Corporation Admin -> can create City Corp Admin & User
             ];
-            $allowedRoleId = $subUserRoleMap[$institutionalAdminRoleId] ?? null;
-            $roles = Role::where('id', $allowedRoleId)->get();
+            $allowedRoleIds = $subUserRoleMap[$institutionalAdminRoleId] ?? [];
+            $roles = Role::whereIn('id', $allowedRoleIds)->get();
         }
 
         $assigned_area = Auth::user()->assigned_area;
         
         // Fetch all potential jurisdictions for the dropdown
+        $districts = District::orderBy('name')->get();
+        $thanas = Thana::orderBy('name')->get();
         $unions = Union::orderBy('name')->get();
         $pourashavas = Pourashava::orderBy('name')->get();
         $city_corps = CityCorporation::orderBy('name')->get();
 
-        return view('backend.pages.user.create', compact('roles', 'assigned_area', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'New Operator', 'page' => 'user']);
+        return view('backend.pages.user.create', compact('roles', 'assigned_area', 'districts', 'thanas', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'New Operator', 'page' => 'user']);
     }
 
 
@@ -157,22 +179,26 @@ class UserController extends Controller
         if (is_institutional_admin()) {
             $institutionalAdminRoleId = Auth::user()->role_id;
             $subUserRoleMap = [
-                6 => 7,  // Union Admin -> Union User
-                8 => 9,  // Pourashava Admin -> Pourashava User
-                10 => 11 // City Corporation Admin -> City Corporation User
+                2 => [3, 6, 8, 10, 5, 7, 9, 11],
+                3 => [6, 8, 10, 5, 7, 9, 11],
+                6 => [6, 7],
+                8 => [8, 9],
+                10 => [10, 11]
             ];
-            $allowedRoleId = $subUserRoleMap[$institutionalAdminRoleId] ?? null;
-            $roles = Role::where('id', $allowedRoleId)->get();
+            $allowedRoleIds = $subUserRoleMap[$institutionalAdminRoleId] ?? [];
+            $roles = Role::whereIn('id', $allowedRoleIds)->get();
         }
 
         $assigned_area = Auth::user()->assigned_area;
         
         // Fetch all potential jurisdictions for the dropdown
+        $districts = District::orderBy('name')->get();
+        $thanas = Thana::orderBy('name')->get();
         $unions = Union::orderBy('name')->get();
         $pourashavas = Pourashava::orderBy('name')->get();
         $city_corps = CityCorporation::orderBy('name')->get();
 
-        return view('backend.pages.user.edit', compact('user', 'roles', 'assigned_area', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'Edit Operator', 'page' => 'user']);
+        return view('backend.pages.user.edit', compact('user', 'roles', 'assigned_area', 'districts', 'thanas', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'Edit Operator', 'page' => 'user']);
     }
 
     /**
