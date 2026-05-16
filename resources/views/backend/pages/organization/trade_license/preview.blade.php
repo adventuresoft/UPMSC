@@ -292,8 +292,8 @@
         <div class="doc-header">
             <div style="margin-top: 20px;">
                
-                <img src="{{ $license->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;"><br>
-                নম্বর: <strong>{{ bnValue($license->system_id) }}</strong><br><br>
+                <img src="{{ $license->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;"><br><br>
+                নম্বর: <strong>{{ bnValue($license->system_id) }}</strong><br>
                 তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}
             </div>
 
@@ -308,7 +308,7 @@
 
             <div style="text-align:right">
                 
-                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.5in;height:1.9in;object-fit:cover; border:1px solid #ddd;">
+                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.5in;height:1.9in;object-fit:cover; border:2px solid #000;">
             </div>
         </div>
 

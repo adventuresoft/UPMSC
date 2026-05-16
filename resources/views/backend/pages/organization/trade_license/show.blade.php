@@ -316,7 +316,7 @@
 
             <div style="text-align:right">
                 তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}<br>
-                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.5in;height:1.9in;object-fit:cover; border:1px solid #ddd;">
+                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.5in;height:1.9in;object-fit:cover; border:2px solid #000;">
             </div>
         </div>
 
