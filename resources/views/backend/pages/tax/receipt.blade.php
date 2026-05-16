@@ -101,9 +101,11 @@
     }
 
     .info-group {
-        display: flex;
+        display: flex !important;
+        flex-direction: row !important;
         margin-bottom: 8px;
         align-items: flex-start;
+        width: 100%;
     }
 
     .info-header {
@@ -217,17 +219,28 @@
             display: none !important;
         }
 
+        .info-group {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .info-header {
+            width: auto !important;
+            margin-bottom: 0 !important;
+        }
+
         .fees-grand-total,
         .fees-total,
         .fees-table-new th {
-            background-color: #f0f0f0 !important;
+            background-color: white !important;
             color: black !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
 
         .fees-grand-total {
-            background-color: #e8e8e8 !important;
+            background-color: white !important;
         }
 
         .fees-table-new th,
