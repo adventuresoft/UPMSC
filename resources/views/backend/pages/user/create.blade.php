@@ -36,7 +36,7 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="area" class="font-weight-bold">Assigned Area</label>
-                                        @if(is_institutional_admin())
+                                        @if(is_institutional_admin() && !is_superadmin())
                                             <input type="text" name="area" class="form-control form-control-premium" id="area" value="{{ $assigned_area }}" readonly style="background-color:#e9ecef;">
                                             <small class="text-muted font-italic">Automatically assigned based on your jurisdiction.</small>
                                         @else

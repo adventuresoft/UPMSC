@@ -183,6 +183,21 @@ class User extends Authenticatable
                 $district = District::find($districtId);
                 return $district ? "District: " . $district->name : "District ID: " . $districtId;
             }
+            if (str_contains($this->area, 'Union:')) {
+                $id = trim(str_replace('Union:', '', $this->area));
+                $union = Union::find($id);
+                return $union ? "Union: " . $union->name : "Union ID: " . $id;
+            }
+            if (str_contains($this->area, 'Pourashava:')) {
+                $id = trim(str_replace('Pourashava:', '', $this->area));
+                $p = Pourashava::find($id);
+                return $p ? "Pourashava: " . $p->name : "Pourashava ID: " . $id;
+            }
+            if (str_contains($this->area, 'City Corp:')) {
+                $id = trim(str_replace('City Corp:', '', $this->area));
+                $c = CityCorporation::find($id);
+                return $c ? "City Corp: " . $c->name : "City Corp ID: " . $id;
+            }
             return $this->area;
         }
         

@@ -119,7 +119,7 @@ class UserController extends Controller
         $user->mobile = $request->mobile;
         
         // Auto-populate area if institutional admin, otherwise use request
-        $user->area = is_institutional_admin() ? Auth::user()->assigned_area : $request->area;
+        $user->area = (is_institutional_admin() && !is_superadmin()) ? Auth::user()->assigned_area : $request->area;
         
         $user->status = $request->status;
         
@@ -228,7 +228,7 @@ class UserController extends Controller
         $user->mobile = $request->mobile;
         
         // Update area and sync with Institute
-        if (is_institutional_admin()) {
+        if (is_institutional_admin() && !is_superadmin()) {
             $user->area = Auth::user()->assigned_area;
         } else {
             $user->area = $request->area;
