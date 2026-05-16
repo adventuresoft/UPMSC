@@ -548,6 +548,7 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
 
     Route::resource('tax', TaxController::class);
     Route::post('tax-status', [TaxController::class, 'taxStatus'])->name('tax.status');
+    Route::post('tax/{id}/manual-payment', [TaxController::class, 'storeManualPayment'])->name('tax.manual-payment.store');
 
     Route::get('taxes', function () {
         return redirect()->route('tax.index');

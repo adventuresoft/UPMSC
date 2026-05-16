@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Tax', 'subMenu' => 'TaxList'])
+@extends('backend.master', ['mainMenu' => 'Tax', 'subMenu' =>'TaxList'])
 
 @push('style')
 <style>
@@ -19,71 +19,66 @@
         background: #f4f6f9;
     }
 
-    /* Main invoice container */
-    .tax-invoice-page {
+    .trade-license-page {
         max-width: 1100px;
         margin: 0 auto;
         background: white;
-        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         position: relative;
         overflow: visible;
-        border-radius: 4px;
+        border-radius: 0;
+        border: 4px solid #556b2f;
+        padding: 8px;
     }
 
-    .tax-invoice-content {
+    .inner-border {
+        border: 2px solid #556b2f;
         padding: 8mm 12mm;
     }
 
-    /* Header Logos and Title - Matching People Certificate */
     .header-logos {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 15px;
-        border-bottom: 2px solid #006600;
-        padding-bottom: 10px;
     }
 
     .header-logos img {
-        width: 70px;
-        height: 70px;
+        width: 80px;
+        height: 80px;
         object-fit: contain;
     }
 
-    /* Union header section - centered text */
     .union-header {
         text-align: center;
         flex: 1;
     }
 
     .union-title-bn {
-        font-size: 22px;
+        font-size: 20px;
         font-weight: bold;
         color: #006600;
         margin: 0;
     }
 
     .union-title-en {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         color: #2e3192;
         margin: 2px 0;
     }
 
     .union-address {
-        font-size: 14px;
         margin: 0;
-        color: #333;
     }
 
-    /* Invoice Title */
-    .invoice-title {
+    .license-title {
         text-align: center;
-        margin: 15px 0;
+        margin: 15px 0 25px 0;
     }
 
-    .invoice-title h3 {
-        background: #28a745;
+    .license-title h3 {
+        background: #006600;
         color: #fff;
         display: inline-block;
         padding: 8px 30px;
@@ -94,365 +89,326 @@
     }
 
     .tax-year {
-        font-size: 14px;
-        font-weight: bold;
-        color: #006600;
+        font-size: 13px;
+        color: #333;
         margin-top: 8px;
+        line-height: 1.6;
     }
 
-    /* Info Tables */
-    .info-table {
-        width: 100%;
-        margin-bottom: 15px;
-        border-collapse: collapse;
+    .invoice-info-simple {
+        margin-bottom: 25px;
+        line-height: 1.8;
     }
 
-    .info-table td {
-        padding: 8px 12px;
-        border: 1px solid #dee2e6;
-        vertical-align: top;
+    .info-group {
+        display: flex;
+        margin-bottom: 8px;
+        align-items: flex-start;
     }
 
-    .info-table td:first-child {
-        background: #343a40;
-        color: #fff;
+    .info-header {
         font-weight: bold;
-        width: 200px;
+        font-size: 15px;
+        white-space: nowrap;
+        margin-right: 5px;
     }
 
-    /* Tax Items Table */
-    .tax-table {
+    .info-body {
+        font-size: 14px;
+        flex: 1;
+    }
+
+    .fees-table-new {
         width: 100%;
+        border-collapse: collapse;
         margin-bottom: 20px;
-        border-collapse: collapse;
+        table-layout: fixed;
     }
 
-    .tax-table th,
-    .tax-table td {
-        border: 1px solid #dee2e6;
-        padding: 8px;
-        vertical-align: middle;
+    .fees-table-new th,
+    .fees-table-new td {
+        border: 1px solid #333;
+        padding: 8px 12px;
+        font-size: 13px;
     }
 
-    .tax-table th {
-        background: #343a40;
-        color: #fff;
+    .fees-table-new th {
+        background: #dcdcdc;
+        color: black;
+        text-align: center;
         font-weight: bold;
-        text-align: center;
     }
 
-    .tax-table td {
-        text-align: right;
-    }
-
-    .tax-table td:first-child {
-        text-align: center;
+    .fees-table-new th:nth-child(1),
+    .fees-table-new td:nth-child(1) {
         width: 8%;
+        text-align: center;
     }
 
-    .tax-table td:nth-child(2) {
+    .fees-table-new th:nth-child(2),
+    .fees-table-new td:nth-child(2) {
         text-align: left;
-        width: 52%;
+        width: 62%;
     }
 
-    .tax-table td:nth-child(3),
-    .tax-table td:nth-child(4) {
-        width: 20%;
+    .fees-table-new th:nth-child(3),
+    .fees-table-new td:nth-child(3) {
+        width: 15%;
+        text-align: center;
     }
 
-    /* Footer totals */
-    .total-row {
-        background: #e9ecef;
+    .fees-table-new th:nth-child(4),
+    .fees-table-new td:nth-child(4) {
+        width: 15%;
+        text-align: center;
+    }
+
+    .fees-total {
+        background: #f8f8f8;
         font-weight: bold;
     }
 
-    .grand-total {
-        background: #6c757d;
-        color: #fff;
+    .fees-grand-total {
+        background: #dcdcdc;
         font-weight: bold;
+        color: black;
     }
 
-    /* Signature area */
     .signature-area {
-        margin-top: 40px;
+        margin-top: 100px;
         display: flex;
         justify-content: space-between;
         text-align: center;
-        border-top: 1px dashed #aaa;
-        padding-top: 20px;
     }
 
     .sig-block {
-        width: 30%;
+        width: 200px;
     }
 
     .sig-line {
-        border-top: 1px solid #000;
-        margin: 25px 0 5px;
+        border-top: 1px solid #333;
+        margin-bottom: 5px;
     }
 
-    /* Print styles */
+    .sig-text {
+        font-size: 14px;
+        line-height: 1.2;
+        color: #333;
+    }
+
     @media print {
         body {
-            margin: 0;
-            padding: 0;
             background: white;
         }
-        
-        .tax-invoice-page {
-            margin: 0;
-            padding: 0;
+
+        .trade-license-page {
             box-shadow: none;
-            border-radius: 0;
-            width: 100%;
+            border: none;
         }
-        
-        .tax-invoice-content {
-            padding: 8mm 12mm;
+
+        .inner-border {
+            border: none;
         }
-        
-        #printPageButton,
+
         .no-print,
         .card-footer,
         footer,
         .main-footer {
             display: none !important;
         }
-        
-        .bg-success {
-            background: #28a745 !important;
-            color: #fff;
-        }
-        
-        .content-wrapper,
-        .container,
-        .card {
-            background: #ffffff;
-            padding: 0;
-            margin: 0;
-        }
-        
-        @page {
-            margin: 12mm 8mm;
-        }
-        
-        /* Force background colors */
-        .info-table td:first-child,
-        .tax-table th,
-        .grand-total {
+
+        .fees-grand-total,
+        .fees-total,
+        .fees-table-new th {
+            background-color: #f0f0f0 !important;
+            color: black !important;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
-        
-        /* Page break controls */
-        .tax-table tr {
-            page-break-inside: avoid;
-            break-inside: avoid;
+
+        .fees-grand-total {
+            background-color: #e8e8e8 !important;
         }
-        
-        .signature-area {
-            margin-top: 200px !important;
-            page-break-inside: avoid;
-            break-inside: avoid;
+
+        .fees-table-new th,
+        .fees-table-new td {
+            border: 1px solid #333 !important;
         }
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
-        .info-table td:first-child {
-            width: 120px;
+        .info-group {
+            flex-direction: column;
+            margin-bottom: 14px;
         }
-        
-        .tax-table th,
-        .tax-table td {
-            font-size: 11px;
-            padding: 5px;
+
+        .info-header {
+            margin-right: 0;
+            margin-bottom: 3px;
         }
     }
 </style>
 @endpush
 
-@section('title', 'Tax Invoice')
+@section('title', 'Tax Receipt Details')
 
 @section('content')
-<div class="tax-invoice-page">
-    <div class="tax-invoice-content">
-        
-        {{-- Header with Logos - Matching People Certificate exactly --}}
+@php
+    $ownerUser = $tax->user;
+    $ownerPeople = $ownerUser?->people;
+    $ownerFamily = $ownerUser?->familyInfo;
+
+    $ownerId = $tax->user_system_id ?? $ownerUser?->system_id ?? '--';
+    $ownerName = $ownerPeople?->bn_name ?? $ownerUser?->name ?? '--';
+    $ownerFatherName = $ownerFamily?->father_name_bn ?? '--';
+
+    $taxYearName = $tax->taxYear?->bn_name ?? $tax->taxYear?->name ?? ($tax->year == 1 ? '2022-2023' : '2021-2022');
+    
+    $fallbackHeaderUnion = \App\Models\Institute::with('union.thana.district')
+        ->whereNotNull('union_id')
+        ->first()?->union;
+
+    $headerUnion = $tax->user?->addressInfo?->presentUnion
+        ?? $tax->user?->addressInfo?->permanentUnion
+        ?? auth()->user()?->institute?->union
+        ?? $fallbackHeaderUnion;
+
+    $headerThana = $headerUnion?->thana
+        ?? $tax->user?->addressInfo?->presentThana
+        ?? $tax->user?->addressInfo?->permanentThana
+        ?? auth()->user()?->institute?->union?->thana
+        ?? $fallbackHeaderUnion?->thana;
+
+    $headerDistrict = $headerThana?->district
+        ?? $tax->user?->addressInfo?->presentDistrict
+        ?? $tax->user?->addressInfo?->permanentDistrict
+        ?? auth()->user()?->institute?->union?->thana?->district
+        ?? $fallbackHeaderUnion?->thana?->district;
+
+    $taxItems = [
+        ['name' => 'বসতবাড়ির বাৎসরিক মূল্যের উপর কর', 'previous' => $tax->previous_residence_tax, 'current' => $tax->residence_tax],
+        ['name' => 'ব্যবসা/পেশা/জীবিকার উপর কর', 'previous' => $tax->previous_income_tax, 'current' => $tax->income_tax],
+        ['name' => 'সিনেমা/যাত্রা/থিয়েটার বা বিনোদেনমূলক অনুষ্ঠানের উপর কর', 'previous' => $tax->previous_entertainment_institute_tax, 'current' => $tax->entertainment_institute_tax],
+        ['name' => 'লাইসেন্স ও পারমিট ফিস', 'previous' => $tax->previous_license_tax, 'current' => $tax->license_tax],
+        ['name' => 'হাট-বাজার/ফেরিঘাট ও জলমহল ইজারা বাবদ ফি', 'previous' => $tax->previous_bazar_tax, 'current' => $tax->bazar_tax],
+        ['name' => 'ভূমি/ইমারত ভাড়ার উপর কর', 'previous' => $tax->previous_land_tax, 'current' => $tax->land_tax],
+        ['name' => 'নিলামে বিক্রয়লব্ধ আয়', 'previous' => $tax->previous_auction_tax, 'current' => $tax->auction_tax],
+        ['name' => 'জরিমানা (যদি থাকে)', 'previous' => $tax->previous_fine, 'current' => $tax->fine],
+        ['name' => 'অন্যান্য দাবি আদায় (যদি থাকে)', 'previous' => $tax->previous_others, 'current' => $tax->others],
+        ['name' => 'বিবিধ', 'previous' => $tax->previous_extra, 'current' => $tax->extra],
+    ];
+@endphp
+
+<div class="trade-license-page mt-4 mb-4">
+    <div class="inner-border">
         <div class="header-logos">
-            <!-- <img src="{{ isset($tax->user->institute->left_image) ? asset($tax->user->institute->left_image) : asset('images/dhaka.png') }}" alt="City Logo"> -->
-            <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
+            <img src="{{ asset('images/dhaka.png') }}" alt="Left Logo">
             <div class="union-header">
                 <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
-                <div class="union-title-bn">{{ $tax->user->institute->union->bn_name ?? 'মোহরাজপুর ইউনিয়ন' }}</div>
-                <div class="union-title-en">{{ $tax->user->institute->union->name ?? 'Moharajpur Union' }}</div>
+                <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>
+                <div class="union-title-en">{{ $headerUnion?->name ?? '' }}</div>
                 <p class="union-address">
-                    উপজেলা: {{ $tax->user->institute->union->thana->bn_name ?? 'গোপালগঞ্জ সদর' }},
-                    জেলা: {{ $tax->user->institute->union->thana->district->bn_name ?? 'গোপালগঞ্জ' }},
+                    থানাঃ {{ $headerThana?->bn_name ?? $headerThana?->name ?? '' }},
+                    জেলাঃ {{ $headerDistrict?->bn_name ?? $headerDistrict?->name ?? '' }},
                     বাংলাদেশ।
                 </p>
             </div>
-            <!-- <img src="{{ isset($tax->user->institute->right_image) ? asset($tax->user->institute->right_image) : asset('images/govt-bd-logo.png') }}" alt="Govt Logo"> -->
-            <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Govt Logo">
-        </div>
-        
-        {{-- Invoice Title --}}
-        <div class="invoice-title">
-            <h3>কর রসিদ / TAX INVOICE</h3>
-            <div class="tax-year">অর্থ বছর: <strong>{{ $tax->taxYear->bn_name ?? 'N/A' }}</strong></div>
+            <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Right Logo">
         </div>
 
-        {{-- Invoice Metadata --}}
-        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-            <div><strong>নম্বর:</strong> {{ bnValue($tax->system_id ?? '') }}</div>
-            <div><strong>তারিখ:</strong> {{ bnValue(date('d/m/Y', strtotime($tax->created_at))) }} খ্রিঃ</div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: -15px; position: relative; z-index: 10;">
+            <div>আইডি নং: <strong>{{ bnValue($tax->system_id ?? $tax->id) }}</strong></div>
+            <div>তারিখ: {{ bnValue(date('d/m/Y', strtotime($tax->updated_at ?? $tax->created_at))) }}</div>
         </div>
 
-        {{-- User and Holding Information --}}
-        <table class="info-table">
-            <tr>
-                <td>হোল্ডিং এর মালিকের তথ্য:</strong> </td>
-                <td>
-                    <strong>আইডি নং- {{ bnValue($tax->user->system_id ?? '') }},</strong>
-                    <strong>নাম: {{ $tax->user->people->bn_name ?? $tax->user->name ?? 'N/A' }}</strong>
-                </td>
-            </tr>
-            <tr>
-                <td>হোল্ডিং সংক্রান্ত তথ্য:</strong> </td>
-                <td>
-                    <strong>
-                        বাড়ি নং- {{ $tax->house->house_bn ?? 'N/A' }}, 
-                        ওয়ার্ড নং- {{ $tax->unionWard->bn_ward_no ?? 'N/A' }}, 
-                        এলাকা: {{ $tax->house->block_section ?? 'N/A' }}, 
-                        গ্রাম: {{ $tax->village->bn_name ?? 'N/A' }}
-                    </strong>
-                </td>
-            </tr>
-        </table>
+        <div class="license-title">
+            <h3>কর রসিদ / TAX RECEIPT</h3>
+            <div class="tax-year">
+                <br>
+                অর্থ বছর: {{ bnValue($taxYearName) }}<br>
+                <span style="font-size: 11px;">( স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই কর নির্ধারণ করা হলো )</span>
+            </div>
+        </div>
 
-        {{-- Tax Items Table --}}
-        <table class="tax-table">
+        <div class="invoice-info-simple">
+            <div class="info-group">
+                <div class="info-header">মালিকের তথ্য:</div>
+                <div class="info-body">
+                    আইডি নং- {{ bnValue($ownerId) }},
+                    নাম- {{ $ownerName }},
+                    পিতার নাম- {{ $ownerFatherName }}
+                </div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-header">ঠিকানা ও অন্যান্য:</div>
+                <div class="info-body">
+                    বাড়ি নং- {{ bnValue($tax->house?->house_bn ?? '--') }},
+                    ব্লক/সেকশন- {{ bnValue($tax->house?->block_section ?? '--') }},
+                    গ্রাম- {{ $tax->village?->bn_name ?? '--' }},
+                    ওয়ার্ড- {{ bnValue($tax->unionWard?->bn_ward_no ?? '--') }}
+                </div>
+            </div>
+        </div>
+
+        <table class="fees-table-new">
             <thead>
                 <tr>
-                    <th style="width: 10%">ক্রমিক নং</th>
-                    <th style="width: 50%">করের বিষয়</th>
-                    <th style="width: 20%">বকেয়া কর</th>
-                    <th style="width: 20%">কর</th>
+                    <th>ক্রমিক নং</th>
+                    <th>কর এর বিষয়</th>
+                    <th>বকেয়া</th>
+                    <th>বর্তমান কর</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>১</td>
-                    <td class="text-left">বসতবাড়ির বাৎসরিক মূল্যের উপর কর</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_residence_tax) }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->residence_tax) }}</td>
+                @php
+                    $totalPrevious = 0;
+                    $totalCurrent = 0;
+                    $index = 1;
+                @endphp
+                @foreach($taxItems as $item)
+                    @php 
+                        $prev = (float)($item['previous'] ?? 0);
+                        $curr = (float)($item['current'] ?? 0);
+                        $totalPrevious += $prev;
+                        $totalCurrent += $curr;
+                    @endphp
+                    <tr>
+                        <td>{{ bnValue($index++) }}</td>
+                        <td>{{ $item['name'] }}</td>
+                        <td>{{ $prev > 0 ? bnValue(currencyFormat($prev)) : '--' }}</td>
+                        <td>{{ $curr > 0 ? bnValue(currencyFormat($curr)) : '--' }}</td>
+                    </tr>
+                @endforeach
+                <tr class="fees-total">
+                    <td colspan="2" style="text-align: right; padding-right: 20px;">মোট:</td>
+                    <td style="text-align: right;">{{ bnValue(currencyFormat($totalPrevious)) }}</td>
+                    <td style="text-align: right;">{{ bnValue(currencyFormat($totalCurrent)) }}</td>
                 </tr>
-                <tr>
-                    <td>২</td>
-                    <td class="text-left">ব্যবসা/পেশা/জীবিকার উপর কর</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_income_tax ?? '') }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->income_tax ?? '') }}</td>
-                </tr>
-                <tr>
-                    <td>৩</td>
-                    <td class="text-left">সিনেমা/যাত্রা/থিয়েটার বা বিনোদনমূলক অনুষ্ঠানের উপর কর</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_entertainment_institute_tax ?? '') }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->entertainment_institute_tax ?? '') }}</td>
-                </tr>
-                <tr>
-                    <td>৪</td>
-                    <td class="text-left">লাইসেন্স ও পারমিট ফি</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_license_tax ?? '') }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->license_tax ?? '') }}</td>
-                </tr>
-                <tr>
-                    <td>৫</td>
-                    <td class="text-left">হাট-বাজার/ফেরিঘাট ও জলমহল ইজারা বাবদ ফি</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_bazar_tax ?? '') }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->bazar_tax ?? '') }}</td>
-                </tr>
-                <tr>
-                    <td>৬</td>
-                    <td class="text-left">ভূমি/ইমারত ভাড়ার উপর কর</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_land_tax ?? '') }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->land_tax ?? '') }}</td>
-                </tr>
-                <tr>
-                    <td>৭</td>
-                    <td class="text-left">নিলামে বিক্রয়লব্ধ আয়</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_auction_tax ?? '') }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->auction_tax ?? '') }}</td>
-                </tr>
-                <tr>
-                    <td>৮</td>
-                    <td class="text-left">জরিমানা (যদি থাকে)</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_fine ?? '') }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->fine ?? '') }}</td>
-                </tr>
-                <tr>
-                    <td>৯</td>
-                    <td class="text-left">অন্যান্য দাবি আদায় (যদি থাকে)</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_others ?? '') }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->others ?? '') }}</td>
-                </tr>
-                <tr>
-                    <td>১০</td>
-                    <td class="text-left">বিবিধ</td>
-                    <td class="text-right">{{ currencyFormat($tax->previous_extra ?? '') }}</td>
-                    <td class="text-right">{{ currencyFormat($tax->extra ?? '') }}</td>
+                <tr class="fees-grand-total">
+                    <td colspan="2" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
+                    <td colspan="2" style="text-align: right;">{{ bnValue(currencyFormat($totalPrevious + $totalCurrent)) }}</td>
                 </tr>
             </tbody>
-            <tfoot>
-                @php
-                    $total_previous = ($tax->previous_extra ?? 0) + ($tax->previous_others ?? 0) + ($tax->previous_fine ?? 0) + 
-                                      ($tax->previous_auction_tax ?? 0) + ($tax->previous_land_tax ?? 0) + ($tax->previous_bazar_tax ?? 0) + 
-                                      ($tax->previous_license_tax ?? 0) + ($tax->previous_entertainment_institute_tax ?? 0) + 
-                                      ($tax->previous_income_tax ?? 0) + ($tax->previous_residence_tax ?? 0);
-                    
-                    $total_current = ($tax->extra ?? 0) + ($tax->others ?? 0) + ($tax->fine ?? 0) + 
-                                    ($tax->auction_tax ?? 0) + ($tax->land_tax ?? 0) + ($tax->bazar_tax ?? 0) + 
-                                    ($tax->license_tax ?? 0) + ($tax->entertainment_institute_tax ?? 0) + 
-                                    ($tax->income_tax ?? 0) + ($tax->residence_tax ?? 0);
-                @endphp
-                <tr class="total-row">
-                    <td colspan="2" class="text-right"><strong>মোট:</strong></td>
-                    <td class="text-right"><strong>{{ currencyFormat($total_previous) }}</strong></td>
-                    <td class="text-right"><strong>{{ currencyFormat($total_current) }}</strong></td>
-                </tr>
-                <tr class="grand-total">
-                    <td colspan="3" class="text-right"><strong>সর্বমোট:</strong></td>
-                    <td class="text-right"><strong>{{ currencyFormat($total_current + $total_previous) }}</strong></td>
-                </tr>
-            </tfoot>
         </table>
 
-        {{-- Signature Area --}}
         <div class="signature-area">
             <div class="sig-block">
                 <div class="sig-line"></div>
-                লাইসেন্স ও বিজ্ঞাপন সুপারভাইজার
+                <div class="sig-text">কর আদায়কারী</div>
             </div>
             <div class="sig-block">
                 <div class="sig-line"></div>
-                সীল
+                <div class="sig-text">সীল</div>
             </div>
             <div class="sig-block">
                 <div class="sig-line"></div>
-                কর কর্মকর্তা বা কর্তৃপক্ষ
+                <div class="sig-text">কর্তৃপক্ষ</div>
             </div>
         </div>
-        
-        {{-- Footer --}}
-        <!-- <div class="text-center mt-3 small text-muted">
-            <small>ইস্যুর তারিখ: {{ bnValue(date('d/m/Y')) }} খ্রিঃ</small>
-        </div>
-        <div class="text-center mt-2 small text-muted">
-            <small>Developed & Maintained by: <a href="https://www.jatri24.com">Jatri 24 Ltd.</a> & <a href="https://www.adventure-soft.com">Adventure Soft Ltd.</a></small>
-        </div> -->
     </div>
 </div>
 
-{{-- Print Buttons --}}
 <div class="no-print text-center my-4">
     <button class="btn btn-success px-5 py-2" onclick="window.print()">
         <i class="fa fa-print"></i> Print / প্রিন্ট
@@ -462,15 +418,3 @@
     </a>
 </div>
 @endsection
-
-@push('script')
-<script>
-    window.onbeforeprint = function() {
-        // Optional: Any pre-print adjustments
-    };
-    
-    window.onafterprint = function() {
-        // Optional: Any post-print cleanup
-    };
-</script>
-@endpush

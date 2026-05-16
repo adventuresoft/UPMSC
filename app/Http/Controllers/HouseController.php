@@ -230,7 +230,20 @@ class HouseController extends Controller
                     $house->update($payload);
                 }
             } else {
-                $payload['institute_id'] = Auth::user()->institute_id;
+                $institute_id = Auth::user()->institute_id;
+
+                // Fallback for Super Admin: find institute from village/union
+                if (!$institute_id && $request->village_id) {
+                    $village = Village::find($request->village_id);
+                    if ($village && $village->union_id) {
+                        $institute = \App\Models\Institute::where('union_id', $village->union_id)->first();
+                        if ($institute) {
+                            $institute_id = $institute->id;
+                        }
+                    }
+                }
+
+                $payload['institute_id'] = $institute_id;
                 $house = House::create($payload);
             }
 
