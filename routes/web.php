@@ -222,6 +222,9 @@ Route::get('/get-villages-by-union/{unionID}', [VillageController::class, 'villa
 Route::get('/get-mouzas-by-thana/{thanaID}', [MouzaController::class, 'mouzasByThana']);
 Route::get('/get-areas-by-village/{villageID}', [VillageAreaController::class, 'areasByVillage']);
 Route::get('/get-houses-by-village-area/{areaID}', [HouseController::class, 'getHouseByArea']);
+Route::get('/get-blocks-by-village-ward/{villageID}/{wardID}', [HouseController::class, 'getBlocksByVillageWard']);
+Route::get('/get-houses-by-block/{villageID}/{wardID}/{block}', [HouseController::class, 'getHousesByBlock']);
+Route::get('/get-owner-by-house/{houseID}', [HouseController::class, 'getOwnerByHouse']);
 Route::get('/search-user-by-system-id/{systemID}', [PeopleController::class, 'searchUser'])->name('user.searchBySystemID');
 Route::get('/search-people', [PeopleController::class, 'searchPeople'])->name('people.search');
 Route::get('/get-organization-info-by-system-id/{systemID}', [OrganizationController::class, 'getOrganizationBySystemId'])->name('getOrganizationBySystemId');

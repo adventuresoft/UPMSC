@@ -86,7 +86,7 @@
                                             <th>ওয়ার্ড নং</th>
                                             <th>{{ $tax->unionWard->bn_ward_no ?? '' }}</th>
                                             <th>এলাকা</th>
-                                            <th>{{ $tax->villageArea->bn_name ?? '' }}</th>
+                                            <th>{{ $tax->house->block_section ?? '' }}</th>
                                         </tr>
                                         <tr>
                                             <th>বাড়ি নং</th>

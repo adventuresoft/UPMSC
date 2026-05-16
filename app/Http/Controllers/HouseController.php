@@ -39,6 +39,63 @@ class HouseController extends Controller
         return $html;
     }
 
+    public function getBlocksByVillageWard($villageID, $wardID)
+    {
+        $html = '<option value="">Select block/section/sector</option>';
+        $blocks = House::where('village_id', $villageID)
+                       ->where('union_ward_id', $wardID)
+                       ->whereNotNull('block_section')
+                       ->where('block_section', '!=', '')
+                       ->select('block_section')
+                       ->distinct()
+                       ->get();
+                       
+        if(count($blocks)){
+            foreach ($blocks as $block) {
+                $html .= '<option value="'.urlencode($block->block_section).'">'.$block->block_section.'</option>';
+            }
+        }
+        return $html;
+    }
+
+    public function getHousesByBlock($villageID, $wardID, $block)
+    {
+        $block = urldecode($block);
+        $html = '<option value="">Select House</option>';
+        $houses = House::where('village_id', $villageID)
+                       ->where('union_ward_id', $wardID)
+                       ->where('block_section', $block)
+                       ->get();
+                       
+        if(count($houses)){
+            foreach ($houses as $house) {
+                $html .= '<option value="'.$house->id.'">'.$house->house.'</option>';
+            }
+        } else {
+            $html .= '<option value="">No House Found</option>';
+        }
+        return $html;
+    }
+
+    public function getOwnerByHouse($houseID)
+    {
+        $house = House::with(['ownership' => function($q) {
+            $q->whereNotNull('owner_id')->orderBy('id', 'asc');
+        }])->find($houseID);
+
+        if ($house && $house->ownership->count() > 0) {
+            return response()->json([
+                'status' => true,
+                'owner_id' => $house->ownership->first()->owner_id
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'No owner found with a system ID'
+        ]);
+    }
+
     public function options( Request $request, $id)
     {
         $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' House</option>';

@@ -134,7 +134,7 @@
                                                 <td>{{ $tax->user->people->bn_name ?? '' }} -- {{ $tax->user_system_id }}
                                                 </td>
                                                 <td>{{ $tax->house->house_bn ?? '' }}</td>
-                                                <td>{{ $tax->villageArea->bn_name ?? '' }} --
+                                                <td>{{ $tax->house->block_section ?? '' }} --
                                                     {{ $tax->unionWard->bn_ward_no }} </td>
                                                 <td>{{ $tax->village->bn_name ?? '' }}</td>
                                                 <td>

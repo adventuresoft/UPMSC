@@ -323,7 +323,7 @@
                     <strong>
                         বাড়ি নং- {{ $tax->house->house_bn ?? 'N/A' }}, 
                         ওয়ার্ড নং- {{ $tax->unionWard->bn_ward_no ?? 'N/A' }}, 
-                        এলাকা: {{ $tax->villageArea->bn_name ?? 'N/A' }}, 
+                        এলাকা: {{ $tax->house->block_section ?? 'N/A' }}, 
                         গ্রাম: {{ $tax->village->bn_name ?? 'N/A' }}
                     </strong>
                 </td>

@@ -90,12 +90,12 @@ class TaxController extends Controller
 
             $tax = new Tax();
             $tax->institute_id = Auth::user()->institute_id;
-            $tax->tax_year_id = $request->tax_year_id;
-            $tax->village_id = $request->village_id;
-            $tax->ward_id = $request->ward_id;
-            $tax->area_id = $request->area_id;
-            $tax->house_id = $request->house_id;
-            $tax->user_id = $request->user_id;
+            $tax->tax_year_id = $request->tax_year_id ?: null;
+            $tax->village_id = $request->village_id ?: null;
+            $tax->ward_id = $request->ward_id ?: null;
+            $tax->area_id = is_numeric($request->area_id) ? $request->area_id : null;
+            $tax->house_id = $request->house_id ?: null;
+            $tax->user_id = $request->user_id ?: null;
             $tax->user_system_id = $request->user_system_id;
 
             $tax->previous_residence_tax = $request->previous_residence_tax;

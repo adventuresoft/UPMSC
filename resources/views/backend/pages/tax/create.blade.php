@@ -309,49 +309,59 @@
             $('.sum_of_total').html(current_total+previous_total)
         }
 
-        $(document).on('change', '#village_id', function(e){
-            e.preventDefault();
-            let village_area_id = $('#area_id')
-            let _this_value = $(this).val();
-            if (_this_value) {
+        function loadBlocks() {
+            let village_id = $('#village_id').val();
+            let ward_id = $('select[name="ward_id"]').val();
+            let area_id = $('#area_id');
+            
+            if (village_id && ward_id) {
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('/get-areas-by-village') }}/"+_this_value,
+                    url: "{{ url('/get-blocks-by-village-ward') }}/" + village_id + "/" + ward_id,
                     beforeSend: function() {
-                        village_area_id.prop("disabled", true);
-                        console.log("Searcing area");
+                        area_id.prop("disabled", true);
+                        console.log("Searching blocks");
                     },
                     success: function(response) {
-                        village_area_id.html(response)
-                        village_area_id.prop("disabled", false);
+                        area_id.html(response);
+                        area_id.prop("disabled", false);
+                        $('#house_id').html('<option value="">Select House</option>');
                     },
                     error: function(xhr, status, error) {
-                        village_area_id.prop("disabled", true);
+                        area_id.prop("disabled", true);
                         var responseText = jQuery.parseJSON(xhr.responseText);
                         toastr.error(responseText.message);
                     }
-
                 });
             } else {
-                village_area_id.prop("disabled", true);
+                area_id.html('<option value="">Select block/section/sector</option>');
+                area_id.prop("disabled", true);
+                $('#house_id').html('<option value="">Select House</option>');
             }
-        })
+        }
+
+        $(document).on('change', '#village_id, select[name="ward_id"]', function(e){
+            e.preventDefault();
+            loadBlocks();
+        });
 
         $(document).on('change', '#area_id', function(e){
             e.preventDefault();
             let _this_house = $("#house_id");
+            let village_id = $('#village_id').val();
+            let ward_id = $('select[name="ward_id"]').val();
+            let block = $(this).val();
 
-            let _this_value = $(this).val();
-            if (_this_value) {
+            if (block && village_id && ward_id) {
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('/get-houses-by-village-area') }}/"+_this_value,
+                    url: "{{ url('/get-houses-by-block') }}/" + village_id + "/" + ward_id + "/" + block,
                     beforeSend: function() {
                         _this_house.prop("disabled", true);
-                        console.log("Searcing Districts");
+                        console.log("Searching Houses");
                     },
                     success: function(response) {
-                        _this_house.html(response)
+                        _this_house.html(response);
                         _this_house.prop("disabled", false);
                     },
                     error: function(xhr, status, error) {
@@ -361,12 +371,45 @@
                     }
                 });
             } else {
+                _this_house.html('<option value="">Select House</option>');
                 _this_house.prop("disabled", true);
             }
+        });
 
-        })
 
 
+
+        $(document).on('change', '#house_id', function(e){
+            e.preventDefault();
+            let house_id = $(this).val();
+            let system_id_input = $('.system_id');
+
+            if (house_id) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-owner-by-house') }}/" + house_id,
+                    beforeSend: function() {
+                        system_id_input.val('Loading...');
+                    },
+                    success: function(response) {
+                        if (response.status && response.owner_id) {
+                            system_id_input.val(response.owner_id);
+                            // Auto trigger search to load user info
+                            $('.find_user_info').trigger('click');
+                        } else {
+                            system_id_input.val('');
+                            toastr.warning(response.message || "No owner ID found for this house.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        system_id_input.val('');
+                        toastr.error("Failed to load owner ID.");
+                    }
+                });
+            } else {
+                system_id_input.val('');
+            }
+        });
 
 
         $(document).on('click', '.find_user_info', function(e){
@@ -389,24 +432,32 @@
                         $(".tax-generate-submit-btn").prop("disabled",false);
 
 
-                        $('.user_info_table').removeClass('d-none')
-                        $('.user_info_table').find('.user_name').html(response.people.bn_name);
-                        $('#user_id').val(response.people.user_id);
-
-                        if(response.people){
-                            if(response.people.user){
-
-                                if(response.people.user.family_info){
-                                    $(".user_father_name").html(response.people.user.family_info.father_name_bn)
-                                }
-                                if(response.people.user.image){
-                                    $(".user_img").attr('src', response.people.user.image)
-                                }
-
+                        let user = response.user;
+                        if(user) {
+                            $('.user_info_table').removeClass('d-none');
+                            
+                            if (user.people && user.people.bn_name) {
+                                $('.user_info_table').find('.user_name').html(user.people.bn_name);
+                            } else {
+                                $('.user_info_table').find('.user_name').html(user.name);
+                            }
+                            
+                            $('#user_id').val(user.id);
+                            
+                            if (user.familyInfo) {
+                                let fatherName = user.familyInfo.father_name_bn || user.familyInfo.father_name || 'N/A';
+                                $(".user_father_name").html(fatherName);
+                            } else {
+                                $(".user_father_name").html('N/A');
+                            }
+                            
+                            if (user.image) {
+                                let imgUrl = user.image.startsWith('http') ? user.image : "{{ asset('') }}" + user.image;
+                                $(".user_img").attr('src', imgUrl);
+                            } else {
+                                $(".user_img").attr('src', "{{ asset('public/no-image-found.jpeg') }}");
                             }
                         }
-
-                        // _this_user_info.find('.user_img').attr('src', response.people.user.image);;
 
                     },
                     error: function(xhr, status, error) {
