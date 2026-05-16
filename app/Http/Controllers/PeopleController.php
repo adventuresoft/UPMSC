@@ -86,12 +86,8 @@ class PeopleController extends Controller
         $users = User::with(['people', 'addressInfo' => function($query) {
             $query->with(['permanentVillage', 'permanentWard', 'permanentThana', 'permanentDistrict', 'permanentPostOffice']);
         }])
-        ->where('role_id', 5);
-
-        // Filter by institute if current user has one
-        if (Auth::user()->institute_id) {
-            $users->where('institute_id', Auth::user()->institute_id);
-        }
+        ->where('role_id', 5)
+        ->applyMultitenancy();
 
         $users->where(function($query) use ($q) {
             $query->where('name', 'LIKE', "%{$q}%")

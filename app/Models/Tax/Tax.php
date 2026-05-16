@@ -12,9 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 
+use App\Traits\Multitenantable;
+
 class Tax extends Model
 {
-    use HasFactory;
+    use HasFactory, Multitenantable;
 
     public function user()
     {

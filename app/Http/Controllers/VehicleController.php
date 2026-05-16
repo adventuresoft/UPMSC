@@ -21,7 +21,9 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        $data['vehicles'] = Vehicle::whereNull('status')->orWhere('status', 0)->latest()->get();
+        $data['vehicles'] = Vehicle::applyMultitenancy()->where(function($q) {
+            $q->whereNull('status')->orWhere('status', 0);
+        })->latest()->get();
         return view('backend.pages.vehicle.index', $data);
     }
 
@@ -84,11 +86,23 @@ class VehicleController extends Controller
                 return response(json_encode($data, JSON_PRETTY_PRINT), 422)->header('Content-Type', 'application/json');
             }
 
+            // Resolve Institute and Geographical data
+            $user = auth()->user();
+            $institute = null;
+            if ($user->institute_id) {
+                $institute = Institute::find($user->institute_id);
+            }
+
+            if (!$institute) {
+                $data['status'] = false;
+                $data['message'] = "Your account is not associated with any Institute. Please contact support.";
+                return response(json_encode($data, JSON_PRETTY_PRINT), 422)->header('Content-Type', 'application/json');
+            }
+
             // Generate Registration ID: YY-UUUU-CCSSSS
             $year = date('y');
-            $institute = Institute::whereNotNull('union_id')->first();
-            $unionId = $institute ? $institute->union_id : '1850'; // Fallback to 1850 as per example
-            $unionId = str_pad($unionId, 4, '0', STR_PAD_LEFT);
+            $unionId = $institute->union_id ?? ($institute->pourashava_id ?? ($institute->city_corporation_id ?? '0000'));
+            $unionIdStr = str_pad($unionId, 4, '0', STR_PAD_LEFT);
 
             $categoryMap = [
                 'Rickshaw - রিকশা' => '01',
@@ -98,7 +112,7 @@ class VehicleController extends Controller
             ];
             $catCode = $categoryMap[$request->vehicle_category] ?? '00';
 
-            $prefix = "VE{$year}-{$unionId}-{$catCode}";
+            $prefix = "VE{$year}-{$unionIdStr}-{$catCode}";
             $registrationId = IdGenerator::generate([
                 'table' => 'vehicles',
                 'field' => 'registration_id',
@@ -108,6 +122,10 @@ class VehicleController extends Controller
 
             $payload = [
                 'registration_id' => $registrationId,
+                'institute_id' => $institute->id,
+                'union_id' => $institute->union_id,
+                'thana_id' => $institute->thana_id,
+                'district_id' => $institute->district_id,
                 'vehicle_type' => $request->vehicle_type,
                 'vehicle_category' => $request->vehicle_category,
                 'vehicle_model' => $request->vehicle_model,
@@ -129,16 +147,14 @@ class VehicleController extends Controller
                 'width' => $request->width,
                 'tyre_size' => $request->tyre_size,
                 'color' => $request->color,
+                'created_by' => $user->id,
             ];
 
             \Log::info("Vehicle Store Payload:", $payload);
 
-            $vehicle = new Vehicle();
-            foreach ($payload as $key => $value) {
-                $vehicle->{$key} = $value;
-            }
+            $vehicle = Vehicle::create($payload);
 
-            if ($vehicle->save()) {
+            if ($vehicle) {
                 $data['status'] = true;
                 $data['message'] = "Vehicle Saved Successfully!";
                 $data['redirect_url'] = route('vehicle.show', $vehicle->id);
@@ -165,7 +181,7 @@ class VehicleController extends Controller
      */
     public function show($id)
     {
-        $vehicle = Vehicle::findOrFail($id);
+        $vehicle = Vehicle::applyMultitenancy()->findOrFail($id);
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
             : null;
@@ -189,7 +205,7 @@ class VehicleController extends Controller
      */
     public function edit($id)
     {
-        $data['vehicle'] = Vehicle::findOrFail($id);
+        $data['vehicle'] = Vehicle::applyMultitenancy()->findOrFail($id);
         return view('backend.pages.vehicle.edit', $data);
     }
 
@@ -265,15 +281,12 @@ class VehicleController extends Controller
                 'width' => $request->width,
                 'tyre_size' => $request->tyre_size,
                 'color' => $request->color,
+                'updated_by' => auth()->id(),
             ];
 
             \Log::info("Vehicle Update Payload:", $payload);
 
-            foreach ($payload as $key => $value) {
-                $vehicle->{$key} = $value;
-            }
-
-            if ($vehicle->save()) {
+            if ($vehicle->update($payload)) {
                 $data['status'] = true;
                 $data['message'] = "Vehicle Updated Successfully!";
                 $data['redirect_url'] = route('vehicle.show', $vehicle->id);
@@ -341,25 +354,25 @@ class VehicleController extends Controller
 
     public function approvalList()
     {
-        $data['vehicles'] = Vehicle::where('status', 1)->latest()->get();
+        $data['vehicles'] = Vehicle::applyMultitenancy()->where('status', 1)->latest()->get();
         return view('backend.pages.vehicle.approval_list', $data);
     }
 
     public function invoiceList()
     {
-        $data['vehicles'] = Vehicle::latest()->get();
+        $data['vehicles'] = Vehicle::applyMultitenancy()->latest()->get();
         return view('backend.pages.vehicle.invoice_list', $data);
     }
 
     public function licenseList()
     {
-        $data['vehicles'] = Vehicle::where('status', 1)->latest()->get();
+        $data['vehicles'] = Vehicle::applyMultitenancy()->where('status', 1)->latest()->get();
         return view('backend.pages.vehicle.license_list', $data);
     }
 
     public function invoiceShow($id)
     {
-        $vehicle = Vehicle::findOrFail($id);
+        $vehicle = Vehicle::applyMultitenancy()->findOrFail($id);
 
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
@@ -445,7 +458,7 @@ class VehicleController extends Controller
 
     public function getFees($id)
     {
-        $vehicle = Vehicle::find($id);
+        $vehicle = Vehicle::applyMultitenancy()->find($id);
         if (!$vehicle) {
             return response()->json(['status' => false, 'message' => 'Vehicle not found']);
         }

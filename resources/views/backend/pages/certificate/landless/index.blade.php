@@ -149,7 +149,7 @@
                                         <td>{{ ++$key }}</td>
 
                                         <td>
-                                            <img src="{{ asset($certificate->user->image ?? 'default.png') }}"
+                                            <img src="{{ asset($certificate->user?->image ?? 'default.png') }}"
                                                 width="55"
                                                 height="65"
                                                 class="img"
@@ -160,14 +160,14 @@
 
                                         <td>
                                             <span class="citizen-id">
-                                                {{ $certificate->user->people->approved_id ?? 'No ID' }}
+                                                {{ $certificate->user?->people?->approved_id ?? 'No ID' }}
                                             </span><br>
-                                            {{ $certificate->user->name ?? '' }}
+                                            {{ $certificate->user?->name ?? '' }}
                                         </td>
 
                                         <td>
-                                            {{ $certificate->user->address ?? '' }} <br>
-                                            <strong>{{ $certificate->user->mobile ?? '' }}</strong>
+                                            {{ $certificate->user?->address ?? '' }} <br>
+                                            <strong>{{ $certificate->user?->mobile ?? '' }}</strong>
                                         </td>
 
                                         <td>{{ $certificate->land_type ?? 'N/A' }}</td>

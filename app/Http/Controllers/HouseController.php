@@ -100,12 +100,10 @@ class HouseController extends Controller
     {
         $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' House</option>';
 
-        if($request->village){
-            $houses = House::where('union_ward_id', $id)->where('village_id', $request->village)->get();
-
+        if ($request->village) {
+            $houses = House::applyMultitenancy()->where('union_ward_id', $id)->where('village_id', $request->village)->get();
         } else {
-            $houses = House::where('union_ward_id', $id)->where('institute_id', Auth::user()->institute_id ?? 1)->get();
-
+            $houses = House::applyMultitenancy()->where('union_ward_id', $id)->get();
         }
 
 
@@ -126,7 +124,7 @@ class HouseController extends Controller
      */
     public function index()
     {
-        $data['houses'] = House::with('ownership')->where('institute_id', Auth::user()->institute_id)->get();
+        $data['houses'] = House::with('ownership')->applyMultitenancy()->latest()->get();
         return view('backend.pages.house.index', $data);
     }
 
@@ -260,7 +258,7 @@ class HouseController extends Controller
      */
     public function show($id)
     {
-        $data['house'] = House::with(['village', 'unionWard', 'ownership'])->find($id);
+        $data['house'] = House::applyMultitenancy()->with(['village', 'unionWard', 'ownership'])->findOrFail($id);
         if (!$data['house']) {
             return redirect()->back()->with('error', 'House not found.');
         }

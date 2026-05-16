@@ -6,9 +6,11 @@ use App\Models\BasicSettings\Village;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\Multitenantable;
+
 class House extends Model
 {
-    use HasFactory;
+    use HasFactory, Multitenantable;
 
     public static $snakeAttributes = false;
     protected $table = "houses";

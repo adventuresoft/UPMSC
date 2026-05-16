@@ -359,7 +359,7 @@
                                         <td>
                                             <a href="{{ route('people.show', $user->id) }}" style="color: inherit; text-decoration: none;">
                                                 <span class="citizen-id">
-                                                    {{$user->people->approved_id}}
+                                                    {{$user->people?->approved_id}}
                                                 </span><br>
                                                 <strong>{{ $user->name ?? '' }}</strong>
                                             </a>
@@ -374,8 +374,8 @@
                                         <td>
                                             @php
                                                 $genderOptions = people_constant_option('gender');
-                                                $gender = isset($user->people->gender) ? ($genderOptions[$user->people->gender] ?? '') : '';
-                                                $dob = $user->people->date_of_birth ?? '';
+                                                $gender = isset($user->people?->gender) ? ($genderOptions[$user->people?->gender] ?? '') : '';
+                                                $dob = $user->people?->date_of_birth ?? '';
                                             @endphp
                                             {{ $gender }}<br>
                                             <small>{{ $dob ? date('d-m-Y', strtotime($dob)) : 'N/A' }}</small>
@@ -394,19 +394,19 @@
                                             @endphp
                                             {{ $instituteFind['institute']->name ?? '' }} {{ $instituteFind['institute_type'] ?? '' }} -->
                                            {{ collect([
-    $user->addressInfo->presentDistrict->name ?? '',
-    $user->addressInfo->presentThana->name ?? '',
-    $user->addressInfo->presentPostoffice->name ?? '',
+    $user->addressInfo?->presentDistrict?->name ?? '',
+    $user->addressInfo?->presentThana?->name ?? '',
+    $user->addressInfo?->presentPostoffice?->name ?? '',
 ])->filter()->implode(', ') }} 
 
 <br/>
 
 {{ collect([
-    $user->addressInfo->presentVillage->en_name ?? '',
-    $user->addressInfo->presentWard->en_ward_no ?? '',
-    $user->addressInfo->present_area ?? '',
-    $user->addressInfo->presentRoad->name ?? '',
-    $user->addressInfo->presentHouse->house ?? ''
+    $user->addressInfo?->presentVillage?->en_name ?? '',
+    $user->addressInfo?->presentWard?->en_ward_no ?? '',
+    $user->addressInfo?->present_area ?? '',
+    $user->addressInfo?->presentRoad?->name ?? '',
+    $user->addressInfo?->presentHouse?->house ?? ''
 ])->filter()->implode(', ') }}
                                         </td>
 

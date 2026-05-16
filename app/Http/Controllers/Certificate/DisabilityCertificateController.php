@@ -27,10 +27,15 @@ class DisabilityCertificateController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = DisabilityCertificate::with('user')
-        ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
-        })->latest()->get();
+        $data['certificates'] = DisabilityCertificate::with([
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district'
+        ])
+        ->applyMultitenancy()
+        ->latest()
+        ->get();
         return view('backend.pages.certificate.disability.index', $data);
     }
 
@@ -42,11 +47,13 @@ class DisabilityCertificateController extends Controller
     public function create()
     {
         $data['users'] = User::with('people')
-        ->where('status', true)
-        ->where('role_id', 5)
-        ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
-        ->where('institute_id', Auth::user()->institute_id)
-        ->get();
+            ->where('status', true)
+            ->where('role_id', 5)
+            ->whereHas('people', function ($q) {
+                $q->whereNotNull('approved_id');
+            })
+            ->applyMultitenancy()
+            ->get();
         return view('backend.pages.certificate.disability.create', $data);
     }
 

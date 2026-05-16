@@ -144,10 +144,10 @@
                                 @foreach ($certificates as $key => $certificate)
                                 @php
                                     // Fallback: use user profile data if certificate fields are empty (pre-migration records)
-                                    $displayName    = $certificate->applicant_name ?: ($certificate->user->name ?? '—');
-                                    $displayNid     = $certificate->applicant_nid  ?: ($certificate->user->people->nid ?? '—');
-                                    $displayMobile  = $certificate->applicant_mobile ?: ($certificate->user->mobile ?? '—');
-                                    $displayImage   = $certificate->user->people->image ?? 'assets/images/person-avatar.png';
+                                    $displayName    = $certificate->applicant_name ?: ($certificate->user?->name ?? '—');
+                                    $displayNid     = $certificate->applicant_nid  ?: ($certificate->user?->people?->nid ?? '—');
+                                    $displayMobile  = $certificate->applicant_mobile ?: ($certificate->user?->mobile ?? '—');
+                                    $displayImage   = $certificate->user?->people?->image ?? 'assets/images/person-avatar.png';
                                 @endphp
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
@@ -164,16 +164,16 @@
                                     <td>
                                         <strong>{{ $displayMobile }}</strong><br>
                                         <small>
-                                            @if($certificate->user && $certificate->user->addressInfo)
-                                                {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                                                ওয়ার্ড নং-{{ bnValue($certificate->user->addressInfo->permanentWard->bn_ward_no ?? '') }},
-                                                {{ $certificate->user->addressInfo->permanentPostOffice->bn_name ?? '' }}
-                                                @if($certificate->user->addressInfo->permanentPostOffice->postal_code ?? false)
-                                                    - {{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }}
+                                            @if($certificate->user && $certificate->user?->addressInfo)
+                                                {{ $certificate->user?->addressInfo?->permanentVillage?->bn_name ?? '' }},
+                                                ওয়ার্ড নং-{{ bnValue($certificate->user?->addressInfo?->permanentWard?->bn_ward_no ?? '') }},
+                                                {{ $certificate->user?->addressInfo?->permanentPostOffice?->bn_name ?? '' }}
+                                                @if($certificate->user?->addressInfo?->permanentPostOffice?->postal_code ?? false)
+                                                    - {{ bnValue($certificate->user?->addressInfo?->permanentPostOffice?->postal_code) }}
                                                 @endif
                                                 ,<br>
-                                                {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                                                {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
+                                                {{ $certificate->user?->institute?->union?->thana?->bn_name ?? '' }},
+                                                {{ $certificate->user?->institute?->union?->thana?->district?->bn_name ?? '' }}।
                                             @elseif($certificate->applicant_address)
                                                 {{ $certificate->applicant_address }}
                                             @else

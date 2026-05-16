@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
+use App\Traits\Multitenantable;
+
 class PermanentCitizenCertificate extends Model
 {
-    use HasFactory,SystemIdGenerator;
+    use HasFactory, SystemIdGenerator, Multitenantable;
 
     public static $snakeAttributes = false;
     public $table = 'permanent_citizen_certificates';

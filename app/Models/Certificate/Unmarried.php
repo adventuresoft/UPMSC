@@ -6,9 +6,11 @@ use App\Traits\SystemIdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\Multitenantable;
+
 class Unmarried extends Model
 {
-    use HasFactory,SystemIdGenerator;
+    use HasFactory, SystemIdGenerator, Multitenantable;
 
     
     

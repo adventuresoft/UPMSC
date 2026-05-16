@@ -20,7 +20,7 @@ class RoadController extends Controller
      */
     public function index()
     {
-        $data['roads'] = Road::latest()->get();
+        $data['roads'] = Road::applyMultitenancy()->latest()->get();
         return view('backend.pages.road.index', $data);
     }
 

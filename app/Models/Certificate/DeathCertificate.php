@@ -7,10 +7,11 @@ use App\Traits\SystemIdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use App\Traits\Multitenantable;
 
 class DeathCertificate extends Model
 {
-    use HasFactory,SystemIdGenerator;
+    use HasFactory, SystemIdGenerator, Multitenantable;
 
     public static $snakeAttributes = false;
     public $table = 'death_certificates';

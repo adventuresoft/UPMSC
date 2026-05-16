@@ -355,8 +355,8 @@
                                         <td>
                                             @php
                                                 $genderOptions = people_constant_option('gender');
-                                                $gender = isset($user->people->gender) ? ($genderOptions[$user->people->gender] ?? '') : '';
-                                                $dob = $user->people->date_of_birth ?? '';
+                                                $gender = isset($user->people?->gender) ? ($genderOptions[$user->people?->gender] ?? '') : '';
+                                                $dob = $user->people?->date_of_birth ?? '';
                                             @endphp
                                             {{ $gender }}<br>
                                             <small>{{ $dob ? date('d-m-Y', strtotime($dob)) : 'N/A' }}</small>
@@ -370,14 +370,14 @@
 
                                         <td>
                                            
-                                            {{ $user->addressInfo->presentWard->en_ward_no ?? ''}} 
+                                            {{ $user->addressInfo?->presentWard?->en_ward_no ?? ''}} 
                                         </td>
                                         
 
                                         <td>
                                             {{ collect([
-    $user->addressInfo->presentDistrict->name ?? '',
-    $user->addressInfo->presentThana->name ?? ''
+    $user->addressInfo?->presentDistrict?->name ?? '',
+    $user->addressInfo?->presentThana?->name ?? ''
 ])->filter()->implode(', ') }} 
                                         </td>
 
@@ -388,33 +388,33 @@
                                             @endphp
                                             {{ $instituteFind['institute']->name ?? '' }} {{ $instituteFind['institute_type'] ?? '' }} -->
                                           <strong>Present:</strong>  {{ collect([
-    $user->addressInfo->presentPostoffice->name ?? '',
-    $user->addressInfo->presentVillage->en_name ?? '',
-    $user->addressInfo->present_area ?? '',
-    $user->addressInfo->presentRoad->name ?? '',
-    $user->addressInfo->presentHouse->house ?? ''
+    $user->addressInfo?->presentPostoffice?->name ?? '',
+    $user->addressInfo?->presentVillage?->en_name ?? '',
+    $user->addressInfo?->present_area ?? '',
+    $user->addressInfo?->presentRoad?->name ?? '',
+    $user->addressInfo?->presentHouse?->house ?? ''
 ])->filter()->implode(', ') }} 
 
 <br/>
 <strong>
 Permanent:</strong>
 {{ collect([
-    $user->addressInfo->permanentDistrict->name ?? '',
-    $user->addressInfo->permanentThana->name ?? '',
-    $user->addressInfo->permanentPostoffice->name ?? '',
-    $user->addressInfo->permanentVillage->en_name ?? '',
-    $user->addressInfo->permanent_area ?? '',
-    $user->addressInfo->permanentRoad->name ?? '',
-    $user->addressInfo->permanentHouse->house ?? ''
+    $user->addressInfo?->permanentDistrict?->name ?? '',
+    $user->addressInfo?->permanentThana?->name ?? '',
+    $user->addressInfo?->permanentPostoffice?->name ?? '',
+    $user->addressInfo?->permanentVillage?->en_name ?? '',
+    $user->addressInfo?->permanent_area ?? '',
+    $user->addressInfo?->permanentRoad?->name ?? '',
+    $user->addressInfo?->permanentHouse?->house ?? ''
 ])->filter()->implode(', ') }}
                                         </td>
 
                                         <td>
                                             <div class="table-action">
                                                 @can('people.update')
-                                                @if(empty($user->people->approved_id))
+                                                @if(empty($user->people?->approved_id))
                                                     <button class="btn-action btn-approve-people btn-approve-people-trigger" 
-                                                        data-id="{{ $user->people->id }}" 
+                                                        data-id="{{ $user->people?->id }}" 
                                                         data-name="{{ $user->name }}" 
                                                         title="Approve Applicant">
                                                         <i class="fas fa-check"></i>

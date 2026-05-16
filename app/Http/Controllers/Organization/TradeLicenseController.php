@@ -131,9 +131,7 @@ class TradeLicenseController extends Controller
             'ownership.user.people',
             'latestTradeLicense.taxYear',
         ])->where('status', 1)
-          ->when(Auth::user()->institute_id, function ($query) {
-              $query->where('institute_id', Auth::user()->institute_id);
-          })
+          ->applyMultitenancy()
           ->latest()
           ->get();
 

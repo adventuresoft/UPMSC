@@ -28,14 +28,15 @@ class CharacterCertificateController extends Controller
     public function index()
     {
         $data['certificates'] = CharacterCertificate::with([
+            'user.people',
             'user.addressInfo.permanentVillage',
             'user.addressInfo.permanentWard',
             'user.addressInfo.permanentPostOffice',
             'user.institute.union.thana.district'
         ])
-        ->whereHas('user', function($q1){
-            $q1->applyMultitenancy();
-        })->latest()->get();
+        ->applyMultitenancy()
+        ->latest()
+        ->get();
         
         return view('backend.pages.certificate.character.index', $data);
     }
@@ -47,15 +48,14 @@ class CharacterCertificateController extends Controller
      */
     public function create()
     {
-        $data['users'] = User::with('people' )
+        $data['users'] = User::with('people')
             ->where('status', true)
             ->where('role_id', 5)
-            ->applyMultitenancy()
             ->whereHas('people', function ($q) {
-        $q->whereNotNull('approved_id');
-    })
-        ->where('institute_id', Auth::user()->institute_id)
-        ->get();
+                $q->whereNotNull('approved_id');
+            })
+            ->applyMultitenancy()
+            ->get();
         
         return view('backend.pages.certificate.character.create', $data);
     }

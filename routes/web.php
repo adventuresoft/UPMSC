@@ -311,6 +311,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
 
     Route::resource('certificate/birth', BirthCertificateController::class);
+    Route::get('certificate/birth/bn/{id}', [BirthCertificateController::class, 'bn_certificate'])->name('birth.bn_certificate');
     Route::resource('certificate/unmarried', UnmarriedCertificateController::class);
     Route::get('certificate/unmarried/bn/{id}', [UnmarriedCertificateController::class, 'bn_certificate'])->name('unmarried.bn_certificate');
     Route::resource('certificate/married', MarriedCertificateController::class);
