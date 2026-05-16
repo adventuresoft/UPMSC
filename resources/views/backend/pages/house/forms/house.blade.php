@@ -54,21 +54,21 @@
     <!-- Removed Legacy Fields: Type, Category, Ownership Type, Mouza, BRS Khatian, BRS Dag, Land Qty, Price -->
 
     <div class="form-group row">
-        <label for="land_quantity" class="col-sm-2 col-form-label">জমির পরিমান (Land Quantity)</label>
-        <div class="col-sm-9">
+        <!-- Land Quantity -->
+        <label for="land_quantity" class="col-sm-2 col-form-label text-nowrap">জমির পরিমান (Land Qty)</label>
+        <div class="col-sm-2">
             <div class="input-group">
-                <input type="text" name="land_quantity" placeholder="Land Quantity" value="{{$house->land_quantity ?? ''}}" class="form-control" id="land_quantity">
+                <input type="text" name="land_quantity" placeholder="Land Qty" value="{{$house->land_quantity ?? ''}}" class="form-control" id="land_quantity">
                 <div class="input-group-append">
                     <span class="input-group-text">একর</span>
                 </div>
             </div>
             <small class="text-danger error land_quantity_error"></small>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <label for="land_price" class="col-sm-2 col-form-label">Total Land Price</label>
-        <div class="col-sm-9">
+        <!-- Land Price -->
+        <label for="land_price" class="col-sm-2 col-form-label text-nowrap text-right">Total Land Price</label>
+        <div class="col-sm-2">
             <div class="input-group">
                 <input type="number" step="0.01" name="land_price" value="{{$house->land_price ?? ''}}" class="form-control" id="land_price" placeholder="0.00">
                 <div class="input-group-append">
@@ -77,19 +77,23 @@
             </div>
             <small class="text-danger error land_price_error"></small>
         </div>
-    </div>
 
-    <div class="form-group row">
-        <label for="number_of_rooms" class="col-sm-2 col-form-label">Number of Building/Structure <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
-        <div class="col-sm-9">
-            <input type="number" required min="1" name="number_of_rooms" value="{{$house->number_of_rooms ?? ''}}" placeholder="Number of Rooms" class="form-control" id="number_of_rooms">
+        <!-- Number of Building -->
+        <label for="number_of_rooms" class="col-sm-2 col-form-label text-nowrap text-right">Building/Structure <span class="text-danger">*</span></label>
+        <div class="col-sm-1">
+            <input type="number" required min="1" name="number_of_rooms" value="{{$house->number_of_rooms ?? ''}}" placeholder="Qty" class="form-control" id="number_of_rooms">
             <small class="text-danger error number_of_rooms_error"></small>
         </div>
     </div>
 
     <!-- Dynamic Room Container -->
-    <div id="dynamic_rooms_container">
-        <!-- Room cards will be injected here via JS -->
+    <div class="form-group row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-9">
+            <div id="dynamic_rooms_container">
+                <!-- Room cards will be injected here via JS -->
+            </div>
+        </div>
     </div>
 
     <div class="form-group row mt-3">
@@ -149,7 +153,7 @@
                 let existingPrice = existingRooms[i] ? existingRooms[i].price_per_sq_ft : '';
 
                 let cardHtml = `
-                    <div class="card card-outline card-primary mb-3 mx-2">
+                    <div class="card card-outline card-primary mb-3">
                         <div class="card-header">
                             <h3 class="card-title">Building/Structure ${i + 1} Details</h3>
                         </div>

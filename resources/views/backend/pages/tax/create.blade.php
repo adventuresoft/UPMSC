@@ -134,71 +134,71 @@
                                             <tr>
                                                 <td>১ ।</td>
                                                 <td class="text-left">বসতবাড়ির বাৎসরিক মূল্যের উপর কর</td>
-                                                <td><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_residence_tax"></td>
-                                                <td><input class="form-control curent_tax_variable text-right" min="0" type="number" name="residence_tax"></td>
+                                                <td><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_residence_tax" value="0.00"></td>
+                                                <td><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="residence_tax" value="0.00"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>২ ।</td>
                                                 <td  class="text-left">ব্যবসা/পেশা/জীবিকার উপর কর</td>
-                                                <td><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_income_tax"></td>
-                                                <td><input class="form-control curent_tax_variable text-right" min="0" type="number" name="income_tax"></td>
+                                                <td><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_income_tax" value="0.00"></td>
+                                                <td><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="income_tax" value="0.00"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>৩ ।</td>
                                                 <td  class="text-left">সিনেমা/যাত্রা/থিয়েটার বা বিনোদেনমূলক অনুষ্ঠানের উপর কর</td>
-                                                <td><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_entertainment_institute_tax"></td>
-                                                <td><input class="form-control curent_tax_variable text-right" min="0" type="number" name="entertainment_institute_tax"></td>
+                                                <td><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_entertainment_institute_tax" value="0.00"></td>
+                                                <td><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="entertainment_institute_tax" value="0.00"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>৪ ।</td>
                                                 <td  class="text-left">লাইসেন্স ও পারমিট ফিস</td>
-                                                <td><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_license_tax"></td>
-                                                <td><input class="form-control curent_tax_variable text-right" min="0" type="number" name="license_tax"></td>
+                                                <td><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_license_tax" value="0.00"></td>
+                                                <td><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="license_tax" value="0.00"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>৫ ।</td>
                                                 <td  class="text-left">হাট-বাজার/ফেরিঘাট ও জলমহল ইজারা বাবদ ফি</td>
-                                                <td><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_bazar_tax"></td>
-                                                <td><input class="form-control curent_tax_variable text-right" min="0" type="number" name="bazar_tax"></td>
+                                                <td><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_bazar_tax" value="0.00"></td>
+                                                <td><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="bazar_tax" value="0.00"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>৬ ।</td>
                                                 <td  class="text-left">ভূমি/ইমারত ভাড়ার উপর কর</td>
-                                                <td><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_land_tax"></td>
-                                                <td><input class="form-control curent_tax_variable text-right" min="0" type="number" name="land_tax"></td>
+                                                <td><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_land_tax" value="0.00"></td>
+                                                <td><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="land_tax" value="0.00"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>৭ ।</td>
                                                 <td  class="text-left">নিলামে বিক্রয়লব্ধ আয়</td>
-                                                <td><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_auction_tax"></td>
-                                                <td><input class="form-control curent_tax_variable text-right" min="0" type="number" name="auction_tax"></td>
+                                                <td><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_auction_tax" value="0.00"></td>
+                                                <td><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="auction_tax" value="0.00"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>৮ ।</td>
                                                 <td  class="text-left">জরিমানা (যদি থাকে)</td>
-                                                <td><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_fine"></td>
-                                                <td><input class="form-control curent_tax_variable text-right" min="0" type="number" name="fine"></td>
+                                                <td><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_fine" value="0.00"></td>
+                                                <td><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="fine" value="0.00"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>৯ ।</td>
                                                 <td  class="text-left">অন্যান্য দাবি আদায় (যদি থাকে)</td>
-                                                <td><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_others"></td>
-                                                <td><input class="form-control curent_tax_variable text-right" min="0" type="number" name="others"></td>
+                                                <td><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_others" value="0.00"></td>
+                                                <td><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="others" value="0.00"></td>
                                             </tr>
 
                                             <tr>
                                                 <td>১০ ।</td>
                                                 <td  class="text-left">বিবিধ</td>
-                                                <td class="text-right"><input class="form-control previous_tax_variable text-right" min="0" type="number" name="previous_extra"></td>
-                                                <td class="text-right"><input class="form-control curent_tax_variable text-right" min="0" type="number" name="extra"></td>
+                                                <td class="text-right"><input class="form-control previous_tax_variable text-right" min="0" step="0.01" type="number" name="previous_extra" value="0.00"></td>
+                                                <td class="text-right"><input class="form-control curent_tax_variable text-right" min="0" step="0.01" type="number" name="extra" value="0.00"></td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
@@ -278,11 +278,20 @@
             })
 
 
-            $('.previous_tax_variable').on('change', function(e){
+            $('.previous_tax_variable, .curent_tax_variable').on('blur', function() {
+                let val = parseFloat($(this).val());
+                if (isNaN(val)) {
+                    $(this).val('0.00');
+                } else {
+                    $(this).val(val.toFixed(2));
+                }
+            });
+
+            $('.previous_tax_variable').on('change input', function(e){
                 calculateSum();
             })
 
-            $('.curent_tax_variable').on('change', function(e){
+            $('.curent_tax_variable').on('change input', function(e){
                 calculateSum();
             })
         })
@@ -291,22 +300,22 @@
           
             let previous_total = 0;
             $( ".previous_tax_variable" ).each(function() {
-                let current_value = parseInt($(this).val());
+                let current_value = parseFloat($(this).val());
                 if(current_value){
                     previous_total = previous_total + current_value;
                 }
             });
-            $('.previous_total').html(previous_total);
+            $('.previous_total').html(previous_total.toFixed(2));
 
             let current_total = 0;
             $(".curent_tax_variable").each(function() {
-                let current_value = parseInt($(this).val());
+                let current_value = parseFloat($(this).val());
                 if(current_value){
                     current_total = current_total +  current_value;
                 }
             });
-            $('.current_total').html(current_total);
-            $('.sum_of_total').html(current_total+previous_total)
+            $('.current_total').html(current_total.toFixed(2));
+            $('.sum_of_total').html((current_total+previous_total).toFixed(2))
         }
 
         function loadBlocks() {
