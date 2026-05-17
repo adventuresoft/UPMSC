@@ -142,13 +142,12 @@
 
     .fees-table-new td:nth-child(2) {
         text-align: left;
-        width: 50%;
+        width: 55%;
     }
 
-    .fees-table-new td:nth-child(3),
-    .fees-table-new td:nth-child(4) {
+    .fees-table-new td:nth-child(3) {
         text-align: right;
-        width: 20%;
+        width: 30%;
     }
 
     .fees-total {
@@ -373,7 +372,6 @@
                 <tr>
                     <th>ক্রমিক নং</th>
                     <th>ফি এর বিষয়</th>
-                    <th>বকেয়া</th>
                     <th>টাকা</th>
                 </tr>
             </thead>
@@ -383,21 +381,20 @@
                         <tr>
                             <td>{{ bnValue($loop->iteration) }}</td>
                             <td>{{ $feeHead }}</td>
-                            <td></td>
                             <td>{{ currencyFormat((float) $amount) }}</td>
                         </tr>
                     @endforeach
                     <tr class="fees-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">মোট:</td>
+                        <td colspan="2" style="text-align: right; padding-right: 20px;">মোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
                     </tr>
                     <tr class="fees-grand-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
+                        <td colspan="2" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
                     </tr>
                 @else
                     <tr>
-                        <td colspan="4" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
+                        <td colspan="3" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
                     </tr>
                 @endif
             </tbody>
