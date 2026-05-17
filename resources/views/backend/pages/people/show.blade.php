@@ -524,27 +524,27 @@
         <div class="two-columns">
             <div class="col">
                 <h6 class="mb-2 font-weight-bold">স্থায়ী ঠিকানা / Permanent Address</h6>
-                <div class="info-row"><span class="info-label">District :</span><span class="info-value">{{ $user->addressInfo->permanentDistrict->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Thana :</span><span class="info-value">{{ $user->addressInfo->permanentThana->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Union :</span><span class="info-value">{{ $user->addressInfo->permanentUnion->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo->permanentPostoffice->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo->permanentVillage->en_name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo->permanentWard->en_ward_no ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo->permanent_area ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo->permanentRoad->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo->permanentHouse->house ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">District :</span><span class="info-value">{{ $user->addressInfo?->permanentDistrict?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Thana :</span><span class="info-value">{{ $user->addressInfo?->permanentThana?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Union :</span><span class="info-value">{{ $user->addressInfo?->permanentUnion?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo?->permanentPostOffice?->name ?? $user->addressInfo?->permanentPostoffice?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo?->permanentVillage?->en_name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo?->permanentWard?->en_ward_no ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo?->permanent_area ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo?->permanentRoad?->name ?? $user->addressInfo?->permanent_road ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo?->permanentHouse?->house ?? $user->addressInfo?->permanent_house ?? '' }}</span></div>
             </div>
             <div class="col">
                 <h6 class="mb-2 font-weight-bold">বর্তমান ঠিকানা / Present Address</h6>
-                <div class="info-row"><span class="info-label">District :</span><span class="info-value">{{ $user->addressInfo->presentDistrict->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Thana :</span><span class="info-value">{{ $user->addressInfo->presentThana->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Union :</span><span class="info-value">{{ $user->addressInfo->presentUnion->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo->presentPostoffice->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo->presentVillage->en_name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo->presentWard->en_ward_no ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo->present_area ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo->presentRoad->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo->presentHouse->house ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">District :</span><span class="info-value">{{ $user->addressInfo?->presentDistrict?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Thana :</span><span class="info-value">{{ $user->addressInfo?->presentThana?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Union :</span><span class="info-value">{{ $user->addressInfo?->presentUnion?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo?->presentPostoffice?->name ?? $user->addressInfo?->presentPostOffice?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo?->presentVillage?->en_name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo?->presentWard?->en_ward_no ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo?->present_area ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo?->presentRoad?->name ?? $user->addressInfo?->present_road ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo?->presentHouse?->house ?? $user->addressInfo?->present_house ?? '' }}</span></div>
             </div>
         </div>
 

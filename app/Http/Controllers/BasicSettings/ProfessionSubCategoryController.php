@@ -21,7 +21,7 @@ class ProfessionSubCategoryController extends Controller
 
     public function professionSubcategoryOptions($id)
     {
-        $html = '<option value="">Select Profession Category</option>';
+        $html = '<option value="">Select Profession Subcategory</option>';
 
         $subcategories = ProfessionSubCategory::where('profession_category_id', $id)->get();
         if(count($subcategories)){

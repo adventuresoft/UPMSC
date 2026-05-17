@@ -86,7 +86,7 @@ class PeopleController extends Controller
         $users = User::with(['people', 'addressInfo' => function($query) {
             $query->with(['permanentVillage', 'permanentWard', 'permanentThana', 'permanentDistrict', 'permanentPostOffice']);
         }])
-        ->where('role_id', 5)
+        ->whereNotIn('role_id', [1, 2, 3, 4])
         ->applyMultitenancy();
 
         $users->where(function($query) use ($q) {
@@ -138,7 +138,10 @@ class PeopleController extends Controller
     {
         $query = User::with([
             'people',
-            'professionalInfos',
+            'professionalInfos.subcategory.category.type.profession',
+            'disabilityInfo',
+            'freedomFighterInfo',
+            'financialInfos',
             'addressInfo.presentWard',
             'addressInfo.presentDistrict',
             'addressInfo.presentThana',
@@ -150,14 +153,17 @@ class PeopleController extends Controller
             'addressInfo.permanentThana',
             'addressInfo.permanentPostOffice',
             'addressInfo.permanentVillage',
+            'addressInfo.permanentWard',
             'addressInfo.permanentRoad',
             'addressInfo.permanentHouse',
-        ])->whereHas('people', function ($q) {
+        ])->whereNotIn('role_id', [1, 2, 3, 4])
+        ->whereHas('people', function ($q) {
             $q->whereNull('approved_id');
         });
 
         $query->applyMultitenancy();
 
+        $data['professions'] = \App\Models\BasicSettings\Profession::where('status', true)->get();
         $data['users'] = $query->latest()->get();
         return view('backend.pages.people.index', $data);
     }
@@ -167,7 +173,10 @@ class PeopleController extends Controller
         $data['subMenu']='approvedList';
         $query = User::with([
             'people',
-            'professionalInfos',
+            'professionalInfos.subcategory.category.type.profession',
+            'disabilityInfo',
+            'freedomFighterInfo',
+            'financialInfos',
             'addressInfo.presentDistrict',
             'addressInfo.presentThana',
             'addressInfo.presentPostoffice',
@@ -175,14 +184,135 @@ class PeopleController extends Controller
             'addressInfo.presentWard',
             'addressInfo.presentRoad',
             'addressInfo.presentHouse',
-        ])->whereHas('people', function ($q) {
+            'addressInfo.permanentDistrict',
+            'addressInfo.permanentThana',
+            'addressInfo.permanentPostOffice',
+            'addressInfo.permanentVillage',
+            'addressInfo.permanentWard',
+        ])->whereNotIn('role_id', [1, 2, 3, 4])
+        ->whereHas('people', function ($q) {
             $q->whereNotNull('approved_id');
         });
 
         $query->applyMultitenancy();
 
+        $data['professions'] = \App\Models\BasicSettings\Profession::where('status', true)->get();
         $data['users'] = $query->latest()->get();
         return view('backend.pages.people.approvedList', $data);
+    }
+
+    public function searchPeoplePage()
+    {
+        $data['subMenu']='search';
+        $query = User::with([
+            'people',
+            'professionalInfos.subcategory.category.type.profession',
+            'disabilityInfo',
+            'freedomFighterInfo',
+            'financialInfos',
+            'addressInfo.presentDistrict',
+            'addressInfo.presentThana',
+            'addressInfo.presentPostoffice',
+            'addressInfo.presentVillage',
+            'addressInfo.presentWard',
+            'addressInfo.presentRoad',
+            'addressInfo.presentHouse',
+            'addressInfo.permanentDistrict',
+            'addressInfo.permanentThana',
+            'addressInfo.permanentPostOffice',
+            'addressInfo.permanentVillage',
+            'addressInfo.permanentWard',
+        ])->whereNotIn('role_id', [1, 2, 3, 4])
+        ->whereHas('people', function ($q) {
+            $q->whereNotNull('approved_id');
+        });
+
+        $query->applyMultitenancy();
+
+        $user = auth()->user();
+        $permittedAreas = collect();
+        $permittedWards = \App\Models\UnionWard::where('status', true)->get();
+
+        if (is_superadmin()) {
+            // Super admins see all areas
+            $unions = \App\Models\Union::where('status', true)->get()->map(function($u) {
+                return ['id' => $u->id, 'name' => $u->name . ' (Union)'];
+            });
+            $pourashavas = \App\Models\Pourashava::get()->map(function($p) {
+                return ['id' => $p->id, 'name' => $p->name . ' (Pourashava)'];
+            });
+            $cityCorps = \App\Models\CityCorporation::get()->map(function($c) {
+                return ['id' => $c->id, 'name' => $c->name . ' (City Corp)'];
+            });
+            $permittedAreas = $permittedAreas->concat($unions)->concat($pourashavas)->concat($cityCorps);
+        } else {
+            // Check institute first
+            if ($user->institute_id && $user->institute) {
+                $inst = $user->institute;
+                if ($inst->union_id && $inst->union) {
+                    $permittedAreas->push(['id' => $inst->union_id, 'name' => $inst->union->name . ' (Union)']);
+                } elseif ($inst->pourashava_id && $inst->pourashava) {
+                    $permittedAreas->push(['id' => $inst->pourashava_id, 'name' => $inst->pourashava->name . ' (Pourashava)']);
+                } elseif ($inst->city_corporation_id && $inst->cityCorporation) {
+                    $permittedAreas->push(['id' => $inst->city_corporation_id, 'name' => $inst->cityCorporation->name . ' (City Corp)']);
+                }
+            }
+            
+            // Check area column next
+            if ($user->area) {
+                if (str_contains($user->area, 'Union:')) {
+                    $id = trim(str_replace('Union:', '', $user->area));
+                    $u = \App\Models\Union::find($id);
+                    if ($u) {
+                        $permittedAreas->push(['id' => $u->id, 'name' => $u->name . ' (Union)']);
+                    }
+                } elseif (str_contains($user->area, 'Pourashava:')) {
+                    $id = trim(str_replace('Pourashava:', '', $user->area));
+                    $p = \App\Models\Pourashava::find($id);
+                    if ($p) {
+                        $permittedAreas->push(['id' => $p->id, 'name' => $p->name . ' (Pourashava)']);
+                    }
+                } elseif (str_contains($user->area, 'City Corp:')) {
+                    $id = trim(str_replace('City Corp:', '', $user->area));
+                    $c = \App\Models\CityCorporation::find($id);
+                    if ($c) {
+                        $permittedAreas->push(['id' => $c->id, 'name' => $c->name . ' (City Corp)']);
+                    }
+                } elseif (str_contains($user->area, 'Thana:')) {
+                    $id = trim(str_replace('Thana:', '', $user->area));
+                    $unions = \App\Models\Union::where('thana_id', $id)->where('status', true)->get()->map(function($u) {
+                        return ['id' => $u->id, 'name' => $u->name . ' (Union)'];
+                    });
+                    $permittedAreas = $permittedAreas->concat($unions);
+                } elseif (str_contains($user->area, 'District:')) {
+                    $id = trim(str_replace('District:', '', $user->area));
+                    $thanas = \App\Models\Thana::where('district_id', $id)->pluck('id');
+                    $unions = \App\Models\Union::whereIn('thana_id', $thanas)->where('status', true)->get()->map(function($u) {
+                        return ['id' => $u->id, 'name' => $u->name . ' (Union)'];
+                    });
+                    $pourashavas = \App\Models\Pourashava::where('district_id', $id)->get()->map(function($p) {
+                        return ['id' => $p->id, 'name' => $p->name . ' (Pourashava)'];
+                    });
+                    $cityCorps = \App\Models\CityCorporation::where('district_id', $id)->get()->map(function($c) {
+                        return ['id' => $c->id, 'name' => $c->name . ' (City Corp)'];
+                    });
+                    $permittedAreas = $permittedAreas->concat($unions)->concat($pourashavas)->concat($cityCorps);
+                }
+            }
+        }
+
+        // De-duplicate and sort permitted areas
+        $data['permittedAreas'] = $permittedAreas->unique('id')->sortBy('name')->values();
+
+        // Ward permissions: restrict if counselor has specific ward in AddressInfo
+        if ($user->addressInfo && $user->addressInfo->permanent_ward_id) {
+            $permittedWards = $permittedWards->where('id', $user->addressInfo->permanent_ward_id);
+        }
+        $data['permittedWards'] = $permittedWards->values();
+
+        $data['professions'] = \App\Models\BasicSettings\Profession::where('status', true)->get();
+        $data['users'] = $query->latest()->get();
+        return view('backend.pages.people.search', $data);
     }
 
     /**
@@ -334,17 +464,14 @@ class PeopleController extends Controller
 
         $data['religions'] = Religion::where('status', true)->get();
         $data['villages'] = [];
-        $data['wards'] = [];
+        $data['wards'] = UnionWard::where('status', true)->get();
         $data['permanent_houses'] = [];
         $data['roads'] = [];
-        if(isset($institute?->institute_type_id) && $institute->institute_type_id == 1) {
-            $data['villages'] = Village::where('union_id', $institute->union_id)->get();
-            $data['wards'] = UnionWard::where('status', true)->get();
-            $data['roads'] = Road::where('institute_id',  $institute->id)->latest()->get();
-        } else if (isset($institute?->institute_type_id) && $institute->institute_type_id == 2) {
-
-        } else if (isset($institute?->institute_type_id) && $institute->institute_type_id == 3) {
-
+        if ($institute) {
+            $data['roads'] = Road::where('institute_id', $institute->id)->latest()->get();
+            if ($institute->union_id) {
+                $data['villages'] = Village::where('union_id', $institute->union_id)->get();
+            }
         }
         $data['divisions'] = Division::where('status', true)->get();
 

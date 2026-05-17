@@ -243,14 +243,14 @@
                                                     <button onclick="approveCertificate({{ $certificate->id }})" class="btn btn-success btn-sm">
                                                         <i class="fa fa-check"></i> Approve
                                                     </button>
-                                                    @if (edit_permission('certificates'))
+                                                    @if (edit_permission('voter_area_certificate'))
                                                     <a href="{{ route('voter-area.edit', $certificate->id) }}" 
                                                         class="btn btn-warning btn-sm" title="Edit">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
                                                     @endif
                                                 @else
-                                                    @if (edit_permission('certificates'))
+                                                    @if (edit_permission('voter_area_certificate'))
                                                     <a href="{{ route('voter-area.edit', $certificate->id) }}" 
                                                         class="btn btn-warning btn-sm" title="Edit">
                                                         <i class="fa fa-edit"></i>

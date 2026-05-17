@@ -89,4 +89,42 @@ class NidCorrectionCertificateController extends Controller
             return response()->json(['status' => false, 'message' => 'Error approving!']);
         }
     }
+
+    public function edit($id)
+    {
+        $data['certificate'] = NidCorrectionCertificate::findOrFail($id);
+        return view('backend.pages.certificate.nid_correction.edit', $data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validate = Validator::make($request->all(), [
+            'applicant_name' => 'nullable|string|max:190',
+            'applicant_nid'  => 'nullable|string|max:20',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json(['status' => false, 'message' => "Invalid Entry.", 'errors' => $validate->errors()], 400);
+        }
+
+        try {
+            $certificate = NidCorrectionCertificate::findOrFail($id);
+            $certificate->fill($request->all());
+            
+            // Filter only active corrections for the JSON field if needed, 
+            // but we can just store the whole array
+            $certificate->correction_data = $request->correction_data;
+            
+            $certificate->payment_amount = $request->payment_amount ?: 0;
+            $certificate->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => "NID Correction application updated successfully!",
+                'redirect_url' => route('nid-correction.index')
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => false, 'message' => "Error: " . $th->getMessage(), 'error' => $th->getMessage()], 500);
+        }
+    }
 }

@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'People', 'subMenu' => 'approvedList'])
+@extends('backend.master', ['mainMenu' => 'People', 'subMenu' => 'search'])
 
 @push('style')
 <style>
@@ -259,7 +259,7 @@
 </style>
 @endpush
 
-@section('title', 'People View')
+@section('title', 'Search People')
 
 @section('content')
 
@@ -274,7 +274,7 @@
                     <div class="card-header bg-white py-3 border-bottom">
                         <div class="row align-items-center">
                             <div class="col-md-6">
-                                <h3 class="card-title text-dark m-0" style="font-size: 14px;">Registered People</h3>
+                                <h3 class="card-title text-dark m-0" style="font-size: 14px;">Search Citizen</h3>
                             </div>
 
                             <div class="col-md-6 text-right">
@@ -324,6 +324,67 @@
                                     <button type="button" id="resetFilter" class="btn btn-sm btn-outline-danger w-100" style="height: 38px; border-radius: 8px;">
                                         <i class="fas fa-undo mr-1"></i> Reset
                                     </button>
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center g-3 mt-3">
+                                <div class="col-md-3">
+                                    <select id="search_profession" class="form-control form-control-sm select2" data-placeholder="Profession...">
+                                        <option value="">All Professions</option>
+                                        @foreach($professions as $profession)
+                                            <option value="{{ $profession->en_name }}">{{ $profession->en_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="search_financial" class="form-control form-control-sm select2" data-placeholder="Financial...">
+                                        <option value="">All Financial</option>
+                                        <option value="Yes">Has Account</option>
+                                        <option value="No">No Account</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="search_age" class="form-control form-control-sm select2" data-placeholder="Age...">
+                                        <option value="">All Ages</option>
+                                        <option value="0-18">0 - 18 Years</option>
+                                        <option value="19-30">19 - 30 Years</option>
+                                        <option value="31-50">31 - 50 Years</option>
+                                        <option value="51+">51+ Years</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="search_disability" class="form-control form-control-sm select2" data-placeholder="Disability...">
+                                        <option value="">All (Disability)</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row align-items-center g-3 mt-3">
+                                <div class="col-md-3">
+                                    <select id="search_freedom_fighter" class="form-control form-control-sm select2" data-placeholder="Freedom Fighter...">
+                                        <option value="">All (Freedom Fighter)</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="search_area" class="form-control form-control-sm select2" data-placeholder="Area...">
+                                        <option value="">All Areas</option>
+                                        @foreach($permittedAreas as $area)
+                                            <option value="{{ $area['id'] }}">{{ $area['name'] }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="search_ward" class="form-control form-control-sm select2" data-placeholder="Ward...">
+                                        <option value="">All Wards</option>
+                                        @foreach($permittedWards as $ward)
+                                            <option value="{{ $ward->id }}">Ward {{ $ward->en_ward_no }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -381,7 +442,9 @@
                                         data-age="{{ $age }}" 
                                         data-financial="{{ $isFinancial }}" 
                                         data-disability="{{ $isDisability }}" 
-                                        data-freedom-fighter="{{ $isFreedomFighter }}">
+                                        data-freedom-fighter="{{ $isFreedomFighter }}"
+                                        data-area-id="{{ $user->addressInfo?->permanent_union_id ?? '' }}"
+                                        data-ward-id="{{ $user->addressInfo?->permanent_ward_id ?? '' }}">
                                         <td>{{ ++$key }}</td>
                                          <!--<td>
                                             {{ $user->system_id ?? '' }}
@@ -461,11 +524,6 @@
                                          </td>
 
                                         <td>
-                                            <!--
-                                            @php
-                                                $instituteFind = user_institute_information($user->institute_id);
-                                            @endphp
-                                            {{ $instituteFind['institute']->name ?? '' }} {{ $instituteFind['institute_type'] ?? '' }} -->
                                            {{ collect([
     $user->addressInfo?->presentDistrict?->name ?? $user->addressInfo?->permanentDistrict?->name ?? '',
     $user->addressInfo?->presentThana?->name ?? $user->addressInfo?->permanentThana?->name ?? '',
@@ -489,7 +547,7 @@
                                                         @if(is_superadmin())
                                                         <a href="{{ route('people.edit', $user->id) }}" 
                                                             class="btn-action btn-edit" title="Edit">
-                                                            <i class="fa fa-edit"></i>
+                                                                <i class="fa fa-edit"></i>
                                                         </a>
                                                         @endif
                                                         
@@ -526,39 +584,6 @@
         </div>
     </div>
 </section>
-
-<!-- Reset Password Modal -->
-<div class="modal fade" id="resetPasswordModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="resetPasswordForm" method="POST">
-                @csrf
-                <div class="modal-header bg-warning">
-                    <h5 class="modal-title"><i class="fas fa-key mr-2"></i> Reset Credentials</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Resetting password for: <strong><span id="resetPersonName"></span></strong></p>
-                    
-                    <div class="form-group mb-3">
-                        <label>New Password</label>
-                        <input type="password" name="password" id="new_password" class="form-control" required minlength="8">
-                    </div>
-                    <div class="form-group mb-0">
-                        <label>Confirm Password</label>
-                        <input type="password" name="password_confirmation" class="form-control" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-warning" id="btnSubmitReset">Reset Now</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 @endsection
 
@@ -618,6 +643,88 @@
             table.page.len($(this).val()).draw();
         });
 
+        // Initialize Select2 for advanced filters
+        $('.select2').select2({
+            theme: 'bootstrap4',
+            width: '100%',
+            allowClear: true
+        });
+
+        // Custom DataTables Filter for Advanced Options
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex, rowData, counter) {
+            if (settings.nTable.id !== 'example1') {
+                return true;
+            }
+
+            var tr = $(settings.aoData[dataIndex].nTr);
+            var rowProfession = tr.data('profession') || '';
+            var rowAge = parseInt(tr.data('age')) || 0;
+            var rowDisability = tr.data('disability') || '';
+            var rowFreedomFighter = tr.data('freedom-fighter') || '';
+            var rowFinancial = tr.data('financial') || '';
+            var rowAreaId = tr.data('area-id') || '';
+            var rowWardId = tr.data('ward-id') || '';
+
+            var searchProfession = $('#search_profession').val();
+            var searchFinancial = $('#search_financial').val();
+            var searchAge = $('#search_age').val();
+            var searchDisability = $('#search_disability').val();
+            var searchFreedomFighter = $('#search_freedom_fighter').val();
+            var searchArea = $('#search_area').val();
+            var searchWard = $('#search_ward').val();
+
+            // Profession check
+            if (searchProfession && searchProfession !== '') {
+                if (rowProfession.indexOf(searchProfession.toLowerCase()) === -1) {
+                    return false;
+                }
+            }
+
+            // Financial check
+            if (searchFinancial && searchFinancial !== '') {
+                if (rowFinancial !== searchFinancial) return false;
+            }
+
+            // Age check
+            if (searchAge && searchAge !== '') {
+                if (searchAge === '0-18' && (rowAge < 0 || rowAge > 18)) return false;
+                if (searchAge === '19-30' && (rowAge < 19 || rowAge > 30)) return false;
+                if (searchAge === '31-50' && (rowAge < 31 || rowAge > 50)) return false;
+                if (searchAge === '51+' && rowAge <= 50) return false;
+            }
+
+            // Disability check
+            if (searchDisability && searchDisability !== '') {
+                if (rowDisability !== searchDisability) return false;
+            }
+
+            // Freedom Fighter check
+            if (searchFreedomFighter && searchFreedomFighter !== '') {
+                if (rowFreedomFighter !== searchFreedomFighter) return false;
+            }
+
+            // Area check
+            if (searchArea && searchArea !== '') {
+                if (String(rowAreaId) !== String(searchArea)) {
+                    return false;
+                }
+            }
+
+            // Ward check
+            if (searchWard && searchWard !== '') {
+                if (String(rowWardId) !== String(searchWard)) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        // Trigger redraw when advanced filters change
+        $('#search_profession, #search_financial, #search_age, #search_disability, #search_freedom_fighter, #search_area, #search_ward').change(function() {
+            table.draw();
+        });
+
         // Reset filter
         $('#resetFilter').click(function() {
             // Clear all input fields
@@ -628,76 +735,17 @@
             $('#search_institute').val('');
             $('#search_global').val('');
             
+            // Clear advanced filters
+            $('#search_profession').val('').trigger('change.select2');
+            $('#search_financial').val('').trigger('change.select2');
+            $('#search_age').val('').trigger('change.select2');
+            $('#search_disability').val('').trigger('change.select2');
+            $('#search_freedom_fighter').val('').trigger('change.select2');
+            $('#search_area').val('').trigger('change.select2');
+            $('#search_ward').val('').trigger('change.select2');
+            
             // Clear all searches
             table.search('').columns().search('').draw();
-        });
-
-        // --- Credential Management Scripts ---
-        
-        // Reveal Password
-        $('.btn-reveal').click(function() {
-            const id = $(this).data('id');
-            const textSpan = $('#password-text-' + id);
-            const icon = $(this).find('i');
-            const box = $('#reveal-box-' + id);
-
-            if (icon.hasClass('fa-eye')) {
-                $.get("{{ route('peoples.credentials.reveal', ':id') }}".replace(':id', id), function(res) {
-                    if (res.status) {
-                        textSpan.text(res.password).removeClass('password-masked').addClass('text-danger font-weight-bold');
-                        icon.removeClass('fa-eye').addClass('fa-eye-slash');
-
-                        // Auto-hide after 10 seconds
-                        setTimeout(() => {
-                            textSpan.text('••••').addClass('password-masked').removeClass('text-danger font-weight-bold');
-                            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-                        }, 10000);
-                    }
-                });
-            } else {
-                textSpan.text('••••').addClass('password-masked').removeClass('text-danger font-weight-bold');
-                icon.removeClass('fa-eye-slash').addClass('fa-eye');
-            }
-        });
-
-        // Toggle Status
-        $('.btn-toggle-status').click(function() {
-            const id = $(this).data('id');
-            if (!confirm("Are you sure you want to change portal access status?")) return;
-
-            $.post("{{ route('peoples.credentials.toggle', ':id') }}".replace(':id', id), {
-                _token: "{{ csrf_token() }}"
-            }, function(res) {
-                if (res.status) {
-                    toastr.success(res.message);
-                    setTimeout(() => window.location.reload(), 1000);
-                }
-            });
-        });
-
-        // Reset Modal
-        let resetId = null;
-        $('.btn-reset-modal').click(function() {
-            resetId = $(this).data('id');
-            $('#resetPersonName').text($(this).data('name'));
-            $('#resetPasswordModal').modal('show');
-        });
-
-        $('#resetPasswordForm').submit(function(e) {
-            e.preventDefault();
-            const btn = $('#btnSubmitReset');
-            btn.prop('disabled', true).text('Processing...');
-
-            $.post("{{ route('peoples.credentials.reset', ':id') }}".replace(':id', resetId), $(this).serialize(), function(res) {
-                if (res.status) {
-                    toastr.success(res.message);
-                    $('#resetPasswordModal').modal('hide');
-                    btn.prop('disabled', false).text('Reset Now');
-                }
-            }).fail(function(xhr) {
-                btn.prop('disabled', false).text('Reset Now');
-                toastr.error(xhr.responseJSON.message || "Reset failed");
-            });
         });
 
     });

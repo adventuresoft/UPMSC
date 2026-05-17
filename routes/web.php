@@ -239,7 +239,7 @@ Route::post('/voter-area-approve', [VoterAreaCertificateController::class, 'appr
 
 Route::get('/profession-type-options-by-profession/{professionID}', [ProfessionTypeController::class, 'professionTypeOptions']);
 Route::get('/profession-category-options-by-profession-type/{professionTypeID}', [ProfessionCategoryController::class, 'professionCategoryOptions' ]);
-Route::get('/profession-subcategory-options-by-profession-category/{professionCategoryID}', [ ProfessionSubcategoryController::class, 'professionSubcategoryOptions'  ] );
+Route::get('/profession-subcategory-options-by-profession-category/{professionCategoryID}', [ ProfessionSubCategoryController::class, 'professionSubcategoryOptions'  ] );
 
 Route::get('/house-category-options-by-type-id/{type_id}', [HouseCategoryController::class, 'getCategoryOptions']);
 Route::get('/house-single-ownership-form', [HouseOwnershipController::class, 'loadOwnershipForm']);
@@ -492,6 +492,9 @@ Route::get('/organization/trade-license/{id}/payment/success', [TradeLicenseCont
   
     Route::get('peopleapprovedlist', [PeopleController::class, 'approvedlist'])
     ->name('peopleapprovedlist');
+
+    Route::get('peoplesearch', [PeopleController::class, 'searchPeoplePage'])
+    ->name('peoplesearch');
 
     Route::get('people/credentials', [PeopleCredentialController::class, 'index'])->name('peoples.credentials');
     Route::post('/people/approve/{id}', [PeopleController::class, 'approve'])

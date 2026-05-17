@@ -82,6 +82,7 @@ class FinancialInfoController extends Controller
                     $data['status'] = true;
                     $data['message'] = "Financial data submitted successfully!";
                     $data['code'] = 200;
+                    $data['redirect_url'] = route('people.property', $user_id);
                     return $data;
                 // } catch (\Throwable $th) {
                 //     $data['code'] = 500;

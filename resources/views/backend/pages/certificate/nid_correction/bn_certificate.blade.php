@@ -108,7 +108,7 @@
             width: 100%;
             padding: 10mm;
         }
-        #printPageButton, #cancelPageButton {
+        #printPageButton, #cancelPageButton, .main-footer, footer {
             display: none !important;
         }
     }
@@ -131,45 +131,58 @@
 @endphp
 <div class="container py-4">
     <div class="form-container">
-        <div class="form-header">
-            <p class="mb-0"><strong>ফরম-২</strong></p>
-            <p class="mb-0" style="font-size: 12px;">[প্রবিধান ৪ দ্রষ্টব্য]</p>
-            <h1 class="form-title">জাতীয় পরিচয়পত্র বা তথ্য-উপাত্ত সংশোধনের আবেদন</h1>
-        </div>
-
-        <div class="staple-box">
-            মূল জাতীয় পরিচয়পত্র এখানে সংযুক্ত করুন (স্ট্যাপল)
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div style="width: 40mm;"></div> <!-- spacer -->
+            <div class="form-header flex-grow-1" style="margin-bottom: 0;">
+                <p class="mb-0"><strong>ফরম-২</strong></p>
+                <p class="mb-0" style="font-size: 12px;">[প্রবিধান ৪ দ্রষ্টব্য]</p>
+                <h1 class="form-title">জাতীয় পরিচয়পত্র বা তথ্য-উপাত্ত<br>সংশোধনের আবেদন</h1>
+            </div>
+            <div class="staple-box" style="position: relative; top: 0; right: 0;">
+                মূল জাতীয় পরিচয়পত্র এখানে সংযুক্ত করুন (স্ট্যাপল)
+            </div>
         </div>
 
         <div class="row">
-            <div class="col-8">
+            <div class="col-6">
                 <p class="mb-1">ক্রমিক নম্বর : <span class="dotted-line" style="min-width: 100px;">{{ bnValue($certificate->system_id) }}</span></p>
                 <p class="mb-1" style="font-size: 11px;">(অফিস কর্তৃক পূরণীয়)</p>
             </div>
-            <div class="col-4">
+            <div class="col-6 text-right">
                 <p class="mb-1">আবেদনের তারিখ : <span class="dotted-line" style="min-width: 120px;">{{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }}</span></p>
             </div>
         </div>
 
         <div class="section-num">১। জাতীয় পরিচয়পত্রধারীর -</div>
         <div class="pl-4">
-            (ক) নাম : <span class="dotted-line" style="min-width: 80%;">{{ $displayName }}</span><br>
-            (খ) জাতীয় পরিচিতি নম্বর (NID) : 
-            <div class="nid-digits">
-                @php 
-                    $nid = str_pad($displayNid, 17, ' ', STR_PAD_LEFT);
-                    $digits = str_split($nid);
-                @endphp
-                @foreach($digits as $digit)
-                    <span>{{ $digit != ' ' ? bnValue($digit) : '' }}</span>
-                @endforeach
+            <div class="d-flex align-items-end mb-2">
+                <span class="mr-2">(ক) নাম :</span>
+                <div class="dotted-line flex-grow-1">{{ $displayName }}</div>
+            </div>
+            <div class="d-flex align-items-center">
+                <span class="mr-2">(খ) জাতীয় পরিচিতি নম্বর (NID) :</span>
+                <div class="nid-digits">
+                    @php 
+                        $nid = str_pad($displayNid, 17, ' ', STR_PAD_LEFT);
+                        $digits = str_split($nid);
+                    @endphp
+                    @foreach($digits as $digit)
+                        <span>{{ $digit != ' ' ? bnValue($digit) : '' }}</span>
+                    @endforeach
+                </div>
             </div>
         </div>
 
         <div class="section-num">২। আঠারো বৎসরের কম বয়স্ক/আদালত কর্তৃক অপ্রকৃতিস্থ ঘোষিত জাতীয় পরিচয়পত্রধারীর ক্ষেত্রে, আইনানুগ অভিভাবকের -</div>
         <div class="pl-4">
-            (ক) নাম : <span class="dotted-line" style="min-width: 80%;">{{ $certificate->guardian_name }}</span><br>
-            (খ) জাতীয় পরিচিতি নম্বর (NID) : <span class="dotted-line" style="min-width: 60%;">{{ bnValue($certificate->guardian_nid) }}</span>
+            <div class="d-flex align-items-end mb-2">
+                <span class="mr-2">(ক) নাম :</span>
+                <div class="dotted-line flex-grow-1">{{ $certificate->guardian_name }}</div>
+            </div>
+            <div class="d-flex align-items-end">
+                <span class="mr-2">(খ) জাতীয় পরিচিতি নম্বর (NID) :</span>
+                <div class="dotted-line flex-grow-1">{{ bnValue($certificate->guardian_nid) }}</div>
+            </div>
         </div>
 
         <div class="section-num">৩। জাতীয় পরিচয়পত্র বা সংরক্ষিত তথ্য-উপাত্তে যে তথ্য সংশোধন করিতে হইবে (অপ্রয়োজনীয় অংশ কাটিয়া দিন):</div>

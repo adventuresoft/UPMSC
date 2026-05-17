@@ -634,10 +634,18 @@ class CounsilorController extends Controller
      */
     public function propertyStore(Request $request)
     {
+        $inputs = $request->all();
+        foreach (['cash_amount', 'house_price', 'flat_price', 'diamond_price', 'gold_price', 'silver_price'] as $field) {
+            if ($request->has($field) && is_string($request->$field)) {
+                $inputs[$field] = str_replace(',', '', $request->$field);
+            }
+        }
+        $request->merge($inputs);
+
         // try {
         $validate = Validator::make($request->all(), [
             'user_id' => 'nullable',
-            'cash_amount' => 'integer|nullable',
+            'cash_amount' => 'numeric|nullable',
             'tin_number' => 'nullable',
             'house' => 'nullable',
             'house_type' => 'nullable',

@@ -26,7 +26,7 @@
     
     $isInstituteSettings = $isPath(['institute*']) || in_array($_subMenu, ['InstituteCreate', 'InstituteType', 'InstituteCategory', 'InstituteList']);
     
-    $isPeopleInfo = $isPath(['people*', 'peopleapprovedlist*']) || in_array($_subMenu, ['Create', 'View', 'Show', 'approvedList']);
+    $isPeopleInfo = $isPath(['people*', 'peopleapprovedlist*', 'peoplesearch*']) || in_array($_subMenu, ['Create', 'View', 'Show', 'approvedList', 'search']);
     
     $isCertificate = $isPath(['citizen*', 'character*', 'death*', 'succession*', 'unmarried*', 'married*', 'remarried*', 'landless*', 'name*', 'income*', 'disability-certificate*', 'voter-area*', 'voter-list*', 'nid-correction*', 'childless*', 'orphan*', 'financial-instability*', 'age*', 'permanent-citizen*', 'residential*', 'guardian-income*']) || $_mainMenu == 'Certificate';
     
@@ -538,6 +538,13 @@
         <a href="{{route('peopleapprovedlist')}}" class="nav-link @if($subMenu == "approvedList") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Reg. People List</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('peoplesearch')}}" class="nav-link @if($subMenu == "search") active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Search People</p>
         </a>
       </li>
 

@@ -229,7 +229,7 @@ class User extends Authenticatable
         // If user has an institute_id, filter by that or geographical area
         if ($user->institute_id) {
             $institute = $user->institute;
-            return $query->where(function($q) use ($institute) {
+            return $query->where(function($q) use ($institute, $user) {
                 // Strict institute check
                 $q->where('institute_id', $institute->id);
                 
@@ -245,14 +245,62 @@ class User extends Authenticatable
                            });
                     });
                 }
+
+                // Operator/Creator bypass - always allow creators to see their own created users
+                $q->orWhere('created_by', $user->id);
             });
         }
 
-        // Handle high-level admins (ENO/DC) who filter by Thana or District
+        // Handle high-level admins (ENO/DC) or local/public reps (Councilor/Chairman) who filter by area
         if ($user->area) {
+            if (str_contains($user->area, 'Union:')) {
+                $unionId = str_replace('Union:', '', $user->area);
+                return $query->where(function($q) use ($unionId, $user) {
+                    $q->whereHas('institute', function($sq) use ($unionId) {
+                        $sq->where('union_id', $unionId);
+                    })->orWhere(function($sq) use ($unionId) {
+                        $sq->where(function($rsq) {
+                            $rsq->whereNull('role_id')->orWhereIn('role_id', [5]);
+                        })->whereHas('addressInfo', function($asq) use ($unionId) {
+                            $asq->where('permanent_union_id', $unionId);
+                        });
+                    })->orWhere('created_by', $user->id);
+                });
+            }
+
+            if (str_contains($user->area, 'Pourashava:')) {
+                $pourashavaId = str_replace('Pourashava:', '', $user->area);
+                return $query->where(function($q) use ($pourashavaId, $user) {
+                    $q->whereHas('institute', function($sq) use ($pourashavaId) {
+                        $sq->where('pourashava_id', $pourashavaId);
+                    })->orWhere(function($sq) use ($pourashavaId) {
+                        $sq->where(function($rsq) {
+                            $rsq->whereNull('role_id')->orWhereIn('role_id', [5]);
+                        })->whereHas('addressInfo', function($asq) use ($pourashavaId) {
+                            $asq->where('permanent_union_id', $pourashavaId);
+                        });
+                    })->orWhere('created_by', $user->id);
+                });
+            }
+
+            if (str_contains($user->area, 'City Corp:')) {
+                $cityCorpId = str_replace('City Corp:', '', $user->area);
+                return $query->where(function($q) use ($cityCorpId, $user) {
+                    $q->whereHas('institute', function($sq) use ($cityCorpId) {
+                        $sq->where('city_corporation_id', $cityCorpId);
+                    })->orWhere(function($sq) use ($cityCorpId) {
+                        $sq->where(function($rsq) {
+                            $rsq->whereNull('role_id')->orWhereIn('role_id', [5]);
+                        })->whereHas('addressInfo', function($asq) use ($cityCorpId) {
+                            $asq->where('permanent_union_id', $cityCorpId);
+                        });
+                    })->orWhere('created_by', $user->id);
+                });
+            }
+
             if (str_contains($user->area, 'Thana:')) {
                 $thanaId = str_replace('Thana:', '', $user->area);
-                return $query->where(function($q) use ($thanaId) {
+                return $query->where(function($q) use ($thanaId, $user) {
                     $q->whereHas('institute.union', function($sq) use ($thanaId) {
                         $sq->where('thana_id', $thanaId);
                     })->orWhere(function($sq) use ($thanaId) {
@@ -261,13 +309,13 @@ class User extends Authenticatable
                         })->whereHas('addressInfo', function($asq) use ($thanaId) {
                             $asq->where('permanent_thana_id', $thanaId);
                         });
-                    });
+                    })->orWhere('created_by', $user->id);
                 });
             }
             
             if (str_contains($user->area, 'District:')) {
                 $districtId = str_replace('District:', '', $user->area);
-                return $query->where(function($q) use ($districtId) {
+                return $query->where(function($q) use ($districtId, $user) {
                     $q->whereHas('institute.union.thana', function($sq) use ($districtId) {
                         $sq->where('district_id', $districtId);
                     })->orWhere(function($sq) use ($districtId) {
@@ -276,12 +324,14 @@ class User extends Authenticatable
                         })->whereHas('addressInfo', function($asq) use ($districtId) {
                             $asq->where('permanent_district_id', $districtId);
                         });
-                    });
+                    })->orWhere('created_by', $user->id);
                 });
             }
         }
 
-        // If no filtering criteria found, but user is not superadmin, restrict them to themselves at least
-        return $query->where('id', $user->id);
+        // If no filtering criteria found, restrict to themselves and users they created
+        return $query->where(function($q) use ($user) {
+            $q->where('id', $user->id)->orWhere('created_by', $user->id);
+        });
     }
 }

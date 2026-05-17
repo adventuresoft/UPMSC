@@ -128,7 +128,7 @@
                         </div>
 
                         <!-- TABLE -->
-                        <table id="nidTable" class="table table-bordered table-hover">
+                        <table id="nidTable" class="table table-bordered table-hover nowrap" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>SL</th>
@@ -184,12 +184,17 @@
                                     <td class="text-center">
                                         {{ date('d-m-Y', strtotime($certificate->created_at)) }}
                                     </td>
-                                    <td class="text-center">
-                                        <div class="d-flex flex-column align-items-center" style="gap: 5px;">
-                                            <a target="_blank" href="{{ route('nid-correction.show', $certificate->id) }}" class="btn btn-primary btn-sm">
+                                    <td class="text-center" style="white-space: nowrap;">
+                                        <div class="d-flex align-items-center justify-content-center" style="gap: 5px;">
+                                            @if (edit_permission('nid_correction_certificate'))
+                                            <a href="{{ route('nid-correction.edit', $certificate->id) }}" class="btn btn-warning btn-sm" title="Edit">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            @endif
+                                            <a target="_blank" href="{{ route('nid-correction.show', $certificate->id) }}" class="btn btn-primary btn-sm" title="English Certificate">
                                                 <i class="far fa-file-pdf"></i> EN
                                             </a>
-                                            <a target="_blank" href="{{ route('nid-correction.bn_certificate', $certificate->id) }}" class="btn btn-info btn-sm">
+                                            <a target="_blank" href="{{ route('nid-correction.bn_certificate', $certificate->id) }}" class="btn btn-info btn-sm" title="Bengali Certificate">
                                                 <i class="far fa-file-pdf"></i> BN
                                             </a>
                                         </div>

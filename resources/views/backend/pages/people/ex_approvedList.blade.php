@@ -206,7 +206,12 @@
                                         </td>
 
                                         <td>
-                                           {{ optional($user->professionalInfos)->pluck('designation')->implode(', ') }}
+                                            {{ optional($user->professionalInfos)->map(function($info) {
+                                                return collect([
+                                                    $info->subcategory?->category?->type?->profession?->en_name ?? '',
+                                                    $info->designation ?? ''
+                                                ])->filter()->implode(' - ');
+                                            })->filter()->implode(', ') }}
                                         </td>
 
                                         <td>
@@ -216,15 +221,15 @@
                                             @endphp
                                             {{ $instituteFind['institute']->name ?? '' }} {{ $instituteFind['institute_type'] ?? '' }} -->
                                           <strong>Present Address:</strong>  {{ collect([
-    $user->addressInfo->presentDistrict->name ?? '',
-    $user->addressInfo->presentThana->name ?? '',
-    $user->addressInfo->presentUnion->name ?? '',
-    $user->addressInfo->presentPostoffice->name ?? '',
-    $user->addressInfo->presentVillage->en_name ?? '',
-    $user->addressInfo->presentWard->en_ward_no ?? '',
-    $user->addressInfo->present_area ?? '',
-    $user->addressInfo->presentRoad->name ?? '',
-    $user->addressInfo->presentHouse->house ?? ''
+    $user->addressInfo?->presentDistrict?->name ?? '',
+    $user->addressInfo?->presentThana?->name ?? '',
+    $user->addressInfo?->presentUnion?->name ?? '',
+    $user->addressInfo?->presentPostoffice?->name ?? '',
+    $user->addressInfo?->presentVillage?->en_name ?? '',
+    $user->addressInfo?->presentWard?->en_ward_no ?? '',
+    $user->addressInfo?->present_area ?? '',
+    $user->addressInfo?->presentRoad?->name ?? $user->addressInfo?->present_road ?? '',
+    $user->addressInfo?->presentHouse?->house ?? $user->addressInfo?->present_house ?? ''
 ])->filter()->implode(', ') }} <!--
 
 <br/>

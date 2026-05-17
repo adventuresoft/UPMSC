@@ -49,7 +49,7 @@ class MarriedCertificateController extends Controller
     {
         $data['users'] = User::with('people')
         ->where('status', true)
-        ->where('role_id', 5)
+        ->whereNotIn('role_id', [1, 2, 3, 4])
         ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
         ->applyMultitenancy()
         ->get();
@@ -116,14 +116,14 @@ class MarriedCertificateController extends Controller
             if ($request->filled('spouse_user_id')) {
                 $spouseUser = User::with('people')
                     ->where('id', $request->spouse_user_id)
-                    ->where('role_id', 5)
+                    ->whereNotIn('role_id', [1, 2, 3, 4])
                     ->applyMultitenancy()
                     ->first();
             }
 
             if (!$spouseUser && $spouseIdentifier !== '') {
                 $spouseUserQuery = User::with('people')
-                    ->where('role_id', 5)
+                    ->whereNotIn('role_id', [1, 2, 3, 4])
                     ->applyMultitenancy()
                     ->where(function ($query) use ($spouseIdentifier) {
                         $query->where('system_id', $spouseIdentifier)

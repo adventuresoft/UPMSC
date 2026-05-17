@@ -300,6 +300,10 @@
                                 <div class="col-md-2">
                                     <input type="text" id="search_global" class="form-control form-control-sm" placeholder="Global search...">
                                 </div>
+                                <div class="col-md-2">
+                                    <button type="button" id="resetFilter" class="btn btn-sm btn-outline-danger w-100" style="height: 38px; border-radius: 8px;">
+                                        <i class="fas fa-undo mr-1"></i> Reset
+                                    </button>
                             </div>
                         </div>
 
@@ -325,7 +329,42 @@
                             <tbody>
                                 @if ($users && count($users) > 0)
                                     @foreach ($users as $key => $user)
-                                    <tr>
+                                    @php
+                                        $age = 0;
+                                        if (!empty($user->people?->date_of_birth)) {
+                                            $age = \Carbon\Carbon::parse($user->people->date_of_birth)->age;
+                                        }
+                                        $professions_list = [];
+                                        foreach ($user->professionalInfos ?? [] as $info) {
+                                            if ($info->subcategory?->category?->type?->profession?->en_name) {
+                                                $professions_list[] = $info->subcategory->category->type->profession->en_name;
+                                            }
+                                            if ($info->subcategory?->category?->type?->en_name) {
+                                                $professions_list[] = $info->subcategory->category->type->en_name;
+                                            }
+                                            if ($info->subcategory?->category?->en_name) {
+                                                $professions_list[] = $info->subcategory->category->en_name;
+                                            }
+                                            if ($info->subcategory?->en_name) {
+                                                $professions_list[] = $info->subcategory->en_name;
+                                            }
+                                            if ($info->designation) {
+                                                $professions_list[] = $info->designation;
+                                            }
+                                            if ($info->organization) {
+                                                $professions_list[] = $info->organization;
+                                            }
+                                        }
+                                        $professions_list = implode(',', array_unique($professions_list));
+                                        $isFinancial = $user->financialInfos && count($user->financialInfos) > 0 ? 'Yes' : 'No';
+                                        $isDisability = $user->disabilityInfo && $user->disabilityInfo->is_disability ? 'Yes' : 'No';
+                                        $isFreedomFighter = $user->freedomFighterInfo && $user->freedomFighterInfo->is_freedom_fighter ? 'Yes' : 'No';
+                                    @endphp
+                                    <tr data-profession="{{ strtolower($professions_list) }}" 
+                                        data-age="{{ $age }}" 
+                                        data-financial="{{ $isFinancial }}" 
+                                        data-disability="{{ $isDisability }}" 
+                                        data-freedom-fighter="{{ $isFreedomFighter }}">
                                         <td>{{ ++$key }}</td>
                                          
 
@@ -363,21 +402,54 @@
                                         </td>
 
                                         <td>
-                                            @foreach(optional($user->professionalInfos) as $info)
-                                                <span class="badge-profession">{{ $info->designation }}</span>
-                                            @endforeach
-                                        </td>
+                                             @foreach($user->professionalInfos ?? [] as $info)
+                                                 @php
+                                                     $profName = $info->subcategory?->category?->type?->profession?->en_name;
+                                                     $typeName = $info->subcategory?->category?->type?->en_name;
+                                                     $categoryName = $info->subcategory?->category?->en_name;
+                                                     $subcategoryName = $info->subcategory?->en_name;
+                                                     $desigName = $info->designation;
+                                                     $orgName = $info->organization;
+                                                 @endphp
+                                                 <div class="profession-item">
+                                                     @if($profName)
+                                                         <span class="badge badge-info text-white" style="font-size: 12px; padding: 4px 8px; font-weight: 600; border-radius: 4px; display: inline-block;">
+                                                             {{ $profName }}
+                                                         </span>
+                                                     @endif
+                                                     
+                                                     @if($desigName || $orgName)
+                                                         <div style="margin-top: 4px; font-size: 12px; font-weight: 600; color: #2c3e50;">
+                                                             {{ $desigName ?? '' }}
+                                                             @if($desigName && $orgName) <span style="font-weight: 400; color: #7f8c8d;">at</span> @endif
+                                                             <span style="color: #2980b9;">{{ $orgName ?? '' }}</span>
+                                                         </div>
+                                                     @endif
+
+                                                     @php
+                                                         $hierarchy = collect([$typeName, $categoryName, $subcategoryName])->filter()->unique()->implode(' ➔ ');
+                                                     @endphp
+                                                     @if($hierarchy)
+                                                         <div style="margin-top: 3px; font-size: 11px; color: #7f8c8d; font-style: italic; line-height: 1.2;">
+                                                             {{ $hierarchy }}
+                                                         </div>
+                                                     @endif
+                                                 </div>
+                                                 @if(!$loop->last)
+                                                     <hr style="margin: 6px 0; border: 0; border-top: 1px dashed #dee2e6;">
+                                                 @endif
+                                             @endforeach
+                                         </td>
 
                                         <td>
-                                           
-                                            {{ $user->addressInfo?->presentWard?->en_ward_no ?? ''}} 
+                                           {{ $user->addressInfo?->presentWard?->en_ward_no ?? $user->addressInfo?->permanentWard?->en_ward_no ?? ''}} 
                                         </td>
                                         
 
                                         <td>
                                             {{ collect([
-    $user->addressInfo?->presentDistrict?->name ?? '',
-    $user->addressInfo?->presentThana?->name ?? ''
+    $user->addressInfo?->presentDistrict?->name ?? $user->addressInfo?->permanentDistrict?->name ?? '',
+    $user->addressInfo?->presentThana?->name ?? $user->addressInfo?->permanentThana?->name ?? ''
 ])->filter()->implode(', ') }} 
                                         </td>
 
@@ -391,8 +463,8 @@
     $user->addressInfo?->presentPostoffice?->name ?? '',
     $user->addressInfo?->presentVillage?->en_name ?? '',
     $user->addressInfo?->present_area ?? '',
-    $user->addressInfo?->presentRoad?->name ?? '',
-    $user->addressInfo?->presentHouse?->house ?? ''
+    $user->addressInfo?->presentRoad?->name ?? $user->addressInfo?->present_road ?? '',
+    $user->addressInfo?->presentHouse?->house ?? $user->addressInfo?->present_house ?? ''
 ])->filter()->implode(', ') }} 
 
 <br/>
@@ -404,8 +476,8 @@ Permanent:</strong>
     $user->addressInfo?->permanentPostoffice?->name ?? '',
     $user->addressInfo?->permanentVillage?->en_name ?? '',
     $user->addressInfo?->permanent_area ?? '',
-    $user->addressInfo?->permanentRoad?->name ?? '',
-    $user->addressInfo?->permanentHouse?->house ?? ''
+    $user->addressInfo?->permanentRoad?->name ?? $user->addressInfo?->permanent_road ?? '',
+    $user->addressInfo?->permanentHouse?->house ?? $user->addressInfo?->permanent_house ?? ''
 ])->filter()->implode(', ') }}
                                         </td>
 

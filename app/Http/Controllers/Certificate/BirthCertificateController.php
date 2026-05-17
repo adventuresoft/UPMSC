@@ -45,7 +45,7 @@ class BirthCertificateController extends Controller
     {
         $data['users'] = User::with('people')
             ->where('status', true)
-            ->where('role_id', 5)
+            ->whereNotIn('role_id', [1, 2, 3, 4])
             ->applyMultitenancy()
             ->whereHas('people', function ($q) {
                 $q->whereNotNull('approved_id');
@@ -143,7 +143,7 @@ class BirthCertificateController extends Controller
         $data['certificate'] = BirthCertificate::applyMultitenancy()->findOrFail($id);
         $data['users'] = User::with('people')
             ->where('status', true)
-            ->where('role_id', 5)
+            ->whereNotIn('role_id', [1, 2, 3, 4])
             ->applyMultitenancy()
             ->whereHas('people', function ($q) {
                 $q->whereNotNull('approved_id');
