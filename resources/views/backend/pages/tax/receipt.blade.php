@@ -8,7 +8,8 @@
     }
 
     html,
-    body {
+    body,
+    .content-wrapper {
         margin: 0;
         padding: 0;
         font-family: 'Nikosh', 'Noto Sans Bengali', Arial, sans-serif;
@@ -16,7 +17,7 @@
         line-height: 1.4;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        background: #f4f6f9;
+        background: white !important;
     }
 
     .trade-license-page {
@@ -205,11 +206,11 @@
 
         .trade-license-page {
             box-shadow: none;
-            border: none;
+            border: 4px solid #556b2f !important;
         }
 
         .inner-border {
-            border: none;
+            border: 2px solid #556b2f !important;
         }
 
         .no-print,
@@ -230,17 +231,24 @@
             margin-bottom: 0 !important;
         }
 
-        .fees-grand-total,
-        .fees-total,
         .fees-table-new th {
-            background-color: white !important;
+            background-color: #dcdcdc !important;
             color: black !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        .fees-total {
+            background-color: #f8f8f8 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
         .fees-grand-total {
-            background-color: white !important;
+            background-color: #dcdcdc !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
 
         .fees-table-new th,

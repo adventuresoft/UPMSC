@@ -391,12 +391,17 @@ class VehicleController extends Controller
             ->where('fee_for', 'new')
             ->first();
 
+        $data['isPaid'] = $vehicle->payment_status === 'paid';
+        $data['canTakePayment'] = $vehicle->payment_status !== 'paid';
+
         return view('backend.pages.vehicle.invoice_show', $data);
     }
 
     public function licenseShow($id)
     {
-        $vehicle = Vehicle::where('status', 1)->findOrFail($id);
+        $vehicle = Vehicle::where(function($query) {
+            $query->where('status', 1)->orWhere('payment_status', 'paid');
+        })->findOrFail($id);
 
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
@@ -409,6 +414,11 @@ class VehicleController extends Controller
         $data['vehicle'] = $vehicle;
         $data['ownerUser'] = $ownerUser;
         $data['ownerOrganization'] = $ownerOrganization;
+
+        $data['fee'] = \App\Models\VehicleFee::where('vehicle_type', $vehicle->vehicle_type)
+            ->where('vehicle_category', $vehicle->vehicle_category)
+            ->where('fee_for', 'new')
+            ->first();
 
         return view('backend.pages.vehicle.license_show', $data);
     }
@@ -439,7 +449,9 @@ class VehicleController extends Controller
 
     public function licensePrint($id)
     {
-        $vehicle = Vehicle::where('status', 1)->findOrFail($id);
+        $vehicle = Vehicle::where(function($query) {
+            $query->where('status', 1)->orWhere('payment_status', 'paid');
+        })->findOrFail($id);
 
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
@@ -453,7 +465,109 @@ class VehicleController extends Controller
         $data['ownerUser'] = $ownerUser;
         $data['ownerOrganization'] = $ownerOrganization;
 
+        $data['fee'] = \App\Models\VehicleFee::where('vehicle_type', $vehicle->vehicle_type)
+            ->where('vehicle_category', $vehicle->vehicle_category)
+            ->where('fee_for', 'new')
+            ->first();
+
         return view('backend.pages.vehicle.printlicense_show', $data);
+    }
+
+    public function storeManualPayment(Request $request, $id)
+    {
+        $request->validate([
+            'payment_details' => 'required|string|max:255',
+            'transaction_id' => 'required|string|max:255',
+            'note' => 'nullable|string|max:1000',
+        ]);
+
+        $vehicle = Vehicle::findOrFail($id);
+
+        \DB::beginTransaction();
+        try {
+            $vehicle->payment_status = 'paid';
+            $vehicle->payment_method = 'manual - ' . $request->payment_details;
+            $vehicle->transaction_id = $request->transaction_id;
+            $vehicle->paid_at = now();
+            $vehicle->status = 1; 
+            $vehicle->save();
+
+            \DB::commit();
+
+            return redirect()
+                ->route('vehicle.license.show', $vehicle->id)
+                ->with('success', 'Manual payment saved successfully.');
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            \Log::error('Vehicle Manual Payment Failed: ' . $e->getMessage());
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Something went wrong: ' . $e->getMessage());
+        }
+    }
+
+    public function onlinePayment($id)
+    {
+        $vehicle = Vehicle::findOrFail($id);
+        
+        $fee = \App\Models\VehicleFee::where('vehicle_type', $vehicle->vehicle_type)
+            ->where('vehicle_category', $vehicle->vehicle_category)
+            ->where('fee_for', 'new')
+            ->first();
+            
+        $totalfee = $fee ? $fee->total_fee : 0;
+
+        $invoice = 'VE-' . $vehicle->id . '-' . time();
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Host' => 'api.paystation.com.bd'
+            ])->asForm()->withoutVerifying()->timeout(10)->post('https://103.134.89.201/initiate-payment', [
+                'invoice_number' => $invoice,
+                'currency' => 'BDT',
+                'payment_amount' => $totalfee ?? 1,
+                'reference' => 'Vehicle License Payment #' . $vehicle->id,
+                'cust_name' => $vehicle->owner_name ?? 'Customer',
+                'cust_phone' => $vehicle->owner_phone ?? '01700000000',
+                'cust_email' => 'test@test.com',
+                'cust_address' => $vehicle->institutional_address ?? 'Dhaka',
+                'callback_url' => route('vehicle.payment.success', $vehicle->id),
+                'checkout_items' => json_encode([
+                    [
+                        "name" => "Vehicle License Fee",
+                        "qty" => 1,
+                        "price" => $totalfee ?? 1
+                    ]
+                ]),
+                'merchantId' => "2573-1775021038",
+                'password' => "'poyt32@ft4e6hgc"
+            ]);
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Payment service unreachable: ' . $e->getMessage());
+        }
+
+        $result = $response->json();
+
+        if (isset($result['status']) && $result['status'] === 'success') {
+            return redirect()->away($result['payment_url']);
+        }
+
+        return back()->with('error', $result['message'] ?? 'Payment initiation failed');
+    }
+
+    public function paymentSuccess($id)
+    {
+        $vehicle = Vehicle::findOrFail($id);
+
+        $vehicle->payment_status = 'paid';
+        $vehicle->status = 1; 
+        $vehicle->paid_at = now();
+        $vehicle->save();
+
+        return redirect()->route('vehicle.license.show', $vehicle->id)->with('success', 'Payment completed successfully');
     }
 
     public function getFees($id)
