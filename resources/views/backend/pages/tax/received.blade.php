@@ -151,8 +151,8 @@
                                                         <a {{$tax->status ? 'disabled' : ''}} href="{{ $tax->status ? '#' : route('taxes.confirmed', $tax->id) }}"
                                                             title="{{$tax->status ? 'Received' : 'Receive'}}" class="btn btn-sm btn-info"><i
                                                                 class="fa fa-hand-holding-usd"></i></a>
-                                                        <a href="{{ route('taxes.receipt', $tax->id) }}" title="Print"
-                                                            class="btn btn-sm btn-primary"><i class="fa fa-print"></i></a>
+                                                        <button type="button" data-url="{{ route('taxes.receipt', $tax->id) }}" title="Print"
+                                                            class="btn btn-sm btn-primary print-tax-btn"><i class="fa fa-print"></i></button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -182,6 +182,28 @@
                 "autoWidth": false,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#tax-table .col-md-6:eq(0)');;
+        });
+
+        $(document).on('click', '.print-tax-btn', function(e) {
+            e.preventDefault();
+            var url = $(this).data('url');
+            var iframe = document.createElement('iframe');
+            iframe.style.position = 'fixed';
+            iframe.style.right = '0';
+            iframe.style.bottom = '0';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = '0';
+            iframe.src = url;
+            document.body.appendChild(iframe);
+            
+            iframe.onload = function() {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+                setTimeout(function() {
+                    document.body.removeChild(iframe);
+                }, 3000);
+            };
         });
 
         $(document).on('change', '.changeTaxStatus', function(e) {
