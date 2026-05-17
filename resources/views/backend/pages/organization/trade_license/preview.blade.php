@@ -56,14 +56,14 @@
 
     .union-title {
         text-align: center;
-        font-size: 22px;
+        font-size: 25px;
         font-weight: bold;
         color: #006600;
     }
 
     .union-subtitle {
         text-align: center;
-        font-size: 20px;
+        font-size: 24px;
         color: #003366;
     }
 
@@ -122,6 +122,9 @@
     .info-label {
         width: 220px;
         font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        padding-right: 15px;
     }
 
     .info-value {
@@ -293,16 +296,18 @@
             <div style="margin-top: 20px;">
                
                 <img src="{{ $license->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;"><br><br>
-                নম্বর: <strong>{{ bnValue($license->system_id) }}</strong><br>
+                
+                <u style="font-size: 15px; font-weight:;">ট্রেড লাইসেন্স ইস্যুর তারিখ</u><br>
                 তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}
             </div>
 
             <div class="doc-title-block">
                 <div class="doc-title">ট্রেড লাইসেন্স</div>
                 <div class="validity-info">
-                    নবায়ন/নতুন<br>
+                    নতুন<br>
                     অর্থ বছর: {{ $license->taxYear->name }} <br>
-                    এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত
+                    এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত <br><br><br>
+                    নম্বর: <strong>{{ bnValue($license->system_id) }}</strong><br>
                 </div>
             </div>
 
@@ -320,12 +325,12 @@
         <div class="section-header">ব্যবসা প্রতিষ্ঠানের তথ্য</div>
         
         <div class="info-row">
-            <span class="info-label"><span style="display:inline-block; width:30px;">১।</span> (ক) প্রতিষ্ঠানের নাম :</span>
-            <span class="info-value">{{ $license->organization->bn_name ?? $license->organization->name }}</span>
+            <span class="info-label"><span><span style="display:inline-block; width:30px;">১।</span> (ক) প্রতিষ্ঠানের নাম</span> <span>:</span></span>
+            <span class="info-value" style="font-weight: bold; font-size: 13px;">{{ $license->organization->bn_name ?? $license->organization->name }}</span>
         </div>
         <div class="info-row">
-            <span class="info-label"><span style="display:inline-block; width:30px;"></span> (খ) প্রতিষ্ঠানের নাম (ইংরেজি) :</span>
-            <span class="info-value">{{ $license->organization->en_name ?? $license->organization->name }}</span>
+            <span class="info-label"><span><span style="display:inline-block; width:30px;"></span> (খ) প্রতিষ্ঠানের নাম (ইংরেজি)</span> <span>:</span></span>
+            <span class="info-value" style="font-weight: bold; font-size: 13px;">{{ $license->organization->en_name ?? $license->organization->name }}</span>
         </div>
 
         @php
@@ -339,7 +344,7 @@
 
         @foreach($otherBusinessInfo as $label => $value)
         <div class="info-row">
-            <span class="info-label">{{ $label }} :</span>
+            <span class="info-label"><span>{{ $label }}</span> <span>:</span></span>
             <span class="info-value">{{ $value }}</span>
         </div>
         @endforeach
@@ -348,11 +353,11 @@
         <div class="section-header">মালিকের তথ্য</div>
         
         <div class="info-row">
-            <span class="info-label"><span style="display:inline-block; width:30px;">১।</span> (ক) মালিকের নাম :</span>
+            <span class="info-label"><span><span style="display:inline-block; width:30px;">১।</span> (ক) মালিকের নাম</span> <span>:</span></span>
             <span class="info-value">{{ $owner?->people?->bn_name }}</span>
         </div>
         <div class="info-row">
-            <span class="info-label"><span style="display:inline-block; width:30px;"></span> (খ) মালিকের নাম (ইংরেজি) :</span>
+            <span class="info-label"><span><span style="display:inline-block; width:30px;"></span> (খ) মালিকের নাম (ইংরেজি)</span> <span>:</span></span>
             <span class="info-value">{{ $owner?->name ?? '--' }}</span>
         </div>
 
@@ -368,7 +373,7 @@
 
         @foreach($otherOwnerInfo as $label => $value)
         <div class="info-row">
-            <span class="info-label">{{ $label }} :</span>
+            <span class="info-label"><span>{{ $label }}</span> <span>:</span></span>
             <span class="info-value">{{ $value }}</span>
         </div>
         @endforeach
