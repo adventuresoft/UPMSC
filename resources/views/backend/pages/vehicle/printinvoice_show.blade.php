@@ -19,7 +19,7 @@
             line-height: 1.4;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
-            background: #fff;
+            background: #ffffff !important;
         }
 
         .trade-license-page {
@@ -181,6 +181,9 @@
         }
 
         @media print {
+            html, body {
+                background: #ffffff !important;
+            }
             .no-print {
                 display: none !important;
             }
@@ -188,22 +191,32 @@
                 background-color: transparent !important;
                 color: black !important;
             }
-            .fees-grand-total, .fees-total, .fees-table-new th {
-                background-color: #f0f0f0 !important;
+            .fees-table-new th {
+                background-color: #dcdcdc !important;
                 color: black !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .fees-total {
+                background-color: #f8f8f8 !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .fees-grand-total {
-                background-color: #e8e8e8 !important;
+                background-color: #dcdcdc !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .fees-table-new th, .fees-table-new td {
                 border: 1px solid #333 !important;
             }
             .trade-license-page {
-                border: none;
+                border: 4px solid #556b2f !important;
             }
             .inner-border {
-                border: none;
+                border: 2px solid #556b2f !important;
             }
         }
         .signature-area {
