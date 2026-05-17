@@ -140,14 +140,18 @@
         text-align: center;
     }
 
+    .fees-table-new td:nth-child(1) {
+        width: 15%;
+    }
+
     .fees-table-new td:nth-child(2) {
         text-align: left;
-        width: 55%;
+        width: 65%;
     }
 
     .fees-table-new td:nth-child(3) {
         text-align: right;
-        width: 30%;
+        width: 20%;
     }
 
     .fees-total {
