@@ -175,6 +175,12 @@
                                             <i class="fa fa-file-pdf"></i> BN
                                         </a>
 
+                                        @if(edit_permission())
+                                        <a href="{{ route('succession.edit', $certificate->id) }}" class="btn btn-warning btn-sm">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        @endif
+
                                     </td>
 
                                 </tr>
