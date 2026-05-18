@@ -42,6 +42,7 @@
                                         @else
                                             <select name="area" id="area" class="form-control select2" required>
                                                 <option value="">-- Select Area --</option>
+                                                <option value="All">All System Areas (Full Access)</option>
                                                 <optgroup label="Districts (for DC)">
                                                     @foreach($districts as $d)
                                                         <option value="District:{{ $d->id }}">{{ $d->name }}</option>

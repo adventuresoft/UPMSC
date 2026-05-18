@@ -51,8 +51,8 @@ class AreaMultitenancyScope implements Scope
 
         $user = Auth::user();
 
-        // Superadmins see everything — no filter
-        if (in_array($user->role_id, [1, 4])) {
+        // Superadmins or users with "All" area assigned see everything — no filter
+        if (in_array($user->role_id, [1, 4]) || $user->area === 'All') {
             return;
         }
 
