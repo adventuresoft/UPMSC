@@ -14,7 +14,10 @@ class LandController extends Controller
      */
     public function index()
     {
-        return view('backend.pages.land.index');
+        $lands = Land::with(['owner.people'])->latest()->get();
+        $districts = \App\Models\District::pluck('bn_name', 'id');
+        $thanas = \App\Models\Thana::pluck('bn_name', 'id');
+        return view('backend.pages.land.index', compact('lands', 'districts', 'thanas'));
     }
 
     /**
@@ -24,7 +27,8 @@ class LandController extends Controller
      */
     public function create()
     {
-        return view('backend.pages.land.create');
+        $districts = \App\Models\District::orderBy('bn_name')->get();
+        return view('backend.pages.land.create', compact('districts'));
     }
 
     /**
@@ -35,7 +39,31 @@ class LandController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'owner_id' => 'required',
+            'records' => 'required|array',
+        ]);
+
+        try {
+            $land = new Land();
+            $land->owner_id = $request->owner_id;
+            $land->records_data = $request->records;
+            $land->status = 'Pending';
+            $land->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Land records saved successfully!',
+                'redirect_url' => route('land.index')
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong. Please try again.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -46,7 +74,10 @@ class LandController extends Controller
      */
     public function show($id)
     {
-        return view('backend.pages.land.show');
+        $land = Land::with('owner.people')->findOrFail($id);
+        $districts = \App\Models\District::pluck('bn_name', 'id');
+        $thanas = \App\Models\Thana::pluck('bn_name', 'id');
+        return view('backend.pages.land.show', compact('land', 'districts', 'thanas'));
     }
 
     /**
@@ -57,7 +88,9 @@ class LandController extends Controller
      */
     public function edit($id)
     {
-        return view('backend.pages.land.edit');
+        $land = Land::with('owner.people')->findOrFail($id);
+        $districts = \App\Models\District::orderBy('bn_name')->get();
+        return view('backend.pages.land.edit', compact('land', 'districts'));
     }
 
     /**
@@ -69,7 +102,29 @@ class LandController extends Controller
      */
     public function update(Request $request, Land $land)
     {
-        //
+        $request->validate([
+            'owner_id' => 'required',
+            'records' => 'required|array',
+        ]);
+
+        try {
+            $land->owner_id = $request->owner_id;
+            $land->records_data = $request->records;
+            $land->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Land records updated successfully!',
+                'redirect_url' => route('land.index')
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong. Please try again.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -80,6 +135,7 @@ class LandController extends Controller
      */
     public function destroy(Land $land)
     {
-        //
+        $land->delete();
+        return redirect()->route('land.index')->with('success', 'Land record deleted successfully.');
     }
 }
