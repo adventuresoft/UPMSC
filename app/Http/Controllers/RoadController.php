@@ -57,9 +57,7 @@ class RoadController extends Controller
                 'road_owner' => 'nullable',
                 'start_point' => 'nullable',
                 'end_point' => 'nullable',
-                'make_year' => 'nullable',
-                'make_contactor' => 'nullable',
-                'make_value' => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
+
                 'current_condition' => 'nullable',
             ]);
             if ($validate->fails()) {
@@ -79,9 +77,7 @@ class RoadController extends Controller
                 $road->road_owner_id = $request->road_owner;
                 $road->start_point = $request->start_point;
                 $road->end_point = $request->end_point;
-                $road->make_year = $request->make_year;
-                $road->make_contactor = $request->make_contactor;
-                $road->make_value = $request->make_value;
+
                 $road->current_condition = $request->current_condition;
 
                 if ($road->save()) {
@@ -110,7 +106,8 @@ class RoadController extends Controller
      */
     public function show($id)
     {
-        return view('backend.pages.road.show');
+        $data['road'] = Road::find($id);
+        return view('backend.pages.road.show', $data);
     }
 
     /**
@@ -148,9 +145,7 @@ class RoadController extends Controller
                 'road_owner' => 'nullable',
                 'start_point' => 'nullable',
                 'end_point' => 'nullable',
-                'make_year' => 'nullable',
-                'make_contactor' => 'nullable',
-                'make_value' => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
+
                 'current_condition' => 'nullable',
             ]);
 
@@ -171,9 +166,7 @@ class RoadController extends Controller
                 $road->road_owner_id = $request->road_owner;
                 $road->start_point = $request->start_point;
                 $road->end_point = $request->end_point;
-                $road->make_year = $request->make_year;
-                $road->make_contactor = $request->make_contactor;
-                $road->make_value = $request->make_value;
+
                 $road->current_condition = $request->current_condition;
 
                 if ($road->save()) {

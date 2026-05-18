@@ -54,18 +54,33 @@
                                     <th>Action</th>
                                 </tr>
                               </thead>
-                              <tbody>
-
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-
+                                @foreach($lands as $key => $land)
+                                    @php
+                                        $records = $land->records_data ?? [];
+                                        $brs = $records['brs'] ?? ($records['rs'] ?? ($records['sa'] ?? ($records['cs'] ?? [])));
+                                        $districtName = $districts[$brs['district'] ?? ''] ?? 'N/A';
+                                        $thanaName = $thanas[$brs['upazila'] ?? ''] ?? 'N/A';
+                                        $ownerUser = $land->owner_user;
+                                        $ownerName = $ownerUser->name ?? ($ownerUser->people->bn_name ?? ($brs['owner_name'] ?? 'N/A'));
+                                    @endphp
+                                    <tr>
+                                        <td class="text-center">{{ $key + 1 }}</td>
+                                        <td class="text-center">{{ $brs['dag_no'] ?? 'N/A' }}</td>
+                                        <td class="text-center">{{ $brs['khatian_no'] ?? 'N/A' }}</td>
+                                        <td class="text-center">{{ $brs['mouza'] ?? 'N/A' }}, {{ $thanaName }}</td>
+                                        <td class="text-center">{{ $districtName }}</td>
+                                        <td class="text-center">{{ $land->owner_id }} - {{ $ownerName }}</td>
+                                        <td class="text-center">
+                                            <a href="{{ route('land.show', $land->id) }}" class="btn btn-sm btn-info" title="View"><i class="fas fa-eye"></i></a>
+                                            <a href="{{ route('land.edit', $land->id) }}" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-edit"></i></a>
+                                            <form action="{{ route('land.destroy', $land->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
                               </tbody>
 
                             </table>

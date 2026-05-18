@@ -68,13 +68,10 @@
                                                 <td>{{ $road->current_condition ?? '--' }}</td>
                                                 <td style="width: 10%">
                                                     <div class="table-action">
+                                                        <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{ route('road.show', $road->id) }}"><i class="fa fa-eye"></i></a>
                                                         @if(edit_permission())
-<a class="btn btn-sm btn-primary" title="Edit"
-                                                            data-toggle="tooltip"
-                                                            href="{{ route('road.edit', $road->id) }}"><i
-                                                                class="fa fa-edit"></i></a>
-@endif
-
+                                                        <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{ route('road.edit', $road->id) }}"><i class="fa fa-edit"></i></a>
+                                                        @endif
                                                         @if(delete_permission('roads'))
                                                         <form class="deleteRoad" method="post">
                                                             @csrf
