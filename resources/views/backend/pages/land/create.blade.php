@@ -205,7 +205,7 @@
                 <div class="col-md-12">
                     <div class="card premium-card">
                         <div class="premium-header">
-                            <h3><i class="fas fa-layer-group mr-2"></i> নতুন জমির রেকর্ড তথ্য ফরম</h3>
+                            <h3><i class="fas fa-layer-group mr-2"></i>জমির রেকর্ড তথ্য ফরম</h3>
                         </div>
                         <form class="form-horizontal" id="landCreateForm" method="POST" action="{{ route('land.store') }}" enctype="multipart/form-data">
                             @csrf
