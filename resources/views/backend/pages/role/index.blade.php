@@ -100,6 +100,65 @@
                                             </td>
                                         </tr>
                                         @endforeach
+
+                                        @if(isset($basicSettingsGroups) && count($basicSettingsGroups))
+                                        <tr class="border-top border-bottom" style="background: #eef2f6;">
+                                            <td colspan="6" class="pl-4 py-3 font-weight-bold text-primary text-uppercase small" style="letter-spacing: 0.5px;">
+                                                <i class="fas fa-sliders-h mr-2"></i> Basic Settings & Sub-menus
+                                            </td>
+                                        </tr>
+
+                                        @foreach($basicSettingsGroups as $groupName => $groupPermissions)
+                                        <tr class="border-top" style="background: #f8fafc;">
+                                            <td class="pl-5 py-3 font-weight-bold text-secondary">
+                                                <i class="fas fa-chevron-right mr-2 text-muted" style="font-size: 0.75rem;"></i> {{ ucwords(str_replace(['_', '-'], ' ', $groupName)) }}
+                                            </td>
+                                            
+                                            {{-- Dynamic columns for CRUD --}}
+                                            @php
+                                                $crudActions = ['create', 'read', 'update', 'delete'];
+                                                $processedPermissions = [];
+                                            @endphp
+                                            
+                                            @foreach($crudActions as $action)
+                                                <td class="text-center py-3">
+                                                    @php
+                                                        $perm = $groupPermissions->first(function($p) use ($action) {
+                                                            return str_ends_with($p->name, '.' . $action);
+                                                        });
+                                                    @endphp
+                                                    
+                                                    @if($perm)
+                                                        @php $processedPermissions[] = $perm->id; @endphp
+                                                        <div class="custom-control custom-checkbox custom-control-inline">
+                                                            <input type="checkbox" name="permissions[]" value="{{ $perm->name }}" 
+                                                                id="perm_{{ $perm->id }}" class="custom-control-input"
+                                                                {{ (isset($role) && $role->hasPermissionTo($perm->name)) ? 'checked' : '' }}>
+                                                            <label class="custom-control-label" for="perm_{{ $perm->id }}"></label>
+                                                        </div>
+                                                    @else
+                                                        <span class="text-muted small">-</span>
+                                                    @endif
+                                                </td>
+                                            @endforeach
+
+                                            {{-- Column for other permissions in this group --}}
+                                            <td class="text-center py-3">
+                                                @foreach($groupPermissions as $p)
+                                                    @if(!in_array($p->id, $processedPermissions))
+                                                        <div class="custom-control custom-checkbox custom-control-inline mb-1" title="{{ $p->name }}">
+                                                            <input type="checkbox" name="permissions[]" value="{{ $p->name }}" 
+                                                                id="perm_{{ $p->id }}" class="custom-control-input"
+                                                                {{ (isset($role) && $role->hasPermissionTo($p->name)) ? 'checked' : '' }}>
+                                                            <label class="custom-control-label" for="perm_{{ $perm->id ?? $p->id }}"></label>
+                                                            <span class="small ml-1 text-muted">{{ str_replace($groupName.'.', '', $p->name) }}</span>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>

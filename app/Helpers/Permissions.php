@@ -41,7 +41,7 @@ if (! function_exists('is_institutional_admin')) {
 
 if (! function_exists('basic_settings_permissions')) {
     function basic_settings_permissions() {
-        return is_superadmin();
+        return is_superadmin() || (Auth::check() && Auth::user()->can('basic-settings.read'));
     }
 }
 
