@@ -853,7 +853,7 @@
   <li class="nav-item">
     <a href="{{route('tax.index')}}" class="nav-link @if($subMenu == "TaxList") active @endif">
       <i class="far fa-circle nav-icon"></i>
-      <p>View</p>
+      <p>Tax List</p>
     </a>
   </li>
 
@@ -970,7 +970,7 @@
             <li class="nav-item">
               <a href="{{route('house.index')}}" class="nav-link @if($subMenu == "HouseList") active @endif">
                 <i class="far fa-circle nav-icon"></i>
-                <p>View</p>
+                <p>House List</p>
               </a>
             </li>
 
@@ -1002,7 +1002,7 @@
           <li class="nav-item">
             <a href="{{route('land.index')}}" class="nav-link @if($subMenu == "LandList") active @endif">
               <i class="far fa-circle nav-icon"></i>
-              <p>View</p>
+              <p>List</p>
             </a>
           </li>
 
@@ -1136,7 +1136,7 @@
         <li class="nav-item">
           <a href="{{route('road.index')}}" class="nav-link @if($subMenu == "RoadList") active  @endif ">
             <i class="far fa-circle nav-icon"></i>
-            <p>View</p>
+            <p>Road List</p>
           </a>
         </li>
 
@@ -1168,7 +1168,7 @@
       <li class="nav-item">
         <a href="{{route('bridge.index')}}" class="nav-link @if($subMenu == "BridgeList") active @endif">
           <i class="far fa-circle nav-icon"></i>
-          <p>View</p>
+          <p>Bridge List</p>
         </a>
       </li>
 
@@ -1199,7 +1199,7 @@
       <li class="nav-item">
         <a href="{{route('market.index')}}" class="nav-link @if($subMenu == "MarketList") active @endif ">
           <i class="far fa-circle nav-icon"></i>
-          <p>View</p>
+          <p>Market List</p>
         </a>
       </li>
 
@@ -1407,7 +1407,7 @@
           <li class="nav-item ">
             <a href="{{route('chairman.index')}}" class="nav-link {{$subMenu ==  'chairmanList'?'active':''}}">
               <i class="far fa-circle nav-icon"></i>
-              <p>View</p>
+              <p>Chairman List</p>
             </a>
           </li>
 
