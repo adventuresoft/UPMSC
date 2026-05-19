@@ -209,8 +209,8 @@
                             <td>{{ $rec['dag_no'] ?: '--' }}</td>
                             <td>{{ $rec['khatian_no'] ?: '--' }}</td>
                             <td>{{ $rec['record_class'] ?: '--' }}</td>
-                            <td>{{ $rec['total_land_dag'] ?: '0' }}</td>
-                            <td>{{ $rec['land_amount'] ?: '0' }}</td>
+                            <td>{{ $rec['total_land_dag'] ? number_format((float)$rec['total_land_dag'], 4, '.', '') : '0.0000' }}</td>
+                            <td>{{ $rec['land_amount'] ? number_format((float)$rec['land_amount'], 4, '.', '') : '0.0000' }}</td>
                             <td>{{ $rec['owner_name'] ?: '--' }}</td>
                         </tr>
                     @endforeach

@@ -8,4 +8,36 @@ use Illuminate\Database\Eloquent\Model;
 class Divorce extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function husbandUser()
+    {
+        return $this->belongsTo(User::class, 'husband_user_id');
+    }
+
+    public function wifeUser()
+    {
+        return $this->belongsTo(User::class, 'wife_user_id');
+    }
+
+    public function division()
+    {
+        return $this->belongsTo(Division::class, 'division_id');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id');
+    }
+
+    public function upazila()
+    {
+        return $this->belongsTo(Thana::class, 'upazila_id');
+    }
+
+    public function union()
+    {
+        return $this->belongsTo(Union::class, 'union_id');
+    }
 }
