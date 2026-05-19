@@ -18,7 +18,7 @@
     .premium-header h3 {
         margin: 0;
         font-weight: 700;
-        font-size: 1.35rem;
+        font-size: 1.0rem;
         letter-spacing: 0.5px;
     }
     
@@ -32,7 +32,7 @@
         border-bottom: 2px solid #edf2f9;
     }
     .step-title {
-        font-size: 1.4rem;
+        font-size: 1.05rem;
         font-weight: 700;
         color: #1e293b;
         margin: 0;
@@ -242,7 +242,7 @@
                                                 <tr>
                                                     <td class="text-center"><span class="record-badge">{{ $label }}</span></td>
                                                     <td>
-                                                        <select name="records[{{$key}}][district]" class="form-control select2 district-select" data-key="{{$key}}" required>
+                                                        <select name="records[{{$key}}][district]" class="form-control select2 district-select" data-key="{{$key}}">
                                                             <option value="">জেলা নির্বাচন করুন</option>
                                                             @foreach($districts as $district)
                                                                 <option value="{{ $district->id }}">{{ $district->bn_name }}</option>
@@ -250,24 +250,24 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select name="records[{{$key}}][upazila]" class="form-control select2 upazila-select" id="upazila_{{$key}}" required>
+                                                        <select name="records[{{$key}}][upazila]" class="form-control select2 upazila-select" id="upazila_{{$key}}">
                                                             <option value="">উপজেলা নির্বাচন</option>
                                                         </select>
                                                     </td>
-                                                    <td><input type="text" name="records[{{$key}}][mouza]" class="premium-input" placeholder="মৌজার নাম" required></td>
-                                                    <td><input type="text" name="records[{{$key}}][dag_no]" class="premium-input text-center" placeholder="দাগ নং" required></td>
-                                                    <td><input type="text" name="records[{{$key}}][khatian_no]" class="premium-input text-center" placeholder="খতিয়ান নং" required></td>
+                                                    <td><input type="text" name="records[{{$key}}][mouza]" class="premium-input" placeholder="মৌজার নাম"></td>
+                                                    <td><input type="text" name="records[{{$key}}][dag_no]" class="premium-input text-center" placeholder="দাগ নং"></td>
+                                                    <td><input type="text" name="records[{{$key}}][khatian_no]" class="premium-input text-center" placeholder="খতিয়ান নং"></td>
                                                     <td>
-                                                        <select name="records[{{$key}}][record_class]" class="form-control select2" required>
+                                                        <select name="records[{{$key}}][record_class]" class="form-control select2">
                                                             <option value="">শ্রেণি নির্বাচন</option>
                                                             @foreach($classes as $cls)
                                                                 <option value="{{ $cls }}">{{ $cls }}</option>
                                                             @endforeach
                                                         </select>
                                                     </td>
-                                                    <td><input type="text" name="records[{{$key}}][total_land_dag]" class="premium-input text-center" placeholder="০.০০" required></td>
-                                                    <td><input type="text" name="records[{{$key}}][land_amount]" class="premium-input text-center" placeholder="০.০০" required></td>
-                                                    <td><input type="text" name="records[{{$key}}][owner_name]" class="premium-input" placeholder="মালিকের নাম" required></td>
+                                                    <td><input type="text" name="records[{{$key}}][total_land_dag]" class="premium-input text-center" placeholder="০.০০"></td>
+                                                    <td><input type="text" name="records[{{$key}}][land_amount]" class="premium-input text-center" placeholder="০.০০"></td>
+                                                    <td><input type="text" name="records[{{$key}}][owner_name]" class="premium-input" placeholder="মালিকের নাম"></td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -287,17 +287,14 @@
                                     
                                     <div class="p-4" style="background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
                                         <div class="form-group row align-items-center mb-0">
-                                            <label for="owner_id" class="col-sm-3 col-form-label font-weight-bold" style="font-size: 1.1rem; color: #334155;">মালিকের সিস্টেম/অনুমোদিত আইডি :</label>
-                                            <div class="col-sm-6">
+                                            <label for="owner_id" class="col-sm-4 col-form-label font-weight-bold" style="font-size: 0.95rem; color: #334155;">মালিকের সিস্টেম/অনুমোদিত আইডি :</label>
+                                            <div class="col-sm-8">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" style="background: #e2e8f0; border-color: #cbd5e1;"><i class="fas fa-id-card text-secondary"></i></span>
                                                     </div>
                                                     <input type="text" name="owner_id" class="form-control" id="owner_id" placeholder="যেমন: 51-830228-0002" style="height: 45px; border-radius: 0 8px 8px 0; font-size: 1.05rem;" required>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <button type="button" class="btn btn-primary btn-block shadow-sm" id="findOwnerBtn" style="height: 45px; font-weight: 700; border-radius: 8px;"><i class="fas fa-search mr-2"></i> Find By</button>
                                             </div>
                                         </div>
                                     </div>
@@ -362,43 +359,56 @@
                 $("#step-1").show();
             });
 
-            // Find Owner AJAX
-            $("#findOwnerBtn").click(function() {
-                let ownerId = $("#owner_id").val();
-                if (!ownerId) {
-                    toastr.warning("Please enter an Owner ID first.");
-                    return;
+            // Find Owner AJAX on typing
+            let typingTimer;
+            const doneTypingInterval = 500;
+            
+            $("#owner_id").on('keyup input', function() {
+                clearTimeout(typingTimer);
+                let ownerId = $(this).val();
+                
+                if (ownerId.length > 5) {
+                    typingTimer = setTimeout(function() {
+                        searchOwner(ownerId);
+                    }, doneTypingInterval);
+                } else {
+                    $("#ownerDetails").html('').hide();
                 }
-                
-                let btn = $(this);
-                btn.text('Searching...').prop('disabled', true);
-                
+            });
+
+            function searchOwner(ownerId) {
                 $.ajax({
                     type: "GET",
                     url: "{{ url('/search-user-by-system-id') }}/" + ownerId,
                     success: function (response) {
-                        btn.text('Find By').prop('disabled', false);
                         if(response.status) {
                             let data = response.user;
                             let name = data.people ? (data.people.bn_name ?? data.name) : data.name;
                             let nidBc = data.nid ?? data.birth_certificate ?? 'N/A';
-                            let html = `<strong>Name:</strong> ${name} <br>
-                                        <strong>Phone:</strong> ${data.mobile ?? 'N/A'} <br>
-                                        <strong>NID/Birth Cert:</strong> ${nidBc}`;
+                            
+                            let photoHtml = data.image 
+                                ? `<img src="{{ asset('') }}${data.image}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 2px solid #e2e8f0;" alt="Owner Photo">` 
+                                : `<div style="width: 80px; height: 80px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #64748b;"><i class="fas fa-user fa-2x"></i></div>`;
+                            
+                            let html = `<div class="d-flex align-items-center">
+                                            <div>${photoHtml}</div>
+                                            <div style="margin-left: 15px;">
+                                                <h5 class="mb-1 font-weight-bold" style="color: #1e293b;">${name}</h5>
+                                                <p class="mb-0" style="color: #475569;"><i class="fas fa-phone-alt text-secondary mr-1"></i> ${data.mobile ?? 'N/A'}</p>
+                                                <p class="mb-0" style="color: #475569;"><i class="fas fa-id-card text-secondary mr-1"></i> NID/Birth Cert: ${nidBc}</p>
+                                            </div>
+                                        </div>`;
                             $("#ownerDetails").html(html).show();
                             toastr.success("Owner found!");
                         } else {
-                            $("#ownerDetails").html('').hide();
-                            toastr.error("Owner not found.");
+                            $("#ownerDetails").html('<div class="text-danger font-weight-bold"><i class="fas fa-exclamation-circle"></i> Owner not found.</div>').show();
                         }
                     },
                     error: function() {
-                        btn.text('Find By').prop('disabled', false);
-                        $("#ownerDetails").html('').hide();
-                        toastr.error("Error finding owner.");
+                        $("#ownerDetails").html('<div class="text-danger font-weight-bold"><i class="fas fa-exclamation-circle"></i> Error finding owner.</div>').show();
                     }
                 });
-            });
+            }
 
             $("#landCreateForm").on('submit', function(e) {
                 e.preventDefault();
