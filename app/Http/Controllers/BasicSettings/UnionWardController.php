@@ -20,7 +20,7 @@ class UnionWardController extends Controller
     {
         $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Ward</option>';
 
-        $wards = UnionWard::where('status', true)->get();
+        $wards = UnionWard::where('status', true)->where('union_id', $id)->get();
 
         if(count($wards)) {
             foreach ($wards as $ward) {

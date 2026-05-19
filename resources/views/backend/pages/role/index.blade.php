@@ -72,6 +72,11 @@
                                             <span><i class="fas fa-sliders-h mr-2 text-warning"></i> Basic Settings</span>
                                             <span class="badge badge-warning badge-pill text-dark px-2 py-1" id="badge-basic">0 / 0</span>
                                         </a>
+
+                                        <a class="nav-link d-flex justify-content-between align-items-center py-3 px-3 mb-2 rounded shadow-xs" id="filter-institute" href="#">
+                                            <span><i class="fas fa-university mr-2 text-info"></i> Institute Settings</span>
+                                            <span class="badge badge-info badge-pill px-2 py-1" id="badge-institute">0 / 0</span>
+                                        </a>
                                     </div>
                                     
                                     <div class="mt-4 pt-3 border-top">
@@ -232,6 +237,65 @@
                                                                     <input type="checkbox" name="permissions[]" value="{{ $p->name }}" 
                                                                         id="perm_{{ $p->id }}" class="custom-control-input perm-checkbox perm-other group-basic_{{ $groupName }}"
                                                                         data-column="other" data-row="basic_{{ $groupName }}"
+                                                                        {{ (isset($role) && $role->hasPermissionTo($p->name)) ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label" for="perm_{{ $p->id }}"></label>
+                                                                    <span class="small ml-1 text-muted">{{ str_replace($groupName.'.', '', $p->name) }}</span>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                                @endif
+
+                                                @if(isset($instituteSettingsGroups) && count($instituteSettingsGroups))
+                                                @foreach($instituteSettingsGroups as $groupName => $groupPermissions)
+                                                <tr class="border-top matrix-row row-institute" style="background: #f0f9ff;">
+                                                    <td class="pl-4 py-3 font-weight-bold text-info d-flex align-items-center">
+                                                        <div class="custom-control custom-checkbox mr-2">
+                                                            <input type="checkbox" id="row_select_inst_{{ $groupName }}" class="custom-control-input row-selector" data-row="inst_{{ $groupName }}">
+                                                            <label class="custom-control-label" for="row_select_inst_{{ $groupName }}"></label>
+                                                        </div>
+                                                        <span class="module-title"><i class="fas fa-university mr-2 text-info" style="font-size: 0.75rem;"></i> {{ ucwords(str_replace(['_', '-'], ' ', $groupName)) }}</span>
+                                                    </td>
+
+                                                    {{-- Dynamic columns for CRUD --}}
+                                                    @php
+                                                        $crudActions = ['create', 'read', 'update', 'delete'];
+                                                        $processedPermissions = [];
+                                                    @endphp
+
+                                                    @foreach($crudActions as $action)
+                                                        <td class="text-center py-3">
+                                                            @php
+                                                                $perm = $groupPermissions->first(function($p) use ($action) {
+                                                                    return str_ends_with($p->name, '.' . $action);
+                                                                });
+                                                            @endphp
+
+                                                            @if($perm)
+                                                                @php $processedPermissions[] = $perm->id; @endphp
+                                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                                    <input type="checkbox" name="permissions[]" value="{{ $perm->name }}"
+                                                                        id="perm_{{ $perm->id }}" class="custom-control-input perm-checkbox perm-{{ $action }} group-inst_{{ $groupName }}"
+                                                                        data-column="{{ $action }}" data-row="inst_{{ $groupName }}"
+                                                                        {{ (isset($role) && $role->hasPermissionTo($perm->name)) ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label" for="perm_{{ $perm->id }}"></label>
+                                                                </div>
+                                                            @else
+                                                                <span class="text-muted small">-</span>
+                                                            @endif
+                                                        </td>
+                                                    @endforeach
+
+                                                    {{-- Column for other permissions --}}
+                                                    <td class="text-center py-3">
+                                                        @foreach($groupPermissions as $p)
+                                                            @if(!in_array($p->id, $processedPermissions))
+                                                                <div class="custom-control custom-checkbox custom-control-inline mb-1" title="{{ $p->name }}">
+                                                                    <input type="checkbox" name="permissions[]" value="{{ $p->name }}"
+                                                                        id="perm_{{ $p->id }}" class="custom-control-input perm-checkbox perm-other group-inst_{{ $groupName }}"
+                                                                        data-column="other" data-row="inst_{{ $groupName }}"
                                                                         {{ (isset($role) && $role->hasPermissionTo($p->name)) ? 'checked' : '' }}>
                                                                     <label class="custom-control-label" for="perm_{{ $p->id }}"></label>
                                                                     <span class="small ml-1 text-muted">{{ str_replace($groupName.'.', '', $p->name) }}</span>
@@ -435,6 +499,7 @@
                 let row = $(this);
                 let isCore = row.hasClass('row-core');
                 let isBasic = row.hasClass('row-basic');
+                let isInstitute = row.hasClass('row-institute');
                 let text = row.find('.module-title').text().toLowerCase();
                 
                 let matchesSearch = text.includes(searchVal);
@@ -445,6 +510,8 @@
                 } else if (filterId === 'filter-core' && isCore) {
                     matchesCategory = true;
                 } else if (filterId === 'filter-basic' && isBasic) {
+                    matchesCategory = true;
+                } else if (filterId === 'filter-institute' && isInstitute) {
                     matchesCategory = true;
                 }
                 
@@ -519,6 +586,11 @@
             let totalBasic = $('.row-basic .perm-checkbox').length;
             let checkedBasic = $('.row-basic .perm-checkbox:checked').length;
             $('#badge-basic').text(checkedBasic + ' / ' + totalBasic);
+
+            // Update Institute Settings badge
+            let totalInstitute = $('.row-institute .perm-checkbox').length;
+            let checkedInstitute = $('.row-institute .perm-checkbox:checked').length;
+            $('#badge-institute').text(checkedInstitute + ' / ' + totalInstitute);
 
             // Update overall global header checkbox
             let totalVisible = $('.matrix-row:visible .perm-checkbox').length;

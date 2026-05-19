@@ -14,7 +14,7 @@
               <div class="row">
                   <div class="col-md-2 text-right">
                       <img height="100" width="100" class="mx-auto d-block"
-                          src=" {{isset($certificate->user->institute->left_image) ? asset($certificate->user->institute->left_image)  : 'https://seeklogo.com/images/M/moharajpur-union-logo-6FAC2CBD46-seeklogo.com.png '}}"
+                          src=" {{isset($certificate->user->institute->left_image) ? asset($certificate->user->institute->left_image)  : asset('assets/images/logo/govt-bd-logo.png')}}"
                           alt="govt-bd-logo">
                   </div>
                   <div class="col-md-8 text-center">

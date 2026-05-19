@@ -97,9 +97,11 @@
                 <div class="info-card">
                     <div class="info-header">
                         <h3 class="info-title"><i class="fas fa-university mr-2 text-primary"></i> Basic Information</h3>
+                        @can('institute.update')
                         <a href="{{route('institute.edit', $institute->id)}}" class="btn btn-sm btn-outline-primary btn-edit-tab">
                             <i class="fas fa-edit mr-1"></i> Edit Info
                         </a>
+                        @endcan
                     </div>
                     <div class="info-body">
                         <div class="info-row">
@@ -153,9 +155,11 @@
                 <div class="info-card">
                     <div class="info-header">
                         <h3 class="info-title"><i class="fas fa-user-shield mr-2 text-success"></i> Administrative Access</h3>
+                        @can('institutional-admin.update')
                         <a href="{{route('instituteA.adminCreate', $institute->id)}}" class="btn btn-sm btn-outline-success btn-edit-tab">
                             <i class="fas fa-user-edit mr-1"></i> Manage Admin
                         </a>
+                        @endcan
                     </div>
                     <div class="info-body">
                         @if($institute->superUser)
@@ -180,7 +184,9 @@
                         @else
                         <div class="text-center py-4">
                             <p class="text-muted">No admin assigned yet.</p>
+                            @can('institutional-admin.create')
                             <a href="{{route('instituteA.adminCreate', $institute->id)}}" class="btn btn-sm btn-primary">Assign Admin</a>
+                            @endcan
                         </div>
                         @endif
                     </div>
@@ -192,9 +198,11 @@
                 <div class="info-card">
                     <div class="info-header">
                         <h3 class="info-title"><i class="fas fa-images mr-2 text-warning"></i> Visual Assets</h3>
+                        @can('institute.update')
                         <a href="{{route('instituteA.imagesCreate', $institute->id)}}" class="btn btn-sm btn-outline-warning btn-edit-tab">
                             <i class="fas fa-camera mr-1"></i> Update
                         </a>
+                        @endcan
                     </div>
                     <div class="info-body">
                         <div class="mb-4">

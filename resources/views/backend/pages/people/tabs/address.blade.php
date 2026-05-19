@@ -291,6 +291,8 @@
 
 @push('script')
     <script>
+        window.isCopyingAddress = false;
+
         $(document).ready(function() {
             // Initialize select2
             $('.select2').select2();
@@ -331,6 +333,7 @@
 
         // Present Address - Division change handler
         $(document).on('change', '#present_division_id', function(e){
+            if (window.isCopyingAddress) return;
             e.preventDefault();
             let district_id = $('#present_district_id');
             let division_id = $(this).val();
@@ -360,6 +363,7 @@
 
         // Present Address - District change handler
         $(document).on('change', '#present_district_id', function(e){
+            if (window.isCopyingAddress) return;
             e.preventDefault();
             let district_id = $(this).val();
             let present_thana_id = $("#present_thana_id");
@@ -389,6 +393,7 @@
 
         // Present Address - Thana change handler
         $(document).on('change', '#present_thana_id', function(e){
+            if (window.isCopyingAddress) return;
             e.preventDefault();
             let thana_id = $(this).val();
             let present_union_id = $('#present_union_id');
@@ -437,9 +442,11 @@
 
         // Present Address - Union change handler
         $(document).on('change', '#present_union_id', function(e){
+            if (window.isCopyingAddress) return;
             e.preventDefault();
             let present_union_id = $(this).val();
             let present_village_id = $('#present_village_id');
+            let present_ward_id = $('#present_ward_id');
             if (present_union_id) {
                 $.ajax({
                     type: "GET",
@@ -461,9 +468,27 @@
                         toastr.error(responseText.message);
                     }
                 });
+
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-word-by-union') }}/"+present_union_id,
+                    beforeSend: function() {
+                        present_ward_id.prop("disabled", true);
+                        present_ward_id.html('<option value="">Loading...</option>');
+                    },
+                    success: function(response) {
+                        present_ward_id.html(response);
+                        present_ward_id.prop("disabled", false);
+                    },
+                    error: function(xhr, status, error) {
+                        present_ward_id.prop("disabled", false);
+                    }
+                });
             } else {
                 present_village_id.html('<option value="">Select Village</option>');
                 present_village_id.prop("disabled", true);
+                present_ward_id.html('<option value="">Select Ward</option>');
+                present_ward_id.prop("disabled", true);
             }
         });
 
@@ -471,6 +496,7 @@
 
         // Division → District
         $(document).on('change', '#permanent_division_id', function(e){
+            if (window.isCopyingAddress) return;
             e.preventDefault();
             let division_id = $(this).val();
             let $district = $('#permanent_district_id');
@@ -497,6 +523,7 @@
 
         // District → Thana
         $(document).on('change', '#permanent_district_id', function(e){
+            if (window.isCopyingAddress) return;
             e.preventDefault();
             let district_id = $(this).val();
             let $thana = $('#permanent_thana_id');
@@ -525,6 +552,7 @@
 
         // Thana → Union & Post Office
         $(document).on('change', '#permanent_thana_id', function(e){
+            if (window.isCopyingAddress) return;
             e.preventDefault();
             let thana_id = $(this).val();
             let $union = $('#permanent_union_id');
@@ -567,9 +595,11 @@
 
         // Union → Village
         $(document).on('change', '#permanent_union_id', function(e){
+            if (window.isCopyingAddress) return;
             e.preventDefault();
             let union_id = $(this).val();
             let $village = $('#permanent_village_id');
+            let $ward = $('#permanent_ward_id');
 
             if (union_id) {
                 $village.prop('disabled', true).html('<option value="">Loading...</option>');
@@ -583,14 +613,29 @@
                         $village.html('<option value="">Select Village</option>').prop('disabled', false);
                     }
                 });
+
+                $ward.prop('disabled', true).html('<option value="">Loading...</option>');
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("/get-word-by-union") }}/' + union_id,
+                    success: function(response) {
+                        $ward.html(response).prop('disabled', false);
+                    },
+                    error: function() {
+                        $ward.html('<option value="">Select Ward</option>').prop('disabled', false);
+                    }
+                });
             } else {
                 $village.html('<option value="">Select Village</option>').prop('disabled', true);
+                $ward.html('<option value="">Select Ward</option>').prop('disabled', true);
             }
         });
 
         // Same as Permanent Address Logic
         $(document).on('change', '#same_as_permanent', function() {
             if($(this).is(':checked')) {
+                window.isCopyingAddress = true;
+                
                 // Copy select values and trigger change for select2
                 const selectFields = [
                     'division_id', 'district_id', 'thana_id', 
@@ -611,6 +656,11 @@
                 inputFields.forEach(function(field) {
                     $('#present_' + field).val($('#permanent_' + field).val());
                 });
+
+                // Release the lock after a short delay to allow select2 to finish updating
+                setTimeout(() => {
+                    window.isCopyingAddress = false;
+                }, 100);
             }
         });
     </script>

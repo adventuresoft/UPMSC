@@ -712,6 +712,9 @@ class PeopleController extends Controller
             $people->approved_id = $approvedId;
             if ($people->user) {
                 $people->user->status = 1;
+                if (Auth::user() && Auth::user()->institute_id) {
+                    $people->user->institute_id = Auth::user()->institute_id;
+                }
                 $people->user->save();
             }
 

@@ -47,10 +47,14 @@ class RoleController extends Controller
             'basic-settings', 'basic_settings'
         ];
 
-        $permissionGroups = $permissions->filter(function($permission) use ($basicSettingsModules) {
+        $instituteSettingsModules = [
+            'institute', 'institute_category', 'institute_type',
+        ];
+
+        $permissionGroups = $permissions->filter(function($permission) use ($basicSettingsModules, $instituteSettingsModules) {
             $parts = explode('.', $permission->name);
             $module = count($parts) > 1 ? $parts[0] : 'Others';
-            return !in_array($module, $basicSettingsModules);
+            return !in_array($module, $basicSettingsModules) && !in_array($module, $instituteSettingsModules);
         })->groupBy(function($permission) {
             $parts = explode('.', $permission->name);
             return count($parts) > 1 ? $parts[0] : 'Others';
@@ -65,7 +69,16 @@ class RoleController extends Controller
             return count($parts) > 1 ? $parts[0] : 'Others';
         });
 
-        return view('backend.pages.role.index', compact('roles', 'permissionGroups', 'basicSettingsGroups'))->with(['title' => 'Role Management', 'page' => 'role']);
+        $instituteSettingsGroups = $permissions->filter(function($permission) use ($instituteSettingsModules) {
+            $parts = explode('.', $permission->name);
+            $module = count($parts) > 1 ? $parts[0] : 'Others';
+            return in_array($module, $instituteSettingsModules);
+        })->groupBy(function($permission) {
+            $parts = explode('.', $permission->name);
+            return count($parts) > 1 ? $parts[0] : 'Others';
+        });
+
+        return view('backend.pages.role.index', compact('roles', 'permissionGroups', 'basicSettingsGroups', 'instituteSettingsGroups'))->with(['title' => 'Role Management', 'page' => 'role']);
     }
 
     /**
@@ -141,10 +154,14 @@ class RoleController extends Controller
             'basic-settings', 'basic_settings'
         ];
 
-        $permissionGroups = $permissions->filter(function($permission) use ($basicSettingsModules) {
+        $instituteSettingsModules = [
+            'institute', 'institute_category', 'institute_type',
+        ];
+
+        $permissionGroups = $permissions->filter(function($permission) use ($basicSettingsModules, $instituteSettingsModules) {
             $parts = explode('.', $permission->name);
             $module = count($parts) > 1 ? $parts[0] : 'Others';
-            return !in_array($module, $basicSettingsModules);
+            return !in_array($module, $basicSettingsModules) && !in_array($module, $instituteSettingsModules);
         })->groupBy(function($permission) {
             $parts = explode('.', $permission->name);
             return count($parts) > 1 ? $parts[0] : 'Others';
@@ -159,7 +176,16 @@ class RoleController extends Controller
             return count($parts) > 1 ? $parts[0] : 'Others';
         });
 
-        return view('backend.pages.role.index', compact('role', 'roles', 'permissionGroups', 'basicSettingsGroups'))->with('title', 'Edit Role Type')->with('page', 'role');
+        $instituteSettingsGroups = $permissions->filter(function($permission) use ($instituteSettingsModules) {
+            $parts = explode('.', $permission->name);
+            $module = count($parts) > 1 ? $parts[0] : 'Others';
+            return in_array($module, $instituteSettingsModules);
+        })->groupBy(function($permission) {
+            $parts = explode('.', $permission->name);
+            return count($parts) > 1 ? $parts[0] : 'Others';
+        });
+
+        return view('backend.pages.role.index', compact('role', 'roles', 'permissionGroups', 'basicSettingsGroups', 'instituteSettingsGroups'))->with('title', 'Edit Role Type')->with('page', 'role');
     }
 
     /**

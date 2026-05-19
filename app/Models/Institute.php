@@ -42,6 +42,14 @@ class Institute extends Model
       return $this->hasOne(User::class, 'institute_id', 'id');
     }
 
-   
+    public function getRightImageAttribute($value)
+    {
+        return 'assets/images/logo/govt-bd-logo.png';
+    }
+
+    public function getTopImageAttribute($value)
+    {
+        return 'assets/images/logo/govt-bd-logo.png';
+    }
 
 }

@@ -51,9 +51,27 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
   <!-- Brand Logo -->
+  @php
+      $currentLogo = asset('backend/img/AdminLTELogo.png');
+      $currentBrandText = 'UPMS';
+
+      if (Auth::guard('web')->check() && Auth::guard('web')->user()->institute) {
+          $inst = Auth::guard('web')->user()->institute;
+          if ($inst->left_image) {
+              $currentLogo = asset($inst->left_image);
+          }
+          $currentBrandText = $inst->union->name ?? 'UPMS';
+      } elseif (Auth::guard('people')->check() && Auth::guard('people')->user()->institute) {
+          $inst = Auth::guard('people')->user()->institute;
+          if ($inst->left_image) {
+              $currentLogo = asset($inst->left_image);
+          }
+          $currentBrandText = $inst->union->name ?? 'UPMS';
+      }
+  @endphp
   <a href="{{route('home')}}" class="brand-link">
-    <img src="{{ asset('backend')}}/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">UPMS</span>
+    <img src="{{ $currentLogo }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light">{{ $currentBrandText }}</span>
   </a>
 
   <!-- Sidebar -->
@@ -476,35 +494,24 @@
     </a>
     <ul class="nav nav-treeview">
 
-
-      {{-- <li class="nav-item">
-        <a href="{{route('institute-type.index')}}" class="nav-link @if($subMenu == "InstituteType") active @endif">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Type</p>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="{{route('institute-category.index')}}" class="nav-link @if($subMenu == "InstituteCategory") active @endif">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Category</p>
-        </a>
-      </li> --}}
-
-
-
+      @can('institute.create')
       <li class="nav-item">
         <a href="{{route('institute.create')}}" class="nav-link @if($subMenu == 'InstituteCreate') active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Create</p>
         </a>
       </li>
+      @endcan
+
+      @can('institute.read')
       <li class="nav-item">
         <a href="{{route('institute.index')}}" class="nav-link @if($subMenu == 'InstituteList') active @endif ">
           <i class="far fa-circle nav-icon"></i>
           <p>View</p>
         </a>
       </li>
+      @endcan
+
     </ul>
   </li>
   @endcan
