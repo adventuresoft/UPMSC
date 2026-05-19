@@ -43,6 +43,7 @@
                                         @else
                                             <select name="area" id="area" class="form-control select2" required>
                                                 <option value="">-- Select Area --</option>
+                                                <option value="All" {{ $user->area == 'All' ? 'selected' : '' }}>All System Areas (Full Access)</option>
                                                 <optgroup label="Districts (for DC)">
                                                     @foreach($districts as $d)
                                                         @php $val = "District:".$d->id; @endphp

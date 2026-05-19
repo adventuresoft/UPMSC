@@ -540,7 +540,7 @@
   @endcan
 
   {{-- People Info --}}
-  @if(is_institutional_admin() || Auth::user()->can('people.read'))
+  @if(view_permission('people'))
   <li class="nav-item {{ $isPeopleInfo ? 'menu-open' : '' }}">
     <a href="#" class="nav-link">
       <i class="nav-icon fas fa-users"></i>
@@ -551,7 +551,7 @@
     </a>
     <ul class="nav nav-treeview">
 
-      @if(is_institutional_admin() || Auth::user()->can('people.create'))
+      @if(create_permission('people'))
       <li class="nav-item">
         <a href="{{route('people.create')}}" class="nav-link @if($subMenu == "Create") active @endif">
           <i class="far fa-circle nav-icon"></i>
@@ -560,26 +560,32 @@
       </li>
       @endif
 
+      @if(view_permission('people'))
       <li class="nav-item">
         <a href="{{route('people.index')}}" class="nav-link @if($subMenu == "View") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Applicant List</p>
         </a>
       </li>
+      @endif
 
+      @if(view_permission('people'))
       <li class="nav-item">
         <a href="{{route('peopleapprovedlist')}}" class="nav-link @if($subMenu == "approvedList") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Reg. People List</p>
         </a>
       </li>
+      @endif
 
+      @if(view_permission('people'))
       <li class="nav-item">
         <a href="{{route('peoplesearch')}}" class="nav-link @if($subMenu == "search") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Search People</p>
         </a>
       </li>
+      @endif
 
     </ul>
   </li>

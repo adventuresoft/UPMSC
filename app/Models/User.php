@@ -169,6 +169,10 @@ class User extends Authenticatable
 
     public function getAssignedAreaAttribute()
     {
+        if ($this->area === 'All') {
+            return 'All System Areas';
+        }
+
         if (!$this->institute_id && !in_array($this->role_id, [2, 3])) return 'System Admin';
 
         // Priority 1: Use the manual 'area' text or structured area info
@@ -223,8 +227,8 @@ class User extends Authenticatable
         $user = auth()->user();
         if (!$user) return $query;
         
-        // Superadmins see everything
-        if (is_superadmin()) return $query;
+        // Superadmins or users with "All" area assigned see everything
+        if (is_superadmin() || $user->area === 'All') return $query;
 
         // If user has an institute_id, filter by that or geographical area
         if ($user->institute_id) {
