@@ -278,7 +278,7 @@
                             </div>
 
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('people'))
                                 <a href="{{ route('people.create') }}" class="btn btn-sm btn-primary font-weight-bold px-3">
                                     <i class="fas fa-plus-circle mr-1"></i> CREATE
                                 </a>
@@ -485,18 +485,28 @@
 
                                         <td>
                                                 <div class="table-action">
-                                                    @if (view_permission())
-                                                        @if(is_superadmin())
-                                                        <a href="{{ route('people.edit', $user->id) }}" 
-                                                            class="btn-action btn-edit" title="Edit">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                        @endif
-                                                        
-                                                        <a href="{{ route('people.show', $user->id) }}" 
-                                                            class="btn-action btn-view" title="View">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
+                                                    @if (edit_permission('people'))
+                                                    <a href="{{ route('people.edit', $user->id) }}" 
+                                                        class="btn-action btn-edit" title="Edit">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    @endif
+                                                    
+                                                    @if (view_permission('people'))
+                                                    <a href="{{ route('people.show', $user->id) }}" 
+                                                        class="btn-action btn-view" title="View">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                    @endif
+
+                                                    @if (delete_permission('people'))
+                                                    <form action="{{ route('people.destroy', $user->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn-action btn-danger btn-delete-confirm" title="Delete" style="background-color: #fee2e2 !important; color: #dc2626 !important; border-color: #fca5a5 !important; border-radius: 8px; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                     @endif
                                                 </div>
                                         </td>

@@ -429,9 +429,14 @@
         {{-- Header with Logos --}}
         @php
             $headerUnion = $user->addressInfo?->presentUnion ?? $user->institute?->union;
+            $institute = $user->institute ?? (Auth::guard('web')->check() ? Auth::guard('web')->user()->institute : (Auth::guard('people')->check() ? Auth::guard('people')->user()->institute : null));
+            $headerLogo = asset('images/dhaka.png'); // fallback
+            if ($institute && $institute->left_image) {
+                $headerLogo = asset($institute->left_image);
+            }
         @endphp
         <div class="header-logos">
-            <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
+            <img src="{{ $headerLogo }}" alt="City Logo">
             <div class="union-header">
                 <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
                 <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>

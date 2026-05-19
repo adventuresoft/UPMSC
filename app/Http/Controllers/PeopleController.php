@@ -40,7 +40,7 @@ class PeopleController extends Controller
     {
         $this->credentialService = $credentialService;
         $this->smsService        = $smsService;
-        $this->middleware('unionAdmin')->except('index', 'approvedlist', 'show', 'searchUser', 'edit', 'update', 'approve');
+        $this->middleware('unionAdmin')->except('index', 'approvedlist', 'show', 'searchUser', 'edit', 'update', 'approve', 'destroy');
     }
 
 
@@ -152,6 +152,10 @@ class PeopleController extends Controller
      */
     public function index()
     {
+        if (!view_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $query = User::with([
             'people',
             'professionalInfos.subcategory.category.type.profession',
@@ -186,6 +190,10 @@ class PeopleController extends Controller
 
     public function approvedlist()
     {
+        if (!view_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data['subMenu']='approvedList';
         $query = User::with([
             'people',
@@ -219,6 +227,10 @@ class PeopleController extends Controller
 
     public function searchPeoplePage()
     {
+        if (!view_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data['subMenu']='search';
         $query = User::with([
             'people',
@@ -338,6 +350,10 @@ class PeopleController extends Controller
      */
     public function create()
     {
+        if (!create_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data['religions'] = Religion::where('status', true)->get();
         $data['districts'] =  District::where('status', true)->orderBy('name')->get();
         $data['countries'] =  Country::orderBy('name')->get();
@@ -352,6 +368,12 @@ class PeopleController extends Controller
      */
     public function store(Request $request)
     {
+        if (!create_permission('people')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized action.'
+            ], 403);
+        }
         $validate = Validator::make($request->all(), [
             'name' => 'nullable|max:190',
             'bn_name' => 'nullable|max:190',
@@ -448,6 +470,9 @@ class PeopleController extends Controller
      */
     public function show($id)
     {
+        if (!view_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $data['religions'] = Religion::where('status', true)->get();
         $data['districts'] =  District::where('status', true)->orderBy('name')->get();
@@ -527,8 +552,8 @@ class PeopleController extends Controller
      */
     public function edit($id)
     {
-        if (!view_permission()) {
-            return redirect()->back();
+        if (!edit_permission('people')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $data['religions'] = Religion::where('status', true)->get();
@@ -557,7 +582,7 @@ class PeopleController extends Controller
      */
     public function update(Request $request, $userID)
     {
-        if (!view_permission()) {
+        if (!edit_permission('people')) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized access.',
@@ -651,15 +676,42 @@ class PeopleController extends Controller
         return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'])->header('Content-Type', 'application/json');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\People  $people
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(People $people)
+    public function destroy($id)
     {
-        //
+        if (!delete_permission('people')) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized access.',
+                ], 403);
+            }
+            return redirect()->back()->with('error', 'Unauthorized access.');
+        }
+
+        $user = User::find($id);
+        if ($user) {
+            $people = People::where('user_id', $id)->first();
+            if ($people) {
+                $people->delete();
+            }
+            $user->delete();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Citizen deleted successfully.',
+                ]);
+            }
+            return redirect()->back()->with('success', 'Citizen deleted successfully.');
+        }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Citizen not found.',
+            ], 404);
+        }
+        return redirect()->back()->with('error', 'Citizen not found.');
     }
 
     private function generateApprovedId($date_of_birth, $district_id)
@@ -692,6 +744,13 @@ class PeopleController extends Controller
 
     public function approve(Request $request, $id)
     {
+        if (!edit_permission('people')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized action.'
+            ], 403);
+        }
+
         try {
             DB::beginTransaction();
 
