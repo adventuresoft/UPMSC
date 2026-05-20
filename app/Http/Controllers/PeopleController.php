@@ -415,9 +415,9 @@ class PeopleController extends Controller
                     $image_name = Str::slug($request->name) . '-' . time();
                     $ext = strtolower($image->getClientOriginalExtension());
                     $image_full_name = $image_name . "." . $ext;
-                    $upload_path = public_path('uploads/users/');
+                    $upload_path = 'uploads/users/';
                     $image_url = 'uploads/users/' . $image_full_name;
-                    $success = $image->move($upload_path, $image_full_name);
+                    $success = $image->move(public_path($upload_path), $image_full_name);
                     if ($success) {
                         $user->image = $image_url;
                     }
@@ -628,9 +628,9 @@ class PeopleController extends Controller
                     $image_name = Str::slug($request->name) . '-' . time();
                     $ext = strtolower($image->getClientOriginalExtension());
                     $image_full_name = $image_name . "." . $ext;
-                    $upload_path = public_path('uploads/users/');
+                    $upload_path = 'uploads/users/';
                     $image_url = 'uploads/users/' . $image_full_name;
-                    $success = $image->move($upload_path, $image_full_name);
+                    $success = $image->move(public_path($upload_path), $image_full_name);
                     if ($success) { $user->image = $image_url; }
                 }
 

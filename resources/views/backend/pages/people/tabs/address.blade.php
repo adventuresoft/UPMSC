@@ -468,27 +468,9 @@
                         toastr.error(responseText.message);
                     }
                 });
-
-                $.ajax({
-                    type: "GET",
-                    url: "{{ url('/get-word-by-union') }}/"+present_union_id,
-                    beforeSend: function() {
-                        present_ward_id.prop("disabled", true);
-                        present_ward_id.html('<option value="">Loading...</option>');
-                    },
-                    success: function(response) {
-                        present_ward_id.html(response);
-                        present_ward_id.prop("disabled", false);
-                    },
-                    error: function(xhr, status, error) {
-                        present_ward_id.prop("disabled", false);
-                    }
-                });
             } else {
                 present_village_id.html('<option value="">Select Village</option>');
                 present_village_id.prop("disabled", true);
-                present_ward_id.html('<option value="">Select Ward</option>');
-                present_ward_id.prop("disabled", true);
             }
         });
 
@@ -614,20 +596,8 @@
                     }
                 });
 
-                $ward.prop('disabled', true).html('<option value="">Loading...</option>');
-                $.ajax({
-                    type: 'GET',
-                    url: '{{ url("/get-word-by-union") }}/' + union_id,
-                    success: function(response) {
-                        $ward.html(response).prop('disabled', false);
-                    },
-                    error: function() {
-                        $ward.html('<option value="">Select Ward</option>').prop('disabled', false);
-                    }
-                });
             } else {
                 $village.html('<option value="">Select Village</option>').prop('disabled', true);
-                $ward.html('<option value="">Select Ward</option>').prop('disabled', true);
             }
         });
 

@@ -554,7 +554,7 @@
                                                         <option value="">Select Ward</option>
                                                         @if ($wards)
                                                             @foreach ($wards as $ward)
-                                                                <option value="{{$ward->id}}" {{$user->addressInfo ? (($user->addressInfo->permanent_ward_id == $ward->id) ? 'selected' : '' ) : ''}}>{{$ward->en_ward_no}}</option>
+                                                                <option value="{{$ward->id}}" {{$user->addressInfo ? (($user->addressInfo->permanent_ward_id == $ward->id) ? 'selected' : '' ) : ''}}>{{$ward->bn_ward_no ?? $ward->en_ward_no}}</option>
                                                             @endforeach
                                                         @endif
                                                     </select>

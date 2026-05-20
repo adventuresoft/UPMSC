@@ -60,13 +60,11 @@
           if ($inst->left_image) {
               $currentLogo = asset($inst->left_image);
           }
-          $currentBrandText = $inst->union->name ?? 'UPMS';
       } elseif (Auth::guard('people')->check() && Auth::guard('people')->user()->institute) {
           $inst = Auth::guard('people')->user()->institute;
           if ($inst->left_image) {
               $currentLogo = asset($inst->left_image);
           }
-          $currentBrandText = $inst->union->name ?? 'UPMS';
       }
   @endphp
   <a href="{{route('home')}}" class="brand-link">

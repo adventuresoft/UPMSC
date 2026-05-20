@@ -117,7 +117,7 @@ public function saveNewOwnership(Request $request)
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $image_name = time() . '.' . $image->getClientOriginalExtension();
-            $image->move('uploads/users/', $image_name);
+            $image->move(public_path('uploads/users/'), $image_name);
             $user->image = 'uploads/users/' . $image_name;
         }
 

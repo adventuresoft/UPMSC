@@ -180,27 +180,27 @@ class User extends Authenticatable
             if (str_contains($this->area, 'Thana:')) {
                 $thanaId = str_replace('Thana:', '', $this->area);
                 $thana = Thana::find($thanaId);
-                return $thana ? "Thana: " . $thana->name : "Thana ID: " . $thanaId;
+                return $thana ? $thana->name : "Thana ID: " . $thanaId;
             }
             if (str_contains($this->area, 'District:')) {
                 $districtId = str_replace('District:', '', $this->area);
                 $district = District::find($districtId);
-                return $district ? "District: " . $district->name : "District ID: " . $districtId;
+                return $district ? $district->name : "District ID: " . $districtId;
             }
             if (str_contains($this->area, 'Union:')) {
                 $id = trim(str_replace('Union:', '', $this->area));
                 $union = Union::find($id);
-                return $union ? "Union: " . $union->name : "Union ID: " . $id;
+                return $union ? $union->name : "Union ID: " . $id;
             }
             if (str_contains($this->area, 'Pourashava:')) {
                 $id = trim(str_replace('Pourashava:', '', $this->area));
                 $p = Pourashava::find($id);
-                return $p ? "Pourashava: " . $p->name : "Pourashava ID: " . $id;
+                return $p ? $p->name : "Pourashava ID: " . $id;
             }
             if (str_contains($this->area, 'City Corp:')) {
                 $id = trim(str_replace('City Corp:', '', $this->area));
                 $c = CityCorporation::find($id);
-                return $c ? "City Corp: " . $c->name : "City Corp ID: " . $id;
+                return $c ? $c->name : "City Corp ID: " . $id;
             }
             return $this->area;
         }
@@ -210,13 +210,13 @@ class User extends Authenticatable
 
         // Priority 2: Try to fetch names from relationships if manual area is empty
         if ($institute->union_id && $institute->union) {
-            return "Union: " . $institute->union->name;
+            return $institute->union->name;
         }
         if ($institute->pourashava_id && $institute->pourashava) {
-            return "Pourashava: " . $institute->pourashava->name;
+            return $institute->pourashava->name;
         }
         if ($institute->city_corporation_id && $institute->cityCorporation) {
-            return "City Corp: " . $institute->cityCorporation->name;
+            return $institute->cityCorporation->name;
         }
 
         return 'Institutional Admin';
@@ -236,24 +236,44 @@ class User extends Authenticatable
             $locationId = $institute->union_id ?? ($institute->pourashava_id ?? $institute->city_corporation_id);
 
             return $query->where(function($q) use ($institute, $locationId, $user) {
-                // 1. Users explicitly assigned to this institute (both staff and citizens)
-                $q->where('institute_id', $institute->id);
+                $q->where(function($q1) use ($institute, $locationId, $user) {
+                    // 1. Users explicitly assigned to this institute (both staff and citizens)
+                    $q1->where('institute_id', $institute->id);
 
-                // 2. Citizens without an institute_id, but whose address falls in this area
+                    // 2. Citizens without an institute_id, but whose address falls in this area
+                    if ($locationId) {
+                        $q1->orWhere(function($sq) use ($locationId) {
+                            $sq->whereNull('institute_id')
+                               ->where(function($rsq) {
+                                   $rsq->whereNull('role_id')->orWhereIn('role_id', [5]);
+                               })
+                               ->whereHas('addressInfo', function($asq) use ($locationId) {
+                                   $asq->where('permanent_union_id', $locationId);
+                               });
+                        });
+                    }
+                    
+                    // 3. Creator bypass - always allow creators to see their own created users
+                    $q1->orWhere('created_by', $user->id);
+                });
+
+                // STRICT CHECK: Citizens MUST belong to this union/area
                 if ($locationId) {
-                    $q->orWhere(function($sq) use ($locationId) {
-                        $sq->whereNull('institute_id')
-                           ->where(function($rsq) {
-                               $rsq->whereNull('role_id')->orWhereIn('role_id', [5]);
+                    $q->where(function($q2) use ($locationId) {
+                        $q2->where('role_id', '!=', 5)
+                           ->orWhereNull('role_id')
+                           ->orWhere(function($q3) use ($locationId) {
+                               $q3->where('role_id', 5)
+                                  ->whereHas('addressInfo', function($asq) use ($locationId) {
+                                      $asq->where('permanent_union_id', $locationId);
+                                  });
                            })
-                           ->whereHas('addressInfo', function($asq) use ($locationId) {
-                               $asq->where('permanent_union_id', $locationId);
+                           ->orWhere(function($q3) {
+                               $q3->where('role_id', 5)
+                                  ->doesntHave('addressInfo');
                            });
                     });
                 }
-                
-                // 3. Creator bypass - always allow creators to see their own created users
-                $q->orWhere('created_by', $user->id);
             });
         }
 
@@ -284,36 +304,54 @@ class User extends Authenticatable
             if ($column && !empty($locationIds)) {
                 return $query->where(function($q) use ($column, $locationIds, $user) {
                     
-                    // 1. Users whose institute matches the area
-                    $q->whereHas('institute', function($instSq) use ($column, $locationIds) {
-                        if ($column === 'permanent_union_id') {
-                            $instSq->whereIn('union_id', $locationIds)
-                                   ->orWhereIn('pourashava_id', $locationIds)
-                                   ->orWhereIn('city_corporation_id', $locationIds);
-                        } elseif ($column === 'permanent_thana_id') {
-                            $instSq->whereHas('union', function($uSq) use ($locationIds) {
-                                $uSq->whereIn('thana_id', $locationIds);
-                            });
-                        } elseif ($column === 'permanent_district_id') {
-                            $instSq->whereHas('union.thana', function($uSq) use ($locationIds) {
-                                $uSq->whereIn('district_id', $locationIds);
-                            });
-                        }
+                    $q->where(function($q1) use ($column, $locationIds, $user) {
+                        // 1. Users whose institute matches the area
+                        $q1->whereHas('institute', function($instSq) use ($column, $locationIds) {
+                            if ($column === 'permanent_union_id') {
+                                $instSq->whereIn('union_id', $locationIds)
+                                       ->orWhereIn('pourashava_id', $locationIds)
+                                       ->orWhereIn('city_corporation_id', $locationIds);
+                            } elseif ($column === 'permanent_thana_id') {
+                                $instSq->whereHas('union', function($uSq) use ($locationIds) {
+                                    $uSq->whereIn('thana_id', $locationIds);
+                                });
+                            } elseif ($column === 'permanent_district_id') {
+                                $instSq->whereHas('union.thana', function($uSq) use ($locationIds) {
+                                    $uSq->whereIn('district_id', $locationIds);
+                                });
+                            }
+                        });
+
+                        // 2. Citizens with NO institute, but whose address matches the area
+                        $q1->orWhere(function($sq) use ($column, $locationIds) {
+                            $sq->whereNull('institute_id')
+                               ->where(function($rsq) {
+                                   $rsq->whereNull('role_id')->orWhereIn('role_id', [5]);
+                               })
+                               ->whereHas('addressInfo', function($asq) use ($column, $locationIds) {
+                                   $asq->whereIn($column, $locationIds);
+                               });
+                        });
+
+                        // 3. Creator bypass
+                        $q1->orWhere('created_by', $user->id);
                     });
 
-                    // 2. Citizens with NO institute, but whose address matches the area
-                    $q->orWhere(function($sq) use ($column, $locationIds) {
-                        $sq->whereNull('institute_id')
-                           ->where(function($rsq) {
-                               $rsq->whereNull('role_id')->orWhereIn('role_id', [5]);
+                    // STRICT CHECK: Citizens MUST belong to this area
+                    $q->where(function($q2) use ($column, $locationIds) {
+                        $q2->where('role_id', '!=', 5)
+                           ->orWhereNull('role_id')
+                           ->orWhere(function($q3) use ($column, $locationIds) {
+                               $q3->where('role_id', 5)
+                                  ->whereHas('addressInfo', function($asq) use ($column, $locationIds) {
+                                      $asq->whereIn($column, $locationIds);
+                                  });
                            })
-                           ->whereHas('addressInfo', function($asq) use ($column, $locationIds) {
-                               $asq->whereIn($column, $locationIds);
+                           ->orWhere(function($q3) {
+                               $q3->where('role_id', 5)
+                                  ->doesntHave('addressInfo');
                            });
                     });
-
-                    // 3. Creator bypass
-                    $q->orWhere('created_by', $user->id);
                 });
             }
         }
