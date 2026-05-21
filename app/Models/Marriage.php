@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\AreaMultitenancyScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,11 @@ class Marriage extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new AreaMultitenancyScope());
+    }
 
     public function groomUser()
     {

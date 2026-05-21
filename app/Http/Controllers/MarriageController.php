@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Marriage;
 use App\Models\Division;
+use App\Support\AreaTenancy;
 use Illuminate\Http\Request;
 
 class MarriageController extends Controller
@@ -48,6 +49,7 @@ class MarriageController extends Controller
             'bride_name' => 'required|string|max:255',
             'bride_nid' => 'required|string|max:255',
         ]);
+        $this->authorizePeopleInAssignedUnion($request);
 
         $marriage = new Marriage();
 
@@ -60,10 +62,11 @@ class MarriageController extends Controller
         $marriage->marriage_area_type = $request->marriage_area_type;
 
         // 2. Address Info
-        $marriage->division_id = $request->division_id;
-        $marriage->district_id = $request->district_id;
-        $marriage->upazila_id = $request->upazila_id;
-        $marriage->union_id = $request->union_id;
+        $location = $this->authorizedLocation($request);
+        $marriage->division_id = $location['division_id'];
+        $marriage->district_id = $location['district_id'];
+        $marriage->upazila_id = $location['upazila_id'];
+        $marriage->union_id = $this->authorizedUnionId($request);
         $marriage->ward_no = $request->ward_no;
         $marriage->village_area = $request->village_area;
         $marriage->post_office = $request->post_office;
@@ -249,6 +252,7 @@ class MarriageController extends Controller
             'bride_name' => 'required|string|max:255',
             'bride_nid' => 'required|string|max:255',
         ]);
+        $this->authorizePeopleInAssignedUnion($request);
 
         $marriage = Marriage::findOrFail($id);
 
@@ -261,10 +265,11 @@ class MarriageController extends Controller
         $marriage->marriage_area_type = $request->marriage_area_type;
 
         // 2. Address Info
-        $marriage->division_id = $request->division_id;
-        $marriage->district_id = $request->district_id;
-        $marriage->upazila_id = $request->upazila_id;
-        $marriage->union_id = $request->union_id;
+        $location = $this->authorizedLocation($request);
+        $marriage->division_id = $location['division_id'];
+        $marriage->district_id = $location['district_id'];
+        $marriage->upazila_id = $location['upazila_id'];
+        $marriage->union_id = $this->authorizedUnionId($request);
         $marriage->ward_no = $request->ward_no;
         $marriage->village_area = $request->village_area;
         $marriage->post_office = $request->post_office;
@@ -427,6 +432,65 @@ class MarriageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $marriage = Marriage::findOrFail($id);
+        $marriage->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Marriage record deleted successfully',
+        ]);
+    }
+
+    private function authorizedUnionId(Request $request): ?int
+    {
+        if (AreaTenancy::isUnscoped()) {
+            return $request->union_id ? (int) $request->union_id : null;
+        }
+
+        $assignedUnionId = AreaTenancy::assignedUnionId();
+
+        abort_unless($assignedUnionId, 403, 'No union is assigned to your account.');
+
+        return $assignedUnionId;
+    }
+
+    private function authorizedLocation(Request $request): array
+    {
+        if (AreaTenancy::isUnscoped()) {
+            return [
+                'division_id' => $request->division_id,
+                'district_id' => $request->district_id,
+                'upazila_id' => $request->upazila_id,
+            ];
+        }
+
+        $union = AreaTenancy::assignedUnion();
+
+        abort_unless($union, 403, 'No union is assigned to your account.');
+
+        return [
+            'division_id' => $union->thana?->district?->division_id ?? $request->division_id,
+            'district_id' => $union->thana?->district_id ?? $request->district_id,
+            'upazila_id' => $union->thana_id ?? $request->upazila_id,
+        ];
+    }
+
+    private function authorizePeopleInAssignedUnion(Request $request): void
+    {
+        if (AreaTenancy::isUnscoped()) {
+            return;
+        }
+
+        abort_unless(
+            AreaTenancy::personBelongsToAssignedUnion($request->groom_user_id),
+            403,
+            'The selected groom is not registered in your assigned union.'
+        );
+
+        abort_unless(
+            AreaTenancy::personBelongsToAssignedUnion($request->bride_user_id),
+            403,
+            'The selected bride is not registered in your assigned union.'
+        );
     }
 }

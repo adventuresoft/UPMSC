@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Institute;
+use App\Support\AreaTenancy;
 
 trait Multitenantable
 {
@@ -28,6 +29,15 @@ trait Multitenantable
             }
 
             if ($user->area) {
+                if (str_contains($user->area, 'Union:')) {
+                    $unionId = AreaTenancy::assignedUnionId($user);
+                    return $unionId
+                        ? $query->whereHas('institute', function($q) use ($unionId) {
+                            $q->where('union_id', $unionId);
+                        })
+                        : $query->whereRaw('1 = 0');
+                }
+
                 if (str_contains($user->area, 'Thana:')) {
                     $thanaId = str_replace('Thana:', '', $user->area);
                     return $query->whereHas('institute.union', function($q) use ($thanaId) {

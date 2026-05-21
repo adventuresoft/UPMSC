@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Land;
+use App\Support\AreaTenancy;
 use Illuminate\Http\Request;
 
 class LandController extends Controller
@@ -14,7 +15,7 @@ class LandController extends Controller
      */
     public function index()
     {
-        $lands = Land::with(['owner.people'])->latest()->get();
+        $lands = Land::applyMultitenancy()->with(['owner.people'])->latest()->get();
         $districts = \App\Models\District::pluck('bn_name', 'id');
         $thanas = \App\Models\Thana::pluck('bn_name', 'id');
         return view('backend.pages.land.index', compact('lands', 'districts', 'thanas'));
@@ -43,6 +44,10 @@ class LandController extends Controller
             'owner_id' => 'required',
             'records' => 'required|array',
         ]);
+
+        if ($ownerError = $this->ownerAuthorizationError($request->owner_id)) {
+            return $ownerError;
+        }
 
         try {
             $land = new Land();
@@ -74,7 +79,7 @@ class LandController extends Controller
      */
     public function show($id)
     {
-        $land = Land::with('owner.people')->findOrFail($id);
+        $land = Land::applyMultitenancy()->with('owner.people')->findOrFail($id);
         $districts = \App\Models\District::pluck('bn_name', 'id');
         $thanas = \App\Models\Thana::pluck('bn_name', 'id');
         return view('backend.pages.land.show', compact('land', 'districts', 'thanas'));
@@ -88,7 +93,7 @@ class LandController extends Controller
      */
     public function edit($id)
     {
-        $land = Land::with('owner.people')->findOrFail($id);
+        $land = Land::applyMultitenancy()->with('owner.people')->findOrFail($id);
         $districts = \App\Models\District::orderBy('bn_name')->get();
         return view('backend.pages.land.edit', compact('land', 'districts'));
     }
@@ -100,14 +105,20 @@ class LandController extends Controller
      * @param  \App\Models\Land  $land
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Land $land)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'owner_id' => 'required',
             'records' => 'required|array',
         ]);
 
+        if ($ownerError = $this->ownerAuthorizationError($request->owner_id)) {
+            return $ownerError;
+        }
+
         try {
+            $land = Land::applyMultitenancy()->findOrFail($id);
+
             $land->owner_id = $request->owner_id;
             $land->records_data = $request->records;
             $land->save();
@@ -133,9 +144,31 @@ class LandController extends Controller
      * @param  \App\Models\Land  $land
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Land $land)
+    public function destroy($id)
     {
+        $land = Land::applyMultitenancy()->findOrFail($id);
         $land->delete();
         return redirect()->route('land.index')->with('success', 'Land record deleted successfully.');
+    }
+
+    private function ownerAuthorizationError($ownerId)
+    {
+        if (!AreaTenancy::personExists($ownerId)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Owner not found.',
+                'errors' => ['owner_id' => ['Owner not found.']],
+            ], 422);
+        }
+
+        if (!AreaTenancy::personBelongsToAssignedUnion($ownerId)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'The selected land owner is not registered in your assigned union.',
+                'errors' => ['owner_id' => ['The selected land owner is not registered in your assigned union.']],
+            ], 403);
+        }
+
+        return null;
     }
 }

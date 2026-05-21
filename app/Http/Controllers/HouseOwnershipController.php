@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\House;
 use App\Models\HouseOwnership;
+use App\Support\AreaTenancy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -76,9 +77,22 @@ class HouseOwnershipController extends Controller
         $quantities = $request->quantity ?? [];
 
         if(!empty($names)){
+            if (!$request->house_id || !AreaTenancy::houseAllowed($request->house_id)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'House not found or unauthorized.',
+                ], 403);
+            }
+
             foreach ($names as $key => $name) {
-                if($ids[$key]){
-                    $ownership = HouseOwnership::find($ids[$key]);
+                if(!empty($ids[$key])){
+                    $ownership = HouseOwnership::whereHas('house', function ($query) {
+                        $query->applyMultitenancy();
+                    })->find($ids[$key]);
+
+                    if (!$ownership) {
+                        continue;
+                    }
                 }else {
                     $ownership = new HouseOwnership();
                 }
@@ -122,7 +136,7 @@ class HouseOwnershipController extends Controller
      */
     public function edit( $id)
     {
-        $data['house'] = House::with('ownership')->find($id);
+        $data['house'] = House::applyMultitenancy()->with('ownership')->findOrFail($id);
         if($data['house']) {
             return view('backend.pages.house.tabs.ownership', $data);
         }
@@ -149,7 +163,9 @@ class HouseOwnershipController extends Controller
      */
     public function destroy($id)
     {
-        $ownership = HouseOwnership::find($id);
+        $ownership = HouseOwnership::whereHas('house', function ($query) {
+            $query->applyMultitenancy();
+        })->find($id);
         if($ownership){
             try {
                 $ownership->delete();

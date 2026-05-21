@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BasicSettings;
 use App\Http\Controllers\Controller;
 use App\Models\BasicSettings\HouseOwnerType;
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -46,14 +47,21 @@ class HouseOwnerTypeController extends Controller
     {
 
         $validate = Validator::make($request->all(), [
-            'en_name' => 'required|unique:house_owner_types,en_name',
-            'bn_name' => 'required|unique:house_owner_types,bn_name',
+            'en_name' => 'required',
+            'bn_name' => 'required',
         ]);
 
         if ($validate->fails()) {
             $data['status'] = false;
             $data['message'] = "Sorry! Invalid Entry.";
             $data['errors'] = $validate->errors();
+            return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+        }
+
+        if ($this->hasVisibleDuplicate('en_name', $request->en_name) || $this->hasVisibleDuplicate('bn_name', $request->bn_name)) {
+            $data['status'] = false;
+            $data['message'] = "Sorry! Invalid Entry.";
+            $data['errors'] = new MessageBag(['name' => ['This house ownership type already exists for your area.']]);
             return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
         }
 
@@ -95,7 +103,7 @@ class HouseOwnerTypeController extends Controller
      */
     public function edit($id)
     {
-        $data['type'] = HouseOwnerType::find($id);
+        $data['type'] = HouseOwnerType::findOrFail($id);
         return view('backend.pages.basic.house.ownership_type.edit', $data);
     }
 
@@ -110,14 +118,21 @@ class HouseOwnerTypeController extends Controller
     {
 
         $validate = Validator::make($request->all(), [
-            'en_name' => 'required|unique:house_owner_types,en_name,' . $id,
-            'bn_name' => 'required|unique:house_owner_types,bn_name,' . $id,
+            'en_name' => 'required',
+            'bn_name' => 'required',
         ]);
 
         if ($validate->fails()) {
             $data['status'] = false;
             $data['message'] = "Sorry! Invalid Entry.";
             $data['errors'] = $validate->errors();
+            return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+        }
+
+        if ($this->hasVisibleDuplicate('en_name', $request->en_name, $id) || $this->hasVisibleDuplicate('bn_name', $request->bn_name, $id)) {
+            $data['status'] = false;
+            $data['message'] = "Sorry! Invalid Entry.";
+            $data['errors'] = new MessageBag(['name' => ['This house ownership type already exists for your area.']]);
             return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
         }
 
@@ -175,5 +190,12 @@ class HouseOwnerTypeController extends Controller
             $data['message'] = "Something went wrong! Please try again...";
             return response(json_encode($data, JSON_PRETTY_PRINT), 404)->header('Content-Type', 'application/json');
         }
+    }
+
+    private function hasVisibleDuplicate(string $column, ?string $value, ?int $ignoreId = null): bool
+    {
+        return HouseOwnerType::where($column, $value)
+            ->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))
+            ->exists();
     }
 }
