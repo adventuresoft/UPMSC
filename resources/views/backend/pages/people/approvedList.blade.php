@@ -338,7 +338,7 @@
                                     <th>Mobile</th>
                                     <th>Gender & DOB</th>
                                     <th>Profession</th>
-                                    <th>Present Address</th>
+                                    <th>Address</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -461,25 +461,37 @@
                                          </td>
 
                                         <td>
-                                            <!--
-                                            @php
-                                                $instituteFind = user_institute_information($user->institute_id);
-                                            @endphp
-                                            {{ $instituteFind['institute']->name ?? '' }} {{ $instituteFind['institute_type'] ?? '' }} -->
-                                           {{ collect([
-    $user->addressInfo?->presentDistrict?->name ?? $user->addressInfo?->permanentDistrict?->name ?? '',
-    $user->addressInfo?->presentThana?->name ?? $user->addressInfo?->permanentThana?->name ?? '',
-    $user->addressInfo?->presentPostoffice?->name ?? $user->addressInfo?->permanentPostOffice?->name ?? '',
+                                            <strong>Present:</strong> {{ collect([
+    $user->addressInfo?->presentDistrict?->name ?? '',
+    $user->addressInfo?->presentThana?->name ?? '',
+    $user->addressInfo?->presentUnion?->name ?? '',
+    $user->addressInfo?->presentPostoffice?->name ?? ''
 ])->filter()->implode(', ') }} 
-
 <br/>
-
 {{ collect([
-    $user->addressInfo?->presentVillage?->en_name ?? $user->addressInfo?->permanentVillage?->en_name ?? '',
-    $user->addressInfo?->presentWard?->en_ward_no ?? $user->addressInfo?->permanentWard?->en_ward_no ?? '',
-    $user->addressInfo?->present_area ?? $user->addressInfo?->permanent_area ?? '',
+    $user->addressInfo?->presentVillage?->en_name ?? '',
+    $user->addressInfo?->presentWard?->en_ward_no ?? '',
+    $user->addressInfo?->present_area ?? '',
     $user->addressInfo?->presentRoad?->name ?? $user->addressInfo?->present_road ?? '',
     $user->addressInfo?->presentHouse?->house ?? $user->addressInfo?->present_house ?? ''
+])->filter()->implode(', ') }}
+
+<br/>
+<br/>
+
+                                           <strong>Permanent:</strong> {{ collect([
+    $user->addressInfo?->permanentDistrict?->name ?? '',
+    $user->addressInfo?->permanentThana?->name ?? '',
+    $user->addressInfo?->permanentUnion?->name ?? '',
+    $user->addressInfo?->permanentPostOffice?->name ?? ''
+])->filter()->implode(', ') }} 
+<br/>
+{{ collect([
+    $user->addressInfo?->permanentVillage?->en_name ?? '',
+    $user->addressInfo?->permanentWard?->en_ward_no ?? '',
+    $user->addressInfo?->permanent_area ?? '',
+    $user->addressInfo?->permanentRoad?->name ?? $user->addressInfo?->permanent_road ?? '',
+    $user->addressInfo?->permanentHouse?->house ?? $user->addressInfo?->permanent_house ?? ''
 ])->filter()->implode(', ') }}
                                         </td>
 

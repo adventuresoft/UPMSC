@@ -102,8 +102,10 @@ class PeopleController extends Controller
         $users = User::with(['people', 'addressInfo' => function($query) {
             $query->with(['permanentVillage', 'permanentWard', 'permanentThana', 'permanentDistrict', 'permanentPostOffice']);
         }])
-        ->whereNotIn('role_id', [1, 2, 3, 4])
-        ->applyMultitenancy();
+        ->whereNotIn('role_id', [1, 2, 3, 4]);
+
+        $this->applyUnionAdminPeopleFilter($users);
+        $users->applyMultitenancy();
 
         $users->where(function($query) use ($q) {
             $query->where('name', 'LIKE', "%{$q}%")
@@ -163,6 +165,7 @@ class PeopleController extends Controller
             'freedomFighterInfo',
             'financialInfos',
             'addressInfo.presentWard',
+            'addressInfo.presentUnion',
             'addressInfo.presentDistrict',
             'addressInfo.presentThana',
             'addressInfo.presentPostoffice',
@@ -173,6 +176,7 @@ class PeopleController extends Controller
             'addressInfo.permanentThana',
             'addressInfo.permanentPostOffice',
             'addressInfo.permanentVillage',
+            'addressInfo.permanentUnion',
             'addressInfo.permanentWard',
             'addressInfo.permanentRoad',
             'addressInfo.permanentHouse',
@@ -181,6 +185,7 @@ class PeopleController extends Controller
             $q->whereNull('approved_id');
         });
 
+        $this->applyUnionAdminPeopleFilter($query);
         $query->applyMultitenancy();
 
         $data['professions'] = \App\Models\BasicSettings\Profession::where('status', true)->get();
@@ -201,6 +206,7 @@ class PeopleController extends Controller
             'disabilityInfo',
             'freedomFighterInfo',
             'financialInfos',
+            'addressInfo.presentUnion',
             'addressInfo.presentDistrict',
             'addressInfo.presentThana',
             'addressInfo.presentPostoffice',
@@ -212,12 +218,14 @@ class PeopleController extends Controller
             'addressInfo.permanentThana',
             'addressInfo.permanentPostOffice',
             'addressInfo.permanentVillage',
+            'addressInfo.permanentUnion',
             'addressInfo.permanentWard',
         ])->whereNotIn('role_id', [1, 2, 3, 4])
         ->whereHas('people', function ($q) {
             $q->whereNotNull('approved_id');
         });
 
+        $this->applyUnionAdminPeopleFilter($query);
         $query->applyMultitenancy();
 
         $data['professions'] = \App\Models\BasicSettings\Profession::where('status', true)->get();
@@ -238,6 +246,7 @@ class PeopleController extends Controller
             'disabilityInfo',
             'freedomFighterInfo',
             'financialInfos',
+            'addressInfo.presentUnion',
             'addressInfo.presentDistrict',
             'addressInfo.presentThana',
             'addressInfo.presentPostoffice',
@@ -249,12 +258,14 @@ class PeopleController extends Controller
             'addressInfo.permanentThana',
             'addressInfo.permanentPostOffice',
             'addressInfo.permanentVillage',
+            'addressInfo.permanentUnion',
             'addressInfo.permanentWard',
         ])->whereNotIn('role_id', [1, 2, 3, 4])
         ->whereHas('people', function ($q) {
             $q->whereNotNull('approved_id');
         });
 
+        $this->applyUnionAdminPeopleFilter($query);
         $query->applyMultitenancy();
 
         $user = auth()->user();
@@ -341,6 +352,53 @@ class PeopleController extends Controller
         $data['professions'] = \App\Models\BasicSettings\Profession::where('status', true)->get();
         $data['users'] = $query->latest()->get();
         return view('backend.pages.people.search', $data);
+    }
+
+    protected function applyUnionAdminPeopleFilter(&$query)
+    {
+        $user = auth()->user();
+        if (!$user || $user->role_id != 6) {
+            return;
+        }
+
+        $unionId = $this->resolveUnionIdFromArea($user->area);
+
+        if (!$unionId && $user->institute_id && $user->institute && $user->institute->union_id) {
+            $unionId = $user->institute->union_id;
+        }
+
+        if (!$unionId) {
+            return;
+        }
+
+        $unionId = intval($unionId);
+
+        $query->whereHas('addressInfo', function ($aq) use ($unionId) {
+            $aq->where('permanent_union_id', $unionId);
+        });
+    }
+
+    protected function resolveUnionIdFromArea($area)
+    {
+        if (!$area) {
+            return null;
+        }
+
+        $area = trim(preg_replace('/\s*:\s*/', ':', $area));
+
+        if (stripos($area, 'Union:') !== false) {
+            return trim(str_ireplace('Union:', '', $area));
+        }
+
+        if (is_numeric($area)) {
+            return $area;
+        }
+
+        $union = \App\Models\Union::where('name', $area)
+            ->orWhere('name', 'like', "%{$area}%")
+            ->first();
+
+        return $union ? $union->id : null;
     }
 
     /**

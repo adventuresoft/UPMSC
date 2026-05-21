@@ -76,7 +76,7 @@
           <div class="flex flex-col md:flex-row items-center gap-8 py-2">
             <img
               src="{{asset('assets/images/logo/govt-bd-logo.png')}}"
-              class="h-12 w-auto object-contain"
+              class="h-20 w-auto object-contain"
               alt="Govt Logo"
             />
             <div class="text-black text-center md:text-left">
