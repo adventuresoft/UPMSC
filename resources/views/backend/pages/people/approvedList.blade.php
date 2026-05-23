@@ -266,6 +266,24 @@
 <section class="content">
     <div class="container-fluid">
 
+         @php
+            $currentInstitute = null;
+            if (!empty($users) && count($users) > 0) {
+                $firstUser = (is_object($users) && method_exists($users, 'first')) ? $users->first() : (is_array($users) ? $users[0] : null);
+                $currentInstitute = $firstUser?->institute ?? null;
+            }
+
+            if (!$currentInstitute) {
+                if (Auth::guard('web')->check()) {
+                    $currentInstitute = Auth::guard('web')->user()->institute;
+                } elseif (Auth::guard('people')->check()) {
+                    $currentInstitute = Auth::guard('people')->user()->institute;
+                }
+            }
+
+            $listLogo = $currentInstitute ? imageUrl($currentInstitute->left_image, 'assets/images/logo/govt-bd-logo.png') : asset('assets/images/logo/govt-bd-logo.png');
+        @endphp
+
         <div class="row">
             <div class="col-md-12">
 
@@ -295,14 +313,7 @@
                         <!-- FILTER BAR -->
                         <div class="filter-bar">
                             <div class="row align-items-center g-3">
-                                <div class="col-md-2">
-                                    <select id="tableLength" class="form-control form-control-sm">
-                                        <option value="10">10 entries</option>
-                                        <option value="25">25 entries</option>
-                                        <option value="50">50 entries</option>
-                                        <option value="100">100 entries</option>
-                                    </select>
-                                </div>
+                                
                                 <div class="col-md-2">
                                     <input type="text" id="search_name" class="form-control form-control-sm" placeholder="Search Name...">
                                 </div>

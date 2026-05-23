@@ -428,11 +428,19 @@
 
         {{-- Header with Logos --}}
         @php
-            $headerUnion = $user->addressInfo?->presentUnion ?? $user->institute?->union;
-            $institute = $user->institute ?? (Auth::guard('web')->check() ? Auth::guard('web')->user()->institute : (Auth::guard('people')->check() ? Auth::guard('people')->user()->institute : null));
-            $headerLogo = asset('images/dhaka.png'); // fallback
-            if ($institute && $institute->left_image) {
-                $headerLogo = asset($institute->left_image);
+            // Use the institute of the currently authenticated user for header branding
+            $authInstitute = null;
+            if (Auth::guard('web')->check()) {
+                $authInstitute = Auth::guard('web')->user()->institute;
+            } elseif (Auth::guard('people')->check()) {
+                $authInstitute = Auth::guard('people')->user()->institute;
+            }
+
+            $headerUnion = $authInstitute?->union ?? $user->addressInfo?->presentUnion;
+            $headerLogo = asset('assets/images/logo/govt-bd-logo.png'); // fallback
+
+            if ($authInstitute) {
+                $headerLogo = imageUrl($authInstitute->left_image, 'assets/images/logo/govt-bd-logo.png');
             }
         @endphp
         <div class="header-logos">

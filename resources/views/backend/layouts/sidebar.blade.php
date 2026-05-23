@@ -58,12 +58,12 @@
       if (Auth::guard('web')->check() && Auth::guard('web')->user()->institute) {
           $inst = Auth::guard('web')->user()->institute;
           if ($inst->left_image) {
-              $currentLogo = asset($inst->left_image);
+              $currentLogo = imageUrl($inst->left_image);
           }
       } elseif (Auth::guard('people')->check() && Auth::guard('people')->user()->institute) {
           $inst = Auth::guard('people')->user()->institute;
           if ($inst->left_image) {
-              $currentLogo = asset($inst->left_image);
+              $currentLogo = imageUrl($inst->left_image);
           }
       }
   @endphp

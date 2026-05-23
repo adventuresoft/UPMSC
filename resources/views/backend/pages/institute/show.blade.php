@@ -207,16 +207,16 @@
                     <div class="info-body">
                         <div class="mb-4">
                             <label class="info-label d-block mb-2">Top Banner</label>
-                            <img src="{{ $institute->top_image ? asset($institute->top_image) : asset('default-banner.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-banner.png')}}'">
+                            <img src="{{ $institute->top_image ? imageUrl($institute->top_image) : asset('default-banner.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-banner.png')}}'">
                         </div>
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="info-label d-block mb-2">Left Asset</label>
-                                <img src="{{ $institute->left_image ? asset($institute->left_image) : asset('default-image.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-image.png')}}'">
+                                <img src="{{ $institute->left_image ? $institute->left_image : asset('default-image.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-image.png')}}'">
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="info-label d-block mb-2">Right Asset</label>
-                                <img src="{{ $institute->right_image ? asset($institute->right_image) : asset('default-image.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-image.png')}}'">
+                                <img src="{{ $institute->right_image ? imageUrl($institute->right_image) : asset('default-image.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-image.png')}}'">
                             </div>
                         </div>
                     </div>
