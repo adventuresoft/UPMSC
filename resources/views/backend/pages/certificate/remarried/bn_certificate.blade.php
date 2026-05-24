@@ -174,8 +174,8 @@
 @endif
                             উপজেলা: - <span>{{ $certificate->user->institute->union->thana->bn_name ?? '' }}</span>,
                             জেলা: - <span>{{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</span>।
-                            তিনি একজন বাংলাদেশী নাগরিক এবং এই ইউনিয়নের স্থায়ী বাসিন্দা। 
-                            আমার জানা মতে তিনি   <span>{{ $certificate->user->familyInfo->marital_status?? '' }}</span>।
+                            তিনি একজন বাংলাদেশী নাগরিক এবং এই ইউনিয়নের স্থায়ী বাসিন্দা।
+                            আমার জানা মতে তিনি   <strong>{{ family_marital_status_label(optional($certificate->user->familyInfo)->marital_status ?? null, 'bn') }}</strong>।
                             এবং এই তথ্য ওয়ার্ড নম্বর - {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }}   এর সদস্য দ্বারা যাচাইকৃত ।
                         </p>
 

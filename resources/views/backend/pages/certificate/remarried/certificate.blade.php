@@ -177,7 +177,7 @@
                             Upzila:- <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,
                             District: - <span>{{ $certificate->user->institute->union->thana->district->name ?? '' }}</span>.
                            He is a Bangladeshi citizen and a permanent resident of this union.
-                          As far as I know, he <strong>{{ $certificate->user->familyInfo->marital_status==1? 'Unmarrid': ' Marrid' }}</strong> 
+                          As far as I know, he <strong>{{ family_marital_status_label(optional($certificate->user->familyInfo)->marital_status ?? null) }}</strong> 
                           
                          And this information is the ward number - {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }}   Verified by its members.
                         </p>
