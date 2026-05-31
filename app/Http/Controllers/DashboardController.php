@@ -48,6 +48,20 @@ class DashboardController extends Controller
             ->groupBy('gender')
             ->get();
 
+        $data['applicant_count'] = User::whereNotIn('role_id', [1, 2, 3, 4])
+            ->whereHas('people', function ($q) {
+                $q->whereNull('approved_id');
+            })
+            ->applyMultitenancy()
+            ->count();
+
+        $data['approved_count'] = User::whereNotIn('role_id', [1, 2, 3, 4])
+            ->whereHas('people', function ($q) {
+                $q->whereNotNull('approved_id');
+            })
+            ->applyMultitenancy()
+            ->count();
+
         // Module Counts with Multitenancy
         $data['taxes'] = Tax::applyMultitenancy()->count();
         $data['organizations'] = Organization::applyMultitenancy()->count();

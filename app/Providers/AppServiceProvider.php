@@ -14,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Load custom global helper files so functions like imageUrl() are always available.
+        foreach (glob(app_path('Helpers') . '/*.php') as $helper) {
+            require_once $helper;
+        }
     }
 
     /**

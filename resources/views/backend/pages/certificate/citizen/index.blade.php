@@ -111,7 +111,7 @@
                                     <th>Certificate No</th>
                                     <th>ID & Name</th>
                                     <th>Address & Mobile</th>
-                                    <!-- <th>Quantity</th> -->
+                                    <th>Date</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -134,7 +134,7 @@
                                             onerror="this.src='{{ asset('default.png') }}'">
                                     </td>
 
-                                    <td>{{ bnValue($certificate->system_id) }}</td>
+                                    <td>{{ Value($certificate->system_id) }}</td>
 
                                     <td>
                                         <span class="citizen-id">
@@ -154,6 +154,8 @@
                                    {{ $certificate->user?->institute?->union?->thana?->bn_name ?? '' }},
                                    {{ $certificate->user?->institute?->union?->thana?->district?->bn_name ?? '' }}।
                                     </td>
+
+                                    <td>{{ Value(date('d/m/Y', strtotime($certificate->created_at??date('Y/m/d')))) }}</td>
 
                                     <td>
                                         @if($certificate->status == 0)

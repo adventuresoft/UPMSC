@@ -22,32 +22,29 @@
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-warning">
-                        @php
-
-                            $male = 0;
-                            $female = 0;
-                            $others = 0;
-                            foreach ($users as $user) {
-                                if ($user->gender == 1) {
-                                    $male = $user->count;
-                                } else if($user->gender ==2){
-                                    $female = $user->count;
-                                } else{
-                                    $others = $user->count;
-                                }
-                            }
-                            $total = $male + $female + $others;
-
-                        @endphp
                         <div class="inner">
-                            <h3>{{$total}}</h3>
-
-                            <p>Total People</p>
+                            <h3>{{ $applicant_count }}</h3>
+                            <p>Applicant List</p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-users"></i>
+                            <i class="fa fa-user-clock"></i>
                         </div>
-                        <p class="small-box-footer">Male: {{$male}} Female: {{$female}} Others: {{$others}}</p>
+                        <a href="{{ route('people.index') }}" class="small-box-footer link-light">View Applicant List <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>{{ $approved_count }}</h3>
+                            <p>Approved People</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-user-check"></i>
+                        </div>
+                        <a href="{{ route('peopleapprovedlist') }}" class="small-box-footer link-light">View Approved List <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
