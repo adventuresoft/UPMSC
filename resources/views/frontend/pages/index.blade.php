@@ -15,6 +15,7 @@
     href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/themes/splide-default.min.css" />
 
   <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
+  <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}" />
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <style>
@@ -246,8 +247,6 @@
                 ১
               </div>
               <h4 class="mt-2 text-sm font-bold text-gray-800">আবেদন করুন</h4>
-              <p class="mt-0.5 text-[10px] text-gray-500 leading-tight max-w-[150px]">নাগরিক পোর্টালের জন্য আবেদন ফরম
-                পূরণ করুন।</p>
             </div>
             <!-- Step 2 -->
             <div class="relative z-10 flex flex-col items-center text-center w-full md:w-1/3 px-2">
@@ -256,8 +255,6 @@
                 ২
               </div>
               <h4 class="mt-2 text-sm font-bold text-gray-800">অনুমোদন পান</h4>
-              <p class="mt-0.5 text-[10px] text-gray-500 leading-tight max-w-[150px]">আবেদন যাচাই হলে SMS-এ লগইন তথ্য
-                পাবেন।</p>
             </div>
             <!-- Step 3 -->
             <div class="relative z-10 flex flex-col items-center text-center w-full md:w-1/3 px-2">
@@ -266,8 +263,6 @@
                 ৩
               </div>
               <h4 class="mt-2 text-sm font-bold text-gray-800">লগইন ও সেবা</h4>
-              <p class="mt-0.5 text-[10px] text-gray-500 leading-tight max-w-[150px]">পোর্টালে লগইন করে সনদ, কর, ও
-                অন্যান্য সেবা নিন।</p>
             </div>
           </div>
         </div>

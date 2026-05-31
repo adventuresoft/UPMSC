@@ -112,6 +112,7 @@
         /* Main Content */
         .portal-main {
             margin-left: var(--sidebar-width);
+            margin-top: 3rem;
             min-height: 100vh;
             padding: 32px;
             transition: all 0.3s ease;
@@ -214,6 +215,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}">
     @stack('css')
 </head>
 <body>

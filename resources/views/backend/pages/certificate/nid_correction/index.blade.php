@@ -3,18 +3,16 @@
 @push('style')
 <style>
     .card-info:not(.card-outline) > .card-header {
-        background-color: #17a2b8;
+        background-color: #f3f4f6;
+        border-bottom-color: #e6eef3;
+        color: #6b7a86;
     }
     .card-title {
         font-weight: semi-bold;
         font-size: 24px;
     }
     .btn-create-list {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 5px 15px;
-        border-radius: 4px;
+        display: inline-block;
         margin-left: 5px;
     }
     .table thead th {
@@ -90,8 +88,8 @@
                                 <h3 class="card-title">NID Correction Certificate</h3>
                             </div>
                             <div class="col-md-6 text-right">
-                                <a href="{{ route('nid-correction.create') }}" class="btn-create-list">Create</a>
-                                <a href="{{ route('nid-correction.index') }}" class="btn-create-list">List</a>
+                                <a href="{{ route('nid-correction.create') }}" class="btn btn-primary">Create</a>
+                                <a href="{{ route('nid-correction.index') }}" class="btn btn-primary ml-2">List</a>
                             </div>
                         </div>
                     </div>
