@@ -47,6 +47,8 @@
     $isChairman = $isPath(['chairman*']) || in_array($_subMenu, ['chairmanCreate', 'chairmanList']) || $_mainMenu == 'chairman';
 
     $isCouncilor = $isPath(['councilor*']) || in_array($_subMenu, ['councilorCreate', 'councilorList']) || $_mainMenu == 'councilor';
+
+    $isReliefCard = $isPath(['relief-card*']) || $_subMenu == 'ReliefCardList';
 @endphp
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
@@ -159,6 +161,12 @@
               <a href="{{ route('people.applications.grant.create') }}" class="nav-link {{ request()->routeIs('people.applications.grant.create') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>অনুদান প্রাপ্তির আবেদন</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('people.applications.relief-card.create') }}" class="nav-link {{ request()->routeIs('people.applications.relief-card.create') ? 'active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>রিলিফ কার্ড আবেদন</p>
               </a>
             </li>
           </ul>
@@ -873,85 +881,16 @@
 </li>
 @endcan
 
-{{-- Relief --}}
-          <!-- <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-seedling"></i>
-              <p>
-                Relief
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
+{{-- Relief Card --}}
+@if(is_institutional_admin() || Auth::user()->can('dashboard.read'))
+<li class="nav-item {{ $isReliefCard ? 'menu-open' : '' }}">
+  <a href="{{ route('relief-card.index') }}" class="nav-link {{ $isReliefCard ? 'active' : '' }}">
+    <i class="nav-icon fas fa-hand-holding-heart"></i>
+    <p>Relief Card</p>
+  </a>
+</li>
+@endif
 
-              @if (create_permission())
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Add Relief</p>
-                  </a>
-                </li>
-              @endif
-
-              @if (view_permission())
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>View</p>
-                  </a>
-                </li>
-              @endif
-
-              @if (view_permission())
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Type</p>
-                  </a>
-                </li>
-              @endif
-
-              @if (view_permission())
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Category</p>
-                  </a>
-                </li>
-              @endif
-
-              @if (view_permission())
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Sub Category</p>
-                  </a>
-                </li>
-              @endif
-
-              @if (view_permission())
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Distribution</p>
-                  </a>
-                </li>
-              @endif
-
-              @if (view_permission())
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Recived</p>
-                  </a>
-                </li>
-              @endif
-
-
-            </ul>
-          </li> -->
-
-          {{-- House Info --}}
           @can('house.read')
           <li class="nav-item {{ $isHouse ? 'menu-open' : '' }}">
           <a href="#" class="nav-link">

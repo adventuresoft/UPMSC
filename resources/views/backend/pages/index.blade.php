@@ -136,6 +136,7 @@
                     ['value' => $organizations, 'title' => 'Total Organization', 'icon' => 'fas fa-briefcase', 'route' => route('organization.index'), 'link' => 'View All Organizations', 'accent' => '#dc2626'],
                     ['value' => $houses, 'title' => 'Total House', 'icon' => 'fa fa-home', 'route' => route('house.index'), 'link' => 'View All Houses', 'accent' => '#2563eb'],
                     ['value' => $vehicles, 'title' => 'Total Vehicle', 'icon' => 'fas fa-truck', 'route' => route('vehicle.index'), 'link' => 'View All Vehicles', 'accent' => '#059669'],
+                    ['value' => $relief_cards, 'title' => 'Total Relief Cards', 'icon' => 'fa fa-hand-holding-heart', 'route' => route('relief-card.index'), 'link' => 'View Relief Cards', 'accent' => '#ec4899'],
                 ];
             @endphp
 

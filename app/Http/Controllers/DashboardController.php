@@ -31,6 +31,7 @@ use App\Models\Road;
 use App\Models\Tax\Tax;
 use App\Models\People;
 use App\Models\User;
+use App\Models\ReliefCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -71,6 +72,7 @@ class DashboardController extends Controller
         $data['vehicles'] = Vehicle::applyMultitenancy()->count();
         $data['bridges'] = Bridge::applyMultitenancy()->count();
         $data['rivers'] = Road::applyMultitenancy()->where('road_type_id', 2)->sum('distance');
+        $data['relief_cards'] = ReliefCard::applyMultitenancy()->count();
 
         // Certificate Counts
         $certMappings = [

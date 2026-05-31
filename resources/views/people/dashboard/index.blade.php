@@ -204,6 +204,16 @@
                                     <a href="{{ route('people.applications.tax.create') }}" class="btn btn-info btn-sm px-4 rounded-lg">আবেদন করুন</a>
                                 </div>
                             </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="p-4 rounded-xl border border-rose-100 bg-rose-50/30 hover:shadow-md transition">
+                                    <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center mb-3">
+                                        <i class="fas fa-hand-holding-heart"></i>
+                                    </div>
+                                    <h6 class="font-bold text-gray-800">রিলিফ কার্ড আবেদন</h6>
+                                    <p class="text-xs text-gray-500 mb-3">ভিজিডি, ভিজিএফ, ওএমএস এবং অন্যান্য সামাজিক নিরাপত্তা কার্ডের আবেদন।</p>
+                                    <a href="{{ route('people.applications.relief-card.create') }}" class="btn btn-danger btn-sm px-4 rounded-lg">আবেদন করুন</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

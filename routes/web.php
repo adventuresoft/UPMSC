@@ -120,6 +120,7 @@ use App\Http\Controllers\People\PeopleAuthController;
 use App\Http\Controllers\People\PeopleDashboardController;
 use App\Http\Controllers\PeopleCredentialController;
 use App\Http\Controllers\People\PeopleApplicationController;
+use App\Http\Controllers\ReliefCardController;
 use App\Http\Controllers\People\PeopleRegistrationController;
 use App\Http\Controllers\People\PeopleStatusController;
 use Illuminate\Support\Facades\Route;
@@ -576,7 +577,11 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
     Route::resource('institute-type', InstituteTypeController::class);
     Route::resource('institute-category', InstituteCategoryController::class);
 
-
+    // Relief Card Routes (Admin)
+    Route::get('relief-card', [ReliefCardController::class, 'index'])->name('relief-card.index');
+    Route::post('relief-card/approve', [ReliefCardController::class, 'approve'])->name('relief-card.approve');
+    Route::post('relief-card/reject', [ReliefCardController::class, 'reject'])->name('relief-card.reject');
+    Route::delete('relief-card/{id}', [ReliefCardController::class, 'destroy'])->name('relief-card.destroy');
 
 });
 
@@ -603,6 +608,8 @@ Route::prefix('people-portal')->name('people.')->group(function () {
             Route::get('/vehicle', [PeopleApplicationController::class, 'vehicleCreate'])->name('vehicle.create');
             Route::get('/tax', [PeopleApplicationController::class, 'taxCreate'])->name('tax.create');
             Route::get('/grant', function() { return view('people.applications.grant'); })->name('grant.create');
+            Route::get('/relief-card', [PeopleApplicationController::class, 'reliefCardCreate'])->name('relief-card.create');
+            Route::post('/relief-card', [PeopleApplicationController::class, 'reliefCardStore'])->name('relief-card.store');
 
             // Registration Tabs (People Info)
             Route::prefix('registration')->name('registration.')->group(function () {
