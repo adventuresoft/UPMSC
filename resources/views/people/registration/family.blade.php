@@ -24,8 +24,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-4">
-                                <label class="text-xs font-bold text-gray-600 uppercase mb-2 block">পারিবারিক সদস্যের ধরন <span class="text-danger">*</span></label>
-                                <select name="family_type_id" required class="form-control border-gray-200 rounded-lg text-sm">
+                                <label class="text-xs font-bold text-gray-600 uppercase mb-2 block">পারিবারিক সদস্যের ধরন</label>
+                                <select name="family_type_id" class="form-control border-gray-200 rounded-lg text-sm">
                                     <option value="">নির্বাচন করুন</option>
                                     @foreach ($familyTypes as $familyType)
                                         <option value="{{$familyType->id}}" {{$user->familyInfo ? ($user->familyInfo->family_type_id == $familyType->id ? 'selected' : '') : ''}}>{{$familyType->bn_name ?? $familyType->en_name}}</option>
@@ -35,8 +35,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-4">
-                                <label class="text-xs font-bold text-gray-600 uppercase mb-2 block">পারিবারিক শ্রেণী <span class="text-danger">*</span></label>
-                                <select name="family_category_id" required class="form-control border-gray-200 rounded-lg text-sm">
+                                <label class="text-xs font-bold text-gray-600 uppercase mb-2 block">পারিবারিক শ্রেণী</label>
+                                <select name="family_category_id" class="form-control border-gray-200 rounded-lg text-sm">
                                     <option value="">নির্বাচন করুন</option>
                                     @foreach ($familyCategories as $familyCategory)
                                         <option value="{{$familyCategory->id}}" {{$user->familyInfo ? ($user->familyInfo->family_category_id == $familyCategory->id ? 'selected' : '') : ''}}>{{$familyCategory->bn_name ?? $familyCategory->en_name}}</option>

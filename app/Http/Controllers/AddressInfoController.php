@@ -67,7 +67,10 @@ class AddressInfoController extends Controller
         $data['roads'] = [];
         $data['post_officeses'] = [];
 
-        $data['wards'] = UnionWard::where('status', true)->get();
+        $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
         $data['post_officeses'] = PostOffice::latest()->get();
 
         if ($institute) {

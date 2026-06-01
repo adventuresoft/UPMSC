@@ -49,7 +49,7 @@
                                         Family Member Type
                                     </label>
                                     <div class="col-sm-10">
-                                        <select name="family_type_id" required class="form-control" id="family_type_id">
+                                        <select name="family_type_id" class="form-control" id="family_type_id">
                                             <option value="">Select Member Type</option>
                                             @if (count($familyTypes))
                                                 @foreach ($familyTypes as $familyType)
@@ -67,7 +67,7 @@
                                         Family Category
                                     </label>
                                     <div class="col-sm-10">
-                                        <select required name="family_category_id" class="form-control" id="family_category_id">
+                                        <select name="family_category_id" class="form-control" id="family_category_id">
                                             <option value="">Select Family Category</option>
                                             @if (count($familyCategories))
                                                 @foreach ($familyCategories as $familyCategory)

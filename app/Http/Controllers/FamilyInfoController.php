@@ -32,8 +32,14 @@ class FamilyInfoController extends Controller
     {
         $data['user'] = User::with('familyInfo')->find($id);
         $data['religions'] = Religion::where('status', true)->get();
-        $data['familyTypes'] = FamilyType::where('status', true)->get();
-        $data['familyCategories'] = FamilyCategory::where('status', true)->get();
+        $data['familyTypes'] = FamilyType::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
+        $data['familyCategories'] = FamilyCategory::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
 
         return view('backend.pages.people.tabs.family', $data);
     }
@@ -47,7 +53,8 @@ class FamilyInfoController extends Controller
     public function store(Request $request)
     {
             $validate = Validator::make($request->all(), [
-                'family_type_id' => 'required',
+                'family_type_id' => 'nullable',
+                'family_category_id' => 'nullable',
                 'father_name' => 'nullable|max:190',
                 'father_live_status' => 'nullable|max:190',
                 'father_nid' => 'nullable|max:190',
@@ -75,8 +82,8 @@ class FamilyInfoController extends Controller
                 $peopleFamily = FamilyInfo::updateOrCreate([
                     'user_id' => $request->user_id
                 ], [
-                    'family_type_id' => $request->family_type_id,
-                    'family_category_id' => $request->family_category_id,
+                    'family_type_id' => $request->filled('family_type_id') ? $request->family_type_id : null,
+                    'family_category_id' => $request->filled('family_category_id') ? $request->family_category_id : null,
                     'father_name' => $request->father_name,
 
                     'father_name_bn' => $request->father_name_bn,

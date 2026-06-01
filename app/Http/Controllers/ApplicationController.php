@@ -53,7 +53,10 @@ class ApplicationController extends Controller
         $data['wards'] = $wards;
 
         $data['roads'] = Road::latest()->get();
-        $data['permanent_unions'] = Union::where('thana_id', 385)->get();
+        $data['permanent_unions'] = Union::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
         $data['permanent_post_offices'] = PostOffice::where('thana_id', 385)->get();
 
 

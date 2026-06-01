@@ -270,7 +270,10 @@ class PeopleController extends Controller
 
         $user = auth()->user();
         $permittedAreas = collect();
-        $permittedWards = \App\Models\UnionWard::where('status', true)->get();
+        $permittedWards = \App\Models\UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
 
         if (is_superadmin()) {
             // Super admins see all areas
@@ -536,8 +539,14 @@ class PeopleController extends Controller
         $data['districts'] =  District::where('status', true)->orderBy('name')->get();
         $data['countries'] =  Country::orderBy('name')->get();
         $data['religions'] = Religion::where('status', true)->get();
-        $data['familyTypes'] = FamilyType::where('status', true)->get();
-        $data['familyCategories'] = FamilyCategory::where('status', true)->get();
+        $data['familyTypes'] = FamilyType::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
+        $data['familyCategories'] = FamilyCategory::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
         $data['user'] = $user = User::with('familyInfo', 'educationInfos', 'financialInfos', 'propertyInfos', 'disabilityInfo', 'freedomFighterInfo')
         ->with( 'institute')
         ->with(array('addressInfo' => function($address){
@@ -563,7 +572,10 @@ class PeopleController extends Controller
 
         $data['religions'] = Religion::where('status', true)->get();
         $data['villages'] = [];
-        $data['wards'] = UnionWard::where('status', true)->get();
+        $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
         $data['permanent_houses'] = [];
         $data['roads'] = [];
         if ($institute) {

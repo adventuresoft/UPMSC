@@ -67,43 +67,69 @@
                                         <td class="titleheading">বিভাগ</td>
                                         <td class="colon">:</td>
                                         <td class="inputfield">
-                                            <select name="division_id" class="form-control select2" id="division_id">
+                                            <select name="division_id" class="form-control select2" id="division_id" @if(isset($userDivision) && $userDivision) disabled @endif>
                                              @if ($divisions)
                                              @foreach ($divisions as $division)
-                                             <option value="{{$division->id}}">{{$division->name}}</option>
+                                             <option value="{{$division->id}}" @if(isset($userDivision) && $userDivision->id == $division->id) selected @endif>{{$division->name}}</option>
                                              @endforeach
                                              @endif
                                          </select>
+                                         @if(isset($userDivision) && $userDivision)
+                                            <input type="hidden" name="division_id" value="{{ $userDivision->id }}">
+                                         @endif
                                      </td>
                                  </tr>
                                  <tr>
                                     <td class="titleheading">জেলা</td>
                                     <td class="colon">:</td>
                                     <td class="inputfield">
-                                       <select class="form-control select2" name="district_id" id="district_id">
+                                       <select class="form-control select2" name="district_id" id="district_id" @if(isset($userDistrict) && $userDistrict) disabled @endif>
                                         <option value="">Select District</option>
-                                        <option value="">No District Found</option>
+                                        @if(isset($districtsForDivision) && $districtsForDivision->count())
+                                            @foreach($districtsForDivision as $district)
+                                            <option value="{{ $district->id }}" @if(isset($userDistrict) && $userDistrict->id == $district->id) selected @endif>{{ $district->name }}</option>
+                                            @endforeach
+                                        @else
+                                            <option value="">No District Found</option>
+                                        @endif
                                     </select>
+                                    @if(isset($userDistrict) && $userDistrict)
+                                        <input type="hidden" name="district_id" value="{{ $userDistrict->id }}">
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titleheading">থানা</td>
                                 <td class="colon">:</td>
                                 <td class="inputfield">
-                                 <select  class="form-control select2" name="thana_id" id="thana_id">
+                                 <select  class="form-control select2" name="thana_id" id="thana_id" @if(isset($userThana) && $userThana) disabled @endif>
                                     <option value="">Select Thana</option>
-                                    <option value="">No Thana Found</option>
+                                    @if(isset($thanasForDistrict) && $thanasForDistrict->count())
+                                        @foreach($thanasForDistrict as $thana)
+                                        <option value="{{ $thana->id }}" @if(isset($userThana) && $userThana->id == $thana->id) selected @endif>{{ $thana->name }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="">No Thana Found</option>
+                                    @endif
                                 </select>
+                                @if(isset($userThana) && $userThana)
+                                    <input type="hidden" name="thana_id" value="{{ $userThana->id }}">
+                                @endif
                             </td>
                         </tr>
                         <tr>
                             <td>ইউনিয়ন / পৌরসভা</td>
                             <td>:</td>
                             <td>
-                                <select  class="form-control select2"  name="union_id" id="union_id">
+                                <select  class="form-control select2"  name="union_id" id="union_id" @if(isset($userUnion) && $userUnion) disabled @endif>
                                     <option value="">Select Union</option>
-                                    <option value="">No Union Found</option>
+                                    @if(isset($userUnion) && $userUnion)
+                                        <option value="{{ $userUnion->id }}" selected>{{ $userUnion->name }}</option>
+                                    @endif
                                 </select>
+                                @if(isset($userUnion) && $userUnion)
+                                    <input type="hidden" name="union_id" value="{{ $userUnion->id }}">
+                                @endif
                             </td>
                         </tr>
                         <tr>
@@ -136,8 +162,11 @@
                             <td class="colon">:</td>
                             <td class="inputfield">
                                 <select type="text" class="form-control select2" id="chairman_id" name="userinfo[]">
-                                    <option>Please select chairman</option>
-                                </select>
+                                    <option>Please select chairman</option>                                    @if(isset($unionPeople) && $unionPeople->count())
+                                        @foreach($unionPeople as $person)
+                                            <option value="{{ $person->user_id }}">{{ $person->User->system_id }} : {{ $person->User->name }}</option>
+                                        @endforeach
+                                    @endif                                </select>
                             </td>
                         </tr>
                     </table>
@@ -327,6 +356,61 @@
 
   $(document).ready(function () {
       $(".select2").chosen();
+      
+      // For union admins, manually populate people lists on page load
+      @if(isset($userUnion) && $userUnion)
+      let unionId = '{{ $userUnion->id }}';
+      if(unionId) {
+          $.ajax({
+              type: "GET",
+              url: "{{ url('get-people-by-union') }}/"+unionId,
+              success: function(response) {
+                  // Populate all select fields with the response
+                  $('#chairman_id').html(response);
+                  $('#chairman_id').trigger("chosen:updated");
+                  
+                  $('#word_1_id').html(response);
+                  $('#word_1_id').trigger("chosen:updated");
+                  
+                  $('#word_2_id').html(response);
+                  $('#word_2_id').trigger("chosen:updated");
+                  
+                  $('#word_3_id').html(response);
+                  $('#word_3_id').trigger("chosen:updated");
+                  
+                  $('#word_4_id').html(response);
+                  $('#word_4_id').trigger("chosen:updated");
+                  
+                  $('#word_5_id').html(response);
+                  $('#word_5_id').trigger("chosen:updated");
+                  
+                  $('#word_6_id').html(response);
+                  $('#word_6_id').trigger("chosen:updated");
+                  
+                  $('#word_7_id').html(response);
+                  $('#word_7_id').trigger("chosen:updated");
+                  
+                  $('#word_8_id').html(response);
+                  $('#word_8_id').trigger("chosen:updated");
+                  
+                  $('#word_9_id').html(response);
+                  $('#word_9_id').trigger("chosen:updated");
+                  
+                  $('#reserved_word_1_id').html(response);
+                  $('#reserved_word_1_id').trigger("chosen:updated");
+                  
+                  $('#reserved_word_2_id').html(response);
+                  $('#reserved_word_2_id').trigger("chosen:updated");
+                  
+                  $('#reserved_word_3_id').html(response);
+                  $('#reserved_word_3_id').trigger("chosen:updated");
+                  
+                  $('#panel_chairman_id').html(response);
+                  $('#panel_chairman_id').trigger("chosen:updated");
+              }
+          });
+      }
+      @endif
   });
 
 </script>
@@ -370,6 +454,9 @@
     })
 
     $(document).on('change', '#division_id', function(e){
+        // Skip if division field is disabled (union admin)
+        if($(this).prop('disabled')) return;
+        
         e.preventDefault();
         
         let district_id = $('#district_id');
@@ -402,6 +489,9 @@
 
 
     $(document).on('change', '#district_id', function(e){
+        // Skip if district field is disabled (union admin)
+        if($(this).prop('disabled')) return;
+        
         e.preventDefault();
         let district_id = $(this).val();
         let present_thana_id = $("#thana_id");
@@ -436,6 +526,9 @@
     })
 
     $(document).on('change', '#thana_id', function(e){
+        // Skip if thana field is disabled (union admin)
+        if($(this).prop('disabled')) return;
+        
         e.preventDefault();
         let thana_id = $(this).val();
         let present_union_id = $('#union_id');
@@ -498,6 +591,9 @@
 
 
     $(document).on('change', '#union_id', function(e){
+        // Skip if union field is disabled (union admin)
+        if($(this).prop('disabled')) return;
+        
         e.preventDefault();
         let union_id = $(this).val();
         let ward_no = $('#chairman_id');

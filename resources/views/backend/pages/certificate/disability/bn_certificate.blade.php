@@ -181,22 +181,7 @@
                 </div>
 
                 <!-- ================= Signature ================= -->
-                <div class="certificate-signature">
-                    <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
-
-                    <div class="chairman">
-                        <div style="height:40px;"></div>
-                        <p class="mb-1">(মোহাম্মাদ রানা)</p>
-                        <p class="mb-0">চেয়ারম্যান</p>
-                        <p class="mb-0">৩ নং শুকতাইল ইউনিয়ন পরিষদ</p>
-                        <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}
-                        </p>
-                    </div>
-                </div>
+                @include('backend.partials.chairman_signature', ['certificate' => $certificate])
 
                 <!-- ================= Footer ================= -->
                 <div class="certificate-footer">

@@ -283,7 +283,7 @@
 
     $isApproved = (int) ($license->status ?? 0) === 1;
     $isPaid = ($license->payment_status ?? 'unpaid') === 'paid';
-    $canTakePayment = $isApproved && !$isPaid;
+    $canTakePayment = !$isPaid;
     $fallbackHeaderUnion = \App\Models\Institute::with('union.thana.district')
         ->whereNotNull('union_id')
         ->first()?->union;
@@ -493,6 +493,10 @@
         $('#showManualPaymentBtn').on('click', function () {
             $('#manualPaymentBox').slideToggle();
         });
+
+        if (new URLSearchParams(window.location.search).get('payment') === '1') {
+            $('#manualPaymentBox').show();
+        }
     });
 </script>
 @endpush

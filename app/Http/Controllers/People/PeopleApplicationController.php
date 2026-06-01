@@ -171,9 +171,15 @@ class PeopleApplicationController extends Controller
         $data['districts'] = District::where('status', true)->orderBy('name', 'asc')->get();
         $data['religions'] = Religion::where('status', true)->orderBy('name', 'asc')->get();
         $data['permanent_villages'] = Village::latest()->get();
-        $data['wards'] = UnionWard::get();
+        $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
         $data['roads'] = Road::latest()->get();
-        $data['permanent_unions'] = Union::where('thana_id', 385)->get();
+        $data['permanent_unions'] = Union::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
         $data['permanent_post_offices'] = PostOffice::where('thana_id', 385)->get();
 
         return view('people.applications.certificate', $data);
@@ -191,7 +197,10 @@ class PeopleApplicationController extends Controller
         $data['types'] = OrganizationType::where('status', true)->latest()->get();
         $data['categories'] = OrganizationCategory::where('status', true)->latest()->get();
         $data['ownership_types'] = OrganizationOwnershipType::where('status', true)->latest()->get();
-        $data['wards'] = UnionWard::where('status', true)->get();
+        $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
         $data['roads'] = Road::where('institute_id', $instituteId)->get();
         $data['divisions'] = Division::where('status', true)->get();
         $data['post_officeses'] = PostOffice::latest()->get();

@@ -188,22 +188,7 @@ To my knowledge, he is of good character and has not been involved in any crime 
                 </div>
 
                 <!-- Signature Area -->
-                <div class="certificate-signature">
-                    <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
-
-                   <div class="chairman">
-                        <div style="height:40px;"></div>
-                        <p class="mb-1">(Mohammad Rana)</p>
-                        <p class="mb-0">Chairman</p>
-                        <p class="mb-0">No.3 Shuktail Union Parishad </p>
-                        <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->name ?? '' }}
-                        </p>
-                    </div>
-                </div>
+                @include('backend.partials.chairman_signature', ['certificate' => $certificate])
 
                 <!-- Footer -->
                 <div class="certificate-footer">

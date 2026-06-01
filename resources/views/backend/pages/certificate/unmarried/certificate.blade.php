@@ -201,16 +201,7 @@
                         <!--<img src="{{ asset('images/scanner.png') }}">-->
                     </div>
 
-                    <div class="chairman">
-                        <div style="height:40px;"></div>
-                        <p class="mb-1">(Mohammad Rana)</p>
-                        <p class="mb-0">Chairman</p>
-                        <p class="mb-0"> {{ $certificate->user->institute->union->name ?? '' }} </p>
-                        <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->name ?? '' }}
-                        </p>
-                    </div>
+                        @include('backend.partials.chairman_signature', ['certificate' => $certificate])
                 </div>
 
                 <!-- ================= Footer ================= -->

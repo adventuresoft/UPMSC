@@ -99,8 +99,15 @@
         opacity: 1 !important;
     }
 
+    .sidebar {
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
     .nav-sidebar {
         padding-top: 8px;
+        padding-bottom: 20px;
     }
 
     .nav-sidebar .nav-item > .nav-link {
@@ -171,11 +178,12 @@
 
     .content-wrapper {
         background: #eef2f7;
-        margin-top: 3rem !important;
+        margin-top: 0 !important;
+        padding: 1rem !important;
     }
 
     .content-wrapper > .content {
-        margin-top: 1rem !important;
+        margin-top: 0 !important;
     }
 
     .main-footer {

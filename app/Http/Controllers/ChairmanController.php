@@ -46,7 +46,12 @@ class ChairmanController extends Controller
      */
     public function index()
     {
-      $data['councils']=Council::paginate(100);
+      $user = Auth::user();
+      if(isset($user->institute->union_id) && $user->institute->union_id) {
+          $data['councils']=Council::where('union_id', $user->institute->union_id)->paginate(100);
+      } else {
+          $data['councils']=Council::paginate(100);
+      }
       return view('backend.pages.chairman.index', $data);
   }
 
@@ -57,11 +62,57 @@ class ChairmanController extends Controller
      */
     public function create()
     {
-
+        $user = Auth::user();
         $data['religions'] = Religion::where('status', true)->get();
-        $data['districts'] =  District::where('status', true)->orderBy('name')->get(); 
-        $data['countries'] =  Country::orderBy('name')->get(); 
-        $data['divisions'] = Division::latest()->get();
+        $data['countries'] =  Country::orderBy('name')->get();
+        
+        // Initialize with empty collections
+        $data['divisions'] = collect();
+        $data['districts'] = collect();
+        $data['userUnion'] = null;
+        $data['unionPeople'] = collect();
+        $data['userThana'] = null;
+        $data['userDistrict'] = null;
+        $data['userDivision'] = null;
+        $data['districtsForDivision'] = collect();
+        $data['thanasForDistrict'] = collect();
+        
+        // Get user's union data and restrict all selections to that union
+        if($user->institute && $user->institute->union_id) {
+            $union = Union::find($user->institute->union_id);
+            $data['userUnion'] = $union;
+            $data['unionPeople'] = AddressInfo::where('present_union_id', $user->institute->union_id)->get();
+            
+            // Get the hierarchy: union -> thana -> district -> division
+            if($union && $union->thana) {
+                $thana = $union->thana;
+                $data['userThana'] = $thana;
+                
+                if($thana->district) {
+                    $district = $thana->district;
+                    $data['userDistrict'] = $district;
+                    
+                    // Only show districts from this division
+                    $data['districtsForDivision'] = District::where('division_id', $district->division_id)->get();
+                    // For the main districts dropdown, only show this district
+                    $data['districts'] = District::where('id', $district->id)->get();
+                    
+                    if($district->Division) {
+                        $data['userDivision'] = $district->Division;
+                        // Only show this division
+                        $data['divisions'] = Division::where('id', $district->division_id)->get();
+                    }
+                    
+                    // Get thanas for this district
+                    $data['thanasForDistrict'] = Thana::where('district_id', $district->id)->get();
+                }
+            }
+        } else {
+            // If no union assigned, show all data
+            $data['districts'] = District::where('status', true)->orderBy('name')->get(); 
+            $data['divisions'] = Division::latest()->get();
+        }
+        
         return view('backend.pages.chairman.create', $data);
     }
 
@@ -90,8 +141,10 @@ class ChairmanController extends Controller
         $result = DB::transaction(function () use ($request) {
             try {
 
+                $user = Auth::user();
                 $council = new Council();
-                $council->union_id=$request->union_id;
+                // enforce union multitenancy: if the authenticated user is tied to a union, use it
+                $council->union_id = $user->institute->union_id ?? $request->union_id;
                 $council->start_date=date('Y-m-d',strtotime($request->start_date));
                 $council->end_date=date('Y-m-d',strtotime($request->end_date));
                 $council->status=1;
@@ -169,15 +222,19 @@ class ChairmanController extends Controller
 
     function fetch(Request $request)
     {
-       if($request->get('query'))
-       {
-          $query = $request->get('query');
-          $data = DB::table('users')
-          ->join('people','users.id','=','people.user_id')
-          ->where('system_id', 'LIKE', "%{$query}%")
-          ->get();
-          $output = '<ul class="dropdown-menu" style="display:block; ">';
-          foreach($data as $row)
+    $user = Auth::user();
+    if($request->get('query'))
+    {
+       $query = $request->get('query');
+       // enforce union filtering if user has a union
+       $unionId = $user->institute->union_id ?? null;
+       $data = DB::table('users')
+       ->join('people','users.id','=','people.user_id');
+       if ($unionId) {
+           $data = $data->join('institutes', 'users.institute_id', '=', 'institutes.id')
+                        ->where('institutes.union_id', $unionId);
+       }
+       $data = $data->where('system_id', 'LIKE', "%{$query}%")->get();
           {
              $output .= '
              <li class="droplist" id="'.$row->id.'"><a href="#" >'.$row->name.'</a></li>
@@ -208,8 +265,14 @@ public function edit($id)
     $data['countries'] =  Country::orderBy('name')->get(); 
     $data['divisions'] = Division::latest()->get();
 
-
-    $council= Council::find($id);
+    $user = Auth::user();
+    $council = Council::find($id);
+    // enforce union multitenancy
+    if ($user->institute->union_id ?? null) {
+        if ($council->union_id != $user->institute->union_id) {
+            abort(403, 'Unauthorized: Council does not belong to your union');
+        }
+    }
     $data['council'] =$council;
     $data['districts'] = District::where('division_id',$council->union->Thana->District->division_id)->get();
 
@@ -222,7 +285,14 @@ public function edit($id)
 
 public function show($id)
 {
+    $user = Auth::user();
     $data['council'] = Council::find($id);
+    // enforce union multitenancy
+    if ($user->institute->union_id ?? null) {
+        if ($data['council']->union_id != $user->institute->union_id) {
+            abort(403, 'Unauthorized: Council does not belong to your union');
+        }
+    }
     return view('backend.pages.chairman.show', $data);
 }
 
@@ -249,7 +319,9 @@ public function fromupdate(Request $request)
 
             $id=$request->id;       
             $council = Council::find($id);
-            $council->union_id=$request->union_id;
+            $user = Auth::user();
+            // enforce union multitenancy: do not allow changing union to a different union than user's
+            $council->union_id = $user->institute->union_id ?? $request->union_id;
             $council->start_date=date('Y-m-d',strtotime($request->start_date));
             $council->end_date=date('Y-m-d',strtotime($request->end_date));
             $council->status=$request->status;
@@ -309,8 +381,15 @@ public function fromupdate(Request $request)
 }
 
 public function changeMember($id){
+    $user = Auth::user();
     $cm=CouncilMember::find($id);
     $council =Council::find($cm->council_id);
+    // enforce union multitenancy
+    if ($user->institute->union_id ?? null) {
+        if ($council->union_id != $user->institute->union_id) {
+            abort(403, 'Unauthorized: Council Member does not belong to your union');
+        }
+    }
     $data['chairmans']=AddressInfo::where('present_union_id', $council->union_id)->get();
     $data['council']=$council;
     $data['cm']=$cm;
@@ -336,7 +415,20 @@ public function councilorUpdate(Request $request){
            $comh->order=$request->order;
            $comh->save();
 
+           // validate council and member belong to same union as authenticated user
+           $user = Auth::user();
            $cm=CouncilMember::find($request->council_member_id);
+           $council = Council::find($request->council_id);
+           if ($user->institute->union_id ?? null) {
+               if ($council->union_id != $user->institute->union_id) {
+                   return response()->json(['status'=>false,'message'=>'Unauthorized: union mismatch'], 403);
+               }
+           }
+           // ensure the selected member user belongs to the same union (if possible)
+           $newMemberUser = User::find($request->member_id);
+           if ($newMemberUser && ($newMemberUser->institute->union_id ?? null) && $council->union_id && $newMemberUser->institute->union_id != $council->union_id) {
+               return response()->json(['status'=>false,'message'=>'Selected member does not belong to this union'], 403);
+           }
            $cm->user_id=$request->member_id;
            $cm->start_date=date('Y-m-d',strtotime($request->new_start_date));
            $cm->end_date=date('Y-m-d',strtotime($request->new_end_date));

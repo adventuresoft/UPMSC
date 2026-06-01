@@ -7,63 +7,71 @@
         margin: 0;
     }
 
-  /* html,
+    html,
+    body,
+    .content-wrapper,
+    .content,
+    .container-fluid {
+        background: #ffffff !important;
+    }
+
     body {
         margin: 0;
         padding: 0;
         font-family: 'Nikosh', 'Noto Sans Bengali', Arial, sans-serif;
-        font-size: 18px !important;
-        line-height: 1.4;
+        font-size: 13px !important;
+        line-height: 1.35;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-    } */
+    }
 
     .header-logos {
-        margin-top: -18px;
+        margin-top: -8px;
     }
 
     .certificate-page {
-        width: 267mm;
-        height: 374mm;
-        margin: auto;
+        width: 210mm;
+        height: 297mm;
+        margin: 0 auto;
         position: relative;
-        background: url('{{ asset("images/sucsesion.png") }}') no-repeat center;
-        background-size: 267mm 374mm;
+        background: #ffffff;
+        border: 4px double #2f684f;
+        box-sizing: border-box;
         overflow: hidden;
     }
 
     .certificate-content {
         position: absolute;
-        padding: 10mm !important;
-        top: 25mm;
-        left: 20mm;
-        right: 20mm;
-        bottom: 20mm;
+        padding: 4mm !important;
+        top: 16mm;
+        left: 14mm;
+        right: 14mm;
+        bottom: 12mm;
     }
 
     .header-logos {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 5px;
     }
 
     .header-logos img {
-        width: 80px;
-        height: 80px;
+        width: 64px;
+        height: 64px;
         object-fit: contain;
     }
 
     .union-title {
         text-align: center;
-        font-size: 25px;
+        font-size: 22px;
         font-weight: bold;
         color: #006600;
     }
 
     .union-subtitle {
         text-align: center;
-        font-size: 24px;
+        font-size: 18px;
         color: #003366;
     }
 
@@ -83,54 +91,54 @@
     .doc-title {
         background: #006600;
         color: #fff;
-        font-size: 22px;
+        font-size: 20px;
         font-weight: bold;
-        padding: 6px 20px;
+        padding: 4px 18px;
         border-radius: 4px;
         display: inline-block;
     }
 
     .validity-info {
         text-align: center;
-        font-size: 13px;
-        margin-bottom: 10px;
-        margin-top: 10px;
+        font-size: 12px;
+        margin-bottom: 6px;
+        margin-top: 6px;
     }
 
     .intro-text {
-        font-size: 14px;
-        line-height: 1.6;
+        font-size: 12px;
+        line-height: 1.45;
         text-align: justify;
-        margin: 15px 0 10px;
+        margin: 8px 0 7px;
     }
 
     .section-header {
         background: #006600;
         color: #fff;
         font-weight: bold;
-        padding: 6px 10px;
-        margin: 12px 0 6px;
-        font-size: 14px;
+        padding: 4px 8px;
+        margin: 7px 0 4px;
+        font-size: 12px;
     }
 
     .info-row {
         display: flex;
-        margin-bottom: 4px;
-        font-size: 13px;
+        margin-bottom: 2px;
+        font-size: 12px;
     }
 
     .info-label {
-        width: 220px;
+        width: 190px;
         font-weight: bold;
         display: flex;
         justify-content: space-between;
-        padding-right: 15px;
+        padding-right: 10px;
     }
 
     .info-value {
         flex: 1;
         font-weight: bold;
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .fees-table-new {
@@ -178,11 +186,12 @@
     }
 
     .signature-area {
-        margin-top: 100px;
+        margin-top: 38px;
         bottom: 15mm;
         display: flex;
         justify-content: space-between;
         text-align: center;
+        font-size: 12px;
     }
 
     .sig-block {
@@ -191,26 +200,70 @@
 
     .sig-line {
         border-top: 1px solid #000;
-        margin: 30px 0 5px;
+        margin: 22px 0 4px;
     }
 
     @media print {
         @page {
-            size: auto;
+            size: A4 portrait;
             margin: 0;
         }
+        html,
         body {
             margin: 0;
+            padding: 0;
+            width: 210mm;
+            height: 297mm;
+            background: #ffffff !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-        .no-print, .main-footer, .navbar, .sidebar {
+        body * {
+            visibility: hidden !important;
+        }
+        .certificate-page,
+        .certificate-page * {
+            visibility: visible !important;
+        }
+        .no-print, .main-footer, .navbar, .sidebar, .main-sidebar, .main-header {
             display: none !important;
         }
-        .certificate-page {
+        .wrapper,
+        .content-wrapper,
+        .content,
+        .container-fluid {
             margin: 0 !important;
+            margin-left: 0 !important;
+            padding: 0 !important;
+            width: 210mm !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            background: #ffffff !important;
+        }
+        .certificate-page {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: auto !important;
+            bottom: auto !important;
+            display: block !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            margin: 0 !important;
+            border: 4px double #2f684f !important;
+            box-sizing: border-box !important;
             box-shadow: none !important;
-            border: none !important;
+            overflow: hidden !important;
+            transform: none !important;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+        .certificate-content {
+            top: 12mm !important;
+            left: 12mm !important;
+            right: 12mm !important;
+            bottom: 10mm !important;
+            padding: 4mm !important;
         }
     }
 
@@ -225,9 +278,9 @@
 
     .certificate-footer {
         position: absolute;
-        bottom: 12mm;
-        left: 16mm;
-        font-size: 11px;
+        bottom: 7mm;
+        left: 14mm;
+        font-size: 9px;
     }
 </style>
 @endpush

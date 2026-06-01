@@ -20,7 +20,10 @@ class UnionWardController extends Controller
     {
         $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Ward</option>';
 
-        $wards = UnionWard::where('status', true)->get();
+        $wards = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
 
         if(count($wards)) {
             foreach ($wards as $ward) {

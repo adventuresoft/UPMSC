@@ -120,8 +120,14 @@ class PeopleRegistrationController extends Controller
     {
         $data['user'] = User::with('familyInfo')->find($id);
         $data['religions'] = Religion::where('status', true)->get();
-        $data['familyTypes'] = FamilyType::where('status', true)->get();
-        $data['familyCategories'] = FamilyCategory::where('status', true)->get();
+        $data['familyTypes'] = FamilyType::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
+        $data['familyCategories'] = FamilyCategory::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
         $data['active_tab'] = 'family';
         
         return view('people.registration.family', $data);
@@ -129,9 +135,13 @@ class PeopleRegistrationController extends Controller
 
     public function storeFamily(Request $request)
     {
+        $familyData = $request->except(['_token', 'user_id']);
+        $familyData['family_type_id'] = $request->filled('family_type_id') ? $request->family_type_id : null;
+        $familyData['family_category_id'] = $request->filled('family_category_id') ? $request->family_category_id : null;
+
         $peopleFamily = FamilyInfo::updateOrCreate([
             'user_id' => $request->user_id
-        ], $request->except(['_token', 'user_id']));
+        ], $familyData);
 
         if ($peopleFamily) {
             return response()->json([
