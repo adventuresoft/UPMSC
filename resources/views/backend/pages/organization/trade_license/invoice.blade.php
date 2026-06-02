@@ -189,39 +189,69 @@
     }
 
     @media print {
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+        html,
         body {
-            background: white;
+            margin: 0;
+            padding: 0;
+            width: 210mm;
+            height: 297mm;
+            background: #ffffff !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
-
-        .trade-license-page {
-            box-shadow: none;
-            border: 4px solid #556b2f !important;
+        body * {
+            visibility: hidden !important;
         }
-
-        .inner-border {
-            border: 2px solid #556b2f !important;
+        .trade-license-page,
+        .trade-license-page * {
+            visibility: visible !important;
         }
-
-        .no-print,
-        .card-footer,
-        footer,
-        .main-footer {
+        .no-print, .main-footer, .navbar, .sidebar, .main-sidebar, .main-header {
             display: none !important;
         }
-
+        .wrapper,
+        .content-wrapper,
+        .content,
+        .container-fluid {
+            margin: 0 !important;
+            margin-left: 0 !important;
+            padding: 0 !important;
+            width: 210mm !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            background: #ffffff !important;
+        }
+        .trade-license-page {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: auto !important;
+            bottom: auto !important;
+            display: block !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            margin: 0 !important;
+            border: 4px solid #556b2f !important;
+            box-sizing: border-box !important;
+            box-shadow: none !important;
+            overflow: hidden !important;
+            transform: none !important;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
         .fees-grand-total,
         .fees-total,
         .fees-table-new th {
             background-color: #f0f0f0 !important;
             color: black !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
         }
-
         .fees-grand-total {
             background-color: #e8e8e8 !important;
         }
-
         .fees-table-new th,
         .fees-table-new td {
             border: 1px solid #333 !important;

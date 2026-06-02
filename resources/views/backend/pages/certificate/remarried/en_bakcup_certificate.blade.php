@@ -102,7 +102,7 @@
                                         <td class="text-center">
                                             <h2 >
                                                 <strong class="text-danger bold">
-                                                    {{ $certificate->user->institute->union->name ?? '' }} Union Parishad
+                                                    {{ $certificate->user->institute->union->name ?? '' }}
                                                 </strong> 
                                                 <br>
                                                 <span style="font-size: 14px">

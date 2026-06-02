@@ -2,10 +2,16 @@
 
 @push('style')
 <style>
+    .container {
+        max-width: 100% !important;
+    }
+
 /* =========================
    A4 CANVAS
 ========================= */
 .certificate-card {
+    max-width: 100%;
+    margin: 0 auto;
     background-image: url('{{ asset('images/sucsesion.png') }}');
     background-size: cover;
     background-repeat: no-repeat;
@@ -97,51 +103,55 @@
 /* =========================
    PRINT CONFIG
 ========================= */
-@media print {
+            @media print {
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            box-sizing: border-box !important;
+        }
 
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        box-sizing: border-box !important;
-    }
+        @page {
+            size: A4 portrait;
+            margin: 0 !important;
+        }
 
-    @page {
-        size: A4 portrait;
-        margin: 0;
-    }
+        html, body {
+            width: 267mm !important;
+            height: 374mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
+        }
 
-    html, body {
-        width: 267mm;
-        height: 374mm;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        background: #fff !important;
-    }
+        .content-wrapper {
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
 
-    .container {
-        width: 267mm !important;
-        height: 374mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+        .container {
+            width: 267mm !important;
+            max-width: 267mm !important;
+            height: 374mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
 
-    .certificate-card {
-        width: 267mm !important;
-        height: 374mm !important;
-        margin: 0 !important;
-        page-break-inside: avoid !important;
-    }
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header {
+            display: none !important;
+        }
 
-    .main-footer{
-        display: none;
+        #printPageButton,
+        #cancelPageButton,
+        .btn {
+            display: none !important;
+        }
     }
-
-    #printPageButton,
-    #cancelPageButton {
-        display: none !important;
-    }
-}
 </style>
 @endpush
 
@@ -337,7 +347,7 @@ His death registration number is -
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">(Mohammad Rana)</p>
+                        <p class="mb-1">({{ $certificate->user->institute->superUser->people->name ?? $certificate->user->institute->superUser->name ?? 'Chairman' }})</p>
                         <p class="mb-0">Chairman</p>
                         <p class="mb-0"> {{ $certificate->user->institute->union->name ?? '' }} </p>
                         <p class="mb-0" style="font-size:14px;">

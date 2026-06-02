@@ -1,7 +1,13 @@
 @extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Childless'])
 @push('style')
 <style>
-    .certificate-card {
+    .container {
+    max-width: 100% !important;
+}
+
+.certificate-card {
+    max-width: 100%;
+    margin: 0 auto;
         background-image: url('{{ asset('images/bg-images.jpeg') }}');
         background-size: cover;
         background-repeat: no-repeat;
@@ -57,28 +63,52 @@
         margin-right: 10mm;
     }
 
-    @media print {
+                @media print {
         * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            box-sizing: border-box !important;
         }
 
         @page {
             size: A4 landscape;
-            margin: 0;
+            margin: 0 !important;
         }
 
         html, body {
-            width: 297mm;
-            height: 210mm;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: #fff !important;
+            width: 297mm !important;
+            height: 210mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
+        }
+
+        .content-wrapper {
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .container {
+            width: 297mm !important;
+            max-width: 297mm !important;
+            height: 210mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
+
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header {
+            display: none !important;
         }
 
         #printPageButton,
-        #cancelPageButton{
+        #cancelPageButton,
+        .btn {
             display: none !important;
         }
     }
@@ -178,10 +208,10 @@
                     </div>
 
                     <div class="chairman">
-                        <p class="mb-1" style="font-weight:600;">(মোহাম্মাদ রানা)</p>
+                        <p class="mb-1" >({{ $certificate->user->institute->superUser->people->bn_name ?? $certificate->user->institute->superUser->name ?? 'চেয়ারম্যান' }})</p>
                         <p class="mb-0">চেয়ারম্যান</p>
-                        <p class="mb-0">৩ নং শুকতাইল ইউনিয়ন পরিষদ</p>
-                        <p class="mb-0" style="font-size:14px;">গোপালগঞ্জ সদর, গোপালগঞ্জ</p>
+                        <p class="mb-0">{{ $certificate->user->institute->union->bn_name ?? '' }}</p>
+                        <p class="mb-0" style="font-size:14px;">{{ $certificate->user->institute->union->thana->bn_name ?? '' }}, {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</p>
                     </div>
                 </div>
 

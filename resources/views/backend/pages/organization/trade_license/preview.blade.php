@@ -35,18 +35,31 @@
         margin: 0 auto;
         position: relative;
         background: #ffffff;
-        border: 4px double #2f684f;
+        border: none;
         box-sizing: border-box;
         overflow: hidden;
     }
 
+    .certificate-page::before {
+        content: "";
+        position: absolute;
+        top: 12mm;
+        left: 12mm;
+        right: 12mm;
+        bottom: 12mm;
+        border: 4px double #2f684f;
+        pointer-events: none;
+        z-index: 1;
+    }
+
     .certificate-content {
         position: absolute;
-        padding: 4mm !important;
-        top: 16mm;
-        left: 14mm;
-        right: 14mm;
+        padding: 10mm 15mm !important;
+        top: 12mm;
+        left: 12mm;
+        right: 12mm;
         bottom: 12mm;
+        z-index: 2;
     }
 
     .header-logos {
@@ -106,10 +119,10 @@
     }
 
     .intro-text {
-        font-size: 12px;
-        line-height: 1.45;
+        font-size: 13px;
+        line-height: 1.5;
         text-align: justify;
-        margin: 8px 0 7px;
+        margin: 12px 0;
     }
 
     .section-header {
@@ -250,7 +263,7 @@
             width: 210mm !important;
             height: 297mm !important;
             margin: 0 !important;
-            border: 4px double #2f684f !important;
+            border: none !important;
             box-sizing: border-box !important;
             box-shadow: none !important;
             overflow: hidden !important;
@@ -258,12 +271,24 @@
             page-break-after: avoid;
             page-break-inside: avoid;
         }
+        .certificate-page::before {
+            content: "" !important;
+            position: absolute !important;
+            top: 12mm !important;
+            left: 12mm !important;
+            right: 12mm !important;
+            bottom: 12mm !important;
+            border: 4px double #2f684f !important;
+            pointer-events: none !important;
+            z-index: 1 !important;
+        }
         .certificate-content {
             top: 12mm !important;
             left: 12mm !important;
             right: 12mm !important;
-            bottom: 10mm !important;
-            padding: 4mm !important;
+            bottom: 12mm !important;
+            padding: 10mm 15mm !important;
+            z-index: 2 !important;
         }
     }
 
@@ -359,8 +384,8 @@
                
                 <img src="{{ $license->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;"><br><br>
                 
-                <u style="font-size: 16px; font-weight:;">ট্রেড লাইসেন্স ইস্যুর তারিখ</u><br>
-                <span style="font-size: 15px;">তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}</span>
+                <u style="font-size: 13px; font-weight: bold;">ট্রেড লাইসেন্স ইস্যুর তারিখ</u><br>
+                <span style="font-size: 12px;">তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}</span>
             </div>
 
             <div class="doc-title-block">
@@ -369,13 +394,13 @@
                     নতুন<br>
                     অর্থ বছর: {{ $license->taxYear->name }} <br>
                     <span style="color: red;">এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত</span> <br><br><br>
-                    <span style="font-size: 14px;">ট্রেড লাইসেন্স নম্বর: <strong>{{ bnValue($license->system_id) }}</strong></span><br>
+                    <span style="font-size: 16px;">ট্রেড লাইসেন্স নম্বর: <strong style="font-size: 18px;">{{ bnValue($license->system_id) }}</strong></span><br>
                 </div>
             </div>
 
             <div style="text-align:right">
                 
-                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.5in;height:1.9in;object-fit:cover; border:2px solid #000;">
+                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.3in;height:1.5in;object-fit:cover; border:2px solid #000;">
             </div>
         </div>
 

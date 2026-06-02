@@ -23,12 +23,12 @@
     }
 
     .certificate-page {
-        width: 267mm;
-        height: 374mm;
+        width: 210mm;
+        height: 297mm;
         margin: auto;
         position: relative;
         background: url('{{ asset("images/sucsesion.png") }}') no-repeat center;
-        background-size: 267mm 374mm;
+        background-size: 210mm 297mm;
         overflow: hidden;
     }
 
@@ -98,10 +98,10 @@
     }
 
     .intro-text {
-        font-size: 14px;
-        line-height: 1.6;
+        font-size: 13px;
+        line-height: 1.5;
         text-align: justify;
-        margin: 15px 0 10px;
+        margin: 12px 0;
     }
 
     .section-header {
@@ -216,21 +216,65 @@
 
     @media print {
         @page {
-            size: auto;
+            size: A4 portrait;
             margin: 0;
         }
+        html,
         body {
             margin: 0;
+            padding: 0;
+            width: 210mm;
+            height: 297mm;
+            background: #ffffff !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
-        .no-print, .main-footer, .navbar, .sidebar {
+        body * {
+            visibility: hidden !important;
+        }
+        .certificate-page,
+        .certificate-page * {
+            visibility: visible !important;
+        }
+        .no-print, .main-footer, .navbar, .sidebar, .main-sidebar, .main-header {
             display: none !important;
         }
-        .certificate-page {
+        .wrapper,
+        .content-wrapper,
+        .content,
+        .container-fluid {
             margin: 0 !important;
-            box-shadow: none !important;
+            margin-left: 0 !important;
+            padding: 0 !important;
+            width: 210mm !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            background: #ffffff !important;
+        }
+        .certificate-page {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: auto !important;
+            bottom: auto !important;
+            display: block !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            margin: 0 !important;
             border: none !important;
+            box-sizing: border-box !important;
+            box-shadow: none !important;
+            overflow: hidden !important;
+            transform: none !important;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+        .certificate-content {
+            top: 25mm !important;
+            left: 20mm !important;
+            right: 20mm !important;
+            bottom: 20mm !important;
+            padding: 10mm !important;
         }
     }
 </style>
@@ -317,8 +361,8 @@
                
                 <img src="{{ $license->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;"><br><br>
                 
-                <u style="font-size: 16px; font-weight:;">ট্রেড লাইসেন্স ইস্যুর তারিখ</u><br>
-                <span style="font-size: 15px;">তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}</span>
+                <u style="font-size: 13px; font-weight: bold;">ট্রেড লাইসেন্স ইস্যুর তারিখ</u><br>
+                <span style="font-size: 12px;">তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}</span>
             </div>
 
             <div class="doc-title-block">
@@ -327,13 +371,13 @@
                     নতুন<br>
                     অর্থ বছর: {{ $license->taxYear->name }} <br>
                     <span style="color: red;">এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত</span> <br><br><br>
-                    <span style="font-size: 14px;">ট্রেড লাইসেন্স নম্বর: <strong>{{ bnValue($license->system_id) }}</strong></span><br>
+                    <span style="font-size: 16px;">ট্রেড লাইসেন্স নম্বর: <strong style="font-size: 18px;">{{ bnValue($license->system_id) }}</strong></span><br>
                 </div>
             </div>
 
             <div style="text-align:right">
                 তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}<br>
-                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.5in;height:1.9in;object-fit:cover; border:2px solid #000;">
+                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.3in;height:1.5in;object-fit:cover; border:2px solid #000;">
             </div>
         </div>
 

@@ -2,8 +2,14 @@
 
 @push('style')
 <style>
-    /* ===== Certificate Canvas ===== */
+        .container {
+        max-width: 100% !important;
+    }
+
+/* ===== Certificate Canvas ===== */
     .certificate-card {
+    max-width: 100%;
+    margin: 0 auto;
         background-image: url('{{ asset('images/bg-images.jpeg') }}');
         background-size: cover;
         background-repeat: no-repeat;
@@ -63,39 +69,52 @@
     }
 
     /* Print Control */
-    @media print {
+                @media print {
         * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            box-sizing: border-box !important;
         }
 
         @page {
             size: A4 landscape;
-            margin: 0;
+            margin: 0 !important;
         }
 
         html, body {
-            width: 297mm;
-            height: 210mm;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: #fff !important;
+            width: 297mm !important;
+            height: 210mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
         }
 
-        .container{
-            width: 297mm;
-            height: 210mm;
-            padding: 0;
-            margin: 0;
+        .content-wrapper {
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
         }
-        
-        .main-footer{
-        display: none;
-    }
+
+        .container {
+            width: 297mm !important;
+            max-width: 297mm !important;
+            height: 210mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
+
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header {
+            display: none !important;
+        }
 
         #printPageButton,
-        #cancelPageButton{
+        #cancelPageButton,
+        .btn {
             display: none !important;
         }
     }
@@ -193,7 +212,7 @@ To my knowledge, he is of good character and has not been involved in any crime 
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">(Mohammad Rana)</p>
+                        <p class="mb-1">({{ $certificate->user->institute->superUser->people->name ?? $certificate->user->institute->superUser->name ?? 'Chairman' }})</p>
                         <p class="mb-0">Chairman</p>
                         <p class="mb-0"> {{ $certificate->user->institute->union->name ?? '' }} </p>
                         <p class="mb-0" style="font-size:14px;">

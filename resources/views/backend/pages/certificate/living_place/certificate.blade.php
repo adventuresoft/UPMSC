@@ -7,7 +7,11 @@
     <title>Certificate</title>
 
     <style>
-        body {
+            .container {
+        max-width: 100% !important;
+    }
+
+body {
             background-color: #00000008 !important;
             padding: 0;
             margin: 0;

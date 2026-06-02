@@ -18,7 +18,7 @@
                           alt="govt-bd-logo">
                   </div>
                   <div class="col-md-8 text-center">
-                      <h1 class="text-danger bold">{{ $certificate->user->institute->union->name ?? '' }} Union Parishad
+                      <h1 class="text-danger bold">{{ $certificate->user->institute->union->name ?? '' }}
                       </h1>
                       <p>
                           PS.:-   <strong class="text-danger">{{ $certificate->user->institute->union->thana->name ?? '' }}</strong>,
