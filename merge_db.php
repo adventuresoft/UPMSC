@@ -5,7 +5,7 @@
  * Uses INSERT IGNORE so existing local data is NEVER overwritten
  */
 
-$sqlFile  = __DIR__ . '/almsgov_upms.sql';
+$sqlFile  = __DIR__ . '/clmsbd_upmsc.sql';
 $dbHost   = '127.0.0.1';
 $dbName   = 'upmsc';
 $dbUser   = 'root';
