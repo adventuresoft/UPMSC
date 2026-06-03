@@ -368,14 +368,14 @@
                                     <div class="gov-photo-wrapper">
                                         <div class="gov-photo-text"><i class="fas fa-image mb-1"></i><br>বরের ছবি<br>(Photo)</div>
                                         <input type="file" name="groom_photo_file" id="groom_photo_input" accept="image/*">
-                                        <img id="groom_photo_preview" src="{{ $marriage->groom_photo ? asset($marriage->groom_photo) : '' }}" style="{{ $marriage->groom_photo ? 'display: block;' : 'display: none;' }}">
+                                        <img id="groom_photo_preview" src="{{ $marriage->groom_photo ? imageUrl($marriage->groom_photo) : '' }}" style="{{ $marriage->groom_photo ? 'display: block;' : 'display: none;' }}">
                                     </div>
                                 </div>
                                 <div>
                                     <div class="gov-photo-wrapper">
                                         <div class="gov-photo-text"><i class="fas fa-pen-fancy mb-1"></i><br>বরের স্বাক্ষর<br>(Signature)</div>
                                         <input type="file" name="groom_signature_file" id="groom_sig_input" accept="image/*">
-                                        <img id="groom_sig_preview" src="{{ $marriage->groom_signature ? asset($marriage->groom_signature) : '' }}" style="{{ $marriage->groom_signature ? 'display: block;' : 'display: none;' }}">
+                                        <img id="groom_sig_preview" src="{{ $marriage->groom_signature ? imageUrl($marriage->groom_signature) : '' }}" style="{{ $marriage->groom_signature ? 'display: block;' : 'display: none;' }}">
                                     </div>
                                 </div>
                             </div>
@@ -460,14 +460,14 @@
                                     <div class="gov-photo-wrapper">
                                         <div class="gov-photo-text"><i class="fas fa-image mb-1"></i><br>কনের ছবি<br>(Photo)</div>
                                         <input type="file" name="bride_photo_file" id="bride_photo_input" accept="image/*">
-                                        <img id="bride_photo_preview" src="{{ $marriage->bride_photo ? asset($marriage->bride_photo) : '' }}" style="{{ $marriage->bride_photo ? 'display: block;' : 'display: none;' }}">
+                                        <img id="bride_photo_preview" src="{{ $marriage->bride_photo ? imageUrl($marriage->bride_photo) : '' }}" style="{{ $marriage->bride_photo ? 'display: block;' : 'display: none;' }}">
                                     </div>
                                 </div>
                                 <div>
                                     <div class="gov-photo-wrapper">
                                         <div class="gov-photo-text"><i class="fas fa-pen-fancy mb-1"></i><br>কনের স্বাক্ষর<br>(Signature)</div>
                                         <input type="file" name="bride_signature_file" id="bride_sig_input" accept="image/*">
-                                        <img id="bride_sig_preview" src="{{ $marriage->bride_signature ? asset($marriage->bride_signature) : '' }}" style="{{ $marriage->bride_signature ? 'display: block;' : 'display: none;' }}">
+                                        <img id="bride_sig_preview" src="{{ $marriage->bride_signature ? imageUrl($marriage->bride_signature) : '' }}" style="{{ $marriage->bride_signature ? 'display: block;' : 'display: none;' }}">
                                     </div>
                                 </div>
                             </div>
@@ -567,7 +567,7 @@
                                     <input type="file" name="witness_1_signature_file" class="form-control gov-input" style="padding: 5px;">
                                     @if($marriage->witness_1_signature)
                                         <div class="mt-2">
-                                            <img src="{{ asset($marriage->witness_1_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
+                                            <img src="{{ imageUrl($marriage->witness_1_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
                                         </div>
                                     @endif
                                 </div>
@@ -604,7 +604,7 @@
                                     <input type="file" name="witness_2_signature_file" class="form-control gov-input" style="padding: 5px;">
                                     @if($marriage->witness_2_signature)
                                         <div class="mt-2">
-                                            <img src="{{ asset($marriage->witness_2_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
+                                            <img src="{{ imageUrl($marriage->witness_2_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
                                         </div>
                                     @endif
                                 </div>
@@ -773,7 +773,7 @@
                                     <div id="file_groom_nid" class="doc-file-input" style="{{ $marriage->doc_groom_nid ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_groom_nid_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($marriage->doc_groom_nid)
-                                            <div class="mt-1"><a href="{{ asset($marriage->doc_groom_nid) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($marriage->doc_groom_nid) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -789,7 +789,7 @@
                                     <div id="file_bride_nid" class="doc-file-input" style="{{ $marriage->doc_bride_nid ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_bride_nid_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($marriage->doc_bride_nid)
-                                            <div class="mt-1"><a href="{{ asset($marriage->doc_bride_nid) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($marriage->doc_bride_nid) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -805,7 +805,7 @@
                                     <div id="file_birth_certificate" class="doc-file-input" style="{{ $marriage->doc_birth_certificate ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_birth_certificate_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($marriage->doc_birth_certificate)
-                                            <div class="mt-1"><a href="{{ asset($marriage->doc_birth_certificate) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($marriage->doc_birth_certificate) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -821,7 +821,7 @@
                                     <div id="file_passport_photo" class="doc-file-input" style="{{ $marriage->doc_passport_photo ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_passport_photo_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($marriage->doc_passport_photo)
-                                            <div class="mt-1"><a href="{{ asset($marriage->doc_passport_photo) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($marriage->doc_passport_photo) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -837,7 +837,7 @@
                                     <div id="file_witness_nid" class="doc-file-input" style="{{ $marriage->doc_witness_nid ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_witness_nid_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($marriage->doc_witness_nid)
-                                            <div class="mt-1"><a href="{{ asset($marriage->doc_witness_nid) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($marriage->doc_witness_nid) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -853,7 +853,7 @@
                                     <div id="file_marriage_certificate" class="doc-file-input" style="{{ $marriage->doc_marriage_certificate_scan ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_marriage_certificate_scan_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($marriage->doc_marriage_certificate_scan)
-                                            <div class="mt-1"><a href="{{ asset($marriage->doc_marriage_certificate_scan) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($marriage->doc_marriage_certificate_scan) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -869,7 +869,7 @@
                                     <div id="file_other" class="doc-file-input" style="{{ $marriage->doc_other ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_other_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($marriage->doc_other)
-                                            <div class="mt-1"><a href="{{ asset($marriage->doc_other) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($marriage->doc_other) }}" target="_blank" class="small text-primary"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -896,7 +896,7 @@
                                 <input type="file" name="registrar_office_seal_file" class="form-control gov-input" style="padding: 5px;">
                                 @if($marriage->registrar_office_seal)
                                     <div class="mt-2">
-                                        <img src="{{ asset($marriage->registrar_office_seal) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
+                                        <img src="{{ imageUrl($marriage->registrar_office_seal) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
                                     </div>
                                 @endif
                             </div>
@@ -940,7 +940,7 @@
                                     <input type="file" name="registrar_signature_file" class="form-control gov-input mx-auto" style="padding: 5px; width: 80%;">
                                     @if($marriage->registrar_signature)
                                         <div class="mt-2">
-                                            <img src="{{ asset($marriage->registrar_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
+                                            <img src="{{ imageUrl($marriage->registrar_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
                                         </div>
                                     @endif
                                 </div>

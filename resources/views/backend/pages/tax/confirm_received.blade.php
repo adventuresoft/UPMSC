@@ -100,7 +100,7 @@
                                 <table class=" table my-2 user_info_table">
                                     <tr>
                                         <td><img class="user_img" height="60" width="60"
-                                                src="{{ asset($tax->user->image ?? 'public/no-image-found.jpeg') }}"></td>
+                                                src="{{ imageUrl($tax->user->image ?? 'public/no-image-found.jpeg') }}"></td>
                                         <td> নাম: <strong class="user_name">{{ $tax->user->people->bn_name ?? '' }}</strong>
                                         </td>
                                         <td> পিতার নাম: <strong

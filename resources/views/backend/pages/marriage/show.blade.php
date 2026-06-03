@@ -345,7 +345,7 @@
             <div class="profile-serial-title">বরের পূর্ণ বিবরণ (Groom Details)</div>
             <div class="profile-top">
                 <div class="profile-photo">
-                    <img src="{{ $marriage->groom_photo ? asset($marriage->groom_photo) : ($marriage->groomUser && $marriage->groomUser->image ? asset($marriage->groomUser->image) : asset('no-image-found.jpeg')) }}" alt="Groom Photo">
+                    <img src="{{ $marriage->groom_photo ? imageUrl($marriage->groom_photo) : ($marriage->groomUser && $marriage->groomUser->image ? imageUrl($marriage->groomUser->image) : asset('no-image-found.jpeg')) }}" alt="Groom Photo">
                 </div>
                 <div class="profile-info-list">
                     <div class="info-row">
@@ -416,7 +416,7 @@
 
             @if($marriage->groom_signature)
             <div class="signature-box">
-                <img src="{{ asset($marriage->groom_signature) }}" alt="Groom Signature">
+                <img src="{{ imageUrl($marriage->groom_signature) }}" alt="Groom Signature">
                 <div class="font-weight-bold" style="font-size:11px;">বরের স্বাক্ষর (Groom's Signature)</div>
             </div>
             @endif
@@ -428,7 +428,7 @@
             <div class="profile-serial-title">কনের পূর্ণ বিবরণ (Bride Details)</div>
             <div class="profile-top">
                 <div class="profile-photo">
-                    <img src="{{ $marriage->bride_photo ? asset($marriage->bride_photo) : ($marriage->brideUser && $marriage->brideUser->image ? asset($marriage->brideUser->image) : asset('no-image-found.jpeg')) }}" alt="Bride Photo">
+                    <img src="{{ $marriage->bride_photo ? imageUrl($marriage->bride_photo) : ($marriage->brideUser && $marriage->brideUser->image ? imageUrl($marriage->brideUser->image) : asset('no-image-found.jpeg')) }}" alt="Bride Photo">
                 </div>
                 <div class="profile-info-list">
                     <div class="info-row">
@@ -499,7 +499,7 @@
 
             @if($marriage->bride_signature)
             <div class="signature-box">
-                <img src="{{ asset($marriage->bride_signature) }}" alt="Bride Signature">
+                <img src="{{ imageUrl($marriage->bride_signature) }}" alt="Bride Signature">
                 <div class="font-weight-bold" style="font-size:11px;">কনের স্বাক্ষর (Bride's Signature)</div>
             </div>
             @endif
@@ -532,7 +532,7 @@
                 </div>
                 @if($marriage->witness_1_signature)
                 <div class="signature-box mt-2">
-                    <img src="{{ asset($marriage->witness_1_signature) }}" alt="Witness 1 Signature">
+                    <img src="{{ imageUrl($marriage->witness_1_signature) }}" alt="Witness 1 Signature">
                 </div>
                 @endif
             </div>
@@ -561,7 +561,7 @@
                 </div>
                 @if($marriage->witness_2_signature)
                 <div class="signature-box mt-2">
-                    <img src="{{ asset($marriage->witness_2_signature) }}" alt="Witness 2 Signature">
+                    <img src="{{ imageUrl($marriage->witness_2_signature) }}" alt="Witness 2 Signature">
                 </div>
                 @endif
             </div>
@@ -698,8 +698,8 @@
                 @if($marriage->doc_groom_nid)
                 <div class="col-md-3 text-center mb-3">
                     <div class="font-weight-bold" style="font-size:12px;">বরের জাতীয় পরিচয়পত্র</div>
-                    <a href="{{ asset($marriage->doc_groom_nid) }}" target="_blank">
-                        <img src="{{ asset($marriage->doc_groom_nid) }}" class="attachment-img">
+                    <a href="{{ imageUrl($marriage->doc_groom_nid) }}" target="_blank">
+                        <img src="{{ imageUrl($marriage->doc_groom_nid) }}" class="attachment-img">
                     </a>
                 </div>
                 @endif
@@ -707,8 +707,8 @@
                 @if($marriage->doc_bride_nid)
                 <div class="col-md-3 text-center mb-3">
                     <div class="font-weight-bold" style="font-size:12px;">কনের জাতীয় পরিচয়পত্র</div>
-                    <a href="{{ asset($marriage->doc_bride_nid) }}" target="_blank">
-                        <img src="{{ asset($marriage->doc_bride_nid) }}" class="attachment-img">
+                    <a href="{{ imageUrl($marriage->doc_bride_nid) }}" target="_blank">
+                        <img src="{{ imageUrl($marriage->doc_bride_nid) }}" class="attachment-img">
                     </a>
                 </div>
                 @endif
@@ -716,8 +716,8 @@
                 @if($marriage->doc_birth_certificate)
                 <div class="col-md-3 text-center mb-3">
                     <div class="font-weight-bold" style="font-size:12px;">জন্ম নিবন্ধন সনদ</div>
-                    <a href="{{ asset($marriage->doc_birth_certificate) }}" target="_blank">
-                        <img src="{{ asset($marriage->doc_birth_certificate) }}" class="attachment-img">
+                    <a href="{{ imageUrl($marriage->doc_birth_certificate) }}" target="_blank">
+                        <img src="{{ imageUrl($marriage->doc_birth_certificate) }}" class="attachment-img">
                     </a>
                 </div>
                 @endif
@@ -725,8 +725,8 @@
                 @if($marriage->doc_marriage_certificate_scan)
                 <div class="col-md-3 text-center mb-3">
                     <div class="font-weight-bold" style="font-size:12px;">বিবাহের কাবিন স্ক্যান</div>
-                    <a href="{{ asset($marriage->doc_marriage_certificate_scan) }}" target="_blank">
-                        <img src="{{ asset($marriage->doc_marriage_certificate_scan) }}" class="attachment-img">
+                    <a href="{{ imageUrl($marriage->doc_marriage_certificate_scan) }}" target="_blank">
+                        <img src="{{ imageUrl($marriage->doc_marriage_certificate_scan) }}" class="attachment-img">
                     </a>
                 </div>
                 @endif
@@ -757,14 +757,14 @@
                 <div class="col-md-4 text-center" style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px dashed #cbd5e1; padding-left: 20px;">
                     @if($marriage->registrar_office_seal)
                     <div class="mb-2">
-                        <img src="{{ asset($marriage->registrar_office_seal) }}" style="max-height: 80px; object-fit: contain;">
+                        <img src="{{ imageUrl($marriage->registrar_office_seal) }}" style="max-height: 80px; object-fit: contain;">
                         <div class="font-weight-bold" style="font-size:11px;">অফিসিয়াল সিল (Parishad/Office Seal)</div>
                     </div>
                     @endif
 
                     @if($marriage->registrar_signature)
                     <div class="mt-2">
-                        <img src="{{ asset($marriage->registrar_signature) }}" style="max-height: 60px; object-fit: contain;">
+                        <img src="{{ imageUrl($marriage->registrar_signature) }}" style="max-height: 60px; object-fit: contain;">
                         <div class="font-weight-bold" style="font-size:11px;">নিবন্ধনকারীর স্বাক্ষর (Registrar Signature)</div>
                     </div>
                     @endif

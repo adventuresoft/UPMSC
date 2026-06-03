@@ -150,7 +150,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td class="text-center">
-                                        <img src="{{ asset($displayImage) }}" style="width: 55px; height: 65px; border-radius: 0; object-fit: cover;" onerror="this.onerror=null;this.src='{{ asset('assets/images/person-avatar.png') }}'">
+                                        <img src="{{ imageUrl($displayImage) }}" style="width: 55px; height: 65px; border-radius: 0; object-fit: cover;" onerror="this.onerror=null;this.src='{{ asset('assets/images/person-avatar.png') }}'">
                                     </td>
                                     <td class="text-center" style="font-size: 16px;">
                                         {{ bnValue($certificate->system_id) }}

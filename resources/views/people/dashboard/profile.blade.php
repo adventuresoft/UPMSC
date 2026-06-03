@@ -37,7 +37,7 @@
           <div class="relative inline-block">
             @if($people->image)
               <img class="w-24 h-24 rounded-full mx-auto object-cover ring-4 ring-white ring-opacity-40 shadow-lg"
-                   src="{{ asset($people->image) }}" alt="Profile Picture">
+                   src="{{ imageUrl($people->image) }}" alt="Profile Picture">
             @else
               <div class="w-24 h-24 rounded-full mx-auto bg-white bg-opacity-20 flex items-center justify-center text-white text-4xl font-black ring-4 ring-white ring-opacity-30 shadow-lg">
                 {{ strtoupper(substr($people->name, 0, 1)) }}

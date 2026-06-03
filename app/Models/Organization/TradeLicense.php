@@ -3,6 +3,7 @@
 namespace App\Models\Organization;
 
 use App\Models\Tax\TaxYear;
+use App\Traits\Multitenantable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -10,7 +11,13 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class TradeLicense extends Model
 {
-    use HasFactory;
+    use HasFactory, Multitenantable;
+
+    protected $fillable = [
+        'system_id', 'invoice_no', 'payment_status', 'payment_type',
+        'payment_details', 'transaction_id', 'payment_note', 'paid_at',
+        'institute_id', 'tax_year_id', 'organization_id', 'fees', 'status', 'total_amount',
+    ];
 
 
     public function taxYear()

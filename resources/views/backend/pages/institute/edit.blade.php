@@ -61,7 +61,7 @@
                                     <label for="institute_subcategory_id" class="col-sm-2 col-form-label">Institute Subcategory</label>
                                     <div class="col-sm-9">
                                         <select  required class="form-control select2" name="institute_subcategory_id" id="institute_subcategory_id">
-                                            <option value="">Select Subcategory A/B/C</option>
+                                            <option value="">Select Category</option>
 
                                             <option value="1" {{ isset($institute->institute_subcategory_id) ? ($institute->institute_subcategory_id == 1 ? 'selected' : '') : ''  }}>Subcategory A</option>
                                             <option value="2"  {{ isset($institute->institute_subcategory_id) ? ($institute->institute_subcategory_id == 2 ? 'selected' : '') : ''  }}>Subcategory B</option>

@@ -69,23 +69,37 @@
         margin-bottom: 5px;
     }
 
+    .header-text-block {
+        margin-top: 15px;
+    }
+
     .header-logos img {
         width: 64px;
         height: 64px;
         object-fit: contain;
     }
 
+    .header-logos h6 {
+        margin: 0 0 4px 0;
+        padding: 0;
+        line-height: 1;
+    }
+
     .union-title {
         text-align: center;
-        font-size: 22px;
+        font-size: 26px;
         font-weight: bold;
         color: #006600;
+        margin: 0 0 4px 0;
+        line-height: 1;
     }
 
     .union-subtitle {
         text-align: center;
         font-size: 18px;
         color: #003366;
+        margin: 0;
+        line-height: 1;
     }
 
     .doc-header {
@@ -119,7 +133,7 @@
     }
 
     .intro-text {
-        font-size: 13px;
+        font-size: 12px;
         line-height: 1.5;
         text-align: justify;
         margin: 12px 0;
@@ -370,10 +384,10 @@
         {{-- Header Logos --}}
         <div class="header-logos">
             <img src="{{ asset('images/dhaka.png') }}">
-            <div>
+            <div class="header-text-block">
                 <h6 class="text-center">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h6>
-                <div class="union-title">৩নং শুকতাইল ইউনিয়ন পরিষদ</div>
-                <div class="union-subtitle">No. 3 Shukhtail Union Parishad</div>
+                <div class="union-title">{{ $license->organization->institute->union->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                <div class="union-subtitle">{{ $license->organization->institute->union->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
             </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}">
         </div>
@@ -382,7 +396,7 @@
         <div class="doc-header">
             <div style="margin-top: 20px;">
                
-                <img src="{{ $license->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;"><br><br>
+                <img src="{{ 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . urlencode(route('trade-license.public-verify', $license->id)) }}" style="width:80px;height:80px;object-fit:cover;"><br><br>
                 
                 <u style="font-size: 13px; font-weight: bold;">ট্রেড লাইসেন্স ইস্যুর তারিখ</u><br>
                 <span style="font-size: 12px;">তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}</span>
@@ -400,7 +414,7 @@
 
             <div style="text-align:right">
                 
-                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.3in;height:1.5in;object-fit:cover; border:2px solid #000;">
+                <img src="{{ ($owner?->image || $owner?->people?->image) ? imageUrl($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.3in;height:1.5in;object-fit:cover; border:2px solid #000;">
             </div>
         </div>
 
@@ -554,3 +568,4 @@
 @endpush
 
 @endsection
+

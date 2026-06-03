@@ -345,7 +345,7 @@
             <div class="profile-serial-title">স্বামীর পূর্ণ বিবরণ (Husband Details)</div>
             <div class="profile-top">
                 <div class="profile-photo">
-                    <img src="{{ $divorce->husband_photo ? asset($divorce->husband_photo) : ($divorce->husbandUser && $divorce->husbandUser->image ? asset($divorce->husbandUser->image) : asset('no-image-found.jpeg')) }}" alt="Husband Photo">
+                    <img src="{{ $divorce->husband_photo ? imageUrl($divorce->husband_photo) : ($divorce->husbandUser && $divorce->husbandUser->image ? imageUrl($divorce->husbandUser->image) : asset('no-image-found.jpeg')) }}" alt="Husband Photo">
                 </div>
                 <div class="profile-info-list">
                     <div class="info-row">
@@ -416,7 +416,7 @@
 
             @if($divorce->husband_signature)
             <div class="signature-box">
-                <img src="{{ asset($divorce->husband_signature) }}" alt="Husband Signature">
+                <img src="{{ imageUrl($divorce->husband_signature) }}" alt="Husband Signature">
                 <div class="font-weight-bold" style="font-size:11px;">স্বামীর স্বাক্ষর (Husband's Signature)</div>
             </div>
             @endif
@@ -428,7 +428,7 @@
             <div class="profile-serial-title">স্ত্রীর পূর্ণ বিবরণ (Wife Details)</div>
             <div class="profile-top">
                 <div class="profile-photo">
-                    <img src="{{ $divorce->wife_photo ? asset($divorce->wife_photo) : ($divorce->wifeUser && $divorce->wifeUser->image ? asset($divorce->wifeUser->image) : asset('no-image-found.jpeg')) }}" alt="Wife Photo">
+                    <img src="{{ $divorce->wife_photo ? imageUrl($divorce->wife_photo) : ($divorce->wifeUser && $divorce->wifeUser->image ? imageUrl($divorce->wifeUser->image) : asset('no-image-found.jpeg')) }}" alt="Wife Photo">
                 </div>
                 <div class="profile-info-list">
                     <div class="info-row">
@@ -499,7 +499,7 @@
 
             @if($divorce->wife_signature)
             <div class="signature-box">
-                <img src="{{ asset($divorce->wife_signature) }}" alt="Wife Signature">
+                <img src="{{ imageUrl($divorce->wife_signature) }}" alt="Wife Signature">
                 <div class="font-weight-bold" style="font-size:11px;">স্ত্রীর স্বাক্ষর (Wife's Signature)</div>
             </div>
             @endif
@@ -532,7 +532,7 @@
                 </div>
                 @if($divorce->witness_1_signature)
                 <div class="signature-box mt-2">
-                    <img src="{{ asset($divorce->witness_1_signature) }}" alt="Witness 1 Signature">
+                    <img src="{{ imageUrl($divorce->witness_1_signature) }}" alt="Witness 1 Signature">
                 </div>
                 @endif
             </div>
@@ -561,7 +561,7 @@
                 </div>
                 @if($divorce->witness_2_signature)
                 <div class="signature-box mt-2">
-                    <img src="{{ asset($divorce->witness_2_signature) }}" alt="Witness 2 Signature">
+                    <img src="{{ imageUrl($divorce->witness_2_signature) }}" alt="Witness 2 Signature">
                 </div>
                 @endif
             </div>
@@ -673,8 +673,8 @@
                 @if($divorce->doc_husband_nid)
                 <div class="col-md-3 text-center mb-3">
                     <div class="font-weight-bold" style="font-size:12px;">স্বামীর জাতীয় পরিচয়পত্র</div>
-                    <a href="{{ asset($divorce->doc_husband_nid) }}" target="_blank">
-                        <img src="{{ asset($divorce->doc_husband_nid) }}" class="attachment-img">
+                    <a href="{{ imageUrl($divorce->doc_husband_nid) }}" target="_blank">
+                        <img src="{{ imageUrl($divorce->doc_husband_nid) }}" class="attachment-img">
                     </a>
                 </div>
                 @endif
@@ -682,8 +682,8 @@
                 @if($divorce->doc_wife_nid)
                 <div class="col-md-3 text-center mb-3">
                     <div class="font-weight-bold" style="font-size:12px;">স্ত্রীর জাতীয় পরিচয়পত্র</div>
-                    <a href="{{ asset($divorce->doc_wife_nid) }}" target="_blank">
-                        <img src="{{ asset($divorce->doc_wife_nid) }}" class="attachment-img">
+                    <a href="{{ imageUrl($divorce->doc_wife_nid) }}" target="_blank">
+                        <img src="{{ imageUrl($divorce->doc_wife_nid) }}" class="attachment-img">
                     </a>
                 </div>
                 @endif
@@ -691,8 +691,8 @@
                 @if($divorce->doc_birth_certificate)
                 <div class="col-md-3 text-center mb-3">
                     <div class="font-weight-bold" style="font-size:12px;">জন্ম নিবন্ধন সনদ</div>
-                    <a href="{{ asset($divorce->doc_birth_certificate) }}" target="_blank">
-                        <img src="{{ asset($divorce->doc_birth_certificate) }}" class="attachment-img">
+                    <a href="{{ imageUrl($divorce->doc_birth_certificate) }}" target="_blank">
+                        <img src="{{ imageUrl($divorce->doc_birth_certificate) }}" class="attachment-img">
                     </a>
                 </div>
                 @endif
@@ -700,8 +700,8 @@
                 @if($divorce->doc_divorce_paper_scan)
                 <div class="col-md-3 text-center mb-3">
                     <div class="font-weight-bold" style="font-size:12px;">তালাকনামা স্ক্যান কপি</div>
-                    <a href="{{ asset($divorce->doc_divorce_paper_scan) }}" target="_blank">
-                        <img src="{{ asset($divorce->doc_divorce_paper_scan) }}" class="attachment-img">
+                    <a href="{{ imageUrl($divorce->doc_divorce_paper_scan) }}" target="_blank">
+                        <img src="{{ imageUrl($divorce->doc_divorce_paper_scan) }}" class="attachment-img">
                     </a>
                 </div>
                 @endif
@@ -732,14 +732,14 @@
                 <div class="col-md-4 text-center" style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-left: 1px dashed #cbd5e1; padding-left: 20px;">
                     @if($divorce->registrar_office_seal)
                     <div class="mb-2">
-                        <img src="{{ asset($divorce->registrar_office_seal) }}" style="max-height: 80px; object-fit: contain;">
+                        <img src="{{ imageUrl($divorce->registrar_office_seal) }}" style="max-height: 80px; object-fit: contain;">
                         <div class="font-weight-bold" style="font-size:11px;">অফিসিয়াল সিল (Parishad/Office Seal)</div>
                     </div>
                     @endif
 
                     @if($divorce->registrar_signature)
                     <div class="mt-2">
-                        <img src="{{ asset($divorce->registrar_signature) }}" style="max-height: 60px; object-fit: contain;">
+                        <img src="{{ imageUrl($divorce->registrar_signature) }}" style="max-height: 60px; object-fit: contain;">
                         <div class="font-weight-bold" style="font-size:11px;">নিবন্ধনকারীর স্বাক্ষর (Registrar Signature)</div>
                     </div>
                     @endif

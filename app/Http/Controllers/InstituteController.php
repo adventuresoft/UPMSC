@@ -43,7 +43,7 @@ class InstituteController extends Controller
             $image_url = $upload_path . $image_full_name;
 
             try {
-                $image->move(public_path($upload_path), $image_full_name);
+                $image->move(base_path($upload_path), $image_full_name);
                 return $image_url;
             } catch (\Throwable $th) {
                 return "upload_failed.png";
@@ -470,7 +470,7 @@ class InstituteController extends Controller
             $image_full_name = $image_name . "." . $ext;
             $upload_path = 'uploads/institute/';
             $image_url = $upload_path . $image_full_name;
-            $success = $left_image->move(public_path($upload_path), $image_full_name);
+            $success = $left_image->move(base_path($upload_path), $image_full_name);
             if ($success) {
                 $left_image_url = $image_url;
             }
@@ -492,3 +492,4 @@ class InstituteController extends Controller
         }
     }
 }
+

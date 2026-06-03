@@ -172,7 +172,7 @@
                                         </td>-->
 
                                         <td>
-                                            <img src="{{ asset($user->image ?? 'default.png') }}"
+                                            <img src="{{ imageUrl($user->image ?? 'default.png') }}"
                                                 width="45"
                                                 height="55"
                                                 class="img"

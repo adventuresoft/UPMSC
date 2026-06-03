@@ -97,16 +97,16 @@ class PeopleDashboardController extends Controller
             $image_url = $upload_path . $image_full_name;
 
             // Ensure directory exists
-            if (!file_exists(public_path($upload_path))) {
-                mkdir(public_path($upload_path), 0777, true);
+            if (!file_exists(base_path($upload_path))) {
+                mkdir(base_path($upload_path), 0777, true);
             }
 
             // Move the file
-            $image->move(public_path($upload_path), $image_full_name);
+            $image->move(base_path($upload_path), $image_full_name);
 
             // Delete old image if exists
-            if ($people->image && file_exists(public_path($people->image))) {
-                @unlink(public_path($people->image));
+            if ($people->image && file_exists(base_path($people->image))) {
+                @unlink(base_path($people->image));
             }
 
             // Update database
@@ -119,3 +119,4 @@ class PeopleDashboardController extends Controller
         return back()->withErrors(['image' => 'Failed to upload image.']);
     }
 }
+

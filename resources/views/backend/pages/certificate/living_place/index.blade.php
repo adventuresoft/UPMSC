@@ -190,7 +190,7 @@
                                             <td>{{++$key}}</td>
                                             
                                             <td>
-                                                <img src="{{ asset($certificate->user->image ?? 'default.png') }}"
+                                                <img src="{{ imageUrl($certificate->user->image ?? 'default.png') }}"
                                                     width="55" height="65" class="img"
                                                     onerror="this.src='{{ asset('default.png') }}'">
                                             </td>

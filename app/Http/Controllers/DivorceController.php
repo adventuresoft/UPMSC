@@ -194,7 +194,7 @@ class DivorceController extends Controller
         if ($request->hasFile($fieldName)) {
             $file = $request->file($fieldName);
             $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/divorces'), $fileName);
+            $file->move(base_path('uploads/divorces'), $fileName);
             return 'uploads/divorces/' . $fileName;
         }
         return null;
@@ -480,3 +480,4 @@ class DivorceController extends Controller
         );
     }
 }
+

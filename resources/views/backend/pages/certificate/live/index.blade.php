@@ -191,13 +191,13 @@
                                             <td>{{++$key}}</td>
                                             
                                             <td>
-                                                <img src="{{ asset($certificate->husband->image ?? 'default.png') }}"
+                                                <img src="{{ imageUrl($certificate->husband->image ?? 'default.png') }}"
                                                     width="55" height="65" class="img"
                                                     onerror="this.src='{{ asset('default.png') }}'">
                                             </td>
                                             
                                             <td>
-                                                <img src="{{ asset($certificate->wife->image ?? 'default.png') }}"
+                                                <img src="{{ imageUrl($certificate->wife->image ?? 'default.png') }}"
                                                     width="55" height="65" class="img"
                                                     onerror="this.src='{{ asset('default.png') }}'">
                                             </td>

@@ -284,13 +284,8 @@
             <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
             <div class="union-header">
                 <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
-                <div class="union-title-bn">{{ $organization->Union?->bn_name ?? '' }}</div>
-                <div class="union-title-en">{{ $organization->Union?->name ?? '' }}</div>
-                <p class="union-address">
-                    থানাঃ {{ $organization->Thana?->bn_name ?? $organization->Thana?->name ?? $organization->officeThana?->bn_name ?? $organization->officeThana?->name ?? '' }},
-                    জেলাঃ {{ $organization->District?->bn_name ?? $organization->District?->name ?? $organization->officeDistrict?->bn_name ?? $organization->officeDistrict?->name ?? '' }},
-                    বাংলাদেশ।
-                </p>
+                <div class="union-title-bn">{{ $organization->institute->union->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                <div class="union-title-en">{{ $organization->institute->union->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
             </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Govt Logo">
         </div>
@@ -302,7 +297,7 @@
 
         <div class="photo-badge">
             <div class="photo-box">
-                <img src="{{ $organization->logo ? asset($organization->logo) : asset('public/no-image-found.jpeg') }}" alt="Organization Logo">
+                <img src="{{ $organization->logo ? imageUrl($organization->logo) : asset('public/no-image-found.jpeg') }}" alt="Organization Logo">
             </div>
             <div class="id-info-columns">
                 <div class="id-info-item"><span>Name :</span> {{ $organization->name }}</div>
@@ -385,7 +380,7 @@
 
                     <div class="owner-top">
                         <div class="owner-photo">
-                            <img src="{{ $owner->user?->image ? asset($owner->user->image) : asset('public/no-image-found.jpeg') }}" alt="Owner Photo" onerror="this.src='{{ asset('public/no-image-found.jpeg') }}'">
+                            <img src="{{ $owner->user?->image ? imageUrl($owner->user->image) : asset('public/no-image-found.jpeg') }}" alt="Owner Photo" onerror="this.src='{{ asset('public/no-image-found.jpeg') }}'">
                         </div>
                         <div class="owner-pill-list">
                             <div class="owner-pill"><span>Name :</span> <strong>{{ $owner->user?->name ?? $owner->user_name ?? '-' }}</strong></div>

@@ -19,7 +19,7 @@
                     <div class="card-body text-center bg-gradient-to-br from-[#046307] to-[#1a7a1e] p-4">
                         <div class="relative inline-block mb-3">
                             @if($people->image)
-                                <img class="w-20 h-20 rounded-full mx-auto object-cover ring-4 ring-white ring-opacity-30 shadow-lg" src="{{ asset($people->image) }}" alt="ছবি">
+                                <img class="w-20 h-20 rounded-full mx-auto object-cover ring-4 ring-white ring-opacity-30 shadow-lg" src="{{ imageUrl($people->image) }}" alt="ছবি">
                             @else
                                 <div class="w-20 h-20 rounded-full mx-auto bg-white bg-opacity-20 flex items-center justify-center text-white text-3xl font-black ring-4 ring-white ring-opacity-20 shadow-lg">
                                     {{ strtoupper(substr($people->name, 0, 1)) }}

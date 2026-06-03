@@ -85,7 +85,7 @@
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td>
-                                        <img src="{{ asset($card->user->image ?? 'default.png') }}"
+                                        <img src="{{ imageUrl($card->user->image ?? 'default.png') }}"
                                              width="55"
                                              height="65"
                                              class="img rounded border"

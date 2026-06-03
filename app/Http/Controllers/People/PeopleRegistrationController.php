@@ -86,7 +86,7 @@ class PeopleRegistrationController extends Controller
                 if ($request->hasFile('image')) {
                     $image = $request->file('image');
                     $image_name = Str::slug($request->name) . '-' . time() . '.' . $image->getClientOriginalExtension();
-                    $image->move(public_path('uploads/users/'), $image_name);
+                    $image->move(base_path('uploads/users/'), $image_name);
                     $user->image = 'uploads/users/' . $image_name;
                 }
 
@@ -515,3 +515,4 @@ class PeopleRegistrationController extends Controller
         return response()->json($result, $result['status'] ? 200 : 500);
     }
 }
+

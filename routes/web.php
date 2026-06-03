@@ -135,6 +135,8 @@ Route::get('/sms', function(){
 Route::get('test-api', [HomeController::class, 'testHttpRequest']);
 
 // Login
+Route::get('/tl/{id}', [App\Http\Controllers\Organization\TradeLicenseController::class, 'publicPreview'])->name('trade-license.public-verify');
+
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login-check', [LoginController::class, 'loginCheck'])->name('login.check');
 
@@ -646,3 +648,21 @@ Route::prefix('people-portal')->name('people.')->group(function () {
         });
     });
 });
+
+// Route to serve uploads from the root directory locally (XAMPP/artisan serve)
+Route::get('uploads/{path}', function ($path) {
+    $filePath = base_path('uploads/' . $path);
+    if (file_exists($filePath)) {
+        return response()->file($filePath);
+    }
+    abort(404);
+})->where('path', '.*');
+
+Route::get('upload/{path}', function ($path) {
+    $filePath = base_path('upload/' . $path);
+    if (file_exists($filePath)) {
+        return response()->file($filePath);
+    }
+    abort(404);
+})->where('path', '.*');
+

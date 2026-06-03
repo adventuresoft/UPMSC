@@ -14,6 +14,7 @@ class UnionController extends Controller
 
         $unions = Union::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
             ->where('status', true)
+            ->where('thana_id', $id)
             ->orderBy('name')
             ->get();
 

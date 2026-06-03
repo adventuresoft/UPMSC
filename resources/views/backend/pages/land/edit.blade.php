@@ -311,7 +311,7 @@
                             <div class="d-flex align-items-center">
                                 <div>
                                     @if($ownerUser->image)
-                                        <img src="{{ asset($ownerUser->image) }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 2px solid #e2e8f0;" alt="Owner Photo">
+                                        <img src="{{ imageUrl($ownerUser->image) }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 2px solid #e2e8f0;" alt="Owner Photo">
                                     @else
                                         <div style="width: 80px; height: 80px; background: #e2e8f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #64748b;"><i class="fas fa-user fa-2x"></i></div>
                                     @endif

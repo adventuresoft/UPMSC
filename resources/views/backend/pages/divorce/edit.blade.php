@@ -368,14 +368,14 @@
                                     <div class="gov-photo-wrapper">
                                         <div class="gov-photo-text"><i class="fas fa-image mb-1"></i><br>স্বামীর ছবি<br>(Photo)</div>
                                         <input type="file" name="husband_photo_file" id="husband_photo_input" accept="image/*">
-                                        <img id="husband_photo_preview" src="{{ $divorce->husband_photo ? asset($divorce->husband_photo) : '' }}" style="{{ $divorce->husband_photo ? 'display: block;' : 'display: none;' }}">
+                                        <img id="husband_photo_preview" src="{{ $divorce->husband_photo ? imageUrl($divorce->husband_photo) : '' }}" style="{{ $divorce->husband_photo ? 'display: block;' : 'display: none;' }}">
                                     </div>
                                 </div>
                                 <div>
                                     <div class="gov-photo-wrapper">
                                         <div class="gov-photo-text"><i class="fas fa-pen-fancy mb-1"></i><br>স্বামীর স্বাক্ষর<br>(Signature)</div>
                                         <input type="file" name="husband_signature_file" id="husband_sig_input" accept="image/*">
-                                        <img id="husband_sig_preview" src="{{ $divorce->husband_signature ? asset($divorce->husband_signature) : '' }}" style="{{ $divorce->husband_signature ? 'display: block;' : 'display: none;' }}">
+                                        <img id="husband_sig_preview" src="{{ $divorce->husband_signature ? imageUrl($divorce->husband_signature) : '' }}" style="{{ $divorce->husband_signature ? 'display: block;' : 'display: none;' }}">
                                     </div>
                                 </div>
                             </div>
@@ -459,14 +459,14 @@
                                     <div class="gov-photo-wrapper">
                                         <div class="gov-photo-text"><i class="fas fa-image mb-1"></i><br>স্ত্রীর ছবি<br>(Photo)</div>
                                         <input type="file" name="wife_photo_file" id="wife_photo_input" accept="image/*">
-                                        <img id="wife_photo_preview" src="{{ $divorce->wife_photo ? asset($divorce->wife_photo) : '' }}" style="{{ $divorce->wife_photo ? 'display: block;' : 'display: none;' }}">
+                                        <img id="wife_photo_preview" src="{{ $divorce->wife_photo ? imageUrl($divorce->wife_photo) : '' }}" style="{{ $divorce->wife_photo ? 'display: block;' : 'display: none;' }}">
                                     </div>
                                 </div>
                                 <div>
                                     <div class="gov-photo-wrapper">
                                         <div class="gov-photo-text"><i class="fas fa-pen-fancy mb-1"></i><br>স্ত্রীর স্বাক্ষর<br>(Signature)</div>
                                         <input type="file" name="wife_signature_file" id="wife_sig_input" accept="image/*">
-                                        <img id="wife_sig_preview" src="{{ $divorce->wife_signature ? asset($divorce->wife_signature) : '' }}" style="{{ $divorce->wife_signature ? 'display: block;' : 'display: none;' }}">
+                                        <img id="wife_sig_preview" src="{{ $divorce->wife_signature ? imageUrl($divorce->wife_signature) : '' }}" style="{{ $divorce->wife_signature ? 'display: block;' : 'display: none;' }}">
                                     </div>
                                 </div>
                             </div>
@@ -566,7 +566,7 @@
                                     <input type="file" name="witness_1_signature_file" class="form-control gov-input" style="padding: 5px;">
                                     @if($divorce->witness_1_signature)
                                         <div class="mt-2">
-                                            <img src="{{ asset($divorce->witness_1_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
+                                            <img src="{{ imageUrl($divorce->witness_1_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
                                         </div>
                                     @endif
                                 </div>
@@ -603,7 +603,7 @@
                                     <input type="file" name="witness_2_signature_file" class="form-control gov-input" style="padding: 5px;">
                                     @if($divorce->witness_2_signature)
                                         <div class="mt-2">
-                                            <img src="{{ asset($divorce->witness_2_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
+                                            <img src="{{ imageUrl($divorce->witness_2_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
                                         </div>
                                     @endif
                                 </div>
@@ -754,7 +754,7 @@
                                     <div id="file_husband_nid" class="doc-file-input" style="{{ $divorce->doc_husband_nid ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_husband_nid_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($divorce->doc_husband_nid)
-                                            <div class="mt-1"><a href="{{ asset($divorce->doc_husband_nid) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($divorce->doc_husband_nid) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -770,7 +770,7 @@
                                     <div id="file_wife_nid" class="doc-file-input" style="{{ $divorce->doc_wife_nid ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_wife_nid_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($divorce->doc_wife_nid)
-                                            <div class="mt-1"><a href="{{ asset($divorce->doc_wife_nid) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($divorce->doc_wife_nid) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -786,7 +786,7 @@
                                     <div id="file_birth_certificate" class="doc-file-input" style="{{ $divorce->doc_birth_certificate ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_birth_certificate_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($divorce->doc_birth_certificate)
-                                            <div class="mt-1"><a href="{{ asset($divorce->doc_birth_certificate) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($divorce->doc_birth_certificate) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -802,7 +802,7 @@
                                     <div id="file_divorce_paper" class="doc-file-input" style="{{ $divorce->doc_divorce_paper_scan ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_divorce_paper_scan_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($divorce->doc_divorce_paper_scan)
-                                            <div class="mt-1"><a href="{{ asset($divorce->doc_divorce_paper_scan) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($divorce->doc_divorce_paper_scan) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -818,7 +818,7 @@
                                     <div id="file_other" class="doc-file-input" style="{{ $divorce->doc_other ? 'display: block;' : 'display: none;' }}">
                                         <input type="file" name="doc_other_file" class="form-control gov-input" style="padding: 5px;">
                                         @if($divorce->doc_other)
-                                            <div class="mt-1"><a href="{{ asset($divorce->doc_other) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
+                                            <div class="mt-1"><a href="{{ imageUrl($divorce->doc_other) }}" target="_blank" class="small text-danger"><i class="fas fa-file"></i> View Current Doc</a></div>
                                         @endif
                                     </div>
                                 </div>
@@ -845,7 +845,7 @@
                                 <input type="file" name="registrar_office_seal_file" class="form-control gov-input" style="padding: 5px;">
                                 @if($divorce->registrar_office_seal)
                                     <div class="mt-2">
-                                        <img src="{{ asset($divorce->registrar_office_seal) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
+                                        <img src="{{ imageUrl($divorce->registrar_office_seal) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
                                     </div>
                                 @endif
                             </div>
@@ -889,7 +889,7 @@
                                     <input type="file" name="registrar_signature_file" class="form-control gov-input mx-auto" style="padding: 5px; width: 80%;">
                                     @if($divorce->registrar_signature)
                                         <div class="mt-2">
-                                            <img src="{{ asset($divorce->registrar_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
+                                            <img src="{{ imageUrl($divorce->registrar_signature) }}" height="50" style="border: 1px solid #ccc; border-radius: 4px; padding: 2px;">
                                         </div>
                                     @endif
                                 </div>

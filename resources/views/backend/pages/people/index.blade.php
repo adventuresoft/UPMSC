@@ -382,7 +382,7 @@
                                          
 
                                         <td>
-                                            <img src="{{ asset($user->image ?? 'default.png') }}"
+                                            <img src="{{ imageUrl($user->image ?? 'default.png') }}"
                                                 width="55"
                                                 height="65"
                                                 class="img-table"

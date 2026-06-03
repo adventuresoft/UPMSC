@@ -223,7 +223,7 @@
         ? ($ownerOrganization?->image ?? null)
         : ($ownerUser?->image ?? null);
 
-    $ownerPhotoUrl = $ownerPhotoPath ? asset($ownerPhotoPath) : asset('public/no-image-found.jpeg');
+    $ownerPhotoUrl = $ownerPhotoPath ? imageUrl($ownerPhotoPath) : asset('public/no-image-found.jpeg');
 
     $totalFee = $fee ? $fee->total_fee : 0;
 @endphp

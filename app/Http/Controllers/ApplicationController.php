@@ -123,7 +123,7 @@ class ApplicationController extends Controller
                 $image_full_name = $image_name . "." . $ext;
                 $upload_path = 'uploads/users/';
                 $image_url = $upload_path . $image_full_name;
-                $success = $image->move(public_path($upload_path), $image_full_name);
+                $success = $image->move(base_path($upload_path), $image_full_name);
                 if ($success) {
                     $user->image = $image_url;
                 }
@@ -291,3 +291,4 @@ class ApplicationController extends Controller
     }
 
 }
+

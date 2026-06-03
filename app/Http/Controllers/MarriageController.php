@@ -199,7 +199,7 @@ class MarriageController extends Controller
         if ($request->hasFile($fieldName)) {
             $file = $request->file($fieldName);
             $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/marriages'), $fileName);
+            $file->move(base_path('uploads/marriages'), $fileName);
             return 'uploads/marriages/' . $fileName;
         }
         return null;
@@ -494,3 +494,4 @@ class MarriageController extends Controller
         );
     }
 }
+

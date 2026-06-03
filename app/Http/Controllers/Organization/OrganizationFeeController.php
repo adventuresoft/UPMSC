@@ -127,7 +127,12 @@ class OrganizationFeeController extends Controller
    
     public function index()
     {
-        $data['fees'] = OrganizationFee::get();
+        $user = Auth::user();
+        $institute = $user ? \App\Models\Institute::find($user->institute_id) : null;
+        $data['fees'] = OrganizationFee::when($institute, function ($q) use ($institute) {
+                $q->where('institute_type_id', $institute->institute_type_id);
+            })
+            ->get();
         return view('backend.pages.organization.fees.registration.index', $data);
     }
 
