@@ -284,8 +284,8 @@
             <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
             <div class="union-header">
                 <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
-                <div class="union-title-bn">{{ $organization->institute->union->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
-                <div class="union-title-en">{{ $organization->institute->union->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
+                <div class="union-title-bn">{{ $organization->institute?->union?->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                <div class="union-title-en">{{ $organization->institute?->union?->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
             </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Govt Logo">
         </div>
@@ -380,7 +380,7 @@
 
                     <div class="owner-top">
                         <div class="owner-photo">
-                            <img src="{{ $owner->user?->image ? imageUrl($owner->user->image) : asset('public/no-image-found.jpeg') }}" alt="Owner Photo" onerror="this.src='{{ asset('public/no-image-found.jpeg') }}'">
+                            <img src="{{ $owner->user?->image ? imageUrl($owner->user->image) : asset('public/no-image-found.jpeg') }}" alt="Owner Photo" onerror="this.onerror=null; this.src='{{ asset('public/no-image-found.jpeg') }}'">
                         </div>
                         <div class="owner-pill-list">
                             <div class="owner-pill"><span>Name :</span> <strong>{{ $owner->user?->name ?? $owner->user_name ?? '-' }}</strong></div>
