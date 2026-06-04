@@ -36,6 +36,17 @@ if ($unionId) {
         }
     }
 }
+
+// Fallback: use Institute Admin (role_id=6) name if no Council Chairman found
+if ($chairmanName === '(Chairman)') {
+    $instituteId = $certificate->user->institute_id ?? null;
+    if ($instituteId) {
+        $adminUser = User::where('institute_id', $instituteId)->where('role_id', 6)->first();
+        if ($adminUser) {
+            $chairmanName = optional($adminUser->people)->name ?? $adminUser->name ?? $chairmanName;
+        }
+    }
+}
 @endphp
 
 <div class="certificate-signature">

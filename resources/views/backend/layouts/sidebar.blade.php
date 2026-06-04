@@ -28,7 +28,7 @@
     
     $isPeopleInfo = $isPath(['people*', 'peopleapprovedlist*', 'peoplesearch*']) || in_array($_subMenu, ['Create', 'View', 'Show', 'approvedList', 'search']);
     
-    $isCertificate = $isPath(['citizen*', 'character*', 'death*', 'succession*', 'unmarried*', 'married*', 'remarried*', 'landless*', 'name*', 'income*', 'disability-certificate*', 'voter-area*', 'voter-list*', 'nid-correction*', 'childless*', 'orphan*', 'financial-instability*', 'age*', 'permanent-citizen*', 'residential*', 'guardian-income*']) || $_mainMenu == 'Certificate';
+    $isCertificate = $isPath(['citizen*', 'character*', 'death*', 'succession*', 'unmarried*', 'married*', 'remarried*', 'landless*', 'name*', 'income*', 'disability-certificate*', 'voter-area*', 'voter-list*', 'nid-correction*', 'childless*', 'orphan*', 'financial-instability*', 'age*', 'permanent-citizen*', 'residential*', 'guardian-income*', 'guardian-acceptance*']) || $_mainMenu == 'Certificate';
     
     $isOrganization = $isPath(['organization*', 'orgapproved*']) || in_array($_subMenu, ['OrganizationCreate', 'OrganizationList', 'ApprovedOrganizationList', 'OrganizationShow', 'RegistrationFees', 'RenewFees', 'TradeLicense', 'GetTradeLicense']);
     
@@ -773,6 +773,13 @@
         <a href="{{route('guardian-income.index')}}" class="nav-link  @if($subMenu == "GuardianIncome") active @endif">
           <i class="far fa-circle nav-icon"></i>
           <p>Guardian Income</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('guardian-acceptance.index')}}" class="nav-link  @if($subMenu == "GuardianAcceptance") active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Guardian Acceptance</p>
         </a>
       </li>
 

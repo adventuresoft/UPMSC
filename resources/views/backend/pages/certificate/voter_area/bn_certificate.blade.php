@@ -38,6 +38,7 @@
         align-items: baseline;
         width: 100%;
         margin-bottom: 3px;
+        white-space: nowrap;
     }
 
     .flex-row > span {
@@ -48,32 +49,20 @@
     .dot-line-container {
         flex-grow: 1;
         position: relative;
-        min-height: 1.2em;
-        overflow: hidden;
-        margin-left: 5px;
-    }
-
-    .dots-bg {
-        position: absolute;
-        bottom: 2px;
-        left: 0;
-        right: 0;
-        color: #000;
-        font-weight: bold;
-        letter-spacing: 2.5px;
-        font-family: Arial, sans-serif;
-        white-space: nowrap;
-        pointer-events: none;
-        z-index: 0;
+        border-bottom: 1px dashed #000;
+        margin-left: 3px;
+        margin-right: 3px;
+        display: flex;
+        align-items: flex-end;
     }
 
     .data-span {
         position: relative;
         z-index: 1;
-        padding: 0 5px;
+        padding-right: 4px;
         font-weight: normal;
-        background: transparent;
-        top: -5px;
+        background: white;
+        padding-bottom: 0px;
     }
 
     .post-code-box {
@@ -118,12 +107,12 @@
             margin: 0 auto;
             padding: 15mm 10mm;
             width: 210mm;
-            min-height: 297mm;
+            min-height: auto;
             page-break-after: always;
             box-sizing: border-box;
             border: none;
         }
-        .form-container:last-child { page-break-after: auto; }
+        .form-container.last-page { page-break-after: auto; }
         .print-controls, .content-header, .main-header, .main-sidebar, .main-footer { display: none !important; }
     }
 </style>
@@ -138,7 +127,7 @@
         <div class="text-center" style="margin-bottom: 30px;">
             <div style="font-size: 20px; font-weight: bold;">ফরম-১৩</div>
             <div style="font-size: 16px;">[বিধি ২৬(৭) দ্রষ্টব্য]</div>
-            <div style="margin-top: 20px; font-size: 18px; font-weight: bold;">এক ভোটার এলাকা হইতে অন্য ভোটার এলাকায় ভোটার স্থানান্তরের আবেদন</div>
+            <div style="margin-top: 20px; font-size: 18px; font-weight: bold;">এক ভোটার এলাকা হইতে অন্য ভোটার এলাকায় ভোটার স্থানান্তরের আবেদন</div>
         </div>
 
         <div style="margin-bottom: 30px;">
@@ -148,14 +137,12 @@
                 <div class="flex-row" style="width: 350px;">
                     <span>উপজেলা/থানা</span>
                     <div class="dot-line-container">
-                        <div class="dots-bg">................................................................................................................................</div>
                         <span class="data-span">{{ $certificate->recipient_upazila_thana_name }}</span>
                     </div>
                 </div>
                 <div class="flex-row" style="width: 350px;">
                     <span>জেলা</span>
                     <div class="dot-line-container">
-                        <div class="dots-bg">................................................................................................................................</div>
                         <span class="data-span">{{ $certificate->recipient_district }}</span>
                     </div>
                 </div>
@@ -166,28 +153,25 @@
             <span style="width: 35px; font-weight: bold;">১।</span>
             <span>আবেদনকারীর নাম :</span>
             <div class="dot-line-container">
-                <div class="dots-bg">................................................................................................................................................................</div>
                 <span class="data-span">{{ $certificate->applicant_name }}</span>
             </div>
         </div>
 
         <div class="flex-row">
             <span style="width: 35px; font-weight: bold;">২।</span>
-            <span>জাতীয় পরিচয়পত্র নম্বর (NID) :</span>
+            <span>জাতীয় পরিচয়পত্র নং (এনআইডি) :</span>
             <div class="dot-line-container">
-                <div class="dots-bg">................................................................................................................................................................</div>
                 <span class="data-span">{{ bnValue($certificate->applicant_nid) }}</span>
             </div>
         </div>
         <div class="text-center" style="font-size: 14px; margin-top: -5px; margin-bottom: 10px; padding-left: 100px;">
-            (জাতীয় পরিচয়পত্রের ছায়ালিপি সংযুক্ত করিতে হইবে)
+            (জাতীয় পরিচয়পত্রের ছায়ালিপি সংযুক্ত করিতে হইবে)
         </div>
 
         <div class="flex-row">
             <span style="width: 35px; font-weight: bold;">৩।</span>
             <span>জন্ম তারিখ :</span>
             <div class="dot-line-container" style="max-width: 450px;">
-                <div class="dots-bg">................................................................................................................................</div>
                 <span class="data-span">{{ $certificate->applicant_dob ? bnValue(date('d/m/Y', strtotime($certificate->applicant_dob))) : '' }}</span>
             </div>
         </div>
@@ -200,43 +184,36 @@
             <div class="flex-row">
                 <span>ভোটার নম্বর :</span>
                 <div class="dot-line-container" style="max-width: 450px;">
-                    <div class="dots-bg">................................................................................................................................</div>
                     <span class="data-span">{{ bnValue($certificate->current_voter_no) }}</span>
                 </div>
             </div>
             <div class="flex-row">
                 <span>ভোটার এলাকার নাম :</span>
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................</div>
                     <span class="data-span">{{ $certificate->current_voter_area_name }}</span>
                 </div>
                 <span style="margin-left: 15px;">ভোটার এলাকার নম্বর :</span>
                 <div class="dot-line-container" style="max-width: 150px;">
-                    <div class="dots-bg">............................................................</div>
                     <span class="data-span">{{ bnValue($certificate->current_voter_area_no) }}</span>
                 </div>
             </div>
             <div class="flex-row">
                 <span>উপজেলা/থানা :</span>
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................</div>
                     <span class="data-span">{{ $certificate->current_upazila_thana }}</span>
                 </div>
                 <span style="margin-left: 15px;">জেলা :</span>
                 <div class="dot-line-container" style="max-width: 200px;">
-                    <div class="dots-bg">............................................................</div>
                     <span class="data-span">{{ $certificate->current_district }}</span>
                 </div>
             </div>
             <div class="flex-row">
                 <span>গ্রাম/রাস্তার নাম ও নম্বর :</span>
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................</div>
                     <span class="data-span">{{ $certificate->current_village_road }}</span>
                 </div>
                 <span style="margin-left: 15px;">বাসা/হোল্ডিং নম্বর :</span>
                 <div class="dot-line-container" style="max-width: 150px;">
-                    <div class="dots-bg">............................................................</div>
                     <span class="data-span">{{ bnValue($certificate->current_house_holding) }}</span>
                 </div>
             </div>
@@ -244,68 +221,58 @@
 
         <div class="flex-row" style="margin-top: 15px;">
             <span style="width: 35px; font-weight: bold;">৫।</span>
-            <span style="font-weight: bold;">যে এলাকায় স্থানান্তর হইতে ইচ্ছুক-</span>
+            <span style="font-weight: bold;">যে এলাকায় স্থানান্তর হইতে ইচ্ছুক-</span>
         </div>
         <div style="margin-left: 35px; padding-left: 60px;">
             <div class="flex-row">
                 <span>জেলা :</span>
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................</div>
                     <span class="data-span">{{ $certificate->transfer_district }}</span>
                 </div>
                 <span style="margin-left: 15px;">উপজেলা/থানা :</span>
                 <div class="dot-line-container" style="max-width: 250px;">
-                    <div class="dots-bg">................................................................................</div>
                     <span class="data-span">{{ $certificate->transfer_upazila_thana }}</span>
                 </div>
             </div>
             <div class="flex-row">
-                <span>সিটি কর্পোরেশন/পৌরসভা/ইউনিয়ন/ক্যান্ট: বোর্ড :</span>
+                <span>সিটি কর্পোরেশন/পৌরসভা/ইউনিয়ন/ক্যান্ট: বোর্ড :</span>
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................</div>
                     <span class="data-span">{{ $certificate->transfer_entity_name }}</span>
                 </div>
-                <span style="margin-left: 15px;">ওয়ার্ড নম্বর :</span>
+                <span style="margin-left: 15px;">ওয়ার্ড নম্বর :</span>
                 <div class="dot-line-container" style="max-width: 100px;">
-                    <div class="dots-bg">............................................................</div>
                     <span class="data-span">{{ bnValue($certificate->transfer_ward_no) }}</span>
                 </div>
             </div>
             <div class="flex-row">
                 <span>ভোটার এলাকার নাম :</span>
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................</div>
                     <span class="data-span">{{ $certificate->transfer_voter_area_name }}</span>
                 </div>
                 <span style="margin-left: 15px;">ভোটার এলাকার নম্বর :</span>
                 <div class="dot-line-container" style="max-width: 150px;">
-                    <div class="dots-bg">............................................................</div>
                     <span class="data-span">{{ bnValue($certificate->transfer_voter_area_no) }}</span>
                 </div>
             </div>
             <div class="flex-row">
                 <span>গ্রাম/রাস্তার নাম ও নম্বর :</span>
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................</div>
                     <span class="data-span">{{ $certificate->transfer_village_road }}</span>
                 </div>
                 <span style="margin-left: 15px;">বাসা/হোল্ডিং নম্বর :</span>
                 <div class="dot-line-container" style="max-width: 150px;">
-                    <div class="dots-bg">............................................................</div>
                     <span class="data-span">{{ bnValue($certificate->transfer_house_holding) }}</span>
                 </div>
             </div>
             <div class="flex-row">
                 <span>টেলিফোন/মোবাইল ফোন নম্বর :</span>
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................................................................................</div>
                     <span class="data-span">{{ bnValue($certificate->transfer_phone_mobile) }}</span>
                 </div>
             </div>
             <div class="flex-row">
                 <span>ডাকঘর :</span>
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................</div>
                     <span class="data-span">{{ $certificate->transfer_post_office }}</span>
                 </div>
                 <span style="margin-left: 15px;">পোস্ট কোড :</span>
@@ -320,9 +287,8 @@
 
         <div class="flex-row" style="margin-top: 15px;">
             <span style="width: 35px; font-weight: bold;">৬।</span>
-            <span>৫ নম্বর ক্রমিকে বর্ণিত ঠিকানায় যে সময় হইতে অবস্থান করিতেছেন :</span>
+            <span>৫ নম্বর ক্রমিকে বর্ণিত ঠিকানায় যে সময় হইতে অবস্থান করিতেছেন :</span>
             <div class="dot-line-container">
-                <div class="dots-bg">................................................................................................................................</div>
                 <span class="data-span">{{ $certificate->staying_since }}</span>
             </div>
         </div>
@@ -331,42 +297,39 @@
             <span style="width: 35px; font-weight: bold;">৭।</span>
             <span>স্থানান্তরের কারণঃ</span>
             <div class="dot-line-container">
-                <div class="dots-bg">................................................................................................................................................................</div>
                 <span class="data-span">{{ $certificate->transfer_reason }}</span>
             </div>
         </div>
     </div>
 
     <!-- PAGE 2 -->
-    <div class="form-container">
+    <div class="form-container last-page">
         <div class="flex-row">
             <span style="width: 35px; font-weight: bold;">৮।</span>
-            <span style="font-weight: bold;">৫ নম্বর ক্রমিকে বর্ণিত ঠিকানায় অবস্থানের সমর্থনে নিম্নের দলিলাদি সংযুক্ত করিতে হইবে :</span>
+            <span style="font-weight: bold;">৫ নম্বর ক্রমিকে বর্ণিত ঠিকানায় অবস্থানের সমর্থনে নিম্নের দলিলাদি সংযুক্ত করিতে হইবে :</span>
         </div>
         <div style="margin-left: 45px; line-height: 2.0; margin-top: 10px;">
-            (ক) প্রথম শ্রেণীর কর্মকর্তা/ ক্যান্টনমেন্ট বোর্ডের এক্সিকিউটিভ অফিসার/ সিটি কর্পোরেশন/পৌরসভার মেয়র /ওয়ার্ড কাউন্সিলর/ইউনিয়ন পরিষদ চেয়ারম্যান কর্তৃক প্রদত্ত প্রত্যয়ন পত্র।<br>
+            (ক) প্রথম শ্রেণীর কর্মকর্তা/ ক্যান্টনমেন্ট বোর্ডের এক্সিকিউটিভ অফিসার/ সিটি কর্পোরেশন/পৌরসভার মেয়র /ওয়ার্ড কাউন্সিলর/ইউনিয়ন পরিষদ চেয়ারম্যান কর্তৃক প্রদত্ত প্রত্যয়ন পত্র।<br>
             (খ) ইউটিলিটি বিলের অনুলিপি (যদি থাকে)<br>
-            (গ) বাড়ী ভাড়া রশিদ/চৌকিদারী কর রশিদ/পৌরকর রশিদ/অন্যান্য
+            (গ) বাড়ী ভাড়া রশিদ/চৌকিদারী কর রশিদ/পৌরকর রশিদ/অন্যান্য
         </div>
 
         <div style="margin-top: 80px; text-align: right; padding-right: 20px;">
             <div style="display: inline-block; text-align: center;">
-                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">...................................................</div>
-                <div style="font-weight: bold;">আবেদনকারীর স্বাক্ষর বা টিপসহি</div>
+                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
+                <div style="font-weight: bold;">আবেদনকারীর স্বাক্ষর বা টিপসহ</div>
             </div>
         </div>
 
         <div style="margin-top: 50px;">
             <div class="flex-row">
                 <span style="font-weight: bold;">আবেদনকারীকে শনাক্তকারীর স্বাক্ষর :</span>
-                <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................</div>
-                </div>
+                <div class="dot-line-container"></div>
             </div>
             <div style="margin-left: 150px; margin-top: 10px;">
-                <div class="flex-row">নাম :<div class="dot-line-container"><div class="dots-bg">................................................................................</div><span class="data-span">{{ $certificate->identifier_name }}</span></div></div>
-                <div class="flex-row">জাতীয় পরিচয়পত্র নম্বর :<div class="dot-line-container"><div class="dots-bg">................................................................................</div><span class="data-span">{{ bnValue($certificate->identifier_nid) }}</span></div></div>
-                <div class="flex-row">ঠিকানা :<div class="dot-line-container"><div class="dots-bg">................................................................................</div><span class="data-span">{{ $certificate->identifier_address }}</span></div></div>
+                <div class="flex-row">নাম :<div class="dot-line-container"><span class="data-span">{{ $certificate->identifier_name }}</span></div></div>
+                <div class="flex-row">জাতীয় পরিচয়পত্র নম্বর :<div class="dot-line-container"><span class="data-span">{{ bnValue($certificate->identifier_nid) }}</span></div></div>
+                <div class="flex-row">ঠিকানা :<div class="dot-line-container"><span class="data-span">{{ $certificate->identifier_address }}</span></div></div>
             </div>
         </div>
 
@@ -376,30 +339,27 @@
 
         <div style="line-height: 2.5; text-align: justify; font-size: 17px; margin-bottom: 40px;">
             <div class="flex-row">
-                দাখিলকৃত দলিলাদি পরীক্ষান্তে 
+                দাখিলকৃত দলিলাদি পরীক্ষান্তে
                 <div class="dot-line-container" style="min-width: 250px;">
-                    <div class="dots-bg">................................................................................................</div>
                 </div>
                 ভোটার এলাকার জন্য প্রণীত ভোটার তালিকা হইতে নাম
             </div>
             <div class="flex-row">
-                কর্তন এবং 
+                কর্তন এবং
                 <div class="dot-line-container" style="max-width: 350px;">
-                    <div class="dots-bg">................................................................................</div>
                 </div>
-                ভোটার এলাকায় নাম অন্তর্ভুক্ত করা হইল।
+                ভোটার এলাকায় নাম অন্তর্ভুক্ত করা হইল।
             </div>
         </div>
 
         <div style="text-align: right; margin-top: 60px; padding-right: 20px;">
             <div style="display: inline-block; text-align: center;">
-                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">...................................................</div>
+                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
                 <div style="font-weight: bold;">উপজেলা/থানা নির্বাচন কর্মকর্তা</div>
-                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-top: 15px;">...................................................</div>
             </div>
         </div>
 
-        <div style="margin-top: 60px; margin-bottom: 30px; border-top: 1.5px dotted #000; width: 100%;"></div>
+        <div style="margin-top: 60px; margin-bottom: 30px; border-top: 1px dashed #000; width: 100%;"></div>
 
         <div style="text-align: center; margin-bottom: 25px; font-weight: bold; font-size: 20px;">
             প্রাপ্তিস্বীকার পত্র
@@ -409,7 +369,6 @@
             <div class="flex-row">
                 জনাব/বেগম
                 <div class="dot-line-container">
-                    <div class="dots-bg">................................................................................................................................</div>
                     <span class="data-span">{{ $certificate->applicant_name }}</span>
                 </div>
                 এর আবেদন ফরম গৃহীত হইল।
@@ -417,15 +376,13 @@
             <div class="flex-row">
                 আবেদন ফরম নম্বর
                 <div class="dot-line-container" style="max-width: 400px;">
-                    <div class="dots-bg">................................................................................</div>
-                    <span class="data-span">{{ bnValue($certificate->system_id) }}</span>
                 </div>
             </div>
         </div>
 
         <div style="text-align: right; margin-top: 60px; padding-right: 20px;">
             <div style="display: inline-block; text-align: center;">
-                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">...................................................</div>
+                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
                 <div style="font-weight: bold;">গ্রহণকারীর স্বাক্ষর</div>
             </div>
         </div>

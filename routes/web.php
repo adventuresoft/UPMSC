@@ -57,6 +57,7 @@ use App\Http\Controllers\Certificate\ResidentialCertificateController;
 use App\Http\Controllers\Certificate\PermanentCitizenCertificateController;
 use App\Http\Controllers\Certificate\AgeCertificateController;
 use App\Http\Controllers\Certificate\FinancialInstabilityCertificateController;
+use App\Http\Controllers\Certificate\GuardianAcceptanceCertificateController;
 
 use App\Http\Controllers\Certificate\OrphanCertificateController;
 use App\Http\Controllers\Certificate\ChildlessCertificateController;
@@ -350,6 +351,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::get('certificate/residential/bn/{id}', [ResidentialCertificateController::class, 'bn_certificate'])->name('residential.bn_certificate');
     Route::resource('certificate/guardian-income', GuardianCertificateController::class);
     Route::get('certificate/guardian-income/bn/{id}', [GuardianCertificateController::class, 'bn_certificate'])->name('guardian-income.bn_certificate');
+    Route::resource('certificate/guardian-acceptance', GuardianAcceptanceCertificateController::class);
+    Route::get('certificate/guardian-acceptance/bn/{id}', [GuardianAcceptanceCertificateController::class, 'bn_certificate'])->name('guardian-acceptance.bn_certificate');
 
 
     Route::prefix('basic-settings')->name('basic-settings.')->group(function () {
