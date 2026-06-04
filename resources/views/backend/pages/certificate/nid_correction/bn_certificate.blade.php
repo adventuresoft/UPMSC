@@ -2,7 +2,11 @@
 
 @push('style')
 <style>
-    .form-container {
+        .container {
+        max-width: 100% !important;
+    }
+
+.form-container {
         width: 210mm;
         min-height: 297mm;
         padding: 15mm;
@@ -94,21 +98,51 @@
         margin-top: 10px;
     }
 
-    @media print {
+        @media print {
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            box-sizing: border-box !important;
+        }
+
         @page {
-            size: A4 portrait;
-            margin: 0;
+            size: A4 landscape;
+            margin: 0 !important;
         }
-        body {
-            background: none !important;
+
+        html, body {
+            width: 297mm !important;
+            height: 210mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
         }
-        .form-container {
-            box-shadow: none;
-            margin: 0;
-            width: 100%;
-            padding: 10mm;
+
+        .container {
+            width: 297mm !important;
+            max-width: 297mm !important;
+            height: 210mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
         }
-        #printPageButton, #cancelPageButton, .main-footer, footer {
+
+        
+
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header,
+        .content-wrapper,
+        .wrapper,
+        .app-footer {
+            display: none !important;
+        }
+
+        #printPageButton,
+        #cancelPageButton,
+        .btn {
             display: none !important;
         }
     }

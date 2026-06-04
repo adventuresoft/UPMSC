@@ -63,7 +63,7 @@
         margin-right: 10mm;
     }
 
-                @media print {
+        @media print {
         * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -84,12 +84,6 @@
             background: #ffffff !important;
         }
 
-        .content-wrapper {
-            background: #ffffff !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
         .container {
             width: 297mm !important;
             max-width: 297mm !important;
@@ -99,10 +93,15 @@
             overflow: hidden !important;
         }
 
+        
+
         .main-header,
         .main-sidebar,
         .main-footer,
-        .content-header {
+        .content-header,
+        .content-wrapper,
+        .wrapper,
+        .app-footer {
             display: none !important;
         }
 
@@ -140,7 +139,7 @@
                             {{ $certificate->user->institute->union->name ?? '' }}
                         </h3>
                         <p class="mb-0" style="font-size:15px;">
-                            থানাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
+                            উপজেলাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
                             বাংলাদেশ।
                         </p>
@@ -209,9 +208,9 @@
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">({{ $certificate->user->institute->superUser->people->bn_name ?? $certificate->user->institute->superUser->name ?? 'চেয়ারম্যান' }})</p>
+                        <p class="mb-1">(মোহাম্মাদ রানা)</p>
                         <p class="mb-0">চেয়ারম্যান</p>
-                        <p class="mb-0">{{ $certificate->user->institute->union->bn_name ?? '' }}</p>
+                        <p class="mb-0">৩ নং শুকতাইল ইউনিয়ন পরিষদ</p>
                         <p class="mb-0" style="font-size:14px;">
                             {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}

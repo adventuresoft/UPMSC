@@ -69,7 +69,7 @@
     }
 
     /* Print Control */
-                @media print {
+        @media print {
         * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -90,12 +90,6 @@
             background: #ffffff !important;
         }
 
-        .content-wrapper {
-            background: #ffffff !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
         .container {
             width: 297mm !important;
             max-width: 297mm !important;
@@ -105,10 +99,15 @@
             overflow: hidden !important;
         }
 
+        
+
         .main-header,
         .main-sidebar,
         .main-footer,
-        .content-header {
+        .content-header,
+        .content-wrapper,
+        .wrapper,
+        .app-footer {
             display: none !important;
         }
 
@@ -137,8 +136,8 @@
 
                     <div class="col-8 text-center">
                         <h2 class="text- font-Nikosh-bold mb-0" style="font-size:20px;"> গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h2>
-                        <h2 class="text-success font-weight-bold mb-0" style="font-size:32px;">{{ $certificate->user->institute->union->bn_name ?? '' }}</h2>
-                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:35px;">{{ $certificate->user->institute->union->name ?? '' }}</h3>
+                        <h2 class="text-success font-weight-bold mb-0" style="font-size:32px;">৩নং শুকতাইল ইউনিয়ন পরিষদ</h2>
+                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:35px;">No. 3 Suktail Union Parishad</h3>
                         <p class="mb-0" style="font-size:15px;">
                            Thana: <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,
                             District: <span>{{ $certificate->user->institute->union->thana->district->name ?? '' }}</span>, Bangladesh.
@@ -216,9 +215,9 @@
 
                    <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">({{ $certificate->user->institute->superUser->people->name ?? $certificate->user->institute->superUser->name ?? 'Chairman' }})</p>
+                        <p class="mb-1">(Mohammad Rana)</p>
                         <p class="mb-0">Chairman</p>
-                        <p class="mb-0">{{ $certificate->user->institute->union->name ?? '' }} </p>
+                        <p class="mb-0">No.3 Shuktail Union Parishad </p>
                         <p class="mb-0" style="font-size:14px;">
                             {{ $certificate->user->institute->union->thana->name ?? '' }},
                             {{ $certificate->user->institute->union->thana->district->name ?? '' }}

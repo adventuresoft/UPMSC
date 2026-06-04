@@ -81,20 +81,9 @@ class InstituteController extends Controller
     public function index()
     {
         if (is_superadmin()) {
-            $institutes = Institute::latest()->get();
+            $institutes = Institute::with(['union', 'pourashava', 'cityCorporation', 'type', 'category'])->latest()->get();
         } else {
-            $institutes = Institute::where('id', Auth::user()->institute_id)->latest()->get();
-        }
-        if (count($institutes)) {
-            foreach ($institutes as $institute) {
-                if ($institute->institute_type_id == 1) {
-                    $institute->union = Union::find($institute->union_id);
-                } else if($institute->institute_type_id == 2) {
-                    $institute->pourashava = Pourashava::find($institute->pourashava_id);
-                } else if($institute->institute_type_id == 3) {
-                    $institute->cityCorporation = CityCorporation::find($institute->city_corporation_id);
-                }
-            }
+            $institutes = Institute::with(['union', 'pourashava', 'cityCorporation', 'type', 'category'])->where('id', Auth::user()->institute_id)->latest()->get();
         }
 
         $data['institutes'] = $institutes;
@@ -135,6 +124,9 @@ class InstituteController extends Controller
             'admin_email' => 'required|email|max:190|unique:users,email',
             'admin_mobile' => 'required|max:15',
             'admin_password' => 'required|min:6',
+            'union' => 'required_if:institute_type,1|nullable|exists:unions,id',
+            'pourashava' => 'required_if:institute_type,2|nullable|exists:pourashavas,id',
+            'city_corporation' => 'required_if:institute_type,3|nullable|exists:city_corporations,id',
         ]);
 
         if ($validate->fails()) {

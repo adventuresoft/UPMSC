@@ -280,13 +280,33 @@
 @section('content')
 <div class="people-certificate-page">
     <div class="people-certificate-content">
+        @php
+            $institute = $organization->institute;
+            $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+            $thanaBn = '';
+            $districtBn = '';
+            
+            if ($institute->union && $institute->union->thana) {
+                $thanaBn = $institute->union->thana->bn_name ?? '';
+                $districtBn = $institute->union->thana->district->bn_name ?? '';
+            } elseif ($institute->pourashava) {
+                $districtBn = $institute->pourashava->District->bn_name ?? '';
+            } elseif ($institute->cityCorporation) {
+                $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+            }
+        @endphp
         <div class="header-logos">
             <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
-            <div class="union-header">
-                <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
-                <div class="union-title-bn">{{ $organization->institute?->union?->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
-                <div class="union-title-en">{{ $organization->institute?->union?->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
-            </div>
+            <div class="union-header" style="text-align: center; line-height: 1.1;">
+                        <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+                        <div class="union-title-bn" style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                        <div class="union-title-en" style="color:#2e3192; font-size: 20px; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
+                        <p class="union-address" style="font-size: 13px; color: #000;">
+                            @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
+                            জেলাঃ {{ $districtBn }},
+                            বাংলাদেশ।
+                        </p>
+                    </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Govt Logo">
         </div>
 

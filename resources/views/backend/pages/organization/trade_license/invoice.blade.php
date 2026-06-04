@@ -289,7 +289,7 @@
     $ownerName = $ownerUser?->name ?? $ownerRecord?->user_name ?? '--';
 
     $organizationAddress = collect([
-        $organization?->house_bn ? 'বাড়ি: ' . $organization->house_bn : ($organization?->house ? 'বাড়ি: ' . $organization->house : null),
+        $organization?->house_bn ? 'বাড়ি: ' . $organization->house_bn : ($organization?->house ? 'বাড়ি: ' . $organization->house : null),
         $organization?->road ? 'রোড: ' . $organization->road : null,
         $organization?->villageArea?->bn_name ? 'এলাকা: ' . $organization->villageArea->bn_name : null,
         $organization?->village?->bn_name ? 'গ্রাম: ' . $organization->village->bn_name : null,
@@ -314,46 +314,33 @@
     $isApproved = (int) ($license->status ?? 0) === 1;
     $isPaid = ($license->payment_status ?? 'unpaid') === 'paid';
     $canTakePayment = !$isPaid;
-    $fallbackHeaderUnion = \App\Models\Institute::with('union.thana.district')
-        ->whereNotNull('union_id')
-        ->first()?->union;
 
-    $headerUnion = $organization?->Union
-        ?? $organization?->institute?->union
-        ?? $ownerUser?->addressInfo?->presentUnion
-        ?? $ownerUser?->addressInfo?->permanentUnion
-        ?? $ownerUser?->institute?->union
-        ?? auth()->user()?->institute?->union
-        ?? $fallbackHeaderUnion;
+    $institute = $organization->institute;
+    $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+    $thanaBn = '';
+    $districtBn = '';
 
-    $headerThana = $organization?->Thana
-        ?? $headerUnion?->thana
-        ?? $organization?->officeThana
-        ?? $ownerUser?->addressInfo?->presentThana
-        ?? $ownerUser?->addressInfo?->permanentThana
-        ?? auth()->user()?->institute?->union?->thana
-        ?? $fallbackHeaderUnion?->thana;
-
-    $headerDistrict = $organization?->District
-        ?? $headerThana?->district
-        ?? $organization?->officeDistrict
-        ?? $ownerUser?->addressInfo?->presentDistrict
-        ?? $ownerUser?->addressInfo?->permanentDistrict
-        ?? auth()->user()?->institute?->union?->thana?->district
-        ?? $fallbackHeaderUnion?->thana?->district;
+    if ($institute->union && $institute->union->thana) {
+        $thanaBn = $institute->union->thana->bn_name ?? '';
+        $districtBn = $institute->union->thana->district->bn_name ?? '';
+    } elseif ($institute->pourashava) {
+        $districtBn = $institute->pourashava->District->bn_name ?? '';
+    } elseif ($institute->cityCorporation) {
+        $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+    }
 @endphp
 
 <div class="trade-license-page mt-4 mb-4">
     <div class="inner-border">
         <div class="header-logos">
             <img src="{{ asset('images/dhaka.png') }}" alt="Left Logo">
-            <div class="union-header">
-                <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
-                <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>
-                <div class="union-title-en">{{ $headerUnion?->name ?? '' }}</div>
-                <p class="union-address">
-                    থানাঃ {{ $headerThana?->bn_name ?? $headerThana?->name ?? '' }},
-                    জেলাঃ {{ $headerDistrict?->bn_name ?? $headerDistrict?->name ?? '' }},
+            <div class="union-header" style="text-align: center; line-height: 1.1;">
+                <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+                <div class="union-title-bn" style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '' }}</div>
+                <div class="union-title-en" style="color:#2e3192; font-size: 20px; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? '' }}</div>
+                <p class="union-address" style="font-size: 13px; color: #000;">
+                    @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
+                    জেলাঃ {{ $districtBn }},
                     বাংলাদেশ।
                 </p>
             </div>
@@ -370,7 +357,7 @@
             <div class="tax-year">
                 <br>
                 অর্থ বছর: {{ bnValue($taxYearName) }}<br>
-                <span style="font-size: 11px;">( স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই ফিস নির্ধারণ করা হলো )</span>
+                <span style="font-size: 11px;">( স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই ফি নির্ধারণ করা হলো )</span>
             </div>
         </div>
 
@@ -387,7 +374,7 @@
             <div class="info-group">
                 <div class="info-header">মালিকের তথ্য:</div>
                 <div class="info-body">
-                    আইডি নং- {{ bnValue($ownerId) }},
+                    আইডি নম্বর- {{ bnValue($ownerId) }},
                     নাম- {{ $ownerName }}
                 </div>
             </div>
@@ -406,7 +393,7 @@
             <thead>
                 <tr>
                     <th>ক্রমিক নং</th>
-                    <th>ফি এর বিষয়</th>
+                    <th>ফি এর বিষয়</th>
                     <th>টাকা</th>
                 </tr>
             </thead>

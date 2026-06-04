@@ -145,7 +145,7 @@
                             {{ $certificate->user->institute->union->name ?? '' }}
                         </h3>
                         <p class="mb-0" style="font-size:15px;">
-                            থানাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
+                            উপজেলাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
                             বাংলাদেশ।
                         </p>

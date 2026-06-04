@@ -103,7 +103,7 @@
 /* =========================
    PRINT CONFIG
 ========================= */
-            @media print {
+    @media print {
         * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -124,12 +124,6 @@
             background: #ffffff !important;
         }
 
-        .content-wrapper {
-            background: #ffffff !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
         .container {
             width: 267mm !important;
             max-width: 267mm !important;
@@ -139,10 +133,15 @@
             overflow: hidden !important;
         }
 
+        
+
         .main-header,
         .main-sidebar,
         .main-footer,
-        .content-header {
+        .content-header,
+        .content-wrapper,
+        .wrapper,
+        .app-footer {
             display: none !important;
         }
 
@@ -347,7 +346,7 @@ His death registration number is -
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">({{ $certificate->user->institute->superUser->people->name ?? $certificate->user->institute->superUser->name ?? 'Chairman' }})</p>
+                        <p class="mb-1">(Mohammad Rana)</p>
                         <p class="mb-0">Chairman</p>
                         <p class="mb-0"> {{ $certificate->user->institute->union->name ?? '' }} </p>
                         <p class="mb-0" style="font-size:14px;">

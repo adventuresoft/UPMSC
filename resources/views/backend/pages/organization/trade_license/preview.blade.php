@@ -339,7 +339,7 @@
     if (!$ownerAddress && $owner?->addressInfo) {
         $addr = $owner->addressInfo;
         $ownerAddress = collect([
-            $addr->permanent_house ? 'বাড়ী নং: ' . $addr->permanent_house : null,
+            $addr->permanent_house ? 'বাড়ী নং: ' . $addr->permanent_house : null,
             $addr->permanent_road ? 'রাস্তা: ' . $addr->permanent_road : null,
             $addr->permanentVillage?->bn_name ?? $addr->permanentVillage?->name,
             $addr->permanentUnion?->bn_name ?? $addr->permanentUnion?->name,
@@ -349,13 +349,13 @@
     }
     $ownerAddress = $ownerAddress ?: '--';
     
-    $businessType = $organization?->subcategory?->bn_name 
-        ?? $organization?->subcategory?->name 
-        ?? $organization?->category?->bn_name 
-        ?? $organization?->category?->name 
+    $businessType = $organization?->subcategory?->bn_name
+        ?? $organization?->subcategory?->name
+        ?? $organization?->category?->bn_name
+        ?? $organization?->category?->name
         ?? '--';
 
-    $businessAddress = $organization?->address 
+    $businessAddress = $organization?->address
         ?? collect([
             $organization?->village?->bn_name ?? $organization?->village?->name,
             $organization?->Union?->bn_name ?? $organization?->Union?->name,
@@ -376,6 +376,20 @@
         $start = '';
         $end = '';
     }
+
+    $institute = $license->organization->institute;
+    $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+    $thanaBn = '';
+    $districtBn = '';
+
+    if ($institute->union && $institute->union->thana) {
+        $thanaBn = $institute->union->thana->bn_name ?? '';
+        $districtBn = $institute->union->thana->district->bn_name ?? '';
+    } elseif ($institute->pourashava) {
+        $districtBn = $institute->pourashava->District->bn_name ?? '';
+    } elseif ($institute->cityCorporation) {
+        $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+    }
 @endphp
 
 <div class="certificate-page">
@@ -384,10 +398,15 @@
         {{-- Header Logos --}}
         <div class="header-logos">
             <img src="{{ asset('images/dhaka.png') }}">
-            <div class="header-text-block">
-                <h6 class="text-center">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h6>
-                <div class="union-title">{{ $license->organization->institute->union->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
-                <div class="union-subtitle">{{ $license->organization->institute->union->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
+            <div class="header-text-block" style="text-align: center; line-height: 1.1;">
+                <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+                <div style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                <div style="font-size: 20px; color: #2e3192; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
+                <div style="font-size: 13px; color: #000;">
+                    @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
+                    জেলাঃ {{ $districtBn }},
+                    বাংলাদেশ।
+                </div>
             </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}">
         </div>
@@ -407,7 +426,7 @@
                 <div class="validity-info">
                     নতুন<br>
                     অর্থ বছর: {{ $license->taxYear->name }} <br>
-                    <span style="color: red;">এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত</span> <br><br><br>
+                    <span style="color: red;">এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত</span> <br><br><br>
                     <span style="font-size: 16px;">ট্রেড লাইসেন্স নম্বর: <strong style="font-size: 18px;">{{ bnValue($license->system_id) }}</strong></span><br>
                 </div>
             </div>
@@ -568,4 +587,3 @@
 @endpush
 
 @endsection
-

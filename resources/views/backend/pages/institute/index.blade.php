@@ -64,11 +64,13 @@
                                           <td>{{++$key}}</td>
                                           <td>
                                             @if ($institute->institute_type_id == 1)
-                                              {{$institute->union?->name}}
+                                              {{$institute->union?->name ?? 'N/A'}}
                                             @elseif($institute->institute_type_id == 2)
-                                              {{$institute->pourashava?->name}}
+                                              {{$institute->pourashava?->name ?? 'N/A'}}
                                             @elseif($institute->institute_type_id == 3)
-                                              {{$institute->cityCorporation?->name}}
+                                              {{$institute->cityCorporation?->name ?? 'N/A'}}
+                                            @else
+                                              N/A
                                             @endif
                                           </td>
                                           <td>{{$institute->type?->name}}</td>
