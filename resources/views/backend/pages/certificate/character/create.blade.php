@@ -39,7 +39,7 @@
                             <div class="card-body">
 
                                 <div class="form-group row">
-                                    <label for="name" class="col-sm-2 col-form-label">NID & Name</label>
+                                    <label for="name" class="col-sm-2 col-form-label">ID & Name</label>
                                     <div class="col-sm-9">
                                         <select required class="form-control select2" name="user_id" id="">
                                             <option value="">Select People</option>

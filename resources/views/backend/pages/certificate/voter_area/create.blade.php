@@ -43,7 +43,7 @@
                                     <h5 class="col-12 mb-0 font-weight-bold">১. প্রাপক ও আবেদনকারীর তথ্য</h5>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="user_id" class="col-sm-3 col-form-label text-right">আবেদনকারী নির্বাচন করুন</label>
+                                    <label for="user_id" class="col-sm-3 col-form-label text-right">ID & Name</label>
                                     <div class="col-sm-9">
                                         <select required class="form-control" name="user_id" id="user_id_select">
                                             <option value="">Select People (Search by Name, NID or Phone)</option>

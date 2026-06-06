@@ -1,7 +1,13 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Childless'])
+@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' => 'Birth'])
 @push('style')
 <style>
-    .certificate-card {
+    .container {
+    max-width: 100% !important;
+}
+
+.certificate-card {
+    max-width: 100%;
+    margin: 0 auto;
         background-image: url('{{ asset('images/bg-images.jpeg') }}');
         background-size: cover;
         background-repeat: no-repeat;
@@ -57,28 +63,52 @@
         margin-right: 10mm;
     }
 
-    @media print {
+                @media print {
         * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            box-sizing: border-box !important;
         }
 
         @page {
             size: A4 landscape;
-            margin: 0;
+            margin: 0 !important;
         }
 
         html, body {
-            width: 297mm;
-            height: 210mm;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: #fff !important;
+            width: 297mm !important;
+            height: 210mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
+        }
+
+        .content-wrapper {
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .container {
+            width: 297mm !important;
+            max-width: 297mm !important;
+            height: 210mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
+
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header {
+            display: none !important;
         }
 
         #printPageButton,
-        #cancelPageButton{
+        #cancelPageButton,
+        .btn {
             display: none !important;
         }
     }
@@ -96,7 +126,7 @@
                 <!-- ================= Header ================= -->
                 <div class="row align-items-center">
                     <div class="col-2 text-center">
-                        <img height="90" width="90" src="{{ asset('images/dhaka.png') }}">
+                        <img height="90" width="90" src="{{ isset($certificate->user->institute->left_image) ? imageUrl($certificate->user->institute->left_image) : asset('images/dhaka.png') }}">
                     </div>
 
                     <div class="col-8 text-center">
@@ -104,14 +134,14 @@
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
                         <h2 class="text-success font-weight-bold mb-0" style="font-size:28px;">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            {{ $certificate->user?->institute?->union?->bn_name ?? '' }}
                         </h2>
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:32px;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
+                            {{ $certificate->user?->institute?->union?->name ?? '' }}
                         </h3>
                         <p class="mb-0" style="font-size:15px;">
-                            থানাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
+                            উপজেলাঃ {{ $certificate->user?->institute?->union?->thana?->bn_name ?? '' }},
+                            জেলাঃ {{ $certificate->user?->institute?->union?->thana?->district?->bn_name ?? '' }},
                             বাংলাদেশ।
                         </p>
                     </div>
@@ -145,27 +175,27 @@
                     <div class="col-12" style="font-size:18px; line-height:1.9; text-align:justify;">
                         <p>
                             <span style="margin-left:40px;"></span>
-                            এই মর্মে প্রত্যয়ন করা যাচ্ছে যে,
-                            {{ $certificate->user->people->gender == 1 ? 'জনাব' : 'জনাবা' }}
-                            <strong>{{ $certificate->user->people->bn_name ?? '' }}</strong>,
-                            আইডি নং <strong>{{ bnValue($certificate->user->system_id ?? '') }}</strong>,
-                            @if($certificate->user->people->nid)
-                                এনআইডিঃ {{ bnValue($certificate->user->people->nid) }},
-                            @elseif($certificate->user->people->birth_certificate)
-                                জন্ম নিবন্ধন নং- {{ bnValue($certificate->user->people->birth_certificate) }},
+                            এই মর্মে প্রত্যয়ন করা যাচ্ছে যে,
+                            {{ $certificate->user?->people?->gender == 1 ? 'জনাব' : 'জনাবা' }}
+                            <strong>{{ $certificate->user?->people?->bn_name ?? '' }}</strong>,
+                            আইডি নং <strong>{{ bnValue($certificate->user?->system_id ?? '') }}</strong>,
+                            @if($certificate->user?->people?->nid)
+                                এনআইডিঃ {{ bnValue($certificate->user?->people?->nid) }},
+                            @elseif($certificate->user?->people?->birth_certificate)
+                                জন্ম নিবন্ধন নং- {{ bnValue($certificate->user?->people?->birth_certificate) }},
                             @endif
-                            পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
-                            মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }},
+                            পিতাঃ {{ $certificate->user?->familyInfo?->father_name_bn ?? '' }},
+                            মাতাঃ {{ $certificate->user?->familyInfo?->mother_name_bn ?? '' }},
                             ঠিকানাঃ 
-                            গ্রাম: - {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                            ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
+                            গ্রাম: - {{ $certificate->user?->addressInfo?->permanentVillage?->bn_name ?? '' }},
+                            ওয়ার্ড:- {{ $certificate->user?->addressInfo?->permanentWard?->bn_ward_no ?? '' }},
                             ডাকঘর: - 
-{{ optional($certificate->user->addressInfo->permanentPostOffice)->bn_name ?? '' }} -
-@if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
-{{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }},
+{{ optional($certificate->user?->addressInfo?->permanentPostOffice)->bn_name ?? '' }} -
+@if(optional($certificate->user?->addressInfo?->permanentPostOffice)->postal_code)
+{{ bnValue($certificate->user?->addressInfo?->permanentPostOffice?->postal_code) }},
 @endif
-                            উপজেলা: - {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            জেলা: - {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
+                            উপজেলা: - {{ $certificate->user?->institute?->union?->thana?->bn_name ?? '' }},
+                            জেলা: - {{ $certificate->user?->institute?->union?->thana?->district?->bn_name ?? '' }}।
                             তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং অত্র ইউনিয়নের স্থায়ী বাসিন্দা।
                             আমার জানা মতে তিনি আইন-শৃঙ্খলা ও রাষ্ট্রবিরোধী কোন কার্যকলাপের সাথে জড়িত নন।
                         </p>
@@ -178,23 +208,16 @@
 
                 <!-- ================= Signature ================= -->
                 <div class="certificate-signature">
-                     <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
-
+                    <div class="qr-code" id="qrcode"></div>
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">(মোহাম্মাদ রানা)</p>
+                        <p class="mb-1" >({{ $certificate->user->institute->superUser->people->bn_name ?? $certificate->user->institute->superUser->name ?? 'চেয়ারম্যান' }})</p>
                         <p class="mb-0">চেয়ারম্যান</p>
-                        <p class="mb-0">৩ নং শুকতাইল ইউনিয়ন পরিষদ</p>
-                        <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}
-                        </p>
+                        <p class="mb-0">{{ $certificate->user->institute->union->bn_name ?? '' }}</p>
+                        <p class="mb-0" style="font-size:14px;">{{ $certificate->user->institute->union->thana->bn_name ?? '' }}, {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</p>
                     </div>
                 </div>
-
-                <!-- ================= Footer ================= -->
+<!-- ================= Footer ================= -->
                 <div class="certificate-footer">
                     This report generated by UPMS | Powered by <strong>Adventure Soft</strong>
                 </div>
@@ -206,7 +229,7 @@
     <!-- ================= Buttons ================= -->
     <div class="text-center mt-2 mb-4">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
-                onclick="window.location.href='{{ route('citizen.index') }}'">
+                onclick="window.location.href='{{ route('certificate/birth.index') }}'">
             Cancel
         </button>
 

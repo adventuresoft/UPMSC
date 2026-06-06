@@ -3,18 +3,16 @@
 @push('style')
 <style>
     .card-info:not(.card-outline) > .card-header {
-        background-color: #17a2b8;
+        background-color: #f3f4f6;
+        border-bottom-color: #e6eef3;
+        color: #6b7a86;
     }
     .card-title {
         font-weight: semi-bold;
         font-size: 24px;
     }
     .btn-create-list {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 5px 15px;
-        border-radius: 4px;
+        display: inline-block;
         margin-left: 5px;
     }
     .table thead th {
@@ -90,8 +88,8 @@
                                 <h3 class="card-title">NID Correction Certificate</h3>
                             </div>
                             <div class="col-md-6 text-right">
-                                <a href="{{ route('nid-correction.create') }}" class="btn-create-list">Create</a>
-                                <a href="{{ route('nid-correction.index') }}" class="btn-create-list">List</a>
+                                <a href="{{ route('nid-correction.create') }}" class="btn btn-primary">Create</a>
+                                <a href="{{ route('nid-correction.index') }}" class="btn btn-primary ml-2">List</a>
                             </div>
                         </div>
                     </div>
@@ -128,7 +126,7 @@
                         </div>
 
                         <!-- TABLE -->
-                        <table id="nidTable" class="table table-bordered table-hover">
+                        <table id="nidTable" class="table table-bordered table-hover nowrap" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>SL</th>
@@ -144,15 +142,15 @@
                                 @foreach ($certificates as $key => $certificate)
                                 @php
                                     // Fallback: use user profile data if certificate fields are empty (pre-migration records)
-                                    $displayName    = $certificate->applicant_name ?: ($certificate->user->name ?? '—');
-                                    $displayNid     = $certificate->applicant_nid  ?: ($certificate->user->people->nid ?? '—');
-                                    $displayMobile  = $certificate->applicant_mobile ?: ($certificate->user->mobile ?? '—');
-                                    $displayImage   = $certificate->user->people->image ?? 'assets/images/person-avatar.png';
+                                    $displayName    = $certificate->applicant_name ?: ($certificate->user?->name ?? '—');
+                                    $displayNid     = $certificate->applicant_nid  ?: ($certificate->user?->people?->nid ?? '—');
+                                    $displayMobile  = $certificate->applicant_mobile ?: ($certificate->user?->mobile ?? '—');
+                                    $displayImage   = $certificate->user?->people?->image ?? 'assets/images/person-avatar.png';
                                 @endphp
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td class="text-center">
-                                        <img src="{{ asset($displayImage) }}" style="width: 55px; height: 65px; border-radius: 0; object-fit: cover;" onerror="this.onerror=null;this.src='{{ asset('assets/images/person-avatar.png') }}'">
+                                        <img src="{{ imageUrl($displayImage) }}" style="width: 55px; height: 65px; border-radius: 0; object-fit: cover;" onerror="this.onerror=null;this.src='{{ asset('assets/images/person-avatar.png') }}'">
                                     </td>
                                     <td class="text-center" style="font-size: 16px;">
                                         {{ bnValue($certificate->system_id) }}
@@ -164,16 +162,16 @@
                                     <td>
                                         <strong>{{ $displayMobile }}</strong><br>
                                         <small>
-                                            @if($certificate->user && $certificate->user->addressInfo)
-                                                {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                                                ওয়ার্ড নং-{{ bnValue($certificate->user->addressInfo->permanentWard->bn_ward_no ?? '') }},
-                                                {{ $certificate->user->addressInfo->permanentPostOffice->bn_name ?? '' }}
-                                                @if($certificate->user->addressInfo->permanentPostOffice->postal_code ?? false)
-                                                    - {{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }}
+                                            @if($certificate->user && $certificate->user?->addressInfo)
+                                                {{ $certificate->user?->addressInfo?->permanentVillage?->bn_name ?? '' }},
+                                                ওয়ার্ড নং-{{ bnValue($certificate->user?->addressInfo?->permanentWard?->bn_ward_no ?? '') }},
+                                                {{ $certificate->user?->addressInfo?->permanentPostOffice?->bn_name ?? '' }}
+                                                @if($certificate->user?->addressInfo?->permanentPostOffice?->postal_code ?? false)
+                                                    - {{ bnValue($certificate->user?->addressInfo?->permanentPostOffice?->postal_code) }}
                                                 @endif
                                                 ,<br>
-                                                {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                                                {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
+                                                {{ $certificate->user?->institute?->union?->thana?->bn_name ?? '' }},
+                                                {{ $certificate->user?->institute?->union?->thana?->district?->bn_name ?? '' }}।
                                             @elseif($certificate->applicant_address)
                                                 {{ $certificate->applicant_address }}
                                             @else
@@ -184,12 +182,17 @@
                                     <td class="text-center">
                                         {{ date('d-m-Y', strtotime($certificate->created_at)) }}
                                     </td>
-                                    <td class="text-center">
-                                        <div class="d-flex flex-column align-items-center" style="gap: 5px;">
-                                            <a target="_blank" href="{{ route('nid-correction.show', $certificate->id) }}" class="btn btn-primary btn-sm">
+                                    <td class="text-center" style="white-space: nowrap;">
+                                        <div class="d-flex align-items-center justify-content-center" style="gap: 5px;">
+                                            @if (edit_permission('nid_correction_certificate'))
+                                            <a href="{{ route('nid-correction.edit', $certificate->id) }}" class="btn btn-warning btn-sm" title="Edit">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            @endif
+                                            <a target="_blank" href="{{ route('nid-correction.show', $certificate->id) }}" class="btn btn-primary btn-sm" title="English Certificate">
                                                 <i class="far fa-file-pdf"></i> EN
                                             </a>
-                                            <a target="_blank" href="{{ route('nid-correction.bn_certificate', $certificate->id) }}" class="btn btn-info btn-sm">
+                                            <a target="_blank" href="{{ route('nid-correction.bn_certificate', $certificate->id) }}" class="btn btn-info btn-sm" title="Bengali Certificate">
                                                 <i class="far fa-file-pdf"></i> BN
                                             </a>
                                         </div>

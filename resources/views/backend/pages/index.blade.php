@@ -1,6 +1,115 @@
 @extends('backend.master', ['mainMenu' => 'Dashboard', 'subMenu' =>'dashboard'])
 @section('title', 'Dashboard')
 
+@push('style')
+<style>
+    .dashboard-card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        width: 100%;
+    }
+
+    .dashboard-stat-card {
+        position: relative;
+        display: flex;
+        min-height: 142px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .dashboard-stat-card:hover {
+        transform: translateY(-2px);
+        border-color: #cbd5e1;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+    }
+
+    .dashboard-stat-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 5px;
+        background: var(--card-accent, #046307);
+    }
+
+    .dashboard-stat-card .card-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0;
+        padding: 18px 18px 0 22px;
+    }
+
+    .dashboard-stat-card .card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+    }
+
+    .dashboard-stat-card .card-number {
+        margin: 0;
+        color: #0f172a;
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .dashboard-stat-card .card-title {
+        margin: 8px 0 0;
+        color: #475569;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .dashboard-stat-card .card-icon {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 8px;
+        background: #f8fafc;
+        color: var(--card-accent, #046307);
+        font-size: 22px;
+    }
+
+    .dashboard-stat-card .card-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 16px -18px 0 -22px;
+        padding: 10px 18px 10px 22px;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+        color: #0f172a;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .dashboard-stat-card .card-link:hover {
+        color: var(--card-accent, #046307);
+    }
+
+    @media (max-width: 575.98px) {
+        .dashboard-card-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+    }
+</style>
+@endpush
+
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -17,184 +126,40 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
-            <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        @php
+            @php
+                $total = $age_certificates + $character_certificates + $childless_certificates + $citizen_certificates + $disability_certificates + $financial_instability_certificates + $guardian_certificates + $landless_certificates + $married_certificates + $name_certificates + $nid_correction_certificates + $orphan_certificates + $permanent_citizen_certificates + $remarried_certificates + $residential_certificates + $unmarried_certificates + $voter_area_certificates + $voter_list_certificates + $yearly_income_certificates;
+                $dashboardCards = [
+                    ['value' => $applicant_count, 'title' => 'Applicant List', 'icon' => 'fa fa-user-clock', 'route' => route('people.index'), 'link' => 'View Applicant List', 'accent' => '#f59e0b'],
+                    ['value' => $approved_count, 'title' => 'Approved People', 'icon' => 'fa fa-user-check', 'route' => route('peopleapprovedlist'), 'link' => 'View Approved List', 'accent' => '#16a34a'],
+                    ['value' => $total, 'title' => 'Total Certificates', 'icon' => 'fa fa-certificate', 'route' => route('citizen.index'), 'link' => 'View All Certificates', 'accent' => '#64748b'],
+                    ['value' => $taxes, 'title' => 'Total Tax', 'icon' => 'fa fa-id-card', 'route' => route('tax.index'), 'link' => 'View All Taxes', 'accent' => '#0891b2'],
+                    ['value' => $organizations, 'title' => 'Total Organization', 'icon' => 'fas fa-briefcase', 'route' => route('organization.index'), 'link' => 'View All Organizations', 'accent' => '#dc2626'],
+                    ['value' => $houses, 'title' => 'Total House', 'icon' => 'fa fa-home', 'route' => route('house.index'), 'link' => 'View All Houses', 'accent' => '#2563eb'],
+                    ['value' => $vehicles, 'title' => 'Total Vehicle', 'icon' => 'fas fa-truck', 'route' => route('vehicle.index'), 'link' => 'View All Vehicles', 'accent' => '#059669'],
+                    ['value' => $relief_cards, 'title' => 'Total Relief Cards', 'icon' => 'fa fa-hand-holding-heart', 'route' => route('relief-card.index'), 'link' => 'View Relief Cards', 'accent' => '#ec4899'],
+                ];
+            @endphp
 
-                            $male = 0;
-                            $female = 0;
-                            $others = 0;
-                            foreach ($users as $user) {
-                                if ($user->gender == 1) {
-                                    $male = $user->count;
-                                } else if($user->gender ==2){
-                                    $female = $user->count;
-                                } else{
-                                    $others = $user->count;
-                                }
-                            }
-                            $total = $male + $female + $others;
-
-                        @endphp
-                        <div class="inner">
-                            <h3>{{$total}}</h3>
-
-                            <p>Total People</p>
+            <div class="dashboard-card-grid">
+                @foreach($dashboardCards as $card)
+                    <div class="dashboard-stat-card" style="--card-accent: {{ $card['accent'] }}">
+                        <div class="card-content">
+                            <div class="card-top">
+                                <div>
+                                    <h3 class="card-number">{{ $card['value'] }}</h3>
+                                    <p class="card-title">{{ $card['title'] }}</p>
+                                </div>
+                                <span class="card-icon" aria-hidden="true">
+                                    <i class="{{ $card['icon'] }}"></i>
+                                </span>
+                            </div>
+                            <a href="{{ $card['route'] }}" class="card-link">
+                                <span>{{ $card['link'] }}</span>
+                                <i class="fas fa-arrow-circle-right"></i>
+                            </a>
                         </div>
-                        <div class="icon">
-                            <i class="fa fa-users"></i>
-                        </div>
-                        <p class="small-box-footer">Male: {{$male}} Female: {{$female}} Others: {{$others}}</p>
                     </div>
-                </div>
-                <!-- ./col -->
-
-                <div class="col-lg-3 col-6">
-                    @php
-                    $total = $age_certificates + $character_certificates + $childless_certificates + $citizen_certificates + $disability_certificates + $financial_instability_certificates + $guardian_certificates + $landless_certificates + $married_certificates + $name_certificates + $nid_correction_certificates + $orphan_certificates + $permanent_citizen_certificates + $remarried_certificates + $residential_certificates + $unmarried_certificates + $voter_area_certificates + $voter_list_certificates + $yearly_income_certificates;
-                    @endphp
-                    <!-- small box -->
-                    <div class="small-box bg-secondary">
-                        <div class="inner">
-                            <h3>{{$total}}</h3>
-                            <p>Total Certificates</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-certificate"></i>
-                        </div>
-                        <p class="small-box-footer">Age: {{$age_certificates}} Others: {{$total - $age_certificates}}</p>
-                    </div>
-                </div>
-                <!-- ./col -->
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>{{$taxes}}</h3>
-
-                            <p>Total Tax</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-id-card"></i>
-                        </div>
-                      <a class="link-light small-box-footer" href="{{route('tax.index')}}" class="btn btn-link">View All Taxes</a>
-                    </div>
-                </div>
-                <!-- ./col -->
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>{{$organizations}}</h3>
-
-                            <p>Total Organization</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-briefcase"></i>
-                        </div>
-                        <a  class="link-light small-box-footer" href="{{route('organization.index')}}">View All Organizations</a>
-                    </div>
-                </div>
-                <!-- ./col -->
-
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>{{$houses}}</h3>
-
-                            <p>Total House</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-home"></i>
-                        </div>
-                        <a href="{{route('house.index')}}" class="small-box-footer link-light">View All Houses</a>
-                    </div>
-                </div>
-                <!-- ./col -->
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-primary">
-                        <div class="inner">
-                            <h3>{{$roads}}</h3>
-
-                            <p>Total Road KM</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-road"></i>
-                        </div>
-                        <a class="small-box-footer link-light" href="{{route('road.index')}}">View All Roads</a>
-                    </div>
-                </div>
-                <!-- ./col -->
-
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-dark">
-                        <div class="inner">
-                            <h3>{{$lands}}</h3>
-
-                            <p>Total Land</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-bacon"></i>
-                        </div>
-                        <p class="small-box-footer">Land: {{$lands}} Others: 0</p>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>{{$vehicles}}</h3>
-
-                            <p>Total Vehicle</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-truck"></i>
-                        </div>
-                        <p class="small-box-footer">Auto: 0 Others: {{$vehicles}}</p>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-secondary">
-                        <div class="inner">
-                            <h3>{{$bridges}}</h3>
-
-                            <p>Total Bridge</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-archway"></i>
-                        </div>
-                        <p class="small-box-footer">Concrit: 0 Others: {{$bridges}}</p>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>{{$rivers}}</h3>
-
-                            <p>Total River KM</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-water"></i>
-                        </div>
-                        <p class="small-box-footer">River: {{$rivers}} Others: 0</p>
-                    </div>
-                </div>
-                <!-- ./col -->
+                @endforeach
             </div>
             <!-- /.row -->
 

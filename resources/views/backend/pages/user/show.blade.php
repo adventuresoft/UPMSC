@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="text-uppercase text-muted small font-weight-bold">Assigned Area</label>
-                                    <div class="h6 font-weight-bold text-primary">{{$user->area ?? 'Not Assigned'}}</div>
+                                    <div class="h6 font-weight-bold text-primary">{{$user->assigned_area ?? 'Not Assigned'}}</div>
                                 </div>
                             </div>
                             <div class="row mb-4">

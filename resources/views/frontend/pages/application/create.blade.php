@@ -6,6 +6,7 @@
     <title>UPMS | Nagorik Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}" />
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
@@ -319,7 +320,7 @@
                     <select name="permanent_post_office_id" id="permanent_post_office_id" class="form-input select2">
                         <option value="">ডাকঘর নির্বাচন করুন</option>
                         @foreach ($permanent_post_offices as $post_office)
-                            <option value="{{$post_office->id}}">{{$post_office->bn_name}}</option>
+                            <option value="{{$post_office->id}}">{{ $post_office->bn_name ?: $post_office->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -328,7 +329,7 @@
                     <select name="permanent_ward" id="permanent_ward" class="form-input select2">
                         <option value="">ওয়ার্ড নির্বাচন করুন</option>
                         @foreach ($wards as $ward)
-                            <option value="{{ $ward->id }}">{{ $ward->en_ward_no }}</option>
+                            <option value="{{ $ward->id }}">{{ $ward->bn_ward_no ?? $ward->en_ward_no }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -403,7 +404,7 @@
                         <select name="present_post_office_id" id="present_post_office_id" class="form-input select2">
                             <option value="">ডাকঘর নির্বাচন করুন</option>
                             @foreach ($permanent_post_offices as $post_office)
-                                <option value="{{$post_office->id}}">{{$post_office->bn_name}}</option>
+                                <option value="{{$post_office->id}}">{{ $post_office->bn_name ?: $post_office->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -412,7 +413,7 @@
                         <select name="present_ward" id="present_ward" class="form-input select2">
                             <option value="">ওয়ার্ড নির্বাচন করুন</option>
                             @foreach ($wards as $ward)
-                                <option value="{{ $ward->id }}">{{ $ward->en_ward_no }}</option>
+                                <option value="{{ $ward->id }}">{{ $ward->bn_ward_no ?? $ward->en_ward_no }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -553,17 +554,32 @@
                 }
             });
 
+            function refreshSelect2(selector) {
+                var $el = $(selector);
+                if ($el.hasClass('select2-hidden-accessible')) {
+                    $el.trigger('change');
+                } else {
+                    $el.select2({ width: '100%' });
+                }
+            }
+
             function findDistrict(division, prefix) {
                 if (!division) return;
                 $.get("{{ url('/get-districts-by-division') }}/" + division, {id: prefix}, function(res) {
-                    $('#' + prefix + "_district").html(res).trigger('change');
+                    var $el = $('#' + prefix + "_district");
+                    $el.html(res);
+                    refreshSelect2($el);
+                    $el.trigger('change');
                 });
             }
 
             function findThana(district, prefix) {
                 if (!district) return;
                 $.get("{{ url('/get-thanas-by-district') }}/" + district, {id: prefix}, function(res) {
-                    $('#' + prefix + "_thana").html(res).trigger('change');
+                    var $el = $('#' + prefix + "_thana");
+                    $el.html(res);
+                    refreshSelect2($el);
+                    $el.trigger('change');
                 });
             }
 
@@ -571,23 +587,40 @@
                 if (!thana) return;
                 // Load Unions
                 $.get("{{ url('/get-unions-by-thana') }}/" + thana, {id: prefix}, function(res) {
-                    $('#' + prefix + "_union").html(res).trigger('change');
+                    var $el = $('#' + prefix + "_union");
+                    $el.html(res);
+                    refreshSelect2($el);
+                    $el.trigger('change');
                 });
                 // Load Post Offices
                 $.get("{{ url('/get-post-offices-by-thana') }}/" + thana, {id: prefix}, function(res) {
-                    $('#' + prefix + "_post_office_id").html(res);
+                    var $el = $('#' + prefix + "_post_office_id");
+                    $el.html(res);
+                    refreshSelect2($el);
                 });
             }
 
             function findUnionDependencies(union, prefix) {
                 if (!union) return;
-                // Load Wards
-                $.get("{{ url('/get-word-by-union') }}/" + union, {id: prefix}, function(res) {
-                    $('#' + prefix + "_ward").html(res);
-                });
+                // Wards are independent and statically populated, do not fetch dynamically.
                 // Load Villages
-                $.get("{{ url('/get-villages-by-union') }}/" + union, {id: prefix}, function(res) {
-                    $('#' + prefix + "_village").html(res.villageOptions || res);
+                $.ajax({
+                    url: "{{ url('/get-villages-by-union') }}/" + union,
+                    type: 'GET',
+                    data: { id: prefix },
+                    dataType: 'json',
+                    success: function(res) {
+                        var html = (res && res.villageOptions) ? res.villageOptions : res;
+                        var $el = $('#' + prefix + "_village");
+                        $el.html(html);
+                        refreshSelect2($el);
+                    },
+                    error: function() {
+                        // fallback — clear the village dropdown
+                        var $el = $('#' + prefix + "_village");
+                        $el.html('<option value="">গ্রাম নির্বাচন করুন</option>');
+                        refreshSelect2($el);
+                    }
                 });
             }
 

@@ -39,121 +39,79 @@
                             <div class="card-body">
 
                                 <div class="form-group row">
-                                    <label for="name" class="col-sm-2 col-form-label">Road</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" name="name" placeholder="Road" class="form-control" id="name">
+                                    <label for="name" class="col-sm-2 col-form-label">Road Number/Name <span class="text-danger">*</span></label>
+                                    <div class="col-sm-3">
+                                        <input type="text" name="name" placeholder="Road Number/Name" class="form-control" id="name" required>
                                         <span class="error name-error text-danger"></span>
                                     </div>
-                                </div>
-
-
-                                <div class="form-group row">
-                                    <label for="bn_name" class="col-sm-2 col-form-label">Road Bangla</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" name="bn_name" placeholder="Road Bangla" class="form-control" id="bn_name">
+                                    <label for="bn_name" class="col-sm-3 col-form-label text-right">Road Number/Name (Bangla ) <span class="text-danger">*</span></label>
+                                    <div class="col-sm-3">
+                                        <input type="text" name="bn_name" placeholder="Road Number/Name (Bangla )" class="form-control" id="bn_name" required>
                                         <span class="error bn_name-error text-danger"></span>
-
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="start_point" class="col-sm-2 col-form-label">Start Point</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" id="start_point" class="form-control" name="start_point" placeholder="Enter start point">
-                                        <span class="error start_point-error text-danger"></span>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label for="end_point" class="col-sm-2 col-form-label">End Point</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" id="end_point" class="form-control" name="end_point" placeholder="Enter end point">
-                                        <span class="error end_point-error text-danger"></span>
-                                    </div>
-                                </div>
-
-
-                                <div class="form-group row">
-                                    <label for="distance" class="col-sm-2 col-form-label">Distance</label>
-                                    <div class="col-sm-9">
-                                        <input type="number" step="any"  placeholder="0.00" name="distance" class="form-control" id="distance">
-                                        <span class="error distance-error text-danger"></span>
-
+                                    <div class="col-sm-9 d-flex align-items-start">
+                                        <div class="flex-grow-1">
+                                            <input type="text" id="start_point" class="form-control" name="start_point" placeholder="Enter start point">
+                                            <span class="error start_point-error text-danger"></span>
+                                        </div>
+                                        <label for="end_point" class="col-form-label ml-3 mr-2 text-nowrap">End Point</label>
+                                        <div class="flex-grow-1">
+                                            <input type="text" id="end_point" class="form-control" name="end_point" placeholder="Enter end point">
+                                            <span class="error end_point-error text-danger"></span>
+                                        </div>
+                                        <label for="distance" class="col-form-label ml-3 mr-2 text-nowrap">Distance (KM)</label>
+                                        <div class="flex-grow-1">
+                                            <input type="number" step="any" placeholder="0.00" name="distance" class="form-control" id="distance">
+                                            <span class="error distance-error text-danger"></span>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="road_type" class="col-sm-2 col-form-label">Road Type</label>
-                                    <div class="col-sm-9">
-                                        <select required class="form-control select2" name="road_type" id="road_type">
-                                             @if (count($road_types))
-                                                @foreach ($road_types as $road_type)
-                                                    <option value="{{$road_type->id}}">{{$road_type->en_name}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <span class="error road_type-error text-danger"></span>
-
+                                    <div class="col-sm-9 d-flex align-items-start">
+                                        <div class="flex-grow-1">
+                                            <select required class="form-control select2" name="road_type" id="road_type">
+                                                 @if (count($road_types))
+                                                    @foreach ($road_types as $road_type)
+                                                        <option value="{{$road_type->id}}">{{$road_type->en_name}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error road_type-error text-danger"></span>
+                                        </div>
+                                        <label for="road_category" class="col-form-label ml-3 mr-2 text-nowrap">Road Category</label>
+                                        <div class="flex-grow-1">
+                                            <select required class="form-control select2" name="road_category" id="road_category">
+                                                <option value="">Select Road Category</option>
+                                                @if (count($road_categories))
+                                                    @foreach ($road_categories as $road_category)
+                                                        <option value="{{$road_category->id}}">{{$road_category->en_name}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error road_category-error text-danger"></span>
+                                        </div>
+                                        <label for="road_owner" class="col-form-label ml-3 mr-2 text-nowrap">Road Owner</label>
+                                        <div class="flex-grow-1">
+                                            <select required class="form-control select2" name="road_owner" id="road_owner">
+                                                <option value="">Select Road Owner</option>
+                                                @if (count($road_owners))
+                                                    @foreach ($road_owners as $road_owner)
+                                                        <option value="{{$road_owner->id}}">{{$road_owner->en_name}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error road_owner-error text-danger"></span>
+                                        </div>
                                     </div>
                                 </div>
 
 
-                                <div class="form-group row">
-                                    <label for="road_category" class="col-sm-2 col-form-label">Road Category</label>
-                                    <div class="col-sm-9">
-                                        <select required class="form-control select2" name="road_category" id="road_category">
-                                            <option value="">Select Road Category</option>
-                                            @if (count($road_categories))
-                                                @foreach ($road_categories as $road_category)
-                                                    <option value="{{$road_category->id}}">{{$road_category->en_name}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <span class="error road_category-error text-danger"></span>
-
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label for="road_owner" class="col-sm-2 col-form-label">Road Owner</label>
-                                    <div class="col-sm-9">
-                                        <select required class="form-control select2" name="road_owner" id="road_owner">
-                                            <option value="">Select Road Owner</option>
-                                            @if (count($road_owners))
-                                                @foreach ($road_owners as $road_owner)
-                                                    <option value="{{$road_owner->id}}">{{$road_owner->en_name}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <span class="error road_owner-error text-danger"></span>
-
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label for="make_year" class="col-sm-2 col-form-label">Make Year</label>
-                                    <div class="col-sm-9">
-                                        <input type="number" min="1900"  max="{{date('Y')}}" placeholder="YYYY" name="make_year"  class="form-control" id="make_year">
-                                        <span class="error make_year-error text-danger"></span>
-
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="make_contactor" class="col-sm-2 col-form-label">Make Contactor</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" name="make_contactor" placeholder="Contactor Name" class="form-control" id="make_contactor">
-                                        <span class="error make_contactor-error text-danger"></span>
-
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="make_value" class="col-sm-2 col-form-label">Make Value</label>
-                                    <div class="col-sm-9">
-                                        <input type="number" step="any" placeholder="eg.500000" name="make_value"  class="form-control" id="make_value">
-                                        <span class="error make_value-error text-danger"></span>
-
-                                    </div>
-                                </div>
                                 <div class="form-group row">
                                     <label for="current_condition" class="col-sm-2 col-form-label">Current Condition</label>
                                     <div class="col-sm-9">

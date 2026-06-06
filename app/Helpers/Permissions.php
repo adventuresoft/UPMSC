@@ -24,9 +24,7 @@ if (! function_exists('is_superadmin')) {
     function is_superadmin() {
         if (!Auth::check()) return false;
         $user = Auth::user();
-        // A user with an institute_id is a tenant, NOT a true superadmin
-        // even if their role_id is 1 (Admin)
-        if ($user->institute_id) return false;
+        // Role 1 (Admin) and 4 (Developer) are always Superadmins
         return in_array($user->role_id, [1, 4]);
     }
 }
@@ -36,14 +34,14 @@ if (! function_exists('is_institutional_admin')) {
         if (!Auth::check()) return false;
         $user = Auth::user();
         
-        // If they have an institute_id and are not the top-level developer (4), they are a tenant
-        return ($user->institute_id && $user->role_id != 4) || in_array($user->role_id, [6, 8, 10]);
+        // Superadmins, those with institute_id (tenants), and specific administrative roles
+        return is_superadmin() || ($user->institute_id && $user->role_id != 4) || in_array($user->role_id, [2, 3, 6, 8, 10]);
     }
 }
 
 if (! function_exists('basic_settings_permissions')) {
     function basic_settings_permissions() {
-        return is_superadmin();
+        return is_superadmin() || (Auth::check() && Auth::user()->can('basic-settings.read'));
     }
 }
 

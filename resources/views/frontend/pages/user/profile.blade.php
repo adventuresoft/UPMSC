@@ -289,7 +289,7 @@
                                             <div class="form-group row">
                                                 <label for="image" class="col-sm-2 col-form-label"></label>
                                                 <div class="col-sm-9">
-                                                    <img class="img-fluid img-thumbnail" src="{{ $user->image ? asset($user->image) : asset('public/no-image-found.jpeg') }}" id="preview" alt="Preview" width="100" height="100">
+                                                    <img class="img-fluid img-thumbnail" src="{{ $user->image ? imageUrl($user->image) : asset('public/no-image-found.jpeg') }}" id="preview" alt="Preview" width="100" height="100">
                                                 </div>
                                             </div>
 
@@ -310,7 +310,7 @@
                                                     Family Member Type
                                                 </label>
                                                 <div class="col-sm-10">
-                                                    <select name="family_type_id" required class="form-control" id="family_type_id">
+                                                    <select name="family_type_id" class="form-control" id="family_type_id">
                                                         <option value="">Select Member Type</option>
                                                         @if (count($familyTypes))
                                                             @foreach ($familyTypes as $familyType)
@@ -328,7 +328,7 @@
                                                     Family Category
                                                 </label>
                                                 <div class="col-sm-10">
-                                                    <select required name="family_category_id" class="form-control" id="family_category_id">
+                                                    <select name="family_category_id" class="form-control" id="family_category_id">
                                                         <option value="">Select Family Category</option>
                                                         @if (count($familyCategories))
                                                             @foreach ($familyCategories as $familyCategory)
@@ -554,7 +554,7 @@
                                                         <option value="">Select Ward</option>
                                                         @if ($wards)
                                                             @foreach ($wards as $ward)
-                                                                <option value="{{$ward->id}}" {{$user->addressInfo ? (($user->addressInfo->permanent_ward_id == $ward->id) ? 'selected' : '' ) : ''}}>{{$ward->en_ward_no}}</option>
+                                                                <option value="{{$ward->id}}" {{$user->addressInfo ? (($user->addressInfo->permanent_ward_id == $ward->id) ? 'selected' : '' ) : ''}}>{{$ward->bn_ward_no ?? $ward->en_ward_no}}</option>
                                                             @endforeach
                                                         @endif
                                                     </select>

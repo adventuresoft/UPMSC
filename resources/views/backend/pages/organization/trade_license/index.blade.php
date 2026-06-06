@@ -175,7 +175,14 @@
 
                   <td>
                     @if ($license)
-                      <label class="badge badge-info">{{ ucfirst($license->payment_status ?? 'unpaid') }}</label>
+                      @php
+                        $paymentStatus = strtolower($license->payment_status ?? 'unpaid');
+                      @endphp
+                      @if ($paymentStatus === 'paid')
+                        <label class="badge badge-success">Paid</label>
+                      @else
+                        <label class="badge badge-danger">Unpaid</label>
+                      @endif
                     @else
                       <label class="badge badge-secondary">Not Generated</label>
                     @endif
@@ -185,23 +192,16 @@
 
                     <div class="table-action">
                       @if ($license)
-                        <a href="{{ route('organizationA.trade-license.confirmed', $license->id ) }}"
-                          title="Confirmed"
+                        <a href="{{ route('organizationA.trade-license.invoice', $license->id ) }}?payment=1"
+                          title="Payment"
                           class="btn btn-sm btn-info">
-                          <i class="fa fa-hand-holding-usd"></i>
+                          <i class="fa fa-credit-card"></i>
                         </a>
 
                         <a href="{{ route('organizationA.trade-license.invoice', $license->id ) }}"
                           title="Invoice View"
                           class="btn btn-sm btn-success">
                           <i class="fa fa-eye"></i>
-                        </a>
-
-                        <a target="_blank"
-                          href="{{ route('organizationA.trade-license.preview', $license->id) }}?print=1"
-                          title="Print"
-                          class="btn btn-sm btn-primary">
-                          <i class="fa fa-print"></i>
                         </a>
                       @else
                         <a href="{{ route('organizationA.trade-license.create', ['org_id' => ($organization->approved_id ?? $organization->application_id ?? $organization->system_id)]) }}"

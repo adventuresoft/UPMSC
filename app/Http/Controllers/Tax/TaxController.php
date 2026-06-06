@@ -23,9 +23,9 @@ class TaxController extends Controller
      */
     public function index()
     {
-        $data['taxes'] = Tax::with(array('user'=>function($q1){
-            $q1->with('people', 'familyInfo');
-        }))->where('institute_id', Auth::user()->institute_id)->get();
+        $data['taxes'] = Tax::with(['user.people', 'user.familyInfo'])
+            ->applyMultitenancy()
+            ->get();
         return view('backend.pages.tax.index', $data);
     }
 
@@ -39,9 +39,9 @@ class TaxController extends Controller
 
     public function taxReceived()
     {
-        $data['taxes'] = Tax::with(array('user'=>function($q1){
-            $q1->with('people', 'familyInfo');
-        }))->where('institute_id', Auth::user()->institute_id)->get();
+        $data['taxes'] = Tax::with(['user.people', 'user.familyInfo'])
+            ->applyMultitenancy()
+            ->get();
         return view('backend.pages.tax.received', $data);
     }
 
@@ -63,7 +63,12 @@ class TaxController extends Controller
         $institute = Institute::find(Auth::user()->institute_id);
         $data['tax_years'] = TaxYear::latest()->get();
         $data['union_wards'] = UnionWard::get();
-        $data['villages'] = Village::where('union_id', $institute->union_id ?? 0 )->get();
+        
+        if ($institute) {
+            $data['villages'] = Village::where('union_id', $institute->union_id)->get();
+        } else {
+            $data['villages'] = Village::latest()->get();
+        }
         return view('backend.pages.tax.create', $data);
     }
 
@@ -90,12 +95,12 @@ class TaxController extends Controller
 
             $tax = new Tax();
             $tax->institute_id = Auth::user()->institute_id;
-            $tax->tax_year_id = $request->tax_year_id;
-            $tax->village_id = $request->village_id;
-            $tax->ward_id = $request->ward_id;
-            $tax->area_id = $request->area_id;
-            $tax->house_id = $request->house_id;
-            $tax->user_id = $request->user_id;
+            $tax->tax_year_id = $request->tax_year_id ?: null;
+            $tax->village_id = $request->village_id ?: null;
+            $tax->ward_id = $request->ward_id ?: null;
+            $tax->area_id = is_numeric($request->area_id) ? $request->area_id : null;
+            $tax->house_id = $request->house_id ?: null;
+            $tax->user_id = $request->user_id ?: null;
             $tax->user_system_id = $request->user_system_id;
 
             $tax->previous_residence_tax = $request->previous_residence_tax;
@@ -164,6 +169,29 @@ class TaxController extends Controller
         }
     }
 
+    public function storeManualPayment(Request $request, $id)
+    {
+        $request->validate([
+            'payment_details' => 'required|string|max:255',
+            'transaction_id' => 'required|string|max:255',
+            'note' => 'nullable|string|max:1000',
+        ]);
+
+        $tax = Tax::findOrFail($id);
+
+        try {
+            $tax->payment_details = $request->payment_details;
+            $tax->transaction_id = $request->transaction_id;
+            $tax->note = $request->note;
+            $tax->status = 1; // Mark as paid
+            $tax->save();
+
+            return redirect()->back()->with('success', 'Manual payment saved successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong! ' . $e->getMessage());
+        }
+    }
+
     /**
      * Display the specified resource.
      *
@@ -172,9 +200,9 @@ class TaxController extends Controller
      */
     public function show($id)
     {
-        $data['tax'] = Tax::with(array('user'=>function($q1){
-            $q1->with('people', 'familyInfo');
-        }))->find($id);
+        $data['tax'] = Tax::with(['user.people', 'user.familyInfo'])
+            ->applyMultitenancy()
+            ->findOrFail($id);
         return view('backend.pages.tax.show', $data);
     }
 

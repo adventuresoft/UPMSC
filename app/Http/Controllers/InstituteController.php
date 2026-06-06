@@ -43,7 +43,7 @@ class InstituteController extends Controller
             $image_url = $upload_path . $image_full_name;
 
             try {
-                $image->move($upload_path, $image_full_name);
+                $image->move(base_path($upload_path), $image_full_name);
                 return $image_url;
             } catch (\Throwable $th) {
                 return "upload_failed.png";
@@ -80,17 +80,10 @@ class InstituteController extends Controller
      */
     public function index()
     {
-        $institutes = Institute::latest()->get();
-        if (count($institutes)) {
-            foreach ($institutes as $institute) {
-                if ($institute->institute_type_id == 1) {
-                    $institute->union = Union::find($institute->union_id);
-                } else if($institute->institute_type_id == 2) {
-                    $institute->pourashava = Pourashava::find($institute->pourashava_id);
-                } else if($institute->institute_type_id == 3) {
-                    $institute->cityCorporation = CityCorporation::find($institute->city_corporation_id);
-                }
-            }
+        if (is_superadmin()) {
+            $institutes = Institute::with(['union', 'pourashava', 'cityCorporation', 'type', 'category'])->latest()->get();
+        } else {
+            $institutes = Institute::with(['union', 'pourashava', 'cityCorporation', 'type', 'category'])->where('id', Auth::user()->institute_id)->latest()->get();
         }
 
         $data['institutes'] = $institutes;
@@ -131,6 +124,9 @@ class InstituteController extends Controller
             'admin_email' => 'required|email|max:190|unique:users,email',
             'admin_mobile' => 'required|max:15',
             'admin_password' => 'required|min:6',
+            'union' => 'required_if:institute_type,1|nullable|exists:unions,id',
+            'pourashava' => 'required_if:institute_type,2|nullable|exists:pourashavas,id',
+            'city_corporation' => 'required_if:institute_type,3|nullable|exists:city_corporations,id',
         ]);
 
         if ($validate->fails()) {
@@ -428,10 +424,17 @@ class InstituteController extends Controller
 
     public function imagesStore(Request $request)
     {
+        $institute = Institute::find($request->institute_id);
+
+        if (!$institute) {
+            $data['status'] = false;
+            $data['code'] = 404;
+            $data['message'] = "Institute not found";
+            return response()->json($data, 200);
+        }
+
         $validate = Validator::make($request->all(), [
-            'left_image' => 'required|mimes:jpeg,jpg,png,gif|max:10000',
-            'top_image' => 'required|mimes:jpeg,jpg,png,gif|max:10000',
-            'right_image' => 'required|mimes:jpeg,jpg,png,gif|max:10000',
+            'left_image' => ($institute->left_image) ? 'nullable|mimes:jpeg,jpg,png,gif|max:10000' : 'required|mimes:jpeg,jpg,png,gif|max:10000',
         ]);
 
         if ($validate->fails()) {
@@ -441,107 +444,44 @@ class InstituteController extends Controller
             return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
         }
 
-        $institute = Institute::find($request->institute_id);
+        $left_image = $request->file('left_image');
+        $left_image_url = $institute->left_image;
 
-        if($institute){
-
-            if($institute->left_image){
+        if ($left_image) {
+            if ($institute->left_image) {
                 try {
                     unlink($institute->left_image);
                 } catch (\Throwable $th) {
-                    //throw $th;
-                }
-            }
-
-            if($institute->top_image){
-                try {
-                    unlink($institute->top_image);
-                } catch (\Throwable $th) {
-                    //throw $th;
-                }
-            }
-
-            
-            if($institute->right_image){
-                try {
-                    unlink($institute->right_image);
-                } catch (\Throwable $th) {
-                    //throw $th;
+                    // Ignore missing files
                 }
             }
 
             $instituteInfo = $this->getInstituteName($institute->institute_type_id, $institute->union_id, $institute->pourashava_id, $institute->city_corporation_id);
-            $left_image = $request->file('left_image');
-            $left_image_url = '';
-            if ($left_image) {
-                $image_name =  Str::slug($instituteInfo->name, '-') . '-left-' . $instituteInfo->id ;
-                $ext = strtolower($left_image->getClientOriginalExtension());
-                $image_full_name = $image_name . "." . $ext;
-                $upload_path = 'uploads/institute/';
-                $image_url = $upload_path . $image_full_name;
-                $success = $left_image->move($upload_path, $image_full_name);
-                if ($success) {
-                    $left_image_url = $image_url;
-                }
-            } else {
-                $left_image_url = $institute->left_image;
+            $image_name =  Str::slug($instituteInfo->name ?? 'institute', '-') . '-left-' . ($instituteInfo->id ?? $institute->id) ;
+            $ext = strtolower($left_image->getClientOriginalExtension());
+            $image_full_name = $image_name . "." . $ext;
+            $upload_path = 'uploads/institute/';
+            $image_url = $upload_path . $image_full_name;
+            $success = $left_image->move(base_path($upload_path), $image_full_name);
+            if ($success) {
+                $left_image_url = $image_url;
             }
-    
-            $top_image = $request->file('top_image');
-            $top_image_url = '';
-            if ($top_image) {
-                $image_name =  Str::slug($instituteInfo->name, '-') . '-top-' . $instituteInfo->id ;
-                $ext = strtolower($top_image->getClientOriginalExtension());
-                $image_full_name = $image_name . "." . $ext;
-                $upload_path = 'uploads/institute/';
-                $image_url = $upload_path . $image_full_name;
-                $success = $top_image->move($upload_path, $image_full_name);
-                if ($success) {
-                    $top_image_url = $image_url;
-                }
-            } else {
-                $top_image_url = $institute->top_image;
-            }
-    
-            $right_image = $request->file('right_image');
-            $right_image_url = '';
-            if ($right_image) {
-                $image_name =  Str::slug($instituteInfo->name, '-') . '-right-' . $instituteInfo->id ;
-                $ext = strtolower($right_image->getClientOriginalExtension());
-                $image_full_name = $image_name . "." . $ext;
-                $upload_path = 'uploads/institute/';
-                $image_url = $upload_path . $image_full_name;
-                $success = $right_image->move($upload_path, $image_full_name);
-                if ($success) {
-                    $right_image_url = $image_url;
-                }
-            }else {
-                $right_image_url = $institute->right_image;
-            }
+        }
 
+        try {
+            $institute->left_image = $left_image_url;
+            $institute->save();
 
-            try {
-                $institute->left_image = $left_image_url;
-                $institute->top_image = $top_image_url;
-                $institute->right_image = $right_image_url;
-                $institute->save();
+            $data['status'] = true;
+            $data['message'] = "Updated Institute Images";
+            return response()->json($data, 200);
 
-                $data['status'] = true;
-                $data['message'] = "Updated Institute Images";
-                return response()->json($data, 200);
-
-            } catch (\Throwable $th) {
-                $data['status'] = false;
-                $data['errors'] = $th;
-                $data['message'] = "Failed to update data";
-                return response()->json($data, 200);
-            }
-
-        } else {
+        } catch (\Throwable $th) {
             $data['status'] = false;
-            $data['code'] = 404;
-            $data['message'] = "Noting found to update";
+            $data['errors'] = $th;
+            $data['message'] = "Failed to update data";
             return response()->json($data, 200);
         }
     }
 }
+

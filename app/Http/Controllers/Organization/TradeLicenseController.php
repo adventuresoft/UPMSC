@@ -66,6 +66,7 @@ class TradeLicenseController extends Controller
             'organization.Union',
             'organization.Thana',
             'organization.District',
+            'organization.institute.union',
             'organization.ownership.user.people',
             'organization.ownership.user.addressInfo.permanentVillage',
             'organization.ownership.user.addressInfo.permanentUnion',
@@ -131,9 +132,7 @@ class TradeLicenseController extends Controller
             'ownership.user.people',
             'latestTradeLicense.taxYear',
         ])->where('status', 1)
-          ->when(Auth::user()->institute_id, function ($query) {
-              $query->where('institute_id', Auth::user()->institute_id);
-          })
+          ->applyMultitenancy()
           ->latest()
           ->get();
 
@@ -163,7 +162,7 @@ class TradeLicenseController extends Controller
             'organization.type',
             'organization.category',
             'organization.subcategory',
-        ])->where('payment_status','paid')->latest()->get();
+        ])->where('payment_status','paid')->applyMultitenancy()->latest()->get();
         return view('backend.pages.organization.trade_license.paidindex', $data);
     }
 
@@ -225,6 +224,7 @@ class TradeLicenseController extends Controller
             'organization.Union',
             'organization.Thana',
             'organization.District',
+            'organization.institute.union',
             'organization.ownership.user.people',
             'organization.ownership.user.addressInfo.permanentVillage',
             'organization.ownership.user.addressInfo.permanentUnion',
@@ -472,6 +472,26 @@ public function paymentSuccess($id)
 
     return redirect()->route('licenses.index')->with('success', 'Payment completed successfully');
 }
+    public function publicPreview($id)
+    {
+        $license = TradeLicense::with([
+            'taxYear',
+            'organization.category',
+            'organization.subcategory',
+            'organization.village',
+            'organization.Union',
+            'organization.Thana',
+            'organization.District',
+            'organization.ownership.user.people',
+            'organization.ownership.user.addressInfo.permanentVillage',
+            'organization.ownership.user.addressInfo.permanentUnion',
+            'organization.ownership.user.addressInfo.permanentThana',
+            'organization.ownership.user.addressInfo.permanentDistrict',
+        ])->findOrFail($id);
+
+        return view('backend.pages.organization.trade_license.public_preview', compact('license'));
+    }
+
 
 
 }

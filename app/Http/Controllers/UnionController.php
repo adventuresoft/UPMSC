@@ -12,7 +12,11 @@ class UnionController extends Controller
     {
         $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Union</option>';
 
-        $unions = Union::where('thana_id', $id)->get();
+        $unions = Union::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->where('thana_id', $id)
+            ->orderBy('name')
+            ->get();
 
         if(count($unions)) {
             foreach ($unions as $union) {

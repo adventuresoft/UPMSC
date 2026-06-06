@@ -97,9 +97,11 @@
                 <div class="info-card">
                     <div class="info-header">
                         <h3 class="info-title"><i class="fas fa-university mr-2 text-primary"></i> Basic Information</h3>
+                        @can('institute.update')
                         <a href="{{route('institute.edit', $institute->id)}}" class="btn btn-sm btn-outline-primary btn-edit-tab">
                             <i class="fas fa-edit mr-1"></i> Edit Info
                         </a>
+                        @endcan
                     </div>
                     <div class="info-body">
                         <div class="info-row">
@@ -153,9 +155,11 @@
                 <div class="info-card">
                     <div class="info-header">
                         <h3 class="info-title"><i class="fas fa-user-shield mr-2 text-success"></i> Administrative Access</h3>
+                        @can('institutional-admin.update')
                         <a href="{{route('instituteA.adminCreate', $institute->id)}}" class="btn btn-sm btn-outline-success btn-edit-tab">
                             <i class="fas fa-user-edit mr-1"></i> Manage Admin
                         </a>
+                        @endcan
                     </div>
                     <div class="info-body">
                         @if($institute->superUser)
@@ -180,7 +184,9 @@
                         @else
                         <div class="text-center py-4">
                             <p class="text-muted">No admin assigned yet.</p>
+                            @can('institutional-admin.create')
                             <a href="{{route('instituteA.adminCreate', $institute->id)}}" class="btn btn-sm btn-primary">Assign Admin</a>
+                            @endcan
                         </div>
                         @endif
                     </div>
@@ -192,23 +198,25 @@
                 <div class="info-card">
                     <div class="info-header">
                         <h3 class="info-title"><i class="fas fa-images mr-2 text-warning"></i> Visual Assets</h3>
+                        @can('institute.update')
                         <a href="{{route('instituteA.imagesCreate', $institute->id)}}" class="btn btn-sm btn-outline-warning btn-edit-tab">
                             <i class="fas fa-camera mr-1"></i> Update
                         </a>
+                        @endcan
                     </div>
                     <div class="info-body">
                         <div class="mb-4">
                             <label class="info-label d-block mb-2">Top Banner</label>
-                            <img src="{{ $institute->top_image ? asset($institute->top_image) : asset('default-banner.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-banner.png')}}'">
+                            <img src="{{ $institute->top_image ? imageUrl($institute->top_image) : asset('default-banner.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-banner.png')}}'">
                         </div>
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="info-label d-block mb-2">Left Asset</label>
-                                <img src="{{ $institute->left_image ? asset($institute->left_image) : asset('default-image.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-image.png')}}'">
+                                <img src="{{ $institute->left_image ? $institute->left_image : asset('default-image.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-image.png')}}'">
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="info-label d-block mb-2">Right Asset</label>
-                                <img src="{{ $institute->right_image ? asset($institute->right_image) : asset('default-image.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-image.png')}}'">
+                                <img src="{{ $institute->right_image ? imageUrl($institute->right_image) : asset('default-image.png') }}" class="image-preview-box" onerror="this.src='{{asset('default-image.png')}}'">
                             </div>
                         </div>
                     </div>

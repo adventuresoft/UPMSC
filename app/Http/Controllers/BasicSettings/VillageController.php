@@ -29,30 +29,32 @@ class VillageController extends Controller
 
     public function villagesByUnion(Request $request, $union_id)
     {
-        $villageOptions = '<option value=""> Select '.($request->id ? ucfirst($request->id) : '').' Village</option>';
+        $label = $request->id ? ucfirst($request->id) : '';
+        $villageOptions = '<option value="">গ্রাম নির্বাচন করুন</option>';
 
-        $villages = Village::where('union_id', $union_id)->get();
+        $villages = Village::where('union_id', $union_id)->where('status', true)->get();
 
-        if(count($villages)) {
+        if (count($villages)) {
             foreach ($villages as $village) {
-               $villageOptions .='<option value="'.$village->id.'">'.$village->en_name.'</option>';
+                $villageOptions .= '<option value="' . $village->id . '">' . ($village->bn_name ?: $village->en_name) . '</option>';
             }
-        } 
-        
+        }
+
         $roadOptions = '<option value="">Select Road</option>';
         $institute = Institute::where('union_id', $union_id)->first();
-        if($institute) {
+        if ($institute) {
             $roads = Road::where('institute_id', $institute->id)->get();
-            if(count($roads)){
-                foreach($roads as $road){
-                    $roadOptions .='<option value="'.$road->id.'">'.$road->name.'</option>';
+            if (count($roads)) {
+                foreach ($roads as $road) {
+                    $roadOptions .= '<option value="' . $road->id . '">' . $road->name . '</option>';
                 }
             }
         }
 
-        $data['villageOptions'] = $villageOptions;
-        $data['roadOptions'] = $roadOptions;
-        return $data;
+        return response()->json([
+            'villageOptions' => $villageOptions,
+            'roadOptions'    => $roadOptions,
+        ]);
     }
 
     public function index()

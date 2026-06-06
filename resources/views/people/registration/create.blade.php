@@ -137,7 +137,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 text-center">
-                            <img class="img-fluid img-thumbnail rounded-lg" src="{{ isset($user->image) ? asset($user->image) : asset('no-image-found.jpeg') }}" id="preview" alt="Preview" width="100">
+                            <img class="img-fluid img-thumbnail rounded-lg" src="{{ isset($user->image) ? imageUrl($user->image) : asset('no-image-found.jpeg') }}" id="preview" alt="Preview" width="100">
                         </div>
                     </div>
                 </div>

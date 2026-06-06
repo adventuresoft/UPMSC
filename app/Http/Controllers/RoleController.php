@@ -30,12 +30,55 @@ class RoleController extends Controller
         $roles = Role::with('permissions')->paginate(10);
         $permissions = Permission::all();
         
-        $permissionGroups = $permissions->groupBy(function($permission) {
+        $basicSettingsModules = [
+            'city_corporation', 'city_corporation_ward', 'city-corporation', 'city-corporation-ward',
+            'family_category', 'family_subcategory', 'family_type',
+            'house_category', 'house_ownership_type', 'house_type', 'house_class', 'house_owner_type',
+            'land_class', 'land_ownership_type', 'land_type',
+            'organization_category', 'organization_subcategory', 'organization_type', 'organization_work_area', 'organization_class', 'organization_owenership_type', 'organization_ownership_type',
+            'profession', 'profession_category', 'profession_subcategory', 'profession_type',
+            'road_category', 'road_owner', 'road_type',
+            'union', 'union_ward',
+            'vehicle_category', 'vehicle_subcategory', 'vehicle_type',
+            'village', 'village_area',
+            'reserve_ward', 'reserve-ward',
+            'market', 'market_category', 'market_ownership_type', 'market_type',
+            'bank', 'account_type', 'country',
+            'basic-settings', 'basic_settings'
+        ];
+
+        $instituteSettingsModules = [
+            'institute', 'institute_category', 'institute_type',
+        ];
+
+        $permissionGroups = $permissions->filter(function($permission) use ($basicSettingsModules, $instituteSettingsModules) {
+            $parts = explode('.', $permission->name);
+            $module = count($parts) > 1 ? $parts[0] : 'Others';
+            return !in_array($module, $basicSettingsModules) && !in_array($module, $instituteSettingsModules);
+        })->groupBy(function($permission) {
             $parts = explode('.', $permission->name);
             return count($parts) > 1 ? $parts[0] : 'Others';
         });
 
-        return view('backend.pages.role.index', compact('roles', 'permissionGroups'))->with(['title' => 'Role Management', 'page' => 'role']);
+        $basicSettingsGroups = $permissions->filter(function($permission) use ($basicSettingsModules) {
+            $parts = explode('.', $permission->name);
+            $module = count($parts) > 1 ? $parts[0] : 'Others';
+            return in_array($module, $basicSettingsModules);
+        })->groupBy(function($permission) {
+            $parts = explode('.', $permission->name);
+            return count($parts) > 1 ? $parts[0] : 'Others';
+        });
+
+        $instituteSettingsGroups = $permissions->filter(function($permission) use ($instituteSettingsModules) {
+            $parts = explode('.', $permission->name);
+            $module = count($parts) > 1 ? $parts[0] : 'Others';
+            return in_array($module, $instituteSettingsModules);
+        })->groupBy(function($permission) {
+            $parts = explode('.', $permission->name);
+            return count($parts) > 1 ? $parts[0] : 'Others';
+        });
+
+        return view('backend.pages.role.index', compact('roles', 'permissionGroups', 'basicSettingsGroups', 'instituteSettingsGroups'))->with(['title' => 'Role Management', 'page' => 'role']);
     }
 
     /**
@@ -94,12 +137,55 @@ class RoleController extends Controller
         $roles = Role::with('permissions')->paginate(10);
         $permissions = Permission::all();
         
-        $permissionGroups = $permissions->groupBy(function($permission) {
+        $basicSettingsModules = [
+            'city_corporation', 'city_corporation_ward', 'city-corporation', 'city-corporation-ward',
+            'family_category', 'family_subcategory', 'family_type',
+            'house_category', 'house_ownership_type', 'house_type', 'house_class', 'house_owner_type',
+            'land_class', 'land_ownership_type', 'land_type',
+            'organization_category', 'organization_subcategory', 'organization_type', 'organization_work_area', 'organization_class', 'organization_owenership_type', 'organization_ownership_type',
+            'profession', 'profession_category', 'profession_subcategory', 'profession_type',
+            'road_category', 'road_owner', 'road_type',
+            'union', 'union_ward',
+            'vehicle_category', 'vehicle_subcategory', 'vehicle_type',
+            'village', 'village_area',
+            'reserve_ward', 'reserve-ward',
+            'market', 'market_category', 'market_ownership_type', 'market_type',
+            'bank', 'account_type', 'country',
+            'basic-settings', 'basic_settings'
+        ];
+
+        $instituteSettingsModules = [
+            'institute', 'institute_category', 'institute_type',
+        ];
+
+        $permissionGroups = $permissions->filter(function($permission) use ($basicSettingsModules, $instituteSettingsModules) {
+            $parts = explode('.', $permission->name);
+            $module = count($parts) > 1 ? $parts[0] : 'Others';
+            return !in_array($module, $basicSettingsModules) && !in_array($module, $instituteSettingsModules);
+        })->groupBy(function($permission) {
             $parts = explode('.', $permission->name);
             return count($parts) > 1 ? $parts[0] : 'Others';
         });
 
-        return view('backend.pages.role.index', compact('role', 'roles', 'permissionGroups'))->with('title', 'Edit Role Type')->with('page', 'role');
+        $basicSettingsGroups = $permissions->filter(function($permission) use ($basicSettingsModules) {
+            $parts = explode('.', $permission->name);
+            $module = count($parts) > 1 ? $parts[0] : 'Others';
+            return in_array($module, $basicSettingsModules);
+        })->groupBy(function($permission) {
+            $parts = explode('.', $permission->name);
+            return count($parts) > 1 ? $parts[0] : 'Others';
+        });
+
+        $instituteSettingsGroups = $permissions->filter(function($permission) use ($instituteSettingsModules) {
+            $parts = explode('.', $permission->name);
+            $module = count($parts) > 1 ? $parts[0] : 'Others';
+            return in_array($module, $instituteSettingsModules);
+        })->groupBy(function($permission) {
+            $parts = explode('.', $permission->name);
+            return count($parts) > 1 ? $parts[0] : 'Others';
+        });
+
+        return view('backend.pages.role.index', compact('role', 'roles', 'permissionGroups', 'basicSettingsGroups', 'instituteSettingsGroups'))->with('title', 'Edit Role Type')->with('page', 'role');
     }
 
     /**

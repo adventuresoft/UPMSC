@@ -21,12 +21,16 @@ class SuccessionController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = Succession::with('user')
-        ->whereHas('user', function($q1){
-            $q1->where('institute_id', Auth::user()->institute_id);
-        })
-        ->with('deathPerson.user')
-        ->latest()->get();
+        $data['certificates'] = Succession::with([
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district',
+            'deathPerson.user'
+        ])
+        ->applyMultitenancy()
+        ->latest()
+        ->get();
         return view('backend.pages.certificate.succession.index', $data);
     }
 
@@ -39,7 +43,7 @@ class SuccessionController extends Controller
     {
         $data['users'] = User::with('people')
         ->where('status', true)
-        ->where('role_id', 5)
+        ->whereNotIn('role_id', [1, 2, 3, 4])
         ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
         ->get();
         return view('backend.pages.certificate.succession.create', $data);
@@ -134,11 +138,7 @@ class SuccessionController extends Controller
             $q1->with('people', 'familyInfo' )->with(array('addressInfo'=>function($q2){
                 $q2->with('permanentVillage', 'presentWard');
             }))->with(array('institute' => function($q3){
-                $q3->with(array('union'=>function($q4){
-                    $q4->with(array('thana'=>function($q5){
-                        $q5->with('district');
-                    }));
-                }));
+                $q3->with('union.thana.district', 'pourashava.District', 'cityCorporation.District');
             }));
         }))->with('deathPerson')->find($id);
         return view('backend.pages.certificate.succession.certificate', $data);
@@ -159,11 +159,7 @@ class SuccessionController extends Controller
             $q1->with('people', 'familyInfo' )->with(array('addressInfo'=>function($q2){
                 $q2->with('permanentVillage', 'presentWard');
             }))->with(array('institute' => function($q3){
-                $q3->with(array('union'=>function($q4){
-                    $q4->with(array('thana'=>function($q5){
-                        $q5->with('district');
-                    }));
-                }));
+                $q3->with('union.thana.district', 'pourashava.District', 'cityCorporation.District');
             }));
         }))->with('deathPerson')->find($id);
         return view('backend.pages.certificate.succession.bn_certificate', $data);
@@ -189,7 +185,13 @@ class SuccessionController extends Controller
      */
     public function edit(Succession $succession)
     {
-        //
+        $data['succession'] = $succession;
+        $data['users'] = User::with('people')
+        ->where('status', true)
+        ->where('role_id', 5)
+        ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
+        ->get();
+        return view('backend.pages.certificate.succession.edit', $data);
     }
 
     /**
@@ -201,7 +203,48 @@ class SuccessionController extends Controller
      */
     public function update(Request $request, Succession $succession)
     {
-        //
+        $validate = Validator::make($request->all(), [
+                'applicant_id' => 'required|exists:users,system_id',
+                'death_certificate_id' => 'nullable|exists:death_certificates,system_id',
+            ]);
+
+        if ($validate->fails()) {
+            $data['status'] = false;
+            $data['message'] = "Invalid input contains! Please check your entries...";
+            $data['errors'] = $validate->errors();
+            return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+        }
+
+        $user = User::where('system_id', $request->applicant_id)->first();
+        $death_certificate = null;
+        if ($request->filled('death_certificate_id')) {
+            $death_certificate = DeathCertificate::where('system_id', $request->death_certificate_id)->first();
+        }
+        
+        if (!$user) {
+            $data['status'] = false;
+            $data['message'] = "Invalid input contains! Please check your entries...";
+            $data['errors'] = [];
+            return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+        }
+
+        try {
+            $succession->user_id = $user->id;
+            $succession->death_certificate_id  = $death_certificate ? $death_certificate->id : null;
+            $succession->members = $request->members ? json_encode($request->members) : NULL;
+            $succession->save();
+            
+            $data['status'] = true;
+            $data['message'] = "Updated successfully!";
+            $data['redirect_url'] = route('succession.index');
+            return response()->json($data, 200);
+
+        } catch (\Throwable $th) {
+            $data['status'] = false;
+            $data['message'] = "Failed to update data!";
+            $data['errors'] = $th->getMessage();
+            return response()->json($data, 500);
+        }
     }
 
     /**

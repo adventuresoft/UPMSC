@@ -10,9 +10,12 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\District;
+use App\Models\Thana;
 use App\Models\Union;
 use App\Models\Pourashava;
 use App\Models\CityCorporation;
+use App\Models\Institute;
 use Hash;
 
 class UserController extends Controller
@@ -31,8 +34,17 @@ class UserController extends Controller
     {
         $query = User::with(['roles', 'roles.permissions']);
 
-        // Apply strict multitenancy so tenants only see their own area's users
+        // Apply strict multitenancy (handles both staff and citizen visibility)
         $query->applyMultitenancy();
+
+        // Ensure we only show staff/administrative users in the Operator Registry for local admins
+        // Superadmins see every user in the system
+        if (!is_superadmin()) {
+            $query->where(function($q) {
+                $q->whereNotIn('role_id', [5])
+                  ->orWhereNotNull('institute_id');
+            });
+        }
 
         // Search filter
         if ($request->filled('search')) {
@@ -60,26 +72,30 @@ class UserController extends Controller
         $roles = Role::all();
 
         // Institutional admins can only assign sub-user roles
-        if (is_institutional_admin()) {
+        if (is_institutional_admin() && !is_superadmin()) {
             $institutionalAdminRoleId = Auth::user()->role_id;
-            // Map admin roles (6, 8, 10) to their corresponding sub-user roles (7, 9, 11)
+            // Map admin roles to their corresponding sub-user roles
             $subUserRoleMap = [
-                6 => 7,  // Union Admin -> Union User
-                8 => 9,  // Pourashava Admin -> Pourashava User
-                10 => 11 // City Corporation Admin -> City Corporation User
+                2 => [3, 6, 8, 10, 5, 7, 9, 11], // DC can create UNO/ENO and all local admins
+                3 => [6, 8, 10, 5, 7, 9, 11],    // UNO/ENO can create Union/Pourashava/CityCorp admins
+                6 => [6, 7],  // Union Admin -> can create Union Admin & User
+                8 => [8, 9],  // Pourashava Admin -> can create Pourashava Admin & User
+                10 => [10, 11] // City Corporation Admin -> can create City Corp Admin & User
             ];
-            $allowedRoleId = $subUserRoleMap[$institutionalAdminRoleId] ?? null;
-            $roles = Role::where('id', $allowedRoleId)->get();
+            $allowedRoleIds = $subUserRoleMap[$institutionalAdminRoleId] ?? [];
+            $roles = Role::whereIn('id', $allowedRoleIds)->get();
         }
 
         $assigned_area = Auth::user()->assigned_area;
         
         // Fetch all potential jurisdictions for the dropdown
+        $districts = District::orderBy('name')->get();
+        $thanas = Thana::orderBy('name')->get();
         $unions = Union::orderBy('name')->get();
         $pourashavas = Pourashava::orderBy('name')->get();
         $city_corps = CityCorporation::orderBy('name')->get();
 
-        return view('backend.pages.user.create', compact('roles', 'assigned_area', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'New Operator', 'page' => 'user']);
+        return view('backend.pages.user.create', compact('roles', 'assigned_area', 'districts', 'thanas', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'New Operator', 'page' => 'user']);
     }
 
 
@@ -103,7 +119,7 @@ class UserController extends Controller
         $user->mobile = $request->mobile;
         
         // Auto-populate area if institutional admin, otherwise use request
-        $user->area = is_institutional_admin() ? Auth::user()->assigned_area : $request->area;
+        $user->area = (is_institutional_admin() && !is_superadmin()) ? Auth::user()->assigned_area : $request->area;
         
         $user->status = $request->status;
         
@@ -148,31 +164,35 @@ class UserController extends Controller
         $user = User::with(['roles'])->find($id);
 
         // Institutional admins can only edit users they created
-        if (is_institutional_admin() && $user->created_by !== Auth::id()) {
+        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id()) {
             abort(403, 'You can only edit users you created.');
         }
 
         $roles = Role::all();
         // Restrict roles for institutional admins
-        if (is_institutional_admin()) {
+        if (is_institutional_admin() && !is_superadmin()) {
             $institutionalAdminRoleId = Auth::user()->role_id;
             $subUserRoleMap = [
-                6 => 7,  // Union Admin -> Union User
-                8 => 9,  // Pourashava Admin -> Pourashava User
-                10 => 11 // City Corporation Admin -> City Corporation User
+                2 => [3, 6, 8, 10, 5, 7, 9, 11],
+                3 => [6, 8, 10, 5, 7, 9, 11],
+                6 => [6, 7],
+                8 => [8, 9],
+                10 => [10, 11]
             ];
-            $allowedRoleId = $subUserRoleMap[$institutionalAdminRoleId] ?? null;
-            $roles = Role::where('id', $allowedRoleId)->get();
+            $allowedRoleIds = $subUserRoleMap[$institutionalAdminRoleId] ?? [];
+            $roles = Role::whereIn('id', $allowedRoleIds)->get();
         }
 
         $assigned_area = Auth::user()->assigned_area;
         
         // Fetch all potential jurisdictions for the dropdown
+        $districts = District::orderBy('name')->get();
+        $thanas = Thana::orderBy('name')->get();
         $unions = Union::orderBy('name')->get();
         $pourashavas = Pourashava::orderBy('name')->get();
         $city_corps = CityCorporation::orderBy('name')->get();
 
-        return view('backend.pages.user.edit', compact('user', 'roles', 'assigned_area', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'Edit Operator', 'page' => 'user']);
+        return view('backend.pages.user.edit', compact('user', 'roles', 'assigned_area', 'districts', 'thanas', 'unions', 'pourashavas', 'city_corps'))->with(['title' => 'Edit Operator', 'page' => 'user']);
     }
 
     /**
@@ -187,7 +207,7 @@ class UserController extends Controller
         $user = User::find($id);
 
         // Institutional admins can only update users they created
-        if (is_institutional_admin() && $user->created_by !== Auth::id()) {
+        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id()) {
             abort(403, 'You can only update users you created.');
         }
 
@@ -199,7 +219,7 @@ class UserController extends Controller
         $image =  $user ->image;
         if ($request->hasFile('image')) {
             $image = time() . '.' . $request->image->getClientOriginalExtension();
-            $request->image->move(('upload/users/images'), $image);
+            $request->image->move(base_path('upload/users/images'), $image);
         }
         $user->image = $image;
 
@@ -208,7 +228,7 @@ class UserController extends Controller
         $user->mobile = $request->mobile;
         
         // Update area and sync with Institute
-        if (is_institutional_admin()) {
+        if (is_institutional_admin() && !is_superadmin()) {
             $user->area = Auth::user()->assigned_area;
         } else {
             $user->area = $request->area;
@@ -298,7 +318,7 @@ class UserController extends Controller
         $user = User::find($id);
         if ($user) {
             // Institutional admins can only delete users they created
-            if (is_institutional_admin() && $user->created_by !== Auth::id()) {
+            if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id()) {
                 abort(403, 'You can only revoke access for users you created.');
             }
             $user->delete();

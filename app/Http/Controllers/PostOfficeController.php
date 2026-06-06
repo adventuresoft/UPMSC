@@ -9,14 +9,14 @@ class PostOfficeController extends Controller
 {
     public function postOfficesByThana(Request $request, $id)
     {
-        $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Post Office</option>';
+        $html = '<option value="">ডাকঘর নির্বাচন করুন</option>';
 
         $postOffices = PostOffice::where('thana_id', $id)->get();
 
         if(count($postOffices)) {
             foreach ($postOffices as $postOffice) {
-               $bn_name = $postOffice->bn_name ? ' - ' . $postOffice->bn_name : '';
-               $html .='<option value="'.$postOffice->id.'">'.$postOffice->name . $bn_name . '</option>';
+               $name = $postOffice->bn_name ?: $postOffice->name;
+               $html .='<option value="'.$postOffice->id.'">'.$name.'</option>';
             }
         }
 

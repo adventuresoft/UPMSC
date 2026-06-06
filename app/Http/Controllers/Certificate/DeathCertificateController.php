@@ -26,9 +26,9 @@ class DeathCertificateController extends Controller
     public function index()
     {
         $data['certificates'] = DeathCertificate::with('user')
-        ->whereHas('user', function($q1){
-            $q1->applyMultitenancy();
-        })->latest()->get();
+            ->applyMultitenancy()
+            ->latest()
+            ->get();
         return view('backend.pages.certificate.death.index', $data);
     }
 
@@ -195,9 +195,18 @@ class DeathCertificateController extends Controller
      * @param  \App\Models\Certificate\DeathCertificate  $deathCertificate
      * @return \Illuminate\Http\Response
      */
-    public function edit(DeathCertificate $deathCertificate)
+    public function edit($id)
     {
-        return view('backend.pages.certificate.death.edit');
+        $data['certificate'] = DeathCertificate::findOrFail($id);
+        $data['users'] = User::with('people')
+        ->where('status', true)
+        ->where('role_id', 5)
+        ->applyMultitenancy()
+        ->whereHas('people', function ($q) {
+            $q->whereNotNull('approved_id');
+        })
+        ->get();
+        return view('backend.pages.certificate.death.edit', $data);
     }
 
     /**
@@ -207,9 +216,40 @@ class DeathCertificateController extends Controller
      * @param  \App\Models\Certificate\DeathCertificate  $deathCertificate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DeathCertificate $deathCertificate)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $validate = Validator::make($request->all(), [
+                'user_id' => 'required',
+            ]);
+
+            if ($validate->fails()) {
+                $data['status'] = false;
+                $data['message'] = "Sorry! Invalid Entry.";
+                $data['errors'] = $validate->errors();
+                return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+            }
+
+            $certificate = DeathCertificate::findOrFail($id);
+            $certificate->user_id = $request->user_id;
+            $certificate->date_of_death = $request->date_of_death;
+            $certificate->cause_of_death = $request->cause_of_death;
+            $certificate->comments = $request->comments;
+            $certificate->save();
+
+            $data['status'] = true;
+            $data['message'] = "Certificate updated successfully!";
+            $data['result'] = $certificate;
+            $data['code'] = 200;
+            $data['redirect_url'] = route('death.index'); // Redirect to index, wait... maybe redirect to index is better
+            return response()->json($data, 200);
+
+        } catch (\Throwable $th) {
+            $data['status'] = false;
+            $data['message'] = "Something went wrong! Please try again...";
+            $data['errors'] = $th->getMessage();
+            return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
+        }
     }
 
     /**

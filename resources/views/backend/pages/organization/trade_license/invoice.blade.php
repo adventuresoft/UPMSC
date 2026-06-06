@@ -8,7 +8,8 @@
     }
 
     html,
-    body {
+    body,
+    .content-wrapper {
         margin: 0;
         padding: 0;
         font-family: 'Nikosh', 'Noto Sans Bengali', Arial, sans-serif;
@@ -16,7 +17,7 @@
         line-height: 1.4;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        background: #f4f6f9;
+        background: #ffffff !important;
     }
 
     .trade-license-page {
@@ -140,13 +141,16 @@
         text-align: center;
     }
 
-    .fees-table-new td:nth-child(2) {
-        text-align: left;
-        width: 50%;
+    .fees-table-new td:nth-child(1) {
+        width: 15%;
     }
 
-    .fees-table-new td:nth-child(3),
-    .fees-table-new td:nth-child(4) {
+    .fees-table-new td:nth-child(2) {
+        text-align: left;
+        width: 65%;
+    }
+
+    .fees-table-new td:nth-child(3) {
         text-align: right;
         width: 20%;
     }
@@ -185,39 +189,69 @@
     }
 
     @media print {
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+        html,
         body {
-            background: white;
+            margin: 0;
+            padding: 0;
+            width: 210mm;
+            height: 297mm;
+            background: #ffffff !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
-
-        .trade-license-page {
-            box-shadow: none;
-            border: none;
+        body * {
+            visibility: hidden !important;
         }
-
-        .inner-border {
-            border: none;
+        .trade-license-page,
+        .trade-license-page * {
+            visibility: visible !important;
         }
-
-        .no-print,
-        .card-footer,
-        footer,
-        .main-footer {
+        .no-print, .main-footer, .navbar, .sidebar, .main-sidebar, .main-header {
             display: none !important;
         }
-
+        .wrapper,
+        .content-wrapper,
+        .content,
+        .container-fluid {
+            margin: 0 !important;
+            margin-left: 0 !important;
+            padding: 0 !important;
+            width: 210mm !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            background: #ffffff !important;
+        }
+        .trade-license-page {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: auto !important;
+            bottom: auto !important;
+            display: block !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            margin: 0 !important;
+            border: 4px solid #556b2f !important;
+            box-sizing: border-box !important;
+            box-shadow: none !important;
+            overflow: hidden !important;
+            transform: none !important;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
         .fees-grand-total,
         .fees-total,
         .fees-table-new th {
             background-color: #f0f0f0 !important;
             color: black !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
         }
-
         .fees-grand-total {
             background-color: #e8e8e8 !important;
         }
-
         .fees-table-new th,
         .fees-table-new td {
             border: 1px solid #333 !important;
@@ -255,7 +289,7 @@
     $ownerName = $ownerUser?->name ?? $ownerRecord?->user_name ?? '--';
 
     $organizationAddress = collect([
-        $organization?->house_bn ? 'বাড়ি: ' . $organization->house_bn : ($organization?->house ? 'বাড়ি: ' . $organization->house : null),
+        $organization?->house_bn ? 'বাড়ি: ' . $organization->house_bn : ($organization?->house ? 'বাড়ি: ' . $organization->house : null),
         $organization?->road ? 'রোড: ' . $organization->road : null,
         $organization?->villageArea?->bn_name ? 'এলাকা: ' . $organization->villageArea->bn_name : null,
         $organization?->village?->bn_name ? 'গ্রাম: ' . $organization->village->bn_name : null,
@@ -279,47 +313,34 @@
 
     $isApproved = (int) ($license->status ?? 0) === 1;
     $isPaid = ($license->payment_status ?? 'unpaid') === 'paid';
-    $canTakePayment = $isApproved && !$isPaid;
-    $fallbackHeaderUnion = \App\Models\Institute::with('union.thana.district')
-        ->whereNotNull('union_id')
-        ->first()?->union;
+    $canTakePayment = !$isPaid;
 
-    $headerUnion = $organization?->Union
-        ?? $organization?->institute?->union
-        ?? $ownerUser?->addressInfo?->presentUnion
-        ?? $ownerUser?->addressInfo?->permanentUnion
-        ?? $ownerUser?->institute?->union
-        ?? auth()->user()?->institute?->union
-        ?? $fallbackHeaderUnion;
+    $institute = $organization->institute;
+    $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+    $thanaBn = '';
+    $districtBn = '';
 
-    $headerThana = $organization?->Thana
-        ?? $headerUnion?->thana
-        ?? $organization?->officeThana
-        ?? $ownerUser?->addressInfo?->presentThana
-        ?? $ownerUser?->addressInfo?->permanentThana
-        ?? auth()->user()?->institute?->union?->thana
-        ?? $fallbackHeaderUnion?->thana;
-
-    $headerDistrict = $organization?->District
-        ?? $headerThana?->district
-        ?? $organization?->officeDistrict
-        ?? $ownerUser?->addressInfo?->presentDistrict
-        ?? $ownerUser?->addressInfo?->permanentDistrict
-        ?? auth()->user()?->institute?->union?->thana?->district
-        ?? $fallbackHeaderUnion?->thana?->district;
+    if ($institute->union && $institute->union->thana) {
+        $thanaBn = $institute->union->thana->bn_name ?? '';
+        $districtBn = $institute->union->thana->district->bn_name ?? '';
+    } elseif ($institute->pourashava) {
+        $districtBn = $institute->pourashava->District->bn_name ?? '';
+    } elseif ($institute->cityCorporation) {
+        $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+    }
 @endphp
 
 <div class="trade-license-page mt-4 mb-4">
     <div class="inner-border">
         <div class="header-logos">
             <img src="{{ asset('images/dhaka.png') }}" alt="Left Logo">
-            <div class="union-header">
-                <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
-                <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>
-                <div class="union-title-en">{{ $headerUnion?->name ?? '' }}</div>
-                <p class="union-address">
-                    থানাঃ {{ $headerThana?->bn_name ?? $headerThana?->name ?? '' }},
-                    জেলাঃ {{ $headerDistrict?->bn_name ?? $headerDistrict?->name ?? '' }},
+            <div class="union-header" style="text-align: center; line-height: 1.1;">
+                <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+                <div class="union-title-bn" style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '' }}</div>
+                <div class="union-title-en" style="color:#2e3192; font-size: 20px; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? '' }}</div>
+                <p class="union-address" style="font-size: 13px; color: #000;">
+                    @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
+                    জেলাঃ {{ $districtBn }},
                     বাংলাদেশ।
                 </p>
             </div>
@@ -336,7 +357,7 @@
             <div class="tax-year">
                 <br>
                 অর্থ বছর: {{ bnValue($taxYearName) }}<br>
-                <span style="font-size: 11px;">( স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই ফিস নির্ধারণ করা হলো )</span>
+                <span style="font-size: 11px;">( স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ অনুযায়ী সরকার প্রণীত বিধি অনুযায়ী এই ফি নির্ধারণ করা হলো )</span>
             </div>
         </div>
 
@@ -353,7 +374,7 @@
             <div class="info-group">
                 <div class="info-header">মালিকের তথ্য:</div>
                 <div class="info-body">
-                    আইডি নং- {{ bnValue($ownerId) }},
+                    আইডি নম্বর- {{ bnValue($ownerId) }},
                     নাম- {{ $ownerName }}
                 </div>
             </div>
@@ -372,8 +393,7 @@
             <thead>
                 <tr>
                     <th>ক্রমিক নং</th>
-                    <th>ফি এর বিষয়</th>
-                    <th>বকেয়া</th>
+                    <th>ফি এর বিষয়</th>
                     <th>টাকা</th>
                 </tr>
             </thead>
@@ -383,21 +403,20 @@
                         <tr>
                             <td>{{ bnValue($loop->iteration) }}</td>
                             <td>{{ $feeHead }}</td>
-                            <td></td>
                             <td>{{ currencyFormat((float) $amount) }}</td>
                         </tr>
                     @endforeach
                     <tr class="fees-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">মোট:</td>
+                        <td colspan="2" style="text-align: right; padding-right: 20px;">মোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
                     </tr>
                     <tr class="fees-grand-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
+                        <td colspan="2" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
                     </tr>
                 @else
                     <tr>
-                        <td colspan="4" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
+                        <td colspan="3" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
                     </tr>
                 @endif
             </tbody>
@@ -491,6 +510,10 @@
         $('#showManualPaymentBtn').on('click', function () {
             $('#manualPaymentBox').slideToggle();
         });
+
+        if (new URLSearchParams(window.location.search).get('payment') === '1') {
+            $('#manualPaymentBox').show();
+        }
     });
 </script>
 @endpush

@@ -41,7 +41,17 @@ class CounsilorController extends Controller
      */
     public function index()
     {
-      $data['chairmanMayors']=ChairmanMayor::paginate(100);
+      $user = Auth::user();
+      if(isset($user->institute->union_id) && $user->institute->union_id) {
+          $unionId = $user->institute->union_id;
+          $userIds = User::whereHas('institute', function($q) use ($unionId){
+              $q->where('union_id', $unionId);
+          })->pluck('id')->toArray();
+
+          $data['chairmanMayors']=ChairmanMayor::whereIn('user_id', $userIds)->paginate(100);
+      } else {
+          $data['chairmanMayors']=ChairmanMayor::paginate(100);
+      }
       return view('backend.pages.chairman.index', $data);
   }
 
@@ -112,7 +122,7 @@ class CounsilorController extends Controller
                     $image_full_name = $image_name . "." . $ext;
                     $upload_path = 'uploads/users/';
                     $image_url = $upload_path . $image_full_name;
-                    $success = $image->move($upload_path, $image_full_name);
+                    $success = $image->move(base_path($upload_path), $image_full_name);
                     if ($success) {
                         $user->image = $image_url;
                     }
@@ -159,9 +169,24 @@ class CounsilorController extends Controller
 
     public function family($id)
     {
+        // enforce union multitenancy
+        $authUser = Auth::user();
+        $targetUser = User::find($id);
+        if ($authUser->institute->union_id ?? null) {
+            if (!$targetUser || ($targetUser->institute->union_id ?? null) !== $authUser->institute->union_id) {
+                abort(403, 'Unauthorized: User does not belong to your union');
+            }
+        }
+        
         $data['user'] = User::with('familyInfo')->find($id);
-        $data['familyTypes'] = FamilyType::where('status', true)->get();
-        $data['familyCategories'] = FamilyCategory::where('status', true)->get();
+        $data['familyTypes'] = FamilyType::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
+        $data['familyCategories'] = FamilyCategory::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
         
         return view('backend.pages.chairman.tabs.family', $data);
     }
@@ -169,7 +194,8 @@ class CounsilorController extends Controller
     public function familyStore(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'family_type_id' => 'required',
+            'family_type_id' => 'nullable',
+            'family_category_id' => 'nullable',
             'father_name' => 'nullable|max:190',
             'father_live_status' => 'nullable|max:190',
             'father_nid' => 'nullable|max:190',
@@ -197,8 +223,8 @@ class CounsilorController extends Controller
         $peopleFamily = FamilyInfo::updateOrCreate([
             'user_id' => $request->user_id
         ], [
-            'family_type_id' => $request->family_type_id,
-            'family_category_id' => $request->family_category_id,
+            'family_type_id' => $request->filled('family_type_id') ? $request->family_type_id : null,
+            'family_category_id' => $request->filled('family_category_id') ? $request->family_category_id : null,
             'father_name' => $request->father_name,
 
             'father_name_bn' => $request->father_name_bn,
@@ -241,11 +267,20 @@ class CounsilorController extends Controller
 
     public function address($id)
     {
+        // enforce union multitenancy
+        $authUser = Auth::user();
         $user = User::with( 'institute')
         ->with(array('addressInfo' => function($address){
             $address->with('presentUnion', 'permanentHouse', 'presentHouse', 'presentRoad', 'permanentRoad',  'presentVillage', 'presentDistrict', 'presentThana');
         }))
         ->find($id);
+        
+        if ($authUser->institute->union_id ?? null) {
+            if (!$user || ($user->institute->union_id ?? null) !== $authUser->institute->union_id) {
+                abort(403, 'Unauthorized: User does not belong to your union');
+            }
+        }
+        
         $data['roads']=[];
         $data['user'] = $user;
         $data['religions'] = Religion::where('status', true)->get();
@@ -256,7 +291,10 @@ class CounsilorController extends Controller
         $data['permanent_houses'] = [];
         if(isset($user->institute->institute_type_id) && $user->institute->institute_type_id == 1) {
             $data['villages'] = Village::where('union_id', $user->institute->union_id)->get();
-            $data['wards'] = UnionWard::where('status', true)->get();
+            $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+                ->where('status', true)
+                ->orderBy('en_ward_no')
+                ->get();
             $data['roads'] = Road::where('institute_id',  $user->institute->id)->latest()->get();
         } else if (isset($user->institute->institute_type_id) && $user->institute->institute_type_id == 2) {
 
@@ -372,6 +410,15 @@ class CounsilorController extends Controller
     }
     public function education($id)
     {
+        // enforce union multitenancy
+        $authUser = Auth::user();
+        $targetUser = User::find($id);
+        if ($authUser->institute->union_id ?? null) {
+            if (!$targetUser || ($targetUser->institute->union_id ?? null) !== $authUser->institute->union_id) {
+                abort(403, 'Unauthorized: User does not belong to your union');
+            }
+        }
+        
         $data['user'] = User::with('educationInfos')->find($id);
         $data['religions'] = Religion::where('status', true)->get();
         return view('backend.pages.chairman.tabs.educational', $data);
@@ -634,10 +681,18 @@ class CounsilorController extends Controller
      */
     public function propertyStore(Request $request)
     {
+        $inputs = $request->all();
+        foreach (['cash_amount', 'house_price', 'flat_price', 'diamond_price', 'gold_price', 'silver_price'] as $field) {
+            if ($request->has($field) && is_string($request->$field)) {
+                $inputs[$field] = str_replace(',', '', $request->$field);
+            }
+        }
+        $request->merge($inputs);
+
         // try {
         $validate = Validator::make($request->all(), [
             'user_id' => 'nullable',
-            'cash_amount' => 'integer|nullable',
+            'cash_amount' => 'numeric|nullable',
             'tin_number' => 'nullable',
             'house' => 'nullable',
             'house_type' => 'nullable',
@@ -1061,3 +1116,4 @@ class CounsilorController extends Controller
         return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'])->header('Content-Type', 'application/json');
     }
 }
+

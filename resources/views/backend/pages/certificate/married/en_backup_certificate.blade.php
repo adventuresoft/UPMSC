@@ -87,7 +87,7 @@
                                     <tr>
                                         <td colspan="3" class="text-center">
                                             <img height="90" width="90" class="mx-auto d-block"
-                                                src="{{ asset($certificate->user->institute->top_image) }}"
+                                                src="{{ imageUrl($certificate->user->institute->top_image) }}"
                                                 alt="top_image">
                                         </td>
                                     </tr>
@@ -95,14 +95,14 @@
                                         <td class="text-right mr-2">
 
                                             <img height="90" width="90" class="mx-auto d-block"
-                                                src="{{ asset($certificate->user->institute->left_image) }}"
+                                                src="{{ imageUrl($certificate->user->institute->left_image) }}"
                                                 alt="left_image">
                                             <h4 class="text-success mt-4 text-green">No. : {{ $certificate->system_id ?? '' }}</h4>
                                         </td>
                                         <td class="text-center">
                                             <h2 >
                                                 <strong class="text-danger bold">
-                                                    {{ $certificate->user->institute->union->name ?? '' }} Union Parishad
+                                                    {{ $certificate->user->institute->union->name ?? '' }}
                                                 </strong> 
                                                 <br>
                                                 <span style="font-size: 14px">
@@ -118,7 +118,7 @@
                                         </td>
                                         <td class="text-left ml-2">
                                             <img height="90" width="90" class="mx-auto d-block"
-                                                src="{{ asset($certificate->user->institute->right_image) }}"
+                                                src="{{ imageUrl($certificate->user->institute->right_image) }}"
                                                 alt="right_image">
 
                                             <h4 class="text-success mt-4">Date :

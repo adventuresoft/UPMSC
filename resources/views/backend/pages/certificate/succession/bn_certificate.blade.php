@@ -2,10 +2,16 @@
 
 @push('style')
 <style>
+    .container {
+        max-width: 100% !important;
+    }
+
 /* =========================
    A4 CANVAS
 ========================= */
 .certificate-card {
+    max-width: 100%;
+    margin: 0 auto;
     background-image: url('{{ asset('images/sucsesion.png') }}');
     background-size: cover;
     background-repeat: no-repeat;
@@ -97,51 +103,54 @@
 /* =========================
    PRINT CONFIG
 ========================= */
-@media print {
+    @media print {
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            box-sizing: border-box !important;
+        }
 
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        box-sizing: border-box !important;
-    }
+        @page {
+            size: A4 portrait;
+            margin: 0 !important;
+        }
 
-    @page {
-        size: A4 portrait;
-        margin: 0;
-    }
+        html, body {
+            width: 267mm !important;
+            height: 374mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
+        }
 
-    html, body {
-        width: 267mm;
-        height: 374mm;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        background: #fff !important;
-    }
+        .container {
+            width: 267mm !important;
+            max-width: 267mm !important;
+            height: 374mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
 
-    .container {
-        width: 267mm !important;
-        height: 374mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+        
 
-    .certificate-card {
-        width: 267mm !important;
-        height: 374mm !important;
-        margin: 0 !important;
-        page-break-inside: avoid !important;
-    }
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header,
+        .content-wrapper,
+        .wrapper,
+        .app-footer {
+            display: none !important;
+        }
 
-    .main-footer{
-        display: none;
+        #printPageButton,
+        #cancelPageButton,
+        .btn {
+            display: none !important;
+        }
     }
-
-    #printPageButton,
-    #cancelPageButton {
-        display: none !important;
-    }
-}
 </style>
 @endpush
 
@@ -156,22 +165,37 @@
                 <!-- ================= Header ================= -->
                 <div class="row align-items-center">
                     <div class="col-2 text-center">
-                        <img height="90" width="90" src="{{ asset('images/dhaka.png') }}">
+                        <img height="90" width="90" src="{{ isset($certificate->user->institute->left_image) ? imageUrl($certificate->user->institute->left_image) : asset('images/dhaka.png') }}">
                     </div>
 
                     <div class="col-8 text-center">
                         <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -16px;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
+                        @php
+                            $institute = $certificate->user->institute;
+                            $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+                            $thanaBn = '';
+                            $districtBn = '';
+                            
+                            if ($institute->union && $institute->union->thana) {
+                                $thanaBn = $institute->union->thana->bn_name ?? '';
+                                $districtBn = $institute->union->thana->district->bn_name ?? '';
+                            } elseif ($institute->pourashava) {
+                                $districtBn = $institute->pourashava->District->bn_name ?? '';
+                            } elseif ($institute->cityCorporation) {
+                                $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+                            }
+                        @endphp
                         <h2 class="text-success font-weight-bold mb-0" style="font-size:28px;">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            {{ $auth->bn_name ?? '' }}
                         </h2>
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:32px;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
+                            {{ $auth->name ?? '' }}
                         </h3>
                         <p class="mb-0" style="font-size:15px;">
-                            থানাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
+                            @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
+                            জেলাঃ {{ $districtBn }},
                             বাংলাদেশ।
                         </p>
                     </div>
@@ -228,8 +252,8 @@
 @if(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code)
     {{ bnValue(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code) }},
 @endif
-                            উপজেলা- {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            জেলা- {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
+                            @if($thanaBn) উপজেলা- {{ $thanaBn }}, @endif
+                            জেলা- {{ $districtBn }}।
                             তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ছিলেন। গত 
                             <strong>
                                 @if($certificate->deathPerson)
@@ -309,8 +333,8 @@
                         <p class="mb-0">চেয়ারম্যান</p>
                         <p class="mb-0">৩ নং শুকতাইল ইউনিয়ন পরিষদ</p>
                         <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}
+                            @if($thanaBn) {{ $thanaBn }}, @endif
+                            {{ $districtBn }}
                         </p>
                     </div>
                 </div>

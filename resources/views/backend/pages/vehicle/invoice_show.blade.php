@@ -8,7 +8,8 @@
     }
 
     html,
-    body {
+    body,
+    .content-wrapper {
         margin: 0;
         padding: 0;
         font-family: 'Nikosh', 'Noto Sans Bengali', Arial, sans-serif;
@@ -16,7 +17,7 @@
         line-height: 1.4;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
-        background: #f4f6f9;
+        background: #ffffff !important;
     }
 
     /* Main license container */
@@ -222,15 +223,18 @@
         text-align: center;
     }
     
-    .fees-table-new td:nth-child(2) {
-        text-align: left;
-        width: 50%;
+    .fees-table-new td:nth-child(1) {
+        width: 15%;
     }
     
-    .fees-table-new td:nth-child(3),
-    .fees-table-new td:nth-child(4) {
+    .fees-table-new td:nth-child(2) {
+        text-align: left;
+        width: 55%;
+    }
+    
+    .fees-table-new td:nth-child(3) {
         text-align: right;
-        width: 20%;
+        width: 30%;
     }
 
     .fees-total {
@@ -251,10 +255,10 @@
         }
         .trade-license-page {
             box-shadow: none;
-            border: none;
+            border: 4px solid #556b2f !important;
         }
         .inner-border {
-            border: none;
+            border: 2px solid #556b2f !important;
         }
         .no-print,
         .card-footer,
@@ -266,18 +270,26 @@
             background-color: transparent !important;
             color: black !important;
         }
-        .fees-grand-total, .fees-total, .fees-table-new th {
-            background-color: #f0f0f0 !important;
+        .fees-table-new th {
+            background-color: #dcdcdc !important;
             color: black !important;
             -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .fees-total {
+            background-color: #f8f8f8 !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
         .fees-grand-total {
-            background-color: #e8e8e8 !important;
+            background-color: #dcdcdc !important;
+            color: black !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
         .fees-table-new th, .fees-table-new td {
             border: 1px solid #333 !important;
-        }
-            -webkit-print-color-adjust: exact;
         }
     }
 </style>
@@ -380,7 +392,6 @@
                 <tr>
                     <th>ক্রমিক নং</th>
                     <th>ফি এর বিষয়</th>
-                    <th>বকেয়া</th>
                     <th>টাকা</th>
                 </tr>
             </thead>
@@ -389,44 +400,39 @@
                     <tr>
                         <td>১</td>
                         <td>নিবন্ধন ফি (Registration)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->registration_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr>
                         <td>২</td>
                         <td>রাস্তা ফি (Road)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->road_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr>
                         <td>৩</td>
                         <td>ফিটনেস ফি (Fitness)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->fitness_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr>
                         <td>৪</td>
                         <td>ভ্যাট (VAT)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->vat_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr>
                         <td>৫</td>
                         <td>ট্যাক্স (Tax)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->tax_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr class="fees-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">মোট:</td>
+                        <td colspan="2" style="text-align: right; padding-right: 20px;">মোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($fee->total_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr class="fees-grand-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
+                        <td colspan="2" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($fee->total_fee) ?? '০.০০' }}</td>
                     </tr>
                 @else
                     <tr>
-                        <td colspan="4" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
+                        <td colspan="3" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
                     </tr>
                 @endif
             </tbody>
@@ -451,11 +457,79 @@
 </div>
 
 <div class="no-print text-center my-4">
-    <button class="btn btn-success px-5 py-2" onclick="window.print()">
+    @if($canTakePayment)
+        <button type="button" class="btn btn-primary px-5 py-2" id="showManualPaymentBtn">
+            <i class="fa fa-credit-card"></i> Make Payment / ম্যানুয়াল পেমেন্ট
+        </button>
+        <a href="{{ route('vehicle.online-payment', $vehicle->id) }}" class="btn btn-warning px-5 py-2 ms-2">
+            <i class="fa fa-globe"></i> Online Payment / অনলাইন পেমেন্ট
+        </a>
+    @elseif($isPaid)
+        <span class="badge badge-success p-3" style="font-size: 14px;">Payment Completed / পরিশোধিত</span>
+        <a href="{{ route('vehicle.license.show', $vehicle->id) }}" class="btn btn-info px-5 py-2 ms-2">
+            <i class="fa fa-certificate"></i> View License / লাইসেন্স দেখুন
+        </a>
+    @endif
+
+    <button class="btn btn-success px-5 py-2 ms-2" onclick="window.print()">
         <i class="fa fa-print"></i> Print / প্রিন্ট
     </button>
     <a href="{{ route('vehicle.invoice.list') }}" class="btn btn-secondary px-5 py-2 ms-3">
         <i class="fa fa-arrow-left"></i> Back to List
     </a>
 </div>
+
+@if($canTakePayment)
+<div class="manual-payment-box no-print" id="manualPaymentBox" style="display:none; max-width: 900px; margin: 25px auto 20px; background: #fff; border: 1px solid #dee2e6; padding: 20px; border-radius: 6px;">
+    <h4 class="mb-3 text-left">Manual Payment Information / ম্যানুয়াল পেমেন্ট তথ্য</h4>
+
+    <form action="{{ route('vehicle.manual-payment.store', $vehicle->id) }}" method="POST">
+        @csrf
+
+        <div class="form-group row text-left">
+            <label class="col-md-3 col-form-label">Payment Details <span class="text-danger">*</span></label>
+            <div class="col-md-9">
+                <input type="text" name="payment_details" class="form-control" value="{{ old('payment_details') }}" placeholder="Enter payment details (e.g. Bank / Bkash / Cash)" required>
+                @error('payment_details')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
+
+        <div class="form-group row text-left">
+            <label class="col-md-3 col-form-label">Transaction ID <span class="text-danger">*</span></label>
+            <div class="col-md-9">
+                <input type="text" name="transaction_id" class="form-control" value="{{ old('transaction_id') }}" placeholder="Enter transaction id" required>
+                @error('transaction_id')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
+
+        <div class="form-group row text-left">
+            <label class="col-md-3 col-form-label">Note</label>
+            <div class="col-md-9">
+                <textarea name="note" class="form-control" rows="3" placeholder="Enter note">{{ old('note') }}</textarea>
+                @error('note')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
+
+        <div class="text-right">
+            <button type="submit" class="btn btn-info px-4 py-2">Save Manual Payment / পেমেন্ট সংরক্ষণ করুন</button>
+        </div>
+    </form>
+</div>
+@endif
 @endsection
+
+@push('script')
+<script>
+    $(document).ready(function () {
+        $('#showManualPaymentBtn').on('click', function () {
+            $('#manualPaymentBox').slideToggle();
+        });
+    });
+</script>
+@endpush

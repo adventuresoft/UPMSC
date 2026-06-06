@@ -12,6 +12,7 @@ use App\Models\Mouza;
 use App\Models\Union;
 use App\Models\UnionWard;
 use App\Models\VillageArea;
+use App\Support\AreaTenancy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +28,7 @@ class HouseController extends Controller
     public function getHouseByArea($areaID)
     {
         $html = '<option value="">Select House</option>';
-        $houses = House::where('village_area_id', $areaID)->get();
+        $houses = House::applyMultitenancy()->where('village_area_id', $areaID)->get();
         if(count($houses)){
             foreach ($houses as $house) {
                 $html .= '<option value="'.$house->id.'">'.$house->house.'</option>';
@@ -39,16 +40,73 @@ class HouseController extends Controller
         return $html;
     }
 
+    public function getBlocksByVillageWard($villageID, $wardID)
+    {
+        $html = '<option value="">Select block/section/sector</option>';
+        $blocks = House::where('village_id', $villageID)
+                       ->applyMultitenancy()
+                       ->where('union_ward_id', $wardID)
+                       ->whereNotNull('block_section')
+                       ->where('block_section', '!=', '')
+                       ->select('block_section')
+                       ->distinct()
+                       ->get();
+                       
+        if(count($blocks)){
+            foreach ($blocks as $block) {
+                $html .= '<option value="'.urlencode($block->block_section).'">'.$block->block_section.'</option>';
+            }
+        }
+        return $html;
+    }
+
+    public function getHousesByBlock($villageID, $wardID, $block)
+    {
+        $block = urldecode($block);
+        $html = '<option value="">Select House</option>';
+        $houses = House::where('village_id', $villageID)
+                       ->applyMultitenancy()
+                       ->where('union_ward_id', $wardID)
+                       ->where('block_section', $block)
+                       ->get();
+                       
+        if(count($houses)){
+            foreach ($houses as $house) {
+                $html .= '<option value="'.$house->id.'">'.$house->house.'</option>';
+            }
+        } else {
+            $html .= '<option value="">No House Found</option>';
+        }
+        return $html;
+    }
+
+    public function getOwnerByHouse($houseID)
+    {
+        $house = House::applyMultitenancy()->with(['ownership' => function($q) {
+            $q->whereNotNull('owner_id')->orderBy('id', 'asc');
+        }])->find($houseID);
+
+        if ($house && $house->ownership->count() > 0) {
+            return response()->json([
+                'status' => true,
+                'owner_id' => $house->ownership->first()->owner_id
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'No owner found with a system ID'
+        ]);
+    }
+
     public function options( Request $request, $id)
     {
         $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' House</option>';
 
-        if($request->village){
-            $houses = House::where('union_ward_id', $id)->where('village_id', $request->village)->get();
-
+        if ($request->village) {
+            $houses = House::applyMultitenancy()->where('union_ward_id', $id)->where('village_id', $request->village)->get();
         } else {
-            $houses = House::where('union_ward_id', $id)->where('institute_id', Auth::user()->institute_id ?? 1)->get();
-
+            $houses = House::applyMultitenancy()->where('union_ward_id', $id)->get();
         }
 
 
@@ -69,7 +127,7 @@ class HouseController extends Controller
      */
     public function index()
     {
-        $data['houses'] = House::with('ownership')->where('institute_id', Auth::user()->institute_id)->get();
+        $data['houses'] = House::with('ownership')->applyMultitenancy()->latest()->get();
         return view('backend.pages.house.index', $data);
     }
 
@@ -89,8 +147,8 @@ class HouseController extends Controller
             }
 
         }else {
-            $data['villages'] = [];
-            $data['mouzas'] = [];
+            $data['villages'] = Village::latest()->get();
+            $data['mouzas'] = Mouza::get();
         }
         $data['villageAreas'] = [];
         $data['union_wards'] = UnionWard::where('status', true)->orderBy('en_ward_no', 'asc')->get();
@@ -134,6 +192,13 @@ class HouseController extends Controller
         }
 
         try {
+            if (!AreaTenancy::villageAllowed($request->village_id)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized village selection for your assigned union.',
+                ], 403);
+            }
+
             $roomDetails = [];
             if ($request->has('room_area') && is_array($request->room_area)) {
                 foreach ($request->room_area as $key => $area) {
@@ -169,13 +234,22 @@ class HouseController extends Controller
                 'grand_total_price' => $request->grand_total_price ?: 0,
             ];
 
+            $instituteId = AreaTenancy::instituteIdForVillage($request->village_id);
+            if ($instituteId) {
+                $payload['institute_id'] = $instituteId;
+            }
+
             if ($request->id) {
-                $house = House::where('id', $request->id)->first();
+                $house = House::applyMultitenancy()->where('id', $request->id)->first();
                 if ($house) {
                     $house->update($payload);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'House not found or unauthorized.',
+                    ], 404);
                 }
             } else {
-                $payload['institute_id'] = Auth::user()->institute_id;
                 $house = House::create($payload);
             }
 
@@ -203,7 +277,7 @@ class HouseController extends Controller
      */
     public function show($id)
     {
-        $data['house'] = House::with(['village', 'unionWard', 'ownership'])->find($id);
+        $data['house'] = House::applyMultitenancy()->with(['village', 'unionWard', 'ownership'])->findOrFail($id);
         if (!$data['house']) {
             return redirect()->back()->with('error', 'House not found.');
         }
@@ -226,14 +300,14 @@ class HouseController extends Controller
                 $data['mouzas'] = Mouza::where('thana_id', $union->thana_id)->get();
             }
         }else {
-            $data['villages'] = [];
-            $data['mouzas'] = [];
+            $data['villages'] = Village::latest()->get();
+            $data['mouzas'] = Mouza::get();
         }
         
         $data['union_wards'] = UnionWard::where('status', true)->orderBy('en_ward_no', 'asc')->get();
         $data['house_types'] = HouseType::where('status', true)->latest()->get();
         $data['house_owner_types'] = HouseOwnerType::where('status', true)->latest()->get();
-        $data['house'] = $house = House::find($id);
+        $data['house'] = $house = House::applyMultitenancy()->findOrFail($id);
         if($data['house']){
             $data['house_categories'] = HouseCategory::where('id', $data['house']->house_category_id)->latest()->get();
             $data['villageAreas'] = VillageArea::where('village_id', $house->village_id)->get();
@@ -261,7 +335,7 @@ class HouseController extends Controller
      */
     public function destroy($id)
     {
-        $house = House::find($id);
+        $house = House::applyMultitenancy()->find($id);
         if($house){
 
             try {

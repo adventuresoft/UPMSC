@@ -83,7 +83,18 @@ class PeopleApplicationController extends Controller
             $certificates = $certificates->concat($records);
         }
 
-        $allApplications = $tradeLicenses->concat($certificates)->sortByDesc('created_at');
+        // Fetch Relief Card Applications
+        $reliefCards = \App\Models\ReliefCard::where('created_by', $user->id)
+            ->get()
+            ->map(function($item) {
+                $item->type = 'Relief Card';
+                $item->type_bn = 'রিলিফ কার্ড';
+                $item->name = 'রিলিফ কার্ড আবেদন (' . $item->relief_type . ')';
+                $item->application_id = $item->system_id;
+                return $item;
+            });
+
+        $allApplications = $tradeLicenses->concat($certificates)->concat($reliefCards)->sortByDesc('created_at');
 
         return view('people.applications.index', compact('allApplications'));
     }
@@ -160,9 +171,15 @@ class PeopleApplicationController extends Controller
         $data['districts'] = District::where('status', true)->orderBy('name', 'asc')->get();
         $data['religions'] = Religion::where('status', true)->orderBy('name', 'asc')->get();
         $data['permanent_villages'] = Village::latest()->get();
-        $data['wards'] = UnionWard::get();
+        $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
         $data['roads'] = Road::latest()->get();
-        $data['permanent_unions'] = Union::where('thana_id', 385)->get();
+        $data['permanent_unions'] = Union::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
         $data['permanent_post_offices'] = PostOffice::where('thana_id', 385)->get();
 
         return view('people.applications.certificate', $data);
@@ -180,7 +197,10 @@ class PeopleApplicationController extends Controller
         $data['types'] = OrganizationType::where('status', true)->latest()->get();
         $data['categories'] = OrganizationCategory::where('status', true)->latest()->get();
         $data['ownership_types'] = OrganizationOwnershipType::where('status', true)->latest()->get();
-        $data['wards'] = UnionWard::where('status', true)->get();
+        $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
         $data['roads'] = Road::where('institute_id', $instituteId)->get();
         $data['divisions'] = Division::where('status', true)->get();
         $data['post_officeses'] = PostOffice::latest()->get();
@@ -212,5 +232,62 @@ class PeopleApplicationController extends Controller
         $data['villages'] = Village::where('union_id', $people->user->addressInfo->permanent_union_id ?? 0)->get();
         
         return view('people.applications.tax', $data);
+    }
+
+    /**
+     * Show relief card application form for citizen.
+     */
+    public function reliefCardCreate()
+    {
+        $people = Auth::guard('people')->user();
+        return view('people.applications.relief_card', compact('people'));
+    }
+
+    /**
+     * Store relief card application.
+     */
+    public function reliefCardStore(Request $request)
+    {
+        $validate = \Validator::make($request->all(), [
+            'relief_type' => 'required|string',
+            'monthly_income' => 'required|numeric|min:0',
+            'family_members' => 'required|integer|min:1',
+            'reason' => 'nullable|string',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation error',
+                'errors' => $validate->errors()
+            ], 400);
+        }
+
+        try {
+            $people = Auth::guard('people')->user();
+
+            $reliefCard = new \App\Models\ReliefCard();
+            $reliefCard->user_id = $people->user_id;
+            $reliefCard->relief_type = $request->relief_type;
+            $reliefCard->monthly_income = $request->monthly_income;
+            $reliefCard->family_members = $request->family_members;
+            $reliefCard->reason = $request->reason;
+            $reliefCard->status = 0; // Pending
+            $reliefCard->created_by = $people->id;
+            $reliefCard->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'আপনার রিলিফ কার্ড আবেদনটি সফলভাবে জমা দেওয়া হয়েছে। অনুগ্রহ করে অনুমোদনের জন্য অপেক্ষা করুন।',
+                'redirect_url' => route('people.dashboard')
+            ], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong!',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
 }

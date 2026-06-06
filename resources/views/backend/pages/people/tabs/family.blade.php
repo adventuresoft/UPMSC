@@ -41,8 +41,8 @@
                                 <!-- Row 1: Family Member Type & Family Category -->
                                 <div class="form-group row">
                                     <div class="col-sm-6">
-                                        <label for="family_type_id">Family Member Type <span class="text-danger">*</span></label>
-                                        <select name="family_type_id" required class="form-control" id="family_type_id">
+                                        <label for="family_type_id">Family Member Type</label>
+                                        <select name="family_type_id" class="form-control" id="family_type_id">
                                             <option value="">Select Member Type</option>
                                             @if (count($familyTypes))
                                                 @foreach ($familyTypes as $familyType)
@@ -53,8 +53,8 @@
                                         <small class="text-danger error family_type_id_error"></small>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label for="family_category_id">Family Category <span class="text-danger">*</span></label>
-                                        <select required name="family_category_id" class="form-control" id="family_category_id">
+                                        <label for="family_category_id">Family Category</label>
+                                        <select name="family_category_id" class="form-control" id="family_category_id">
                                             <option value="">Select Family Category</option>
                                             @if (count($familyCategories))
                                                 @foreach ($familyCategories as $familyCategory)

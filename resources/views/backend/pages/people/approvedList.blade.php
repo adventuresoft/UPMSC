@@ -266,6 +266,24 @@
 <section class="content">
     <div class="container-fluid">
 
+         @php
+            $currentInstitute = null;
+            if (!empty($users) && count($users) > 0) {
+                $firstUser = (is_object($users) && method_exists($users, 'first')) ? $users->first() : (is_array($users) ? $users[0] : null);
+                $currentInstitute = $firstUser?->institute ?? null;
+            }
+
+            if (!$currentInstitute) {
+                if (Auth::guard('web')->check()) {
+                    $currentInstitute = Auth::guard('web')->user()->institute;
+                } elseif (Auth::guard('people')->check()) {
+                    $currentInstitute = Auth::guard('people')->user()->institute;
+                }
+            }
+
+            $listLogo = $currentInstitute ? imageUrl($currentInstitute->left_image, 'assets/images/logo/govt-bd-logo.png') : asset('assets/images/logo/govt-bd-logo.png');
+        @endphp
+
         <div class="row">
             <div class="col-md-12">
 
@@ -278,7 +296,7 @@
                             </div>
 
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('people'))
                                 <a href="{{ route('people.create') }}" class="btn btn-sm btn-primary font-weight-bold px-3">
                                     <i class="fas fa-plus-circle mr-1"></i> CREATE
                                 </a>
@@ -295,14 +313,7 @@
                         <!-- FILTER BAR -->
                         <div class="filter-bar">
                             <div class="row align-items-center g-3">
-                                <div class="col-md-2">
-                                    <select id="tableLength" class="form-control form-control-sm">
-                                        <option value="10">10 entries</option>
-                                        <option value="25">25 entries</option>
-                                        <option value="50">50 entries</option>
-                                        <option value="100">100 entries</option>
-                                    </select>
-                                </div>
+                                
                                 <div class="col-md-2">
                                     <input type="text" id="search_name" class="form-control form-control-sm" placeholder="Search Name...">
                                 </div>
@@ -320,6 +331,10 @@
                                 <div class="col-md-2">
                                     <input type="text" id="search_global" class="form-control form-control-sm" placeholder="Global search...">
                                 </div>
+                                <div class="col-md-2">
+                                    <button type="button" id="resetFilter" class="btn btn-sm btn-outline-danger w-100" style="height: 38px; border-radius: 8px;">
+                                        <i class="fas fa-undo mr-1"></i> Reset
+                                    </button>
                             </div>
                         </div>
 
@@ -334,7 +349,7 @@
                                     <th>Mobile</th>
                                     <th>Gender & DOB</th>
                                     <th>Profession</th>
-                                    <th>Present Address</th>
+                                    <th>Address</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -342,21 +357,51 @@
                             <tbody>
                                 @if ($users && count($users) > 0)
                                     @foreach ($users as $key => $user)
-                                    <tr>
+                                    @php
+                                        $age = 0;
+                                        if (!empty($user->people?->date_of_birth)) {
+                                            $age = \Carbon\Carbon::parse($user->people->date_of_birth)->age;
+                                        }
+                                         $professions_list = [];
+                                         foreach ($user->professionalInfos ?? [] as $info) {
+                                             if ($info->subcategory?->category?->type?->profession?->en_name) {
+                                                 $professions_list[] = $info->subcategory->category->type->profession->en_name;
+                                             }
+                                             if ($info->subcategory?->category?->type?->en_name) {
+                                                 $professions_list[] = $info->subcategory->category->type->en_name;
+                                             }
+                                             if ($info->subcategory?->category?->en_name) {
+                                                 $professions_list[] = $info->subcategory->category->en_name;
+                                             }
+                                             if ($info->subcategory?->en_name) {
+                                                 $professions_list[] = $info->subcategory->en_name;
+                                             }
+                                             if ($info->designation) {
+                                                 $professions_list[] = $info->designation;
+                                             }
+                                             if ($info->organization) {
+                                                 $professions_list[] = $info->organization;
+                                             }
+                                         }
+                                         $professions_list = implode(',', array_unique($professions_list));
+                                        $isFinancial = $user->financialInfos && count($user->financialInfos) > 0 ? 'Yes' : 'No';
+                                        $isDisability = $user->disabilityInfo && $user->disabilityInfo->is_disability ? 'Yes' : 'No';
+                                        $isFreedomFighter = $user->freedomFighterInfo && $user->freedomFighterInfo->is_freedom_fighter ? 'Yes' : 'No';
+                                    @endphp
+                                    <tr data-profession="{{ strtolower($professions_list) }}" 
+                                        data-age="{{ $age }}" 
+                                        data-financial="{{ $isFinancial }}" 
+                                        data-disability="{{ $isDisability }}" 
+                                        data-freedom-fighter="{{ $isFreedomFighter }}">
                                         <td>{{ ++$key }}</td>
                                          <!--<td>
                                             {{ $user->system_id ?? '' }}
                                         </td>-->
 
                                         <td>
-                                            @php
-                                                $imagePath = $user->image && file_exists(public_path($user->image)) 
-                                                    ? asset($user->image) 
-                                                    : asset('default.png');
-                                            @endphp
-                                            <img src="{{ $imagePath }}"
-                                                width="40"
-                                                height="50"
+                                            <img src="{{ imageUrl($user->image ?? 'default.png') }}"
+                                                width="55"
+                                                height="65"
                                                 class="img-table"
                                                 onerror="this.src='{{ asset('default.png') }}'">
                                         </td>
@@ -364,7 +409,7 @@
                                         <td>
                                             <a href="{{ route('people.show', $user->id) }}" style="color: inherit; text-decoration: none;">
                                                 <span class="citizen-id">
-                                                    {{$user->people->approved_id}}
+                                                    {{$user->people?->approved_id}}
                                                 </span><br>
                                                 <strong>{{ $user->name ?? '' }}</strong>
                                             </a>
@@ -379,56 +424,112 @@
                                         <td>
                                             @php
                                                 $genderOptions = people_constant_option('gender');
-                                                $gender = isset($user->people->gender) ? ($genderOptions[$user->people->gender] ?? '') : '';
-                                                $dob = $user->people->date_of_birth ?? '';
+                                                $gender = isset($user->people?->gender) ? ($genderOptions[$user->people?->gender] ?? '') : '';
+                                                $dob = $user->people?->date_of_birth ?? '';
                                             @endphp
                                             {{ $gender }}<br>
                                             <small>{{ $dob ? date('d-m-Y', strtotime($dob)) : 'N/A' }}</small>
                                         </td>
 
                                         <td>
-                                            @foreach(optional($user->professionalInfos) as $info)
-                                                <span class="badge-profession">{{ $info->designation }}</span>
-                                            @endforeach
-                                        </td>
+                                             @foreach($user->professionalInfos ?? [] as $info)
+                                                 @php
+                                                     $profName = $info->subcategory?->category?->type?->profession?->en_name;
+                                                     $typeName = $info->subcategory?->category?->type?->en_name;
+                                                     $categoryName = $info->subcategory?->category?->en_name;
+                                                     $subcategoryName = $info->subcategory?->en_name;
+                                                     $desigName = $info->designation;
+                                                     $orgName = $info->organization;
+                                                 @endphp
+                                                 <div class="profession-item">
+                                                     @if($profName)
+                                                         <span class="badge badge-info text-white" style="font-size: 12px; padding: 4px 8px; font-weight: 600; border-radius: 4px; display: inline-block;">
+                                                             {{ $profName }}
+                                                         </span>
+                                                     @endif
+                                                     
+                                                     @if($desigName || $orgName)
+                                                         <div style="margin-top: 4px; font-size: 12px; font-weight: 600; color: #2c3e50;">
+                                                             {{ $desigName ?? '' }}
+                                                             @if($desigName && $orgName) <span style="font-weight: 400; color: #7f8c8d;">at</span> @endif
+                                                             <span style="color: #2980b9;">{{ $orgName ?? '' }}</span>
+                                                         </div>
+                                                     @endif
+
+                                                     @php
+                                                         $hierarchy = collect([$typeName, $categoryName, $subcategoryName])->filter()->unique()->implode(' ➔ ');
+                                                     @endphp
+                                                     @if($hierarchy)
+                                                         <div style="margin-top: 3px; font-size: 11px; color: #7f8c8d; font-style: italic; line-height: 1.2;">
+                                                             {{ $hierarchy }}
+                                                         </div>
+                                                     @endif
+                                                 </div>
+                                                 @if(!$loop->last)
+                                                     <hr style="margin: 6px 0; border: 0; border-top: 1px dashed #dee2e6;">
+                                                 @endif
+                                             @endforeach
+                                         </td>
 
                                         <td>
-                                            <!--
-                                            @php
-                                                $instituteFind = user_institute_information($user->institute_id);
-                                            @endphp
-                                            {{ $instituteFind['institute']->name ?? '' }} {{ $instituteFind['institute_type'] ?? '' }} -->
-                                           {{ collect([
-    $user->addressInfo->presentDistrict->name ?? '',
-    $user->addressInfo->presentThana->name ?? '',
-    $user->addressInfo->presentPostoffice->name ?? '',
+                                            <strong>Present:</strong> {{ collect([
+    $user->addressInfo?->presentDistrict?->name ?? '',
+    $user->addressInfo?->presentThana?->name ?? '',
+    $user->addressInfo?->presentUnion?->name ?? '',
+    $user->addressInfo?->presentPostoffice?->name ?? ''
 ])->filter()->implode(', ') }} 
+<br/>
+{{ collect([
+    $user->addressInfo?->presentVillage?->en_name ?? '',
+    $user->addressInfo?->presentWard?->en_ward_no ?? '',
+    $user->addressInfo?->present_area ?? '',
+    $user->addressInfo?->presentRoad?->name ?? $user->addressInfo?->present_road ?? '',
+    $user->addressInfo?->presentHouse?->house ?? $user->addressInfo?->present_house ?? ''
+])->filter()->implode(', ') }}
 
 <br/>
+<br/>
 
+                                           <strong>Permanent:</strong> {{ collect([
+    $user->addressInfo?->permanentDistrict?->name ?? '',
+    $user->addressInfo?->permanentThana?->name ?? '',
+    $user->addressInfo?->permanentUnion?->name ?? '',
+    $user->addressInfo?->permanentPostOffice?->name ?? ''
+])->filter()->implode(', ') }} 
+<br/>
 {{ collect([
-    $user->addressInfo->presentVillage->en_name ?? '',
-    $user->addressInfo->presentWard->en_ward_no ?? '',
-    $user->addressInfo->present_area ?? '',
-    $user->addressInfo->presentRoad->name ?? '',
-    $user->addressInfo->presentHouse->house ?? ''
+    $user->addressInfo?->permanentVillage?->en_name ?? '',
+    $user->addressInfo?->permanentWard?->en_ward_no ?? '',
+    $user->addressInfo?->permanent_area ?? '',
+    $user->addressInfo?->permanentRoad?->name ?? $user->addressInfo?->permanent_road ?? '',
+    $user->addressInfo?->permanentHouse?->house ?? $user->addressInfo?->permanent_house ?? ''
 ])->filter()->implode(', ') }}
                                         </td>
 
                                         <td>
                                                 <div class="table-action">
-                                                    @if (view_permission())
-                                                        @if(Auth::user()->role_id == 1)
-                                                        <a href="{{ route('people.edit', $user->id) }}" 
-                                                            class="btn-action btn-edit" title="Edit">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                        @endif
-                                                        
-                                                        <a href="{{ route('people.show', $user->id) }}" 
-                                                            class="btn-action btn-view" title="View">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
+                                                    @if (edit_permission('people'))
+                                                    <a href="{{ route('people.edit', $user->id) }}" 
+                                                        class="btn-action btn-edit" title="Edit">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    @endif
+                                                    
+                                                    @if (view_permission('people'))
+                                                    <a href="{{ route('people.show', $user->id) }}" 
+                                                        class="btn-action btn-view" title="View">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                    @endif
+
+                                                    @if (delete_permission('people'))
+                                                    <form action="{{ route('people.destroy', $user->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn-action btn-danger btn-delete-confirm" title="Delete" style="background-color: #fee2e2 !important; color: #dc2626 !important; border-color: #fca5a5 !important; border-radius: 8px; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                     @endif
                                                 </div>
                                         </td>

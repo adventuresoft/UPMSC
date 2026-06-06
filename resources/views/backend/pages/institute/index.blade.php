@@ -35,7 +35,9 @@
                                     <h3 class="card-title">Institute List</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
+                                    @can('institute.create')
                                     <a href="{{route('institute.create')}}" class="btn btn-primary">Create</a>
+                                    @endcan
                                 </div>
                             </div>
                         </div>
@@ -62,11 +64,13 @@
                                           <td>{{++$key}}</td>
                                           <td>
                                             @if ($institute->institute_type_id == 1)
-                                              {{$institute->union?->name}}
+                                              {{$institute->union?->name ?? 'N/A'}}
                                             @elseif($institute->institute_type_id == 2)
-                                              {{$institute->pourashava?->name}}
+                                              {{$institute->pourashava?->name ?? 'N/A'}}
                                             @elseif($institute->institute_type_id == 3)
-                                              {{$institute->cityCorporation?->name}}
+                                              {{$institute->cityCorporation?->name ?? 'N/A'}}
+                                            @else
+                                              N/A
                                             @endif
                                           </td>
                                           <td>{{$institute->type?->name}}</td>
@@ -74,11 +78,12 @@
                                           <td>{{date("d M, Y", strtotime($institute->activation_time))}}</td>
                                           <td style="width: 10%">
                                             <div class="table-action">
-                                            @if(edit_permission('institutes'))
+                                            @can('institute.update')
                                                 <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('institute.edit', $institute->id)}}"><i class="fa fa-edit"></i></a>
-                                            @endif
+                                            @endcan
                                                 <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('institute.show', $institute->id)}}"><i class="fa fa-eye"></i></a>
 
+                                            @can('institute.delete')
                                                 <form class="deleteInstitute" method="post">
                                                     @csrf
                                                     @method('DELETE')
@@ -86,6 +91,7 @@
                                                     <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('institute.destroy', $institute->id)}}">
                                                     <button type="submit" title="Delete" data-toggle="tooltip" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                                                 </form>
+                                            @endcan
                                             </div>
                                           </td>
                                       </tr>

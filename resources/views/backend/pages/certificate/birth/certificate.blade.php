@@ -1,9 +1,15 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Birth'])
+@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' => 'Birth'])
 
 @push('style')
 <style>
-    /* ===== Certificate Canvas ===== */
+        .container {
+        max-width: 100% !important;
+    }
+
+/* ===== Certificate Canvas ===== */
     .certificate-card {
+    max-width: 100%;
+    margin: 0 auto;
         background-image: url('{{ asset('images/bg-images.jpeg') }}');
         background-size: cover;
         background-repeat: no-repeat;
@@ -63,39 +69,51 @@
     }
 
     /* Print Control */
-    @media print {
+        @media print {
         * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            box-sizing: border-box !important;
         }
 
         @page {
             size: A4 landscape;
-            margin: 0;
+            margin: 0 !important;
         }
 
         html, body {
-            width: 297mm;
-            height: 210mm;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: #fff !important;
+            width: 297mm !important;
+            height: 210mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
         }
 
-        .container{
-            width: 297mm;
-            height: 210mm;
-            padding: 0;
-            margin: 0;
+        .container {
+            width: 297mm !important;
+            max-width: 297mm !important;
+            height: 210mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
         }
+
         
-        .main-footer{
-        display: none;
-    }
+
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header,
+        .content-wrapper,
+        .wrapper,
+        .app-footer {
+            display: none !important;
+        }
 
         #printPageButton,
-        #cancelPageButton{
+        #cancelPageButton,
+        .btn {
             display: none !important;
         }
     }
@@ -113,7 +131,7 @@
                 <!-- ================= Header ================= -->
                 <div class="row align-items-center">
                     <div class="col-2 text-center">
-                        <img height="90" width="90" src="{{ asset('images/dhaka.png') }}">
+                        <img height="90" width="90" src="{{ isset($certificate->user->institute->left_image) ? imageUrl($certificate->user->institute->left_image) : asset('images/dhaka.png') }}">
                     </div>
 
                     <div class="col-8 text-center">
@@ -121,14 +139,14 @@
                           Government of the People's Republic of Bangladesh
                         </h2>
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:30px;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
+                            {{ $certificate->user?->institute?->union?->name ?? '' }}
                         </h3>
                         <h2 class="text-success font-Nikosh-bold mb-0" style="font-size:28px;">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            {{ $certificate->user?->institute?->union?->bn_name ?? '' }}
                         </h2>
                         <p class="mb-0" style="font-size:15px;">
-                            Thana: {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            District: {{ $certificate->user->institute->union->thana->district->name ?? '' }},
+                            Thana: {{ $certificate->user?->institute?->union?->thana?->name ?? '' }},
+                            District: {{ $certificate->user?->institute?->union?->thana?->district?->name ?? '' }},
                             Bangladesh
                         </p>
                     </div>
@@ -162,14 +180,14 @@
                         <p>
                             <span style="margin-left:40px;"></span>
                             This is to certify that ,
-                            {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Mrs.' }}
-                            <strong>{{ $certificate->user->name ?? '' }}</strong>,
-                            ID No. <strong>{{ $certificate->user->people->approved_id }}</strong>,
-                            Father: {{ $certificate->user->familyInfo->father_name ?? '' }},
-                            Mother: {{ $certificate->user->familyInfo->mother_name ?? '' }},
+                            {{ $certificate->user?->people?->gender == 1 ? 'Mr.' : 'Mrs.' }}
+                            <strong>{{ $certificate->user?->name ?? '' }}</strong>,
+                            ID No. <strong>{{ $certificate->user?->people?->approved_id }}</strong>,
+                            Father: {{ $certificate->user?->familyInfo?->father_name ?? '' }},
+                            Mother: {{ $certificate->user?->familyInfo?->mother_name ?? '' }},
                             @php 
-                                $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
-                                $bc = $certificate->user->birth_certificate ?? $certificate->user->people->birth_certificate ?? '';
+                                $nid = $certificate->user?->nid ?? $certificate->user?->people?->nid ?? '';
+                                $bc  = $certificate->user?->birth_certificate ?? $certificate->user?->people?->birth_certificate ?? '';
                             @endphp
                             @if($nid && $nid != '1111111114')
                                 NID No. <strong>{{ $nid }}</strong>,
@@ -177,15 +195,15 @@
                                 Birth Certificate No. <strong>{{ $bc }}</strong>,
                             @endif
                             Address:  
-                            Village: - {{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }},
-                            Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},
+                            Village: - {{ $certificate->user?->addressInfo?->permanentVillage?->en_name ?? '' }},
+                            Word:- {{ $certificate->user?->addressInfo?->permanentWard?->en_ward_no ?? '' }},
                             Post Office - 
-{{ optional($certificate->user->addressInfo->permanentPostOffice)->name ?? '' }} -
-@if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
-{{ $certificate->user->addressInfo->permanentPostOffice->postal_code }},
+{{ optional($certificate->user?->addressInfo?->permanentPostOffice)->name ?? '' }} -
+@if(optional($certificate->user?->addressInfo?->permanentPostOffice)->postal_code)
+{{ $certificate->user?->addressInfo?->permanentPostOffice?->postal_code }},
 @endif
-                            Upzila - {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            District: - {{ $certificate->user->institute->union->thana->district->name ?? '' }} .
+                            Upzila - {{ $certificate->user?->institute?->union?->thana?->name ?? '' }},
+                            District: - {{ $certificate->user?->institute?->union?->thana?->district?->name ?? '' }} .
                            He is a Bangladeshi citizen by birth and a permanent resident of this union.
 To my knowledge, he is not involved in any law and order or anti-state activities.
                         </p>
@@ -197,22 +215,7 @@ To my knowledge, he is not involved in any law and order or anti-state activitie
                 </div>
 
                 <!-- ================= Signature ================= -->
-                <div class="certificate-signature">
-                    <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
-
-                    <div class="chairman">
-                        <div style="height:40px;"></div>
-                        <p class="mb-1">(Mohammad Rana)</p>
-                        <p class="mb-0">Chairman</p>
-                        <p class="mb-0"> {{ $certificate->user->institute->union->name ?? '' }} </p>
-                        <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->name ?? '' }}
-                        </p>
-                    </div>
-                </div>
+                @include('backend.partials.chairman_signature', ['certificate' => $certificate])
 
                 <!-- ================= Footer ================= -->
                 <div class="certificate-footer">
@@ -226,7 +229,7 @@ To my knowledge, he is not involved in any law and order or anti-state activitie
     <!-- ================= Buttons ================= -->
     <div class="text-center mt-2 mb-4">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
-                onclick="window.location.href='{{ route('citizen.index') }}'">
+                onclick="window.location.href='{{ route('certificate/birth.index') }}'">
             Cancel
         </button>
 

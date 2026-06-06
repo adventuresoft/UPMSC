@@ -127,7 +127,7 @@
                             <!-- NID Number Filter -->
                             <div class="col-md-2">
                                 <input type="text" id="search_nid" class="form-control form-control-sm"
-                                    placeholder="NID Number">
+                                    placeholder="ID or Name">
                             </div>
 
                             <!-- Name Filter -->
@@ -178,10 +178,10 @@
                                         <td>{{ $key + 1 }}</td>
 
                                         <td>
-                                            <img src="{{ asset($certificate->user->people->image ?? 'default.png') }}"
-                                                width="40"
-                                                height="40"
-                                                class="img-circle"
+                                            <img src="{{ imageUrl($certificate->user?->image ?? 'default.png') }}"
+                                                width="55"
+                                                height="65"
+                                                class="img"
                                                 onerror="this.src='{{ asset('default.png') }}'">
                                         </td>
 
@@ -193,14 +193,14 @@
 
                                         <td>
                                             <span class="citizen-id">
-                                                {{ bnValue($certificate->user->system_id ?? '') }}
+                                                {{ $certificate->user?->people?->approved_id ?? 'No ID' }}
                                             </span><br>
-                                            <strong>{{ $certificate->applicant_name ?? $certificate->user->name ?? 'N/A' }}</strong>
+                                            <strong>{{ $certificate->applicant_name ?? $certificate->user?->name ?? 'N/A' }}</strong>
                                         </td>
 
                                         <td>
-                                            {{ $certificate->current_village_road ?? $certificate->user->address ?? 'N/A' }} <br>
-                                            <strong>{{ $certificate->transfer_phone_mobile ?? $certificate->user->mobile ?? 'N/A' }}</strong>
+                                            {{ $certificate->current_village_road ?? $certificate->user?->address ?? 'N/A' }} <br>
+                                            <strong>{{ $certificate->transfer_phone_mobile ?? $certificate->user?->mobile ?? 'N/A' }}</strong>
                                         </td>
 
                                         <td>
@@ -243,14 +243,14 @@
                                                     <button onclick="approveCertificate({{ $certificate->id }})" class="btn btn-success btn-sm">
                                                         <i class="fa fa-check"></i> Approve
                                                     </button>
-                                                    @if (edit_permission('certificates'))
+                                                    @if (edit_permission('voter_area_certificate'))
                                                     <a href="{{ route('voter-area.edit', $certificate->id) }}" 
                                                         class="btn btn-warning btn-sm" title="Edit">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
                                                     @endif
                                                 @else
-                                                    @if (edit_permission('certificates'))
+                                                    @if (edit_permission('voter_area_certificate'))
                                                     <a href="{{ route('voter-area.edit', $certificate->id) }}" 
                                                         class="btn btn-warning btn-sm" title="Edit">
                                                         <i class="fa fa-edit"></i>

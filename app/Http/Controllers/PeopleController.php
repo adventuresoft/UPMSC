@@ -40,7 +40,7 @@ class PeopleController extends Controller
     {
         $this->credentialService = $credentialService;
         $this->smsService        = $smsService;
-        $this->middleware('unionAdmin')->except('index', 'approvedlist', 'show', 'searchUser', 'edit', 'update', 'approve');
+        $this->middleware('unionAdmin')->except('index', 'approvedlist', 'show', 'searchUser', 'edit', 'update', 'approve', 'destroy');
     }
 
 
@@ -48,9 +48,25 @@ class PeopleController extends Controller
     {
         $searchKey = trim((string) $system_id);
 
-        $user = User::with(['people', 'familyInfo', 'addressInfo' => function($q) {
-            $q->with(['presentVillage', 'presentWard', 'presentRoad', 'presentHouse']);
-        }])
+        $user = User::with([
+            'people',
+            'familyInfo',
+            'addressInfo' => function($q) {
+                $q->with([
+                    'presentVillage', 'presentWard', 'presentRoad', 'presentHouse', 'presentThana', 'presentDistrict',
+                    'permanentVillage', 'permanentWard', 'permanentThana', 'permanentDistrict'
+                ]);
+            },
+            'professionalInfos' => function($q1) {
+                $q1->with(['subcategory' => function($q2) {
+                    $q2->with(['category' => function($q3) {
+                        $q3->with(['type' => function($q4) {
+                            $q4->with('profession');
+                        }]);
+                    }]);
+                }]);
+            }
+        ])
             ->where(function ($query) use ($searchKey) {
                 $query->where('system_id', $searchKey)
                     ->orWhereHas('people', function ($q) use ($searchKey) {
@@ -86,12 +102,10 @@ class PeopleController extends Controller
         $users = User::with(['people', 'addressInfo' => function($query) {
             $query->with(['permanentVillage', 'permanentWard', 'permanentThana', 'permanentDistrict', 'permanentPostOffice']);
         }])
-        ->where('role_id', 5);
+        ->whereNotIn('role_id', [1, 2, 3, 4]);
 
-        // Filter by institute if current user has one
-        if (Auth::user()->institute_id) {
-            $users->where('institute_id', Auth::user()->institute_id);
-        }
+        $this->applyUnionAdminPeopleFilter($users);
+        $users->applyMultitenancy();
 
         $users->where(function($query) use ($q) {
             $query->where('name', 'LIKE', "%{$q}%")
@@ -140,10 +154,18 @@ class PeopleController extends Controller
      */
     public function index()
     {
+        if (!view_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $query = User::with([
             'people',
-            'professionalInfos',
+            'professionalInfos.subcategory.category.type.profession',
+            'disabilityInfo',
+            'freedomFighterInfo',
+            'financialInfos',
             'addressInfo.presentWard',
+            'addressInfo.presentUnion',
             'addressInfo.presentDistrict',
             'addressInfo.presentThana',
             'addressInfo.presentPostoffice',
@@ -154,24 +176,37 @@ class PeopleController extends Controller
             'addressInfo.permanentThana',
             'addressInfo.permanentPostOffice',
             'addressInfo.permanentVillage',
+            'addressInfo.permanentUnion',
+            'addressInfo.permanentWard',
             'addressInfo.permanentRoad',
             'addressInfo.permanentHouse',
-        ])->whereHas('people', function ($q) {
+        ])->whereNotIn('role_id', [1, 2, 3, 4])
+        ->whereHas('people', function ($q) {
             $q->whereNull('approved_id');
         });
 
+        $this->applyUnionAdminPeopleFilter($query);
         $query->applyMultitenancy();
 
+        $data['professions'] = \App\Models\BasicSettings\Profession::where('status', true)->get();
         $data['users'] = $query->latest()->get();
         return view('backend.pages.people.index', $data);
     }
 
     public function approvedlist()
     {
+        if (!view_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data['subMenu']='approvedList';
         $query = User::with([
             'people',
-            'professionalInfos',
+            'professionalInfos.subcategory.category.type.profession',
+            'disabilityInfo',
+            'freedomFighterInfo',
+            'financialInfos',
+            'addressInfo.presentUnion',
             'addressInfo.presentDistrict',
             'addressInfo.presentThana',
             'addressInfo.presentPostoffice',
@@ -179,14 +214,194 @@ class PeopleController extends Controller
             'addressInfo.presentWard',
             'addressInfo.presentRoad',
             'addressInfo.presentHouse',
-        ])->whereHas('people', function ($q) {
+            'addressInfo.permanentDistrict',
+            'addressInfo.permanentThana',
+            'addressInfo.permanentPostOffice',
+            'addressInfo.permanentVillage',
+            'addressInfo.permanentUnion',
+            'addressInfo.permanentWard',
+        ])->whereNotIn('role_id', [1, 2, 3, 4])
+        ->whereHas('people', function ($q) {
             $q->whereNotNull('approved_id');
         });
 
+        $this->applyUnionAdminPeopleFilter($query);
         $query->applyMultitenancy();
 
+        $data['professions'] = \App\Models\BasicSettings\Profession::where('status', true)->get();
         $data['users'] = $query->latest()->get();
         return view('backend.pages.people.approvedList', $data);
+    }
+
+    public function searchPeoplePage()
+    {
+        if (!view_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data['subMenu']='search';
+        $query = User::with([
+            'people',
+            'professionalInfos.subcategory.category.type.profession',
+            'disabilityInfo',
+            'freedomFighterInfo',
+            'financialInfos',
+            'addressInfo.presentUnion',
+            'addressInfo.presentDistrict',
+            'addressInfo.presentThana',
+            'addressInfo.presentPostoffice',
+            'addressInfo.presentVillage',
+            'addressInfo.presentWard',
+            'addressInfo.presentRoad',
+            'addressInfo.presentHouse',
+            'addressInfo.permanentDistrict',
+            'addressInfo.permanentThana',
+            'addressInfo.permanentPostOffice',
+            'addressInfo.permanentVillage',
+            'addressInfo.permanentUnion',
+            'addressInfo.permanentWard',
+        ])->whereNotIn('role_id', [1, 2, 3, 4])
+        ->whereHas('people', function ($q) {
+            $q->whereNotNull('approved_id');
+        });
+
+        $this->applyUnionAdminPeopleFilter($query);
+        $query->applyMultitenancy();
+
+        $user = auth()->user();
+        $permittedAreas = collect();
+        $permittedWards = \App\Models\UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
+
+        if (is_superadmin()) {
+            // Super admins see all areas
+            $unions = \App\Models\Union::where('status', true)->get()->map(function($u) {
+                return ['id' => $u->id, 'name' => $u->name . ' (Union)'];
+            });
+            $pourashavas = \App\Models\Pourashava::get()->map(function($p) {
+                return ['id' => $p->id, 'name' => $p->name . ' (Pourashava)'];
+            });
+            $cityCorps = \App\Models\CityCorporation::get()->map(function($c) {
+                return ['id' => $c->id, 'name' => $c->name . ' (City Corp)'];
+            });
+            $permittedAreas = $permittedAreas->concat($unions)->concat($pourashavas)->concat($cityCorps);
+        } else {
+            // Check institute first
+            if ($user->institute_id && $user->institute) {
+                $inst = $user->institute;
+                if ($inst->union_id && $inst->union) {
+                    $permittedAreas->push(['id' => $inst->union_id, 'name' => $inst->union->name . ' (Union)']);
+                } elseif ($inst->pourashava_id && $inst->pourashava) {
+                    $permittedAreas->push(['id' => $inst->pourashava_id, 'name' => $inst->pourashava->name . ' (Pourashava)']);
+                } elseif ($inst->city_corporation_id && $inst->cityCorporation) {
+                    $permittedAreas->push(['id' => $inst->city_corporation_id, 'name' => $inst->cityCorporation->name . ' (City Corp)']);
+                }
+            }
+            
+            // Check area column next
+            if ($user->area) {
+                if (str_contains($user->area, 'Union:')) {
+                    $id = trim(str_replace('Union:', '', $user->area));
+                    $u = \App\Models\Union::find($id);
+                    if ($u) {
+                        $permittedAreas->push(['id' => $u->id, 'name' => $u->name . ' (Union)']);
+                    }
+                } elseif (str_contains($user->area, 'Pourashava:')) {
+                    $id = trim(str_replace('Pourashava:', '', $user->area));
+                    $p = \App\Models\Pourashava::find($id);
+                    if ($p) {
+                        $permittedAreas->push(['id' => $p->id, 'name' => $p->name . ' (Pourashava)']);
+                    }
+                } elseif (str_contains($user->area, 'City Corp:')) {
+                    $id = trim(str_replace('City Corp:', '', $user->area));
+                    $c = \App\Models\CityCorporation::find($id);
+                    if ($c) {
+                        $permittedAreas->push(['id' => $c->id, 'name' => $c->name . ' (City Corp)']);
+                    }
+                } elseif (str_contains($user->area, 'Thana:')) {
+                    $id = trim(str_replace('Thana:', '', $user->area));
+                    $unions = \App\Models\Union::where('thana_id', $id)->where('status', true)->get()->map(function($u) {
+                        return ['id' => $u->id, 'name' => $u->name . ' (Union)'];
+                    });
+                    $permittedAreas = $permittedAreas->concat($unions);
+                } elseif (str_contains($user->area, 'District:')) {
+                    $id = trim(str_replace('District:', '', $user->area));
+                    $thanas = \App\Models\Thana::where('district_id', $id)->pluck('id');
+                    $unions = \App\Models\Union::whereIn('thana_id', $thanas)->where('status', true)->get()->map(function($u) {
+                        return ['id' => $u->id, 'name' => $u->name . ' (Union)'];
+                    });
+                    $pourashavas = \App\Models\Pourashava::where('district_id', $id)->get()->map(function($p) {
+                        return ['id' => $p->id, 'name' => $p->name . ' (Pourashava)'];
+                    });
+                    $cityCorps = \App\Models\CityCorporation::where('district_id', $id)->get()->map(function($c) {
+                        return ['id' => $c->id, 'name' => $c->name . ' (City Corp)'];
+                    });
+                    $permittedAreas = $permittedAreas->concat($unions)->concat($pourashavas)->concat($cityCorps);
+                }
+            }
+        }
+
+        // De-duplicate and sort permitted areas
+        $data['permittedAreas'] = $permittedAreas->unique('id')->sortBy('name')->values();
+
+        // Ward permissions: restrict if counselor has specific ward in AddressInfo
+        if ($user->addressInfo && $user->addressInfo->permanent_ward_id) {
+            $permittedWards = $permittedWards->where('id', $user->addressInfo->permanent_ward_id);
+        }
+        $data['permittedWards'] = $permittedWards->values();
+
+        $data['professions'] = \App\Models\BasicSettings\Profession::where('status', true)->get();
+        $data['users'] = $query->latest()->get();
+        return view('backend.pages.people.search', $data);
+    }
+
+    protected function applyUnionAdminPeopleFilter(&$query)
+    {
+        $user = auth()->user();
+        if (!$user || $user->role_id != 6) {
+            return;
+        }
+
+        $unionId = $this->resolveUnionIdFromArea($user->area);
+
+        if (!$unionId && $user->institute_id && $user->institute && $user->institute->union_id) {
+            $unionId = $user->institute->union_id;
+        }
+
+        if (!$unionId) {
+            return;
+        }
+
+        $unionId = intval($unionId);
+
+        $query->whereHas('addressInfo', function ($aq) use ($unionId) {
+            $aq->where('permanent_union_id', $unionId);
+        });
+    }
+
+    protected function resolveUnionIdFromArea($area)
+    {
+        if (!$area) {
+            return null;
+        }
+
+        $area = trim(preg_replace('/\s*:\s*/', ':', $area));
+
+        if (stripos($area, 'Union:') !== false) {
+            return trim(str_ireplace('Union:', '', $area));
+        }
+
+        if (is_numeric($area)) {
+            return $area;
+        }
+
+        $union = \App\Models\Union::where('name', $area)
+            ->orWhere('name', 'like', "%{$area}%")
+            ->first();
+
+        return $union ? $union->id : null;
     }
 
     /**
@@ -196,6 +411,10 @@ class PeopleController extends Controller
      */
     public function create()
     {
+        if (!create_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data['religions'] = Religion::where('status', true)->get();
         $data['districts'] =  District::where('status', true)->orderBy('name')->get();
         $data['countries'] =  Country::orderBy('name')->get();
@@ -210,6 +429,12 @@ class PeopleController extends Controller
      */
     public function store(Request $request)
     {
+        if (!create_permission('people')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized action.'
+            ], 403);
+        }
         $validate = Validator::make($request->all(), [
             'name' => 'nullable|max:190',
             'bn_name' => 'nullable|max:190',
@@ -251,9 +476,9 @@ class PeopleController extends Controller
                     $image_name = Str::slug($request->name) . '-' . time();
                     $ext = strtolower($image->getClientOriginalExtension());
                     $image_full_name = $image_name . "." . $ext;
-                    $upload_path = public_path('uploads/users/');
+                    $upload_path = 'uploads/users/';
                     $image_url = 'uploads/users/' . $image_full_name;
-                    $success = $image->move($upload_path, $image_full_name);
+                    $success = $image->move(base_path($upload_path), $image_full_name);
                     if ($success) {
                         $user->image = $image_url;
                     }
@@ -306,13 +531,22 @@ class PeopleController extends Controller
      */
     public function show($id)
     {
+        if (!view_permission('people')) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $data['religions'] = Religion::where('status', true)->get();
         $data['districts'] =  District::where('status', true)->orderBy('name')->get();
         $data['countries'] =  Country::orderBy('name')->get();
         $data['religions'] = Religion::where('status', true)->get();
-        $data['familyTypes'] = FamilyType::where('status', true)->get();
-        $data['familyCategories'] = FamilyCategory::where('status', true)->get();
+        $data['familyTypes'] = FamilyType::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
+        $data['familyCategories'] = FamilyCategory::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_name')
+            ->get();
         $data['user'] = $user = User::with('familyInfo', 'educationInfos', 'financialInfos', 'propertyInfos', 'disabilityInfo', 'freedomFighterInfo')
         ->with( 'institute')
         ->with(array('addressInfo' => function($address){
@@ -338,17 +572,17 @@ class PeopleController extends Controller
 
         $data['religions'] = Religion::where('status', true)->get();
         $data['villages'] = [];
-        $data['wards'] = [];
+        $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
         $data['permanent_houses'] = [];
         $data['roads'] = [];
-        if(isset($institute?->institute_type_id) && $institute->institute_type_id == 1) {
-            $data['villages'] = Village::where('union_id', $institute->union_id)->get();
-            $data['wards'] = UnionWard::where('status', true)->get();
-            $data['roads'] = Road::where('institute_id',  $institute->id)->latest()->get();
-        } else if (isset($institute?->institute_type_id) && $institute->institute_type_id == 2) {
-
-        } else if (isset($institute?->institute_type_id) && $institute->institute_type_id == 3) {
-
+        if ($institute) {
+            $data['roads'] = Road::where('institute_id', $institute->id)->latest()->get();
+            if ($institute->union_id) {
+                $data['villages'] = Village::where('union_id', $institute->union_id)->get();
+            }
         }
         $data['divisions'] = Division::where('status', true)->get();
 
@@ -388,8 +622,8 @@ class PeopleController extends Controller
      */
     public function edit($id)
     {
-        if (!view_permission()) {
-            return redirect()->back();
+        if (!edit_permission('people')) {
+            abort(403, 'Unauthorized action.');
         }
 
         $data['religions'] = Religion::where('status', true)->get();
@@ -418,7 +652,7 @@ class PeopleController extends Controller
      */
     public function update(Request $request, $userID)
     {
-        if (!view_permission()) {
+        if (!edit_permission('people')) {
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized access.',
@@ -464,9 +698,9 @@ class PeopleController extends Controller
                     $image_name = Str::slug($request->name) . '-' . time();
                     $ext = strtolower($image->getClientOriginalExtension());
                     $image_full_name = $image_name . "." . $ext;
-                    $upload_path = public_path('uploads/users/');
+                    $upload_path = 'uploads/users/';
                     $image_url = 'uploads/users/' . $image_full_name;
-                    $success = $image->move($upload_path, $image_full_name);
+                    $success = $image->move(base_path($upload_path), $image_full_name);
                     if ($success) { $user->image = $image_url; }
                 }
 
@@ -512,15 +746,42 @@ class PeopleController extends Controller
         return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'])->header('Content-Type', 'application/json');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\People  $people
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(People $people)
+    public function destroy($id)
     {
-        //
+        if (!delete_permission('people')) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized access.',
+                ], 403);
+            }
+            return redirect()->back()->with('error', 'Unauthorized access.');
+        }
+
+        $user = User::find($id);
+        if ($user) {
+            $people = People::where('user_id', $id)->first();
+            if ($people) {
+                $people->delete();
+            }
+            $user->delete();
+
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Citizen deleted successfully.',
+                ]);
+            }
+            return redirect()->back()->with('success', 'Citizen deleted successfully.');
+        }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Citizen not found.',
+            ], 404);
+        }
+        return redirect()->back()->with('error', 'Citizen not found.');
     }
 
     private function generateApprovedId($date_of_birth, $district_id)
@@ -553,6 +814,13 @@ class PeopleController extends Controller
 
     public function approve(Request $request, $id)
     {
+        if (!edit_permission('people')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized action.'
+            ], 403);
+        }
+
         try {
             DB::beginTransaction();
 
@@ -589,6 +857,9 @@ class PeopleController extends Controller
             $people->approved_id = $approvedId;
             if ($people->user) {
                 $people->user->status = 1;
+                if (Auth::user() && Auth::user()->institute_id) {
+                    $people->user->institute_id = Auth::user()->institute_id;
+                }
                 $people->user->save();
             }
 
@@ -647,3 +918,4 @@ class PeopleController extends Controller
     }
 
 }
+

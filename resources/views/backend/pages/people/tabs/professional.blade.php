@@ -517,19 +517,19 @@
                     url: "{{ url('/profession-type-options-by-profession') }}/" + profession_id,
                     beforeSend: function() {
                         console.log("Searcing...");
-                        _this_profession_type.html(default_profession_type_option);
+                        _this_profession_type.html(default_profession_type_option).trigger('change');
                     },
                     success: function(response) {
-                        _this_profession_type.html(response);
+                        _this_profession_type.html(response).trigger('change');
                     },
                     error: function(xhr, status, error) {
                         var responseText = jQuery.parseJSON(xhr.responseText);
                         toastr.error(responseText.message);
-                        _this_profession_type.html(default_profession_type_option);
+                        _this_profession_type.html(default_profession_type_option).trigger('change');
                     }
                 });
             } else {
-                _this_profession_type.html(default_profession_type_option);
+                _this_profession_type.html(default_profession_type_option).trigger('change');
             }
         })
 
@@ -547,26 +547,26 @@
                         profession_type_id,
                     beforeSend: function() {
                         console.log("Searcing...");
-                        profession_category.html(option);
+                        profession_category.html(option).trigger('change');
                     },
                     success: function(response) {
-                        profession_category.html(response);
+                        profession_category.html(response).trigger('change');
                     },
                     error: function(xhr, status, error) {
-                        profession_category.html(option);
+                        profession_category.html(option).trigger('change');
                         var responseText = jQuery.parseJSON(xhr.responseText);
                         toastr.error(responseText.message);
                     }
                 });
             } else {
-                profession_category.html(option);
+                profession_category.html(option).trigger('change');
             }
         })
 
         $(document).on('change', '.profession_category', function(e) {
             e.preventDefault();
             let profession_category_id = $(this).val();
-            let option = '<option value="">Select Profession Subategory</option>';
+            let option = '<option value="">Select Profession Subcategory</option>'; // Fixed typo in placeholder text
             let _this = $(this).closest('.single-profession');
             let profession_subcategory = _this.find(".profession_subcategory");
 
@@ -577,19 +577,19 @@
                         profession_category_id,
                     beforeSend: function() {
                         console.log("Searcing...");
-                        profession_subcategory.html(option);
+                        profession_subcategory.html(option).trigger('change');
                     },
                     success: function(response) {
-                        profession_subcategory.html(response);
+                        profession_subcategory.html(response).trigger('change');
                     },
                     error: function(xhr, status, error) {
-                        profession_subcategory.html(option);
+                        profession_subcategory.html(option).trigger('change');
                         var responseText = jQuery.parseJSON(xhr.responseText);
                         toastr.error(responseText.message);
                     }
                 });
             } else {
-                profession_subcategory.html(option);
+                profession_subcategory.html(option).trigger('change');
             }
         })
     </script>

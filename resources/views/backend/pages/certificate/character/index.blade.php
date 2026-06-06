@@ -110,7 +110,7 @@
                                     <th>Sl</th>
                                     <th>Photo</th>
                                     <th>Certificate No</th>
-                                    <th>NID & Name</th>
+                                    <th>ID & Name</th>
                                     <th>Address & Mobile</th>
                                     <!-- <th>Quantity</th> -->
                                     <th>Created At</th>
@@ -128,26 +128,20 @@
                                     <td>{{ ++$key }}</td>
 
                                     <td>
-                                        <img src="{{ asset($certificate->user->image ?? 'default.png') }}"
+                                        <img src="{{ imageUrl($certificate->user?->image ?? 'default.png') }}"
                                             width="55"
                                             height="65"
-                                            class="img">
+                                            class="img"
+                                            onerror="this.src='{{ asset('default.png') }}'">
                                     </td>
 
                                     <td>{{ bnValue($certificate->system_id) }}</td>
 
                                     <td>
                                         <span class="citizen-id">
-                                            @php 
-                                                $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
-                                            @endphp
-                                            @if($nid && $nid != '1111111114')
-                                                {{ $nid }}
-                                            @else
-                                                No NID
-                                            @endif
+                                            {{ $certificate->user?->people?->approved_id ?? 'No ID' }}
                                         </span><br>
-                                        {{ $certificate->user->name }}
+                                        {{ $certificate->user?->name ?? '' }}
                                     </td>
 
                                     <td>
@@ -156,7 +150,7 @@
                             ওয়ার্ড নং-{{ $certificate->user?->addressInfo?->permanentWard?->bn_ward_no ?? '' }},
                                    {{ $certificate->user?->addressInfo?->permanentPostOffice?->bn_name ?? '' }} -
                                      @if($certificate->user?->addressInfo?->permanentPostOffice?->postal_code)
-                                   {{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }},
+                                   {{ bnValue($certificate->user->addressInfo?->permanentPostOffice?->postal_code) }},
                                   @endif <br>
                                    {{ $certificate->user?->institute?->union?->thana?->bn_name ?? '' }},
                                    {{ $certificate->user?->institute?->union?->thana?->district?->bn_name ?? '' }}।

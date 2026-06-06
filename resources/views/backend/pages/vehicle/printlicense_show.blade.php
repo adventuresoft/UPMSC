@@ -8,7 +8,7 @@
     <style>
         @page {
             size: A4 portrait;
-            margin: 12mm 8mm;
+            margin: 0;
         }
 
         html,
@@ -16,229 +16,163 @@
             margin: 0;
             padding: 0;
             font-family: 'Nikosh', 'Noto Sans Bengali', Arial, sans-serif;
-            font-size: 13px !important;
-            line-height: 1.5;
+            font-size: 18px !important;
+            line-height: 1.4;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
             background: #fff;
         }
 
-        .license-page {
-            max-width: 1080px;
-            margin: 0 auto;
-            background: #fff;
-            border: 4px solid #556b2f;
-            padding: 8px;
+        .certificate-page {
+            width: 267mm;
+            height: 374mm;
+            margin: auto;
+            position: relative;
+            background: url('{{ asset("images/sucsesion.png") }}') no-repeat center;
+            background-size: 267mm 374mm;
+            overflow: hidden;
         }
 
-        .license-inner {
-            border: 2px solid #556b2f;
-            padding: 8mm 12mm;
+        .certificate-content {
+            position: absolute;
+            padding: 10mm !important;
+            top: 25mm;
+            left: 20mm;
+            right: 20mm;
+            bottom: 20mm;
         }
 
         .header-logos {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 8px;
         }
 
         .header-logos img {
-            width: 76px;
-            height: 76px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
         }
 
-        .union-header {
+        .union-title {
             text-align: center;
-            flex: 1;
-        }
-
-        .union-title-bn {
-            font-size: 21px;
-            font-weight: 700;
+            font-size: 25px;
+            font-weight: bold;
             color: #006600;
-            margin: 0;
         }
 
-        .union-title-en {
-            font-size: 16px;
-            font-weight: 700;
-            color: #2e3192;
-            margin: 3px 0;
+        .union-subtitle {
+            text-align: center;
+            font-size: 24px;
+            color: #003366;
         }
 
-        .meta-row {
+        .doc-header {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
             font-size: 13px;
-            margin-bottom: 6px;
+            margin: 12px 0;
         }
 
-        .license-title {
+        .doc-title-block {
+            flex: 1;
             text-align: center;
-            margin: 10px 0 8px;
         }
 
-        .license-title h3 {
+        .doc-title {
             background: #006600;
             color: #fff;
-            display: inline-block;
-            padding: 8px 28px;
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 6px 20px;
             border-radius: 4px;
-            margin: 0;
+            display: inline-block;
         }
 
-        .subtitle {
+        .validity-info {
             text-align: center;
-            margin-bottom: 14px;
-            color: #333;
+            font-size: 13px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .intro-text {
+            font-size: 14px;
+            line-height: 1.6;
+            text-align: justify;
+            margin: 15px 0 10px;
+        }
+
+        .section-header {
+            background: #006600;
+            color: #fff;
+            font-weight: bold;
+            padding: 6px 10px;
+            margin: 12px 0 6px;
+            font-size: 14px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 4px;
             font-size: 13px;
         }
 
-        .section-card {
-            border: 1px solid #d7d7d7;
-            margin-top: 14px;
-        }
-
-        .section-title {
-            background: #f2f6f2;
-            color: #0f4d0f;
-            font-weight: 700;
-            padding: 8px 12px;
-            font-size: 15px;
-            border-bottom: 1px solid #d7d7d7;
-        }
-
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .info-table td {
-            border-bottom: 1px solid #ededed;
-            padding: 6px 10px;
-            vertical-align: top;
-            font-size: 12px;
-        }
-
-        .info-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .info-table .label-cell {
-            width: 18%;
-            font-weight: 700;
-            color: #1f2d3d;
-            background: #fbfbfb;
-            white-space: nowrap;
-        }
-
-        .info-table .value-cell {
-            width: 32%;
-            color: #162536;
-        }
-
-        .info-table .full-label {
-            width: 18%;
-            font-weight: 700;
-            color: #1f2d3d;
-            background: #fbfbfb;
-        }
-
-        .info-table .full-value {
-            width: 82%;
-            color: #162536;
-        }
-
-        .owner-info-wrap {
+        .info-label {
+            width: 220px;
+            font-weight: bold;
             display: flex;
-            align-items: stretch;
-            flex-direction: row-reverse;
+            justify-content: space-between;
+            padding-right: 15px;
         }
 
-        .owner-table-wrap {
+        .info-value {
             flex: 1;
-            min-width: 0;
-        }
-
-        .owner-photo-wrap {
-            width: 185px;
-            border-right: 1px solid #e6e6e6;
-            padding: 12px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 8px;
-            background: #fcfcfc;
-        }
-
-        .owner-photo-frame {
-            width: 140px;
-            height: 165px;
-            border: 1px solid #cdd8ce;
-            border-radius: 4px;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        .owner-photo-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+            font-weight: bold;
+            font-size: 13px;
         }
 
         .signature-area {
-            margin-top: 90px;
+            margin-top: 180px;
+            bottom: 15mm;
             display: flex;
             justify-content: space-between;
             text-align: center;
         }
 
         .sig-block {
-            width: 210px;
+            width: 30%;
+            font-size: 14px;
         }
 
         .sig-line {
-            border-top: 1px solid #333;
-            margin-bottom: 6px;
+            border-top: 1px solid #000;
+            margin: 25px 0 5px;
         }
 
-        .sig-text {
-            font-size: 14px;
-            line-height: 1.3;
-            color: #333;
+        .certificate-footer {
+            position: absolute;
+            bottom: 12mm;
+            left: 16mm;
+            font-size: 11px;
         }
 
         @media print {
             .no-print {
                 display: none !important;
             }
-
-            .license-page,
-            .license-inner {
-                border: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .owner-info-wrap {
-                flex-direction: column-reverse;
-            }
-
-            .owner-photo-wrap {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid #e6e6e6;
+            .certificate-page {
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
             }
         }
     </style>
 </head>
 <body onload="window.print()">
+
 @php
     $fallbackHeaderUnion = \App\Models\Institute::with('union.thana.district')
         ->whereNotNull('union_id')
@@ -281,21 +215,7 @@
         ? ($vehicle->institutional_name ?? 'N/A')
         : ($ownerUser?->name ?? $vehicle->owner_name ?? 'N/A');
 
-    $ownerCompactRows = [
-        ['label' => 'মালিকানার ধরন', 'value' => ucfirst($vehicle->ownership_type ?? '--')],
-        ['label' => 'নাম', 'value' => $ownerName],
-        ['label' => 'আইডি নম্বর', 'value' => bnValue($vehicle->owner_id ?? $ownerUser?->system_id ?? '--')],
-    ];
-
-    if ($vehicle->ownership_type === 'institutional') {
-        $ownerCompactRows[] = ['label' => 'ট্রেড লাইসেন্স নম্বর', 'value' => $vehicle->trade_license ?? '--'];
-    } else {
-        $ownerCompactRows[] = ['label' => 'জাতীয় পরিচয়পত্র', 'value' => $ownerUser?->nid ?? '--'];
-        $ownerCompactRows[] = ['label' => 'মোবাইল নম্বর', 'value' => $ownerUser?->mobile ?? '--'];
-    }
-
-    $ownerAddressLabel = $vehicle->ownership_type === 'institutional' ? 'প্রতিষ্ঠানের ঠিকানা' : 'বর্তমান ঠিকানা';
-    $ownerAddressValue = $vehicle->ownership_type === 'institutional'
+    $ownerAddress = $vehicle->ownership_type === 'institutional'
         ? ($vehicle->institutional_address ?? '--')
         : ($presentAddress ?: '--');
 
@@ -303,121 +223,161 @@
         ? ($ownerOrganization?->image ?? null)
         : ($ownerUser?->image ?? null);
 
-    $ownerPhotoUrl = $ownerPhotoPath ? asset($ownerPhotoPath) : asset('public/no-image-found.jpeg');
+    $ownerPhotoUrl = $ownerPhotoPath ? imageUrl($ownerPhotoPath) : asset('public/no-image-found.jpeg');
 
-    $vehicleCompactRows = [
-        ['label' => 'যানবাহন আইডি', 'value' => bnValue($vehicle->registration_id ?? $vehicle->id)],
-        ['label' => 'যানবাহনের ধরন', 'value' => $vehicle->vehicle_type ?? '--'],
-        ['label' => 'ক্যাটাগরি', 'value' => $vehicle->vehicle_category ?? '--'],
-        ['label' => 'মডেল', 'value' => $vehicle->vehicle_model ?? '--'],
-        ['label' => 'প্রস্তুতকারক ও সাল', 'value' => ($vehicle->make_company ?? '--') . ($vehicle->make_year ? ' (' . $vehicle->make_year . ')' : '')],
-        ['label' => 'ইঞ্জিন নম্বর', 'value' => $vehicle->engine_number ?? '--'],
-        ['label' => 'চ্যাসিস নম্বর', 'value' => $vehicle->chassis_number ?? '--'],
-        ['label' => 'ক্ষমতা ও আসন', 'value' => 'HP/CC: ' . ($vehicle->hp_cc ?? '--') . ', সিট: ' . ($vehicle->seat_capacity ?? '--')],
-        ['label' => 'রং ও টায়ার', 'value' => 'রং: ' . ($vehicle->color ?? '--') . ', টায়ার: ' . ($vehicle->tyre_size ?? '--')],
-    ];
+    $totalFee = $fee ? $fee->total_fee : 0;
 @endphp
 
-<div class="license-page mt-4 mb-4">
-    <div class="license-inner">
+<div class="certificate-page">
+    <div class="certificate-content">
         <div class="header-logos">
-            <img src="{{ asset('images/dhaka.png') }}" alt="Left Logo">
-            <div class="union-header">
-                <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
-                <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>
-                <div class="union-title-en">{{ $headerUnion?->name ?? '' }}</div>
-                <p class="mb-0">
-                    থানাঃ {{ $headerThana?->bn_name ?? $headerThana?->name ?? '' }},
-                    জেলাঃ {{ $headerDistrict?->bn_name ?? $headerDistrict?->name ?? '' }}, বাংলাদেশ।
-                </p>
+            <img src="{{ asset('images/dhaka.png') }}">
+            <div>
+                <h6 class="text-center">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h6>
+                <div class="union-title">{{ $headerUnion?->bn_name ?? '' }}</div>
+                <div class="union-subtitle">{{ $headerUnion?->name ?? '' }}</div>
             </div>
-            <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Right Logo">
+            <img src="{{ asset('images/govt-bd-logo.png') }}">
         </div>
 
-        <div class="meta-row">
-            <div>নম্বর: <strong>{{ bnValue($vehicle->registration_id ?? $vehicle->id) }}</strong></div>
-            <div>তারিখ: {{ bnValue(date('d/m/Y', strtotime($vehicle->created_at))) }}</div>
-        </div>
+        <div class="doc-header">
+            <div style="margin-top: 20px;">
+                <img src="{{ $vehicle->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;"><br><br>
+                <u style="font-size: 16px;">লাইসেন্স ইস্যুর তারিখ</u><br>
+                <span style="font-size: 15px;">তারিখ: {{ bnValue(date('d/m/Y', strtotime($vehicle->created_at))) }}</span>
+            </div>
 
-        <div class="license-title">
-            <h3>যানবাহন লাইসেন্স / VEHICLE LICENSE</h3>
-        </div>
-
-        <div class="subtitle">
-            যাচাইকৃত আবেদন ও অনুমোদিত তথ্যের ভিত্তিতে এই যানবাহন লাইসেন্স ইস্যু করা হলো।
-        </div>
-
-        <div class="section-card">
-            <div class="section-title">যানবাহনের তথ্য</div>
-            <table class="info-table">
-                @foreach(collect($vehicleCompactRows)->chunk(2) as $pair)
-                    @php($pair = $pair->values())
-                    <tr>
-                        <td class="label-cell">{{ $pair[0]['label'] }}</td>
-                        <td class="value-cell">{{ $pair[0]['value'] }}</td>
-                        @if(isset($pair[1]))
-                            <td class="label-cell">{{ $pair[1]['label'] }}</td>
-                            <td class="value-cell">{{ $pair[1]['value'] }}</td>
-                        @else
-                            <td class="label-cell"></td>
-                            <td class="value-cell"></td>
-                        @endif
-                    </tr>
-                @endforeach
-            </table>
-        </div>
-
-        <div class="section-card">
-            <div class="section-title">মালিকের তথ্য</div>
-            <div class="owner-info-wrap">
-                <div class="owner-table-wrap">
-                    <table class="info-table">
-                        @foreach(collect($ownerCompactRows)->chunk(2) as $pair)
-                            @php($pair = $pair->values())
-                            <tr>
-                                <td class="label-cell">{{ $pair[0]['label'] }}</td>
-                                <td class="value-cell">{{ $pair[0]['value'] }}</td>
-                                @if(isset($pair[1]))
-                                    <td class="label-cell">{{ $pair[1]['label'] }}</td>
-                                    <td class="value-cell">{{ $pair[1]['value'] }}</td>
-                                @else
-                                    <td class="label-cell"></td>
-                                    <td class="value-cell"></td>
-                                @endif
-                            </tr>
-                        @endforeach
-                        <tr>
-                            <td class="full-label">{{ $ownerAddressLabel }}</td>
-                            <td class="full-value" colspan="3">{{ $ownerAddressValue }}</td>
-                        </tr>
-                    </table>
+            <div class="doc-title-block">
+                <div class="doc-title">যানবাহন লাইসেন্স</div>
+                <div class="validity-info">
+                    নতুন<br>
+                    অর্থ বছর: {{ bnValue($fee->finance_year ?? 'N/A') }} <br><br><br>
+                    <span style="font-size: 14px;">লাইসেন্স নম্বর: <strong>{{ bnValue($vehicle->registration_id) }}</strong></span><br>
                 </div>
-                <div class="owner-photo-wrap">
-                    <div class="owner-photo-frame">
-                        <img src="{{ $ownerPhotoUrl }}" alt="Owner Photo" onerror="this.src='{{ asset('public/no-image-found.jpeg') }}';">
+            </div>
+
+            <div style="text-align:right">
+                তারিখ: {{ bnValue(date('d/m/Y', strtotime($vehicle->created_at))) }}<br>
+                <img src="{{ $ownerPhotoUrl }}" style="width:1.5in;height:1.9in;object-fit:cover; border:2px solid #000;" onerror="this.src='{{ asset('public/no-image-found.jpeg') }}';">
+            </div>
+        </div>
+
+        <p class="intro-text">
+            স্থানীয় সরকার (ইউনিয়ন পরিষদ) আইন, ২০০৯ এর ধারা ৬৬ অনুযায়ী এই ইউনিয়ন পরিষদ কর্তৃক নির্ধারিত ফি আদায় সাপেক্ষে নিম্নবর্ণিত যানবাহন ও মালিকের অনুকূলে এই লাইসেন্সটি ইস্যু করা হলো।
+        </p>
+
+        <div class="section-header">যানবাহনের তথ্য</div>
+
+        <div class="info-row">
+            <span class="info-label"><span>১। যানবাহন আইডি</span> <span>:</span></span>
+            <span class="info-value">{{ bnValue($vehicle->registration_id) }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><span>২। Vehicles ধরন</span> <span>:</span></span>
+            <span class="info-value">{{ $vehicle->vehicle_type ?? '--' }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><span>৩। ক্যাটাগরি</span> <span>:</span></span>
+            <span class="info-value">{{ $vehicle->vehicle_category ?? '--' }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><span>৪। প্রস্তুতকারক ও সাল</span> <span>:</span></span>
+            <span class="info-value">{{ ($vehicle->make_company ?? '--') . ($vehicle->make_year ? ' (' . $vehicle->make_year . ')' : '') }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><span>৫। ইঞ্জিন ও চ্যাসিস নম্বর</span> <span>:</span></span>
+            <span class="info-value">ইঞ্জিন: {{ $vehicle->engine_number ?? '--' }} , চ্যাসিস: {{ $vehicle->chassis_number ?? '--' }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><span>৬। ক্ষমতা ও আসন</span> <span>:</span></span>
+            <span class="info-value">HP/CC: {{ $vehicle->hp_cc ?? '--' }} , সিট: {{ $vehicle->seat_capacity ?? '--' }}</span>
+        </div>
+
+        <div class="section-header">মালিকের তথ্য</div>
+
+        <div class="info-row">
+            <span class="info-label"><span>১। মালিকের নাম</span> <span>:</span></span>
+            <span class="info-value">{{ $ownerName }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><span>২। মালিকের আইডি</span> <span>:</span></span>
+            <span class="info-value">{{ bnValue($vehicle->owner_id ?? $ownerUser?->system_id ?? '--') }}</span>
+        </div>
+        @if($vehicle->ownership_type === 'institutional')
+            <div class="info-row">
+                <span class="info-label"><span>৩। ট্রেড লাইসেন্স নম্বর</span> <span>:</span></span>
+                <span class="info-value">{{ $vehicle->trade_license ?? '--' }}</span>
+            </div>
+        @else
+            <div class="info-row">
+                <span class="info-label"><span>৩। জাতীয় পরিচয়পত্র</span> <span>:</span></span>
+                <span class="info-value">{{ bnValue($ownerUser?->nid ?? '--') }}</span>
+            </div>
+        @endif
+        <div class="info-row">
+            <span class="info-label"><span>৪। মোবাইল নম্বর</span> <span>:</span></span>
+            <span class="info-value">{{ bnValue($ownerUser?->mobile ?? '--') }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label"><span>৫। মালিকের ঠিকানা</span> <span>:</span></span>
+            <span class="info-value">{{ $ownerAddress }}</span>
+        </div>
+
+        <div class="section-header">যানবাহন ফিস</div>
+
+        <div style="margin-top: 10px;">
+            @if($fee)
+                @php
+                    $vehicleFeesList = [
+                        'নিবন্ধন ফি (Registration)' => $fee->registration_fee,
+                        'রাস্তা ফি (Road)' => $fee->road_fee,
+                        'ফিটনেস ফি (Fitness)' => $fee->fitness_fee,
+                        'ভ্যাট (VAT)' => $fee->vat_fee,
+                        'ট্যাক্স (Tax)' => $fee->tax_fee,
+                    ];
+                @endphp
+                @foreach($vehicleFeesList as $name => $amount)
+                    <div style="display: flex; margin-bottom: 2px; font-size: 13px; align-items: center;">
+                        <div style="width: 220px; display: flex; justify-content: space-between; font-weight: bold;">
+                            <span>{{ bnValue($loop->iteration) }}। {{ $name }}</span>
+                            <span>:</span>
+                        </div>
+                        <div style="flex: 1; text-align: right; padding-right: 10px; font-weight: bold;">
+                            {{ bnValue(currencyFormat((float) $amount)) }}/-
+                        </div>
+                    </div>
+                @endforeach
+                
+                <div style="display: flex; margin-top: 8px; border-top: 1px solid #333; padding-top: 5px; font-size: 15px; font-weight: bold; align-items: center;">
+                    <div style="width: 220px; display: flex; justify-content: space-between;">
+                        <span>সর্বমোট</span>
+                        <span>:</span>
+                    </div>
+                    <div style="flex: 1; text-align: right; padding-right: 10px;">
+                        {{ bnValue(currencyFormat($totalFee)) }}/-
                     </div>
                 </div>
-            </div>
+            @else
+                <div class="text-center py-2" style="font-size: 13px;">কোন ফি নির্ধারণ করা নেই</div>
+            @endif
         </div>
 
         <div class="signature-area">
-            <div class="sig-block">
-                <div class="sig-line"></div>
-                <div class="sig-text">লাইসেন্স ও বিজ্ঞাপন<br>সুপারভাইজার</div>
-            </div>
-            <div class="sig-block">
-                <div class="sig-line"></div>
-                <div class="sig-text">সীল</div>
-            </div>
-            <div class="sig-block">
-                <div class="sig-line"></div>
-                <div class="sig-text">কর্তৃপক্ষ</div>
-            </div>
+            @foreach(['লাইসেন্স ও বিজ্ঞাপন সুপারভাইজার', 'সীল', 'কর্তৃপক্ষ'] as $sign)
+                <div class="sig-block">
+                    <div class="sig-line"></div>
+                    {{ $sign }}
+                </div>
+            @endforeach
         </div>
+    </div>
+
+    <div class="certificate-footer">
+        This report generated by UPMS | Powered by <strong>Adventure Soft</strong>
     </div>
 </div>
 
-<div class="no-print text-center mb-4">
+<div class="no-print text-center my-4">
     <a href="{{ route('vehicle.license.list') }}" class="btn btn-secondary px-5 py-2">
         Back to License List
     </a>

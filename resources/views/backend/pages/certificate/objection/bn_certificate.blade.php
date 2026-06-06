@@ -1,7 +1,13 @@
 @extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Childless'])
 @push('style')
 <style>
-    .certificate-card {
+    .container {
+    max-width: 100% !important;
+}
+
+.certificate-card {
+    max-width: 100%;
+    margin: 0 auto;
         background-image: url('{{ asset('images/bg-images.jpeg') }}');
         background-size: cover;
         background-repeat: no-repeat;
@@ -57,28 +63,51 @@
         margin-right: 10mm;
     }
 
-    @media print {
+        @media print {
         * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            box-sizing: border-box !important;
         }
 
         @page {
             size: A4 landscape;
-            margin: 0;
+            margin: 0 !important;
         }
 
         html, body {
-            width: 297mm;
-            height: 210mm;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: #fff !important;
+            width: 297mm !important;
+            height: 210mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
+        }
+
+        .container {
+            width: 297mm !important;
+            max-width: 297mm !important;
+            height: 210mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
+
+        
+
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header,
+        .content-wrapper,
+        .wrapper,
+        .app-footer {
+            display: none !important;
         }
 
         #printPageButton,
-        #cancelPageButton{
+        #cancelPageButton,
+        .btn {
             display: none !important;
         }
     }
@@ -96,7 +125,7 @@
                 <!-- ================= Header ================= -->
                 <div class="row align-items-center">
                     <div class="col-2 text-center">
-                        <img height="90" width="90" src="{{ asset('images/dhaka.png') }}">
+                        <img height="90" width="90" src="{{ isset($certificate->user->institute->left_image) ? imageUrl($certificate->user->institute->left_image) : asset('images/dhaka.png') }}">
                     </div>
 
                     <div class="col-8 text-center">

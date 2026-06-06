@@ -2,10 +2,16 @@
 
 @push('style')
 <style>
+    .container {
+        max-width: 100% !important;
+    }
+
 /* =========================
    A4 CANVAS
 ========================= */
 .certificate-card {
+    max-width: 100%;
+    margin: 0 auto;
     background-image: url('{{ asset('images/sucsesion.png') }}');
     background-size: cover;
     background-repeat: no-repeat;
@@ -97,51 +103,54 @@
 /* =========================
    PRINT CONFIG
 ========================= */
-@media print {
+    @media print {
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            box-sizing: border-box !important;
+        }
 
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-        box-sizing: border-box !important;
-    }
+        @page {
+            size: A4 portrait;
+            margin: 0 !important;
+        }
 
-    @page {
-        size: A4 portrait;
-        margin: 0;
-    }
+        html, body {
+            width: 267mm !important;
+            height: 374mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
+        }
 
-    html, body {
-        width: 267mm;
-        height: 374mm;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        background: #fff !important;
-    }
+        .container {
+            width: 267mm !important;
+            max-width: 267mm !important;
+            height: 374mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
 
-    .container {
-        width: 267mm !important;
-        height: 374mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+        
 
-    .certificate-card {
-        width: 267mm !important;
-        height: 374mm !important;
-        margin: 0 !important;
-        page-break-inside: avoid !important;
-    }
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header,
+        .content-wrapper,
+        .wrapper,
+        .app-footer {
+            display: none !important;
+        }
 
-    .main-footer{
-        display: none;
+        #printPageButton,
+        #cancelPageButton,
+        .btn {
+            display: none !important;
+        }
     }
-
-    #printPageButton,
-    #cancelPageButton {
-        display: none !important;
-    }
-}
 </style>
 @endpush
 
@@ -156,22 +165,37 @@
                 <!-- ================= Header ================= -->
                 <div class="row align-items-center">
                     <div class="col-2 text-center">
-                        <img height="90" width="90" src="{{ asset('images/dhaka.png') }}">
+                        <img height="90" width="90" src="{{ isset($certificate->user->institute->left_image) ? imageUrl($certificate->user->institute->left_image) : asset('images/dhaka.png') }}">
                     </div>
 
                     <div class="col-8 text-center">
                         <h2 class="text- font-Tahoma-bold mb-0" style="font-size:16px;">
                           Government of the People's Republic of Bangladesh
                         </h2>
+                        @php
+                            $institute = $certificate->user->institute;
+                            $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+                            $thana = '';
+                            $district = '';
+                            
+                            if ($institute->union && $institute->union->thana) {
+                                $thana = str_replace('Upazila', '', $institute->union->thana->name);
+                                $district = $institute->union->thana->district->name ?? '';
+                            } elseif ($institute->pourashava) {
+                                $district = $institute->pourashava->District->name ?? '';
+                            } elseif ($institute->cityCorporation) {
+                                $district = $institute->cityCorporation->District->name ?? '';
+                            }
+                        @endphp
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:28px;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
+                            {{ $auth->name ?? '' }}
                         </h3>
                         <h4 class="text-success font-Nikosh-bold mb-0" style="font-size:24px;">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            {{ $auth->bn_name ?? '' }}
                         </h4>
                         <p class="mb-0" style="font-size:15px;">
-                            Thana: {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            District: {{ $certificate->user->institute->union->thana->district->name ?? '' }},
+                            @if($thana) Thana: {{ $thana }}, @endif
+                            District: {{ $district }},
                             Bangladesh
                         </p>
                     </div>

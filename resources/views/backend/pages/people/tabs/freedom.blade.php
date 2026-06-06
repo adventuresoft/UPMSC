@@ -66,7 +66,7 @@
                                 <div class="form-group row">
                                     <label for="type_id" class="col-sm-3 col-form-label">Freedom Fighter Type</label>
                                     <div class="col-sm-9">
-                                        <select name="type_id" required class="form-control" id="type_id">
+                                        <select name="type_id" class="form-control" id="type_id">
                                             <option value="">Select Type</option>
                                             @foreach (freedom_fighter_constant_option('type') as $key => $item)
                                                 <option value="{{$key}}" {{isset($user->freedomFighterInfo->type_id) ? (($user->freedomFighterInfo->type_id == $key) ? 'selected' : '' ) : ''  }} >{{$item}}</option>
@@ -80,7 +80,7 @@
                                 <div class="form-group row">
                                     <label for="area_id" class="col-sm-3 col-form-label">Freedom Fight Area</label>
                                     <div class="col-sm-9">
-                                        <select name="area_id" required class="form-control" id="area_id">
+                                        <select name="area_id" class="form-control" id="area_id">
                                             <option value="">Select Area</option>
                                             @foreach (freedom_fighter_constant_option('area') as $key => $item)
                                                 <option value="{{$key}}" {{isset($user->freedomFighterInfo->area_id) ? (($user->freedomFighterInfo->area_id == $key) ? 'selected' : '' ) : ''  }} >{{$item}}</option>
@@ -94,7 +94,7 @@
                                 <div class="form-group row">
                                     <label for="designation_id" class="col-sm-3 col-form-label">Designation</label>
                                     <div class="col-sm-9">
-                                        <select name="designation_id" required class="form-control" id="designation_id">
+                                        <select name="designation_id" class="form-control" id="designation_id">
                                             <option value="">Select Designation</option>
                                             @foreach (freedom_fighter_constant_option('designation') as $key => $item)
                                                 <option value="{{$key}}" {{isset($user->freedomFighterInfo->designation_id) ? (($user->freedomFighterInfo->designation_id == $key) ? 'selected' : '' ) : ''  }} >{{$item}}</option>
@@ -164,6 +164,17 @@
 @push('script')
     <script>
         $(document).ready(function() {
+            function toggleRequiredFields(isFighter) {
+                if (parseInt(isFighter)) {
+                    $("#type_id, #area_id, #designation_id").prop('required', true);
+                } else {
+                    $("#type_id, #area_id, #designation_id").prop('required', false);
+                }
+            }
+
+            let initial_value = $('input[name="is_freedom_fighter"]:checked').val();
+            toggleRequiredFields(initial_value);
+
             $("#peopleFreedomForm").on('submit', function(e) {
                 e.preventDefault();
                 let thisForm = $(this);
@@ -194,18 +205,18 @@
                         });
                     }
                 });
-            })
-        })
+            });
 
-
-        $(document).on('change', 'input[type=radio][name=is_freedom_fighter]', function(e) {
-            e.preventDefault();
-            let _this_value = $(this).val();
-            if (parseInt(_this_value)) {
-                $(".fighter-content").removeClass('d-none');
-            } else {
-                $(".fighter-content").removeClass('d-none').addClass('d-none');
-            }
+            $(document).on('change', 'input[type=radio][name=is_freedom_fighter]', function(e) {
+                e.preventDefault();
+                let _this_value = $(this).val();
+                toggleRequiredFields(_this_value);
+                if (parseInt(_this_value)) {
+                    $(".fighter-content").removeClass('d-none');
+                } else {
+                    $(".fighter-content").removeClass('d-none').addClass('d-none');
+                }
+            });
         })
     </script>
     

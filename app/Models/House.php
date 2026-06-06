@@ -6,9 +6,11 @@ use App\Models\BasicSettings\Village;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\Multitenantable;
+
 class House extends Model
 {
-    use HasFactory;
+    use HasFactory, Multitenantable;
 
     public static $snakeAttributes = false;
     protected $table = "houses";
@@ -48,6 +50,11 @@ class House extends Model
     public function unionWard()
     {
       return $this->belongsTo(UnionWard::class, 'union_ward_id', 'id');
+    }
+
+    public function villageArea()
+    {
+      return $this->belongsTo(VillageArea::class, 'village_area_id', 'id');
     }
 
    

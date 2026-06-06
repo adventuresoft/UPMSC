@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
+use App\Traits\Multitenantable;
+
 class NidCorrectionCertificate extends Model
 {
-    use HasFactory,SystemIdGenerator;
+    use HasFactory, SystemIdGenerator, Multitenantable;
 
     public static $snakeAttributes = false;
     public $table = 'nid_correction_certificates';

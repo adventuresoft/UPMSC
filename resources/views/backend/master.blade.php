@@ -37,10 +37,183 @@
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ asset('plugins')}}/select2/css/select2.min.css">
   <link rel="stylesheet" href="{{ asset('plugins')}}/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}">
   <style>
+    :root {
+        --upms-green: #10d915;
+        --upms-deep-green: #046307;
+        --upms-sidebar: #ffffff;
+        --upms-sidebar-dark: #f8fafc;
+        --upms-text: #213243;
+        --upms-sidebar-border: #e6eef3;
+    }
+
+    .main-header.navbar-upms {
+        background: var(--upms-deep-green);
+        border-bottom: 0;
+        box-shadow: 0 4px 18px rgba(4, 99, 7, 0.18);
+        min-height: 58px;
+    }
+
+    .main-header.navbar-upms .nav-link {
+        color: #ffffff !important;
+    }
+
+    .main-header.navbar-upms .nav-link:hover,
+    .main-header.navbar-upms .nav-link:focus {
+        background: rgba(255, 255, 255, 0.12);
+        color: #ffffff !important;
+    }
+
+    .main-header.navbar-upms .navbar-nav > .nav-item > .nav-link {
+        border-radius: 6px;
+        margin: 0 3px;
+        font-weight: 600;
+    }
+
+    .main-sidebar {
+        background: var(--upms-sidebar) !important;
+        border-right: 1px solid var(--upms-sidebar-border) !important;
+        box-shadow: none !important;
+    }
+
+    .brand-link {
+        display: flex;
+        align-items: center;
+        min-height: 70px;
+        background: var(--upms-sidebar) !important;
+        border-bottom: 1px solid var(--upms-sidebar-border) !important;
+        color: var(--upms-text) !important;
+        font-weight: 700;
+    }
+
+    .brand-link .brand-text {
+        color: #071b08 !important;
+        font-weight: 700 !important;
+        letter-spacing: .2px;
+    }
+
+    .brand-link .brand-image {
+        background: #ffffff;
+        border: 2px solid rgba(255, 255, 255, 0.75);
+        opacity: 1 !important;
+    }
+
+    .sidebar {
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .nav-sidebar {
+        padding-top: 8px;
+        padding-bottom: 20px;
+    }
+
+    .nav-sidebar .nav-item > .nav-link {
+        color: rgba(33, 50, 67, 0.9) !important;
+        border-radius: 8px;
+        margin: 6px 8px;
+        transition: background-color .18s ease, color .18s ease, transform .18s ease;
+        background: transparent !important;
+    }
+
+    .nav-sidebar .nav-item > .nav-link p,
+    .nav-sidebar .nav-item > .nav-link i {
+        color: inherit !important;
+    }
+
+    .nav-sidebar .nav-link:hover {
+        background-color: rgba(4, 99, 7, 0.06) !important;
+        color: var(--upms-deep-green) !important;
+        transform: translateX(1px);
+    }
+
+    .nav-sidebar > .nav-item.menu-open > .nav-link:not(.active) {
+        background: rgba(33, 50, 67, 0.04) !important;
+        color: var(--upms-text) !important;
+    }
+
+    .nav-sidebar .nav-treeview {
+        margin: 2px 8px 6px;
+        padding: 4px 0;
+        background: var(--upms-sidebar-dark);
+        border-radius: 8px;
+    }
+
+    /* Ensure submenu text is dark so it's visible on light sidebar */
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link,
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link p,
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link i {
+        color: var(--upms-text) !important;
+        font-weight: 600;
+    }
+
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link:hover {
+        color: var(--upms-deep-green) !important;
+    }
+
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link {
+        margin: 1px 6px;
+        color: rgba(255, 255, 255, 0.74) !important;
+        font-size: 14px;
+    }
+
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link.active,
+    .nav-sidebar .nav-link.active,
+    .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+    .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+        background: transparent !important;
+        color: var(--upms-deep-green) !important;
+        border-left: 3px solid var(--upms-deep-green);
+        padding-left: calc(1rem - 3px) !important;
+    }
+
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link.active i,
+    .nav-sidebar .nav-link.active i,
+    .nav-sidebar .nav-treeview > .nav-item > .nav-link.active p,
+    .nav-sidebar .nav-link.active p {
+        color: #071b08 !important;
+    }
+
+    .content-wrapper {
+        background: #eef2f7;
+        margin-top: 0 !important;
+        padding: 1rem !important;
+    }
+
+    .content-wrapper > .content {
+        margin-top: 0 !important;
+    }
+
+    .main-footer {
+        border-top: 1px solid #dbe5df;
+        color: #64748b;
+    }
+
     /* Global: Prevent horizontal scrollbars on all DataTable pages */
     .card-body {
         overflow-x: hidden;
+    }
+
+    /* Force card-info header to gray instead of cyan */
+    .card.card-info > .card-header,
+    .card-info > .card-header {
+        background: #f3f4f6 !important;
+        border-bottom-color: #e6eef3 !important;
+        color: #6b7a86 !important;
+    }
+
+    .card.card-info > .card-header .card-title,
+    .card-info > .card-header .card-title {
+        color: #6b7a86 !important;
+    }
+
+    .card.card-info > .card-header .btn,
+    .card-info > .card-header .btn {
+        background: #1f2937 !important;
+        border-color: #1f2937 !important;
+        color: #ffffff !important;
     }
     
     /* Ensure DataTables Responsive collapse works cleanly */
@@ -58,21 +231,6 @@ width:100%!important;
     .table-action{
       display: flex;
       gap: 8px;
-    }
-    /* Sidebar Active State Fix */
-    .nav-sidebar .nav-treeview > .nav-item > .nav-link.active {
-        background-color: #046307 !important;
-        color: #fff !important;
-        border-radius: 4px;
-    }
-    .nav-sidebar .nav-treeview > .nav-item > .nav-link.active i {
-        color: #fff !important;
-    }
-    .nav-sidebar .nav-link:hover {
-        background-color: rgba(255,255,255,0.1) !important;
-    }
-    .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
-        background-color: #046307 !important;
     }
   </style>
   @stack('style')
@@ -118,8 +276,7 @@ width:100%!important;
 <!-- ./wrapper -->
 
 <!-- jQuery -->
-{{-- <script src="{{ asset('plugins')}}/jquery/jquery.min.js"></script> --}}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="{{ asset('plugins') }}/jquery/jquery.min.js"></script>
 
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('plugins')}}/jquery-ui/jquery-ui.min.js"></script>

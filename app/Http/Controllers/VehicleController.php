@@ -21,7 +21,9 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        $data['vehicles'] = Vehicle::whereNull('status')->orWhere('status', 0)->latest()->get();
+        $data['vehicles'] = Vehicle::applyMultitenancy()->where(function($q) {
+            $q->whereNull('status')->orWhere('status', 0);
+        })->latest()->get();
         return view('backend.pages.vehicle.index', $data);
     }
 
@@ -84,11 +86,23 @@ class VehicleController extends Controller
                 return response(json_encode($data, JSON_PRETTY_PRINT), 422)->header('Content-Type', 'application/json');
             }
 
+            // Resolve Institute and Geographical data
+            $user = auth()->user();
+            $institute = null;
+            if ($user->institute_id) {
+                $institute = Institute::find($user->institute_id);
+            }
+
+            if (!$institute) {
+                $data['status'] = false;
+                $data['message'] = "Your account is not associated with any Institute. Please contact support.";
+                return response(json_encode($data, JSON_PRETTY_PRINT), 422)->header('Content-Type', 'application/json');
+            }
+
             // Generate Registration ID: YY-UUUU-CCSSSS
             $year = date('y');
-            $institute = Institute::whereNotNull('union_id')->first();
-            $unionId = $institute ? $institute->union_id : '1850'; // Fallback to 1850 as per example
-            $unionId = str_pad($unionId, 4, '0', STR_PAD_LEFT);
+            $unionId = $institute->union_id ?? ($institute->pourashava_id ?? ($institute->city_corporation_id ?? '0000'));
+            $unionIdStr = str_pad($unionId, 4, '0', STR_PAD_LEFT);
 
             $categoryMap = [
                 'Rickshaw - রিকশা' => '01',
@@ -98,7 +112,7 @@ class VehicleController extends Controller
             ];
             $catCode = $categoryMap[$request->vehicle_category] ?? '00';
 
-            $prefix = "VE{$year}-{$unionId}-{$catCode}";
+            $prefix = "VE{$year}-{$unionIdStr}-{$catCode}";
             $registrationId = IdGenerator::generate([
                 'table' => 'vehicles',
                 'field' => 'registration_id',
@@ -108,6 +122,10 @@ class VehicleController extends Controller
 
             $payload = [
                 'registration_id' => $registrationId,
+                'institute_id' => $institute->id,
+                'union_id' => $institute->union_id,
+                'thana_id' => $institute->thana_id,
+                'district_id' => $institute->district_id,
                 'vehicle_type' => $request->vehicle_type,
                 'vehicle_category' => $request->vehicle_category,
                 'vehicle_model' => $request->vehicle_model,
@@ -129,16 +147,14 @@ class VehicleController extends Controller
                 'width' => $request->width,
                 'tyre_size' => $request->tyre_size,
                 'color' => $request->color,
+                'created_by' => $user->id,
             ];
 
             \Log::info("Vehicle Store Payload:", $payload);
 
-            $vehicle = new Vehicle();
-            foreach ($payload as $key => $value) {
-                $vehicle->{$key} = $value;
-            }
+            $vehicle = Vehicle::create($payload);
 
-            if ($vehicle->save()) {
+            if ($vehicle) {
                 $data['status'] = true;
                 $data['message'] = "Vehicle Saved Successfully!";
                 $data['redirect_url'] = route('vehicle.show', $vehicle->id);
@@ -165,7 +181,7 @@ class VehicleController extends Controller
      */
     public function show($id)
     {
-        $vehicle = Vehicle::findOrFail($id);
+        $vehicle = Vehicle::applyMultitenancy()->findOrFail($id);
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
             : null;
@@ -189,7 +205,7 @@ class VehicleController extends Controller
      */
     public function edit($id)
     {
-        $data['vehicle'] = Vehicle::findOrFail($id);
+        $data['vehicle'] = Vehicle::applyMultitenancy()->findOrFail($id);
         return view('backend.pages.vehicle.edit', $data);
     }
 
@@ -265,15 +281,12 @@ class VehicleController extends Controller
                 'width' => $request->width,
                 'tyre_size' => $request->tyre_size,
                 'color' => $request->color,
+                'updated_by' => auth()->id(),
             ];
 
             \Log::info("Vehicle Update Payload:", $payload);
 
-            foreach ($payload as $key => $value) {
-                $vehicle->{$key} = $value;
-            }
-
-            if ($vehicle->save()) {
+            if ($vehicle->update($payload)) {
                 $data['status'] = true;
                 $data['message'] = "Vehicle Updated Successfully!";
                 $data['redirect_url'] = route('vehicle.show', $vehicle->id);
@@ -341,25 +354,25 @@ class VehicleController extends Controller
 
     public function approvalList()
     {
-        $data['vehicles'] = Vehicle::where('status', 1)->latest()->get();
+        $data['vehicles'] = Vehicle::applyMultitenancy()->where('status', 1)->latest()->get();
         return view('backend.pages.vehicle.approval_list', $data);
     }
 
     public function invoiceList()
     {
-        $data['vehicles'] = Vehicle::latest()->get();
+        $data['vehicles'] = Vehicle::applyMultitenancy()->latest()->get();
         return view('backend.pages.vehicle.invoice_list', $data);
     }
 
     public function licenseList()
     {
-        $data['vehicles'] = Vehicle::where('status', 1)->latest()->get();
+        $data['vehicles'] = Vehicle::applyMultitenancy()->where('status', 1)->latest()->get();
         return view('backend.pages.vehicle.license_list', $data);
     }
 
     public function invoiceShow($id)
     {
-        $vehicle = Vehicle::findOrFail($id);
+        $vehicle = Vehicle::applyMultitenancy()->findOrFail($id);
 
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
@@ -378,12 +391,17 @@ class VehicleController extends Controller
             ->where('fee_for', 'new')
             ->first();
 
+        $data['isPaid'] = $vehicle->payment_status === 'paid';
+        $data['canTakePayment'] = $vehicle->payment_status !== 'paid';
+
         return view('backend.pages.vehicle.invoice_show', $data);
     }
 
     public function licenseShow($id)
     {
-        $vehicle = Vehicle::where('status', 1)->findOrFail($id);
+        $vehicle = Vehicle::where(function($query) {
+            $query->where('status', 1)->orWhere('payment_status', 'paid');
+        })->findOrFail($id);
 
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
@@ -396,6 +414,11 @@ class VehicleController extends Controller
         $data['vehicle'] = $vehicle;
         $data['ownerUser'] = $ownerUser;
         $data['ownerOrganization'] = $ownerOrganization;
+
+        $data['fee'] = \App\Models\VehicleFee::where('vehicle_type', $vehicle->vehicle_type)
+            ->where('vehicle_category', $vehicle->vehicle_category)
+            ->where('fee_for', 'new')
+            ->first();
 
         return view('backend.pages.vehicle.license_show', $data);
     }
@@ -426,7 +449,9 @@ class VehicleController extends Controller
 
     public function licensePrint($id)
     {
-        $vehicle = Vehicle::where('status', 1)->findOrFail($id);
+        $vehicle = Vehicle::where(function($query) {
+            $query->where('status', 1)->orWhere('payment_status', 'paid');
+        })->findOrFail($id);
 
         $ownerUser = $vehicle->ownership_type === 'personal'
             ? $this->resolveOwnerUser($vehicle->owner_id)
@@ -440,12 +465,114 @@ class VehicleController extends Controller
         $data['ownerUser'] = $ownerUser;
         $data['ownerOrganization'] = $ownerOrganization;
 
+        $data['fee'] = \App\Models\VehicleFee::where('vehicle_type', $vehicle->vehicle_type)
+            ->where('vehicle_category', $vehicle->vehicle_category)
+            ->where('fee_for', 'new')
+            ->first();
+
         return view('backend.pages.vehicle.printlicense_show', $data);
+    }
+
+    public function storeManualPayment(Request $request, $id)
+    {
+        $request->validate([
+            'payment_details' => 'required|string|max:255',
+            'transaction_id' => 'required|string|max:255',
+            'note' => 'nullable|string|max:1000',
+        ]);
+
+        $vehicle = Vehicle::findOrFail($id);
+
+        \DB::beginTransaction();
+        try {
+            $vehicle->payment_status = 'paid';
+            $vehicle->payment_method = 'manual - ' . $request->payment_details;
+            $vehicle->transaction_id = $request->transaction_id;
+            $vehicle->paid_at = now();
+            $vehicle->status = 1; 
+            $vehicle->save();
+
+            \DB::commit();
+
+            return redirect()
+                ->route('vehicle.license.show', $vehicle->id)
+                ->with('success', 'Manual payment saved successfully.');
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            \Log::error('Vehicle Manual Payment Failed: ' . $e->getMessage());
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Something went wrong: ' . $e->getMessage());
+        }
+    }
+
+    public function onlinePayment($id)
+    {
+        $vehicle = Vehicle::findOrFail($id);
+        
+        $fee = \App\Models\VehicleFee::where('vehicle_type', $vehicle->vehicle_type)
+            ->where('vehicle_category', $vehicle->vehicle_category)
+            ->where('fee_for', 'new')
+            ->first();
+            
+        $totalfee = $fee ? $fee->total_fee : 0;
+
+        $invoice = 'VE-' . $vehicle->id . '-' . time();
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Host' => 'api.paystation.com.bd'
+            ])->asForm()->withoutVerifying()->timeout(10)->post('https://103.134.89.201/initiate-payment', [
+                'invoice_number' => $invoice,
+                'currency' => 'BDT',
+                'payment_amount' => $totalfee ?? 1,
+                'reference' => 'Vehicle License Payment #' . $vehicle->id,
+                'cust_name' => $vehicle->owner_name ?? 'Customer',
+                'cust_phone' => $vehicle->owner_phone ?? '01700000000',
+                'cust_email' => 'test@test.com',
+                'cust_address' => $vehicle->institutional_address ?? 'Dhaka',
+                'callback_url' => route('vehicle.payment.success', $vehicle->id),
+                'checkout_items' => json_encode([
+                    [
+                        "name" => "Vehicle License Fee",
+                        "qty" => 1,
+                        "price" => $totalfee ?? 1
+                    ]
+                ]),
+                'merchantId' => "2573-1775021038",
+                'password' => "'poyt32@ft4e6hgc"
+            ]);
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Payment service unreachable: ' . $e->getMessage());
+        }
+
+        $result = $response->json();
+
+        if (isset($result['status']) && $result['status'] === 'success') {
+            return redirect()->away($result['payment_url']);
+        }
+
+        return back()->with('error', $result['message'] ?? 'Payment initiation failed');
+    }
+
+    public function paymentSuccess($id)
+    {
+        $vehicle = Vehicle::findOrFail($id);
+
+        $vehicle->payment_status = 'paid';
+        $vehicle->status = 1; 
+        $vehicle->paid_at = now();
+        $vehicle->save();
+
+        return redirect()->route('vehicle.license.show', $vehicle->id)->with('success', 'Payment completed successfully');
     }
 
     public function getFees($id)
     {
-        $vehicle = Vehicle::find($id);
+        $vehicle = Vehicle::applyMultitenancy()->find($id);
         if (!$vehicle) {
             return response()->json(['status' => false, 'message' => 'Vehicle not found']);
         }

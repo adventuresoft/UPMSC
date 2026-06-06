@@ -280,18 +280,33 @@
 @section('content')
 <div class="people-certificate-page">
     <div class="people-certificate-content">
+        @php
+            $institute = $organization->institute;
+            $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+            $thanaBn = '';
+            $districtBn = '';
+            
+            if ($institute->union && $institute->union->thana) {
+                $thanaBn = $institute->union->thana->bn_name ?? '';
+                $districtBn = $institute->union->thana->district->bn_name ?? '';
+            } elseif ($institute->pourashava) {
+                $districtBn = $institute->pourashava->District->bn_name ?? '';
+            } elseif ($institute->cityCorporation) {
+                $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+            }
+        @endphp
         <div class="header-logos">
             <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
-            <div class="union-header">
-                <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
-                <div class="union-title-bn">{{ $organization->Union?->bn_name ?? '' }}</div>
-                <div class="union-title-en">{{ $organization->Union?->name ?? '' }}</div>
-                <p class="union-address">
-                    থানাঃ {{ $organization->Thana?->bn_name ?? $organization->Thana?->name ?? $organization->officeThana?->bn_name ?? $organization->officeThana?->name ?? '' }},
-                    জেলাঃ {{ $organization->District?->bn_name ?? $organization->District?->name ?? $organization->officeDistrict?->bn_name ?? $organization->officeDistrict?->name ?? '' }},
-                    বাংলাদেশ।
-                </p>
-            </div>
+            <div class="union-header" style="text-align: center; line-height: 1.1;">
+                        <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+                        <div class="union-title-bn" style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                        <div class="union-title-en" style="color:#2e3192; font-size: 20px; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
+                        <p class="union-address" style="font-size: 13px; color: #000;">
+                            @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
+                            জেলাঃ {{ $districtBn }},
+                            বাংলাদেশ।
+                        </p>
+                    </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}" alt="Govt Logo">
         </div>
 
@@ -302,7 +317,7 @@
 
         <div class="photo-badge">
             <div class="photo-box">
-                <img src="{{ $organization->logo ? asset($organization->logo) : asset('public/no-image-found.jpeg') }}" alt="Organization Logo">
+                <img src="{{ $organization->logo ? imageUrl($organization->logo) : asset('public/no-image-found.jpeg') }}" alt="Organization Logo">
             </div>
             <div class="id-info-columns">
                 <div class="id-info-item"><span>Name :</span> {{ $organization->name }}</div>
@@ -385,7 +400,7 @@
 
                     <div class="owner-top">
                         <div class="owner-photo">
-                            <img src="{{ $owner->user?->image ? asset($owner->user->image) : asset('public/no-image-found.jpeg') }}" alt="Owner Photo" onerror="this.src='{{ asset('public/no-image-found.jpeg') }}'">
+                            <img src="{{ $owner->user?->image ? imageUrl($owner->user->image) : asset('public/no-image-found.jpeg') }}" alt="Owner Photo" onerror="this.onerror=null; this.src='{{ asset('public/no-image-found.jpeg') }}'">
                         </div>
                         <div class="owner-pill-list">
                             <div class="owner-pill"><span>Name :</span> <strong>{{ $owner->user?->name ?? $owner->user_name ?? '-' }}</strong></div>

@@ -116,7 +116,7 @@
                                     <label for="institute_subcategory_id" class="col-sm-2 col-form-label">Institute Category</label>
                                     <div class="col-sm-9">
                                         <select  required class="form-control select2" name="institute_subcategory_id" id="institute_subcategory_id">
-                                            <option value="">Category A/B/C</option>
+                                            <option value="">Select Category</option>
                                             <option value="1">Category A</option>
                                             <option value="2">Category B</option>
                                             <option value="3">Category C</option>

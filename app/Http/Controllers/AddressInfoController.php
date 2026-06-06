@@ -67,16 +67,17 @@ class AddressInfoController extends Controller
         $data['roads'] = [];
         $data['post_officeses'] = [];
 
-        if(isset($institute?->institute_type_id) && $institute->institute_type_id == 1) {
-            $data['villages'] = Village::where('union_id', $institute->union_id)->get();
-            $data['wards'] = UnionWard::where('status', true)->get();
-            $data['roads'] = Road::where('institute_id',  $institute->id)->latest()->get();
-            $data['post_officeses']=PostOffice::latest()->get();
-            
-        } else if (isset($institute?->institute_type_id) && $institute->institute_type_id == 2) {
-           
-        } else if (isset($institute?->institute_type_id) && $institute->institute_type_id == 3) {
+        $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('en_ward_no')
+            ->get();
+        $data['post_officeses'] = PostOffice::latest()->get();
 
+        if ($institute) {
+            $data['roads'] = Road::where('institute_id', $institute->id)->latest()->get();
+            if ($institute->union_id) {
+                $data['villages'] = Village::where('union_id', $institute->union_id)->get();
+            }
         }
         $data['divisions'] = Division::where('status', true)->get();
         $data['districts'] = District::where('status', true)->orderBy('name')->get();

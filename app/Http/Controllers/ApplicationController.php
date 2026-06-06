@@ -33,9 +33,30 @@ class ApplicationController extends Controller
         $data['districts'] = District::where('status', true)->orderBy('name', 'asc')->get();
         $data['religions'] = Religion::where('status', true)->orderBy('name', 'asc')->get();
         $data['permanent_villages'] = Village::latest()->get();
-        $data['wards'] = UnionWard::get();
+        
+        $wards = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)->get();
+        if ($wards->isEmpty()) {
+            $firstUnion = Union::first();
+            $unionId = $firstUnion ? $firstUnion->id : 3503;
+            $banglaWards = ['১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            for ($i = 1; $i <= 9; $i++) {
+                $w = new UnionWard();
+                $w->union_id = $unionId;
+                $w->en_ward_no = $i;
+                $w->bn_ward_no = $banglaWards[$i - 1];
+                $w->status = 1;
+                $w->created_by = 1;
+                $w->save();
+            }
+            $wards = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)->get();
+        }
+        $data['wards'] = $wards;
+
         $data['roads'] = Road::latest()->get();
-        $data['permanent_unions'] = Union::where('thana_id', 385)->get();
+        $data['permanent_unions'] = Union::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
         $data['permanent_post_offices'] = PostOffice::where('thana_id', 385)->get();
 
 
@@ -102,7 +123,7 @@ class ApplicationController extends Controller
                 $image_full_name = $image_name . "." . $ext;
                 $upload_path = 'uploads/users/';
                 $image_url = $upload_path . $image_full_name;
-                $success = $image->move($upload_path, $image_full_name);
+                $success = $image->move(base_path($upload_path), $image_full_name);
                 if ($success) {
                     $user->image = $image_url;
                 }
@@ -270,3 +291,4 @@ class ApplicationController extends Controller
     }
 
 }
+

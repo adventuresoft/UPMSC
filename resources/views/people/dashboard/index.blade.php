@@ -19,7 +19,7 @@
                     <div class="card-body text-center bg-gradient-to-br from-[#046307] to-[#1a7a1e] p-4">
                         <div class="relative inline-block mb-3">
                             @if($people->image)
-                                <img class="w-20 h-20 rounded-full mx-auto object-cover ring-4 ring-white ring-opacity-30 shadow-lg" src="{{ asset($people->image) }}" alt="ছবি">
+                                <img class="w-20 h-20 rounded-full mx-auto object-cover ring-4 ring-white ring-opacity-30 shadow-lg" src="{{ imageUrl($people->image) }}" alt="ছবি">
                             @else
                                 <div class="w-20 h-20 rounded-full mx-auto bg-white bg-opacity-20 flex items-center justify-center text-white text-3xl font-black ring-4 ring-white ring-opacity-20 shadow-lg">
                                     {{ strtoupper(substr($people->name, 0, 1)) }}
@@ -202,6 +202,16 @@
                                     <h6 class="font-bold text-gray-800">হোল্ডিং ট্যাক্স</h6>
                                     <p class="text-xs text-gray-500 mb-3">হোল্ডিং ট্যাক্স নির্ধারণ বা পরিবর্তনের আবেদন।</p>
                                     <a href="{{ route('people.applications.tax.create') }}" class="btn btn-info btn-sm px-4 rounded-lg">আবেদন করুন</a>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="p-4 rounded-xl border border-rose-100 bg-rose-50/30 hover:shadow-md transition">
+                                    <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center mb-3">
+                                        <i class="fas fa-hand-holding-heart"></i>
+                                    </div>
+                                    <h6 class="font-bold text-gray-800">রিলিফ কার্ড আবেদন</h6>
+                                    <p class="text-xs text-gray-500 mb-3">ভিজিডি, ভিজিএফ, ওএমএস এবং অন্যান্য সামাজিক নিরাপত্তা কার্ডের আবেদন।</p>
+                                    <a href="{{ route('people.applications.relief-card.create') }}" class="btn btn-danger btn-sm px-4 rounded-lg">আবেদন করুন</a>
                                 </div>
                             </div>
                         </div>

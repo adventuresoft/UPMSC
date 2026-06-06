@@ -154,6 +154,17 @@
 @push('script')
     <script>
         $(document).ready(function() {
+            function toggleRequiredFields(isFighter) {
+                if (parseInt(isFighter)) {
+                    $("#type_id, #area_id, #designation_id").prop('required', true);
+                } else {
+                    $("#type_id, #area_id, #designation_id").prop('required', false);
+                }
+            }
+
+            let initial_value = $('input[name="is_freedom_fighter"]:checked').val();
+            toggleRequiredFields(initial_value);
+
             $("#peopleFreedomForm").on('submit', function(e) {
                 e.preventDefault();
                 let thisForm = $(this);
@@ -184,18 +195,18 @@
                         });
                     }
                 });
-            })
-        })
+            });
 
-
-        $(document).on('change', 'input[type=radio][name=is_freedom_fighter]', function(e) {
-            e.preventDefault();
-            let _this_value = $(this).val();
-            if (parseInt(_this_value)) {
-                $(".fighter-content").removeClass('d-none');
-            } else {
-                $(".fighter-content").removeClass('d-none').addClass('d-none');
-            }
+            $(document).on('change', 'input[type=radio][name=is_freedom_fighter]', function(e) {
+                e.preventDefault();
+                let _this_value = $(this).val();
+                toggleRequiredFields(_this_value);
+                if (parseInt(_this_value)) {
+                    $(".fighter-content").removeClass('d-none');
+                } else {
+                    $(".fighter-content").removeClass('d-none').addClass('d-none');
+                }
+            });
         })
     </script>
     

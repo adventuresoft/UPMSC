@@ -70,13 +70,13 @@
 
                                    <!-- <div class="row  text-center">
                                         <div class="col-md-12 ">
-                                            <img height="70" width="70" class="mx-auto d-block" src="{{ isset($license->organization->institute->top_image) ? asset($license->organization->institute->top_image)  : asset('public/backend/img/certificate/govt-bd-logo.png') }}" alt="govt-bd-logo">
+                                            <img height="70" width="70" class="mx-auto d-block" src="{{ isset($license->organization->institute->top_image) ? imageUrl($license->organization->institute->top_image)  : asset('public/backend/img/certificate/govt-bd-logo.png') }}" alt="govt-bd-logo">
                                         </div>
                                     </div>-->
 
                                         <div class="row mt-2">
                                             <div class="col-md-2 text-right">
-                                                <img height="70" width="70" class="mx-auto d-block" src=" {{ isset($license->organization->institute->left_image) ? asset($license->organization->institute->left_image) : 'https://seeklogo.com/images/M/moharajpur-union-logo-6FAC2CBD46-seeklogo.com.png ' }}" alt="govt-bd-logo">
+                                                <img height="70" width="70" class="mx-auto d-block" src=" {{ isset($license->organization->institute->left_image) ? $license->organization->institute->left_image : 'https://seeklogo.com/images/M/moharajpur-union-logo-6FAC2CBD46-seeklogo.com.png ' }}" alt="govt-bd-logo">
                                             </div>
                                             <div class="col-md-8 text-center">
                                                 <h2 class="text-danger bold">
@@ -95,7 +95,7 @@
                                                 </p>
                                             </div>
                                             <div class="col-md-2 text-left">
-                                                <img height="70" width="70" class="mx-auto d-block" src="{{ isset($license->organization->institute->right_image) ? asset($license->organization->institute->right_image) : 'https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/Mujib_100_Logo.svg/1200px-Mujib_100_Logo.svg.png' }} "
+                                                <img height="70" width="70" class="mx-auto d-block" src="{{ isset($license->organization->institute->right_image) ? imageUrl($license->organization->institute->right_image) : 'https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/Mujib_100_Logo.svg/1200px-Mujib_100_Logo.svg.png' }} "
                                                 alt="govt-bd-logo">
                                             </div>
                                         </div>

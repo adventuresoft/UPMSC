@@ -49,33 +49,13 @@
                                     <div class="col-sm-9">
     
                                         <div class="row">
-                                            <div class="col-sm-4">
-                                                <label for="left_image">Left <span class="text-danger" title="Required"
+                                            <div class="col-sm-6">
+                                                <label for="left_image">Union Logo (Left Side) <span class="text-danger" title="Required"
                                                         data-toggle="tooltip">*</span></label>
-                                                <input type="file" required id="left_image" name="left_image">
+                                                <input type="file" @if(!$institute->left_image) required @endif id="left_image" name="left_image">
                                                 <small class="error left_image-error text-danger"></small><br>
-                                                <img class="img-fluid img-thumbnail my-3" height="100" width="100"
-                                                    src="{{ asset( $institute->left_image ??  'public/no-image-found.jpeg') }}" id="left_image_preview"
-                                                    alt="leftImagePreview">
-    
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <label for="top_image">Top <span class="text-danger" title="Required"
-                                                        data-toggle="tooltip">*</span></label>
-                                                <input type="file" required id="top_image" name="top_image">
-                                                <small class="error top_image-error text-danger"></small><br>
-                                                <img class="img-fluid img-thumbnail my-3" height="100" width="100"
-                                                    src="{{ asset($institute->top_image ?? 'public/no-image-found.jpeg') }}" id="top_image_preview"
-                                                    alt="leftImagePreview">
-    
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <label for="right_image">Right <span class="text-danger" title="Required"
-                                                        data-toggle="tooltip">*</span></label>
-                                                <input type="file" id="right_image" required name="right_image">
-                                                <small class="error right_image-error text-danger"></small><br>
-                                                <img class="img-fluid img-thumbnail my-3" height="100" width="100"
-                                                    src="{{ asset( $institute->right_image ?? 'public/no-image-found.jpeg') }}" id="right_image_preview"
+                                                <img class="img-fluid img-thumbnail my-3" height="120" width="120"
+                                                    src="{{ $institute->left_image ?? asset('public/no-image-found.jpeg') }}" id="left_image_preview"
                                                     alt="leftImagePreview">
                                             </div>
                                         </div>

@@ -173,7 +173,7 @@ $(document).ready(function() {
         let id = $(this).val();
         let target = $(this).closest('.single-professional').find('.profession-type');
         if(id) {
-            $.get("/profession-type-options-by-profession/" + id, function(data) {
+            $.get("{{ url('/profession-type-options-by-profession') }}/" + id, function(data) {
                 target.html(data);
             });
         }
@@ -183,7 +183,7 @@ $(document).ready(function() {
         let id = $(this).val();
         let target = $(this).closest('.single-professional').find('.profession-category');
         if(id) {
-            $.get("/profession-category-options-by-profession-type/" + id, function(data) {
+            $.get("{{ url('/profession-category-options-by-profession-type') }}/" + id, function(data) {
                 target.html(data);
             });
         }
@@ -193,7 +193,7 @@ $(document).ready(function() {
         let id = $(this).val();
         let target = $(this).closest('.single-professional').find('.profession-subcategory');
         if(id) {
-            $.get("/profession-subcategory-options-by-profession-category/" + id, function(data) {
+            $.get("{{ url('/profession-subcategory-options-by-profession-category') }}/" + id, function(data) {
                 target.html(data);
             });
         }

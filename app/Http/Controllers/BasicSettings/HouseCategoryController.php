@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BasicSettings\HouseCategory;
 use App\Models\BasicSettings\HouseType;
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -62,15 +63,29 @@ class HouseCategoryController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), [
-                'house_type_id' => 'required|integer|exists:house_types,id',
-                'en_name' => 'required|unique:house_categories,en_name',
-                'bn_name' => 'required|unique:house_categories,bn_name',
+                'house_type_id' => 'required|integer',
+                'en_name' => 'required',
+                'bn_name' => 'required',
             ]);
 
             if ($validate->fails()) {
                 $data['status'] = false;
                 $data['message'] = "Sorry! Invalid Entry.";
                 $data['errors'] = $validate->errors();
+                return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+            }
+
+            if (!HouseType::whereKey($request->house_type_id)->exists()) {
+                $data['status'] = false;
+                $data['message'] = "Sorry! Invalid Entry.";
+                $data['errors'] = new MessageBag(['house_type_id' => ['Selected house type is not available for your area.']]);
+                return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+            }
+
+            if ($this->hasVisibleDuplicate('en_name', $request->en_name) || $this->hasVisibleDuplicate('bn_name', $request->bn_name)) {
+                $data['status'] = false;
+                $data['message'] = "Sorry! Invalid Entry.";
+                $data['errors'] = new MessageBag(['name' => ['This house category already exists for your area.']]);
                 return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
             }
 
@@ -119,7 +134,7 @@ class HouseCategoryController extends Controller
      */
     public function edit($id)
     {
-        $data['category'] = HouseCategory::find($id);
+        $data['category'] = HouseCategory::findOrFail($id);
         $data['types'] = HouseType::latest()->get();
         return view('backend.pages.basic.house.category.edit', $data);
     }
@@ -135,9 +150,9 @@ class HouseCategoryController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), [
-                'house_type_id' => 'required|integer|exists:house_types,id',
-                'en_name' => 'required|unique:house_categories,en_name,'. $id,
-                'bn_name' => 'required|unique:house_categories,bn_name,'. $id,
+                'house_type_id' => 'required|integer',
+                'en_name' => 'required',
+                'bn_name' => 'required',
             ]);
 
             if ($validate->fails()) {
@@ -146,6 +161,20 @@ class HouseCategoryController extends Controller
                 $data['errors'] = $validate->errors();
                 return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
             }
+
+                if (!HouseType::whereKey($request->house_type_id)->exists()) {
+                    $data['status'] = false;
+                    $data['message'] = "Sorry! Invalid Entry.";
+                    $data['errors'] = new MessageBag(['house_type_id' => ['Selected house type is not available for your area.']]);
+                    return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+                }
+
+                if ($this->hasVisibleDuplicate('en_name', $request->en_name, $id) || $this->hasVisibleDuplicate('bn_name', $request->bn_name, $id)) {
+                    $data['status'] = false;
+                    $data['message'] = "Sorry! Invalid Entry.";
+                    $data['errors'] = new MessageBag(['name' => ['This house category already exists for your area.']]);
+                    return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+                }
 
                 $query = HouseCategory::find($id);
 
@@ -210,5 +239,12 @@ class HouseCategoryController extends Controller
             $data['errors'] = $th;
             return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
         }
+    }
+
+    private function hasVisibleDuplicate(string $column, ?string $value, ?int $ignoreId = null): bool
+    {
+        return HouseCategory::where($column, $value)
+            ->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))
+            ->exists();
     }
 }

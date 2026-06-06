@@ -23,12 +23,12 @@
     }
 
     .certificate-page {
-        width: 267mm;
-        height: 374mm;
+        width: 210mm;
+        height: 297mm;
         margin: auto;
         position: relative;
         background: url('{{ asset("images/sucsesion.png") }}') no-repeat center;
-        background-size: 267mm 374mm;
+        background-size: 210mm 297mm;
         overflow: hidden;
     }
 
@@ -48,23 +48,37 @@
         margin-bottom: 8px;
     }
 
+    .header-text-block {
+        margin-top: 15px;
+    }
+
     .header-logos img {
         width: 80px;
         height: 80px;
         object-fit: contain;
     }
 
+    .header-logos h6 {
+        margin: 0 0 5px 0;
+        padding: 0;
+        line-height: 1;
+    }
+
     .union-title {
         text-align: center;
-        font-size: 22px;
+        font-size: 30px;
         font-weight: bold;
         color: #006600;
+        margin: 0 0 5px 0;
+        line-height: 1;
     }
 
     .union-subtitle {
         text-align: center;
-        font-size: 15px;
+        font-size: 20px;
         color: #003366;
+        margin: 0;
+        line-height: 1;
     }
 
     .doc-header {
@@ -98,10 +112,10 @@
     }
 
     .intro-text {
-        font-size: 14px;
-        line-height: 1.6;
+        font-size: 13px;
+        line-height: 1.5;
         text-align: justify;
-        margin: 15px 0 10px;
+        margin: 12px 0;
     }
 
     .section-header {
@@ -122,10 +136,15 @@
     .info-label {
         width: 220px;
         font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        padding-right: 15px;
     }
 
     .info-value {
         flex: 1;
+        font-weight: bold;
+        font-size: 13px;
     }
 
     .fees-table-new {
@@ -193,6 +212,13 @@
         display: none;
     }
 
+    .certificate-footer {
+        position: absolute;
+        bottom: 12mm;
+        left: 16mm;
+        font-size: 11px;
+    }
+
     .manual-payment-box {
         max-width: 900px;
         margin: 25px auto 0;
@@ -203,12 +229,66 @@
     }
 
     @media print {
-        body {
+        @page {
+            size: A4 portrait;
             margin: 0;
         }
-
-        .no-print {
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 210mm;
+            height: 297mm;
+            background: #ffffff !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+        body * {
+            visibility: hidden !important;
+        }
+        .certificate-page,
+        .certificate-page * {
+            visibility: visible !important;
+        }
+        .no-print, .main-footer, .navbar, .sidebar, .main-sidebar, .main-header {
             display: none !important;
+        }
+        .wrapper,
+        .content-wrapper,
+        .content,
+        .container-fluid {
+            margin: 0 !important;
+            margin-left: 0 !important;
+            padding: 0 !important;
+            width: 210mm !important;
+            max-width: none !important;
+            min-height: 0 !important;
+            background: #ffffff !important;
+        }
+        .certificate-page {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: auto !important;
+            bottom: auto !important;
+            display: block !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            margin: 0 !important;
+            border: none !important;
+            box-sizing: border-box !important;
+            box-shadow: none !important;
+            overflow: hidden !important;
+            transform: none !important;
+            page-break-after: avoid;
+            page-break-inside: avoid;
+        }
+        .certificate-content {
+            top: 25mm !important;
+            left: 20mm !important;
+            right: 20mm !important;
+            bottom: 20mm !important;
+            padding: 10mm !important;
         }
     }
 </style>
@@ -229,7 +309,7 @@
     if (!$ownerAddress && $owner?->addressInfo) {
         $addr = $owner->addressInfo;
         $ownerAddress = collect([
-            $addr->permanent_house ? 'বাড়ী নং: ' . $addr->permanent_house : null,
+            $addr->permanent_house ? 'বাড়ী নং: ' . $addr->permanent_house : null,
             $addr->permanent_road ? 'রাস্তা: ' . $addr->permanent_road : null,
             $addr->permanentVillage?->bn_name ?? $addr->permanentVillage?->name,
             $addr->permanentUnion?->bn_name ?? $addr->permanentUnion?->name,
@@ -275,38 +355,63 @@
     <div class="certificate-content">
         @if(!$organization)
             <div class="alert alert-warning no-print" style="font-size:13px;">
-                এই ট্রেড লাইসেন্সের সাথে যুক্ত প্রতিষ্ঠানের তথ্য পাওয়া যায়নি। কিছু তথ্য ফাঁকা থাকতে পারে।
+                এই ট্রেড লাইসেন্সের সাথে যুক্ত প্রতিষ্ঠানের তথ্য পাওয়া যায়নি। কিছু তথ্য ফাঁকা থাকতে পারে।
             </div>
         @endif
 
         <div class="header-logos">
             <img src="{{ asset('images/dhaka.png') }}">
-            <div>
-                <h6 class="text-center">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h6>
-                <div class="union-title">৩নং শুকতাইল ইউনিয়ন পরিষদ</div>
-                <div class="union-subtitle">No. 3 Shukhtail Union Parishad</div>
+            <div class="header-text-block" style="text-align: center; line-height: 1.1;">
+                <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+                @php
+                    $institute = $license->organization->institute;
+                    $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+                    $thanaBn = '';
+                    $districtBn = '';
+                    
+                    if ($institute->union && $institute->union->thana) {
+                        $thanaBn = $institute->union->thana->bn_name ?? '';
+                        $districtBn = $institute->union->thana->district->bn_name ?? '';
+                    } elseif ($institute->pourashava) {
+                        $districtBn = $institute->pourashava->District->bn_name ?? '';
+                    } elseif ($institute->cityCorporation) {
+                        $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+                    }
+                @endphp
+                <div style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                <div style="font-size: 20px; color: #2e3192; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
+                <div style="font-size: 13px; color: #000;">
+                    @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
+                    জেলাঃ {{ $districtBn }},
+                    বাংলাদেশ।
+                </div>
             </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}">
         </div>
 
+         {{-- Document Header --}}
         <div class="doc-header">
             <div style="margin-top: 20px;">
-                নম্বর: <strong>{{ bnValue($license->system_id) }}</strong><br>
-                <img src="{{ $license->scan_image ?? asset('images/scanner.png') }}" style="width:80px;height:80px;object-fit:cover;">
+               
+                <img src="{{ 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' . urlencode(route('trade-license.public-verify', $license->id)) }}" style="width:80px;height:80px;object-fit:cover;"><br><br>
+                
+                <u style="font-size: 13px; font-weight: bold;">ট্রেড লাইসেন্স ইস্যুর তারিখ</u><br>
+                <span style="font-size: 12px;">তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}</span>
             </div>
 
             <div class="doc-title-block">
                 <div class="doc-title">ট্রেড লাইসেন্স</div>
                 <div class="validity-info">
-                    নবায়ন/নতুন <br>
-                    অর্থ বছর: {{ $license->taxYear?->name ?? '--' }} <br>
-                    এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত
+                    নতুন<br>
+                    অর্থ বছর: {{ $license->taxYear->name }} <br>
+                    <span style="color: red;">এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত</span> <br><br><br>
+                    <span style="font-size: 16px;">ট্রেড লাইসেন্স নম্বর: <strong style="font-size: 18px;">{{ bnValue($license->system_id) }}</strong></span><br>
                 </div>
             </div>
 
             <div style="text-align:right">
                 তারিখ: {{ bnValue(date('d/m/Y', strtotime($license->updated_at))) }}<br>
-                <img src="{{ ($owner?->image || $owner?->people?->image) ? asset($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.5in;height:1.9in;object-fit:cover; border:1px solid #ddd;">
+                <img src="{{ ($owner?->image || $owner?->people?->image) ? imageUrl($owner?->image ?? $owner?->people?->image) : asset('images/photo-placeholder.png') }}" style="width:1.3in;height:1.5in;object-fit:cover; border:2px solid #000;">
             </div>
         </div>
 
@@ -317,12 +422,12 @@
         <div class="section-header">ব্যবসা প্রতিষ্ঠানের তথ্য</div>
 
         <div class="info-row">
-            <span class="info-label"><span style="display:inline-block; width:30px;">১।</span> (ক) প্রতিষ্ঠানের নাম :</span>
-            <span class="info-value">{{ $organization?->bn_name ?? ($organization?->name ?? '--') }}</span>
+            <span class="info-label"><span><span style="display:inline-block; width:30px;">১।</span> (ক) প্রতিষ্ঠানের নাম</span> <span>:</span></span>
+            <span class="info-value" style="font-weight: bold; font-size: 13px;">{{ $organization?->bn_name ?? ($organization?->name ?? '--') }}</span>
         </div>
         <div class="info-row">
-            <span class="info-label"><span style="display:inline-block; width:30px;"></span> (খ) প্রতিষ্ঠানের নাম (ইংরেজি) :</span>
-            <span class="info-value">{{ $organization?->en_name ?? ($organization?->name ?? '--') }}</span>
+            <span class="info-label"><span><span style="display:inline-block; width:30px;"></span> (খ) প্রতিষ্ঠানের নাম (ইংরেজি)</span> <span>:</span></span>
+            <span class="info-value" style="font-weight: bold; font-size: 13px;">{{ $organization?->en_name ?? ($organization?->name ?? '--') }}</span>
         </div>
 
         @php
@@ -336,7 +441,7 @@
 
         @foreach($otherBusinessInfo as $label => $value)
             <div class="info-row">
-                <span class="info-label">{{ $label }} :</span>
+                <span class="info-label"><span>{{ $label }}</span> <span>:</span></span>
                 <span class="info-value">{{ $value }}</span>
             </div>
         @endforeach
@@ -344,11 +449,11 @@
         <div class="section-header">মালিকের তথ্য</div>
 
         <div class="info-row">
-            <span class="info-label"><span style="display:inline-block; width:30px;">১।</span> (ক) মালিকের নাম :</span>
+            <span class="info-label"><span><span style="display:inline-block; width:30px;">১।</span> (ক) মালিকের নাম</span> <span>:</span></span>
             <span class="info-value">{{ $owner?->people?->bn_name }}</span>
         </div>
         <div class="info-row">
-            <span class="info-label"><span style="display:inline-block; width:30px;"></span> (খ) মালিকের নাম (ইংরেজি) :</span>
+            <span class="info-label"><span><span style="display:inline-block; width:30px;"></span> (খ) মালিকের নাম (ইংরেজি)</span> <span>:</span></span>
             <span class="info-value">{{ $owner?->name ?? '--' }}</span>
         </div>
 
@@ -364,46 +469,63 @@
 
         @foreach($otherOwnerInfo as $label => $value)
             <div class="info-row">
-                <span class="info-label">{{ $label }} :</span>
+                <span class="info-label"><span>{{ $label }}</span> <span>:</span></span>
                 <span class="info-value">{{ $value }}</span>
             </div>
         @endforeach
 
         <div class="section-header">ব্যবসা প্রতিষ্ঠানের ফিস</div>
-        <table class="fees-table-new">
-            <thead>
-                <tr>
-                    <th>ক্রমিক নং</th>
-                    <th>ফি এর বিষয়</th>
-                    <th>বকেয়া</th>
-                    <th>টাকা</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if(!empty($fees))
-                    @foreach($fees as $feeHead => $amount)
-                        <tr>
-                            <td>{{ bnValue($loop->iteration) }}</td>
-                            <td>{{ $feeHead }}</td>
-                            <td></td>
-                            <td>{{ currencyFormat((float) $amount) }}</td>
-                        </tr>
-                    @endforeach
-                    <tr class="fees-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">মোট:</td>
-                        <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
-                    </tr>
-                    <tr class="fees-grand-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
-                        <td style="text-align: right;">{{ currencyFormat($totalFee) }}</td>
-                    </tr>
-                @else
-                    <tr>
-                        <td colspan="4" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
+        @php
+            $feeMapping = [
+                'New Registration Charge' => 'নতুন নিবন্ধন ফি',
+                'Yearly Charge' => 'বার্ষিক ফি',
+                'Renew Charge' => 'নবায়ন ফি',
+                'Signboard Fees' => 'সাইনবোর্ড ফি',
+                'Surcharge' => 'সারচার্জ',
+                'Others' => 'অন্যান্য',
+                'VAT' => 'ভ্যাট',
+                'TAX' => 'ট্যাক্স',
+                'Fine' => 'জরিমানা',
+                'Trade License Fee' => 'ট্রেড লাইসেন্স ফি',
+                'Business Tax' => 'ব্যবসা কর',
+                'Signboard Tax' => 'সাইনবোর্ড কর',
+                'Professional Tax' => 'পেশা কর',
+                'Sanitation Fee' => 'স্যানিটেশন ফি',
+                'Environmental Fee' => 'পরিবেশ ফি',
+                'Application Fee' => 'আবেদন ফি',
+                'Service Charge' => 'সার্ভিস চার্জ',
+                'Other Fee' => 'অন্যান্য ফি',
+                'Penalty' => 'জরিমানা',
+            ];
+        @endphp
+
+        <div style="margin-top: 10px;">
+            @if(!empty($fees))
+                @foreach($fees as $feeHead => $amount)
+                    <div style="display: flex; margin-bottom: 2px; font-size: 13px; align-items: center;">
+                        <div style="width: 180px; display: flex; justify-content: space-between; font-weight: bold;">
+                            <span>{{ bnValue($loop->iteration) }}। {{ $feeMapping[$feeHead] ?? $feeHead }}</span>
+                            <span>:</span>
+                        </div>
+                        <div style="flex: 1; text-align: right; padding-right: 10px; font-weight: bold;">
+                            {{ bnValue(currencyFormat((float) $amount)) }}/-
+                        </div>
+                    </div>
+                @endforeach
+                
+                <div style="display: flex; margin-top: 8px; border-top: 1px solid #333; padding-top: 5px; font-size: 15px; font-weight: bold; align-items: center;">
+                    <div style="width: 180px; display: flex; justify-content: space-between;">
+                        <span>সর্বমোট</span>
+                        <span>:</span>
+                    </div>
+                    <div style="flex: 1; text-align: right; padding-right: 10px;">
+                        {{ bnValue(currencyFormat($totalFee)) }}/-
+                    </div>
+                </div>
+            @else
+                <div class="text-center py-2" style="font-size: 13px;">কোন ফি নির্ধারণ করা নেই</div>
+            @endif
+        </div>
 
 
         <div class="signature-area">
@@ -414,6 +536,11 @@
                 </div>
             @endforeach
         </div>
+    </div>
+
+    <!-- ================= Footer ================= -->
+    <div class="certificate-footer">
+        This report generated by UPMS | Powered by <strong>Adventure Soft</strong>
     </div>
 </div>
 

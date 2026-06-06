@@ -428,10 +428,23 @@
 
         {{-- Header with Logos --}}
         @php
-            $headerUnion = $user->addressInfo?->presentUnion ?? $user->institute?->union;
+            // Use the institute of the currently authenticated user for header branding
+            $authInstitute = null;
+            if (Auth::guard('web')->check()) {
+                $authInstitute = Auth::guard('web')->user()->institute;
+            } elseif (Auth::guard('people')->check()) {
+                $authInstitute = Auth::guard('people')->user()->institute;
+            }
+
+            $headerUnion = $authInstitute?->union ?? $user->addressInfo?->presentUnion;
+            $headerLogo = asset('assets/images/logo/govt-bd-logo.png'); // fallback
+
+            if ($authInstitute) {
+                $headerLogo = imageUrl($authInstitute->left_image, 'assets/images/logo/govt-bd-logo.png');
+            }
         @endphp
         <div class="header-logos">
-            <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
+            <img src="{{ $headerLogo }}" alt="City Logo">
             <div class="union-header">
                 <h5 class="mb-0">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h5>
                 <div class="union-title-bn">{{ $headerUnion?->bn_name ?? '' }}</div>
@@ -456,8 +469,8 @@
         <div class="photo-badge">
             <div class="photo-box">
                 @php
-                    $imagePath = $user->image && file_exists(public_path($user->image)) 
-                        ? asset($user->image) 
+                    $imagePath = $user->image && file_exists(base_path($user->image)) 
+                        ? imageUrl($user->image) 
                         : asset('public/no-image-found.jpeg');
                 @endphp
                 <img src="{{ $imagePath }}" alt="Profile Photo">
@@ -524,27 +537,27 @@
         <div class="two-columns">
             <div class="col">
                 <h6 class="mb-2 font-weight-bold">স্থায়ী ঠিকানা / Permanent Address</h6>
-                <div class="info-row"><span class="info-label">District :</span><span class="info-value">{{ $user->addressInfo->permanentDistrict->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Thana :</span><span class="info-value">{{ $user->addressInfo->permanentThana->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Union :</span><span class="info-value">{{ $user->addressInfo->permanentUnion->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo->permanentPostoffice->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo->permanentVillage->en_name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo->permanentWard->en_ward_no ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo->permanent_area ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo->permanentRoad->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo->permanentHouse->house ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">District :</span><span class="info-value">{{ $user->addressInfo?->permanentDistrict?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Thana :</span><span class="info-value">{{ $user->addressInfo?->permanentThana?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Union :</span><span class="info-value">{{ $user->addressInfo?->permanentUnion?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo?->permanentPostOffice?->name ?? $user->addressInfo?->permanentPostoffice?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo?->permanentVillage?->en_name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo?->permanentWard?->en_ward_no ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo?->permanent_area ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo?->permanentRoad?->name ?? $user->addressInfo?->permanent_road ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo?->permanentHouse?->house ?? $user->addressInfo?->permanent_house ?? '' }}</span></div>
             </div>
             <div class="col">
                 <h6 class="mb-2 font-weight-bold">বর্তমান ঠিকানা / Present Address</h6>
-                <div class="info-row"><span class="info-label">District :</span><span class="info-value">{{ $user->addressInfo->presentDistrict->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Thana :</span><span class="info-value">{{ $user->addressInfo->presentThana->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Union :</span><span class="info-value">{{ $user->addressInfo->presentUnion->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo->presentPostoffice->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo->presentVillage->en_name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo->presentWard->en_ward_no ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo->present_area ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo->presentRoad->name ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo->presentHouse->house ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">District :</span><span class="info-value">{{ $user->addressInfo?->presentDistrict?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Thana :</span><span class="info-value">{{ $user->addressInfo?->presentThana?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Union :</span><span class="info-value">{{ $user->addressInfo?->presentUnion?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo?->presentPostoffice?->name ?? $user->addressInfo?->presentPostOffice?->name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo?->presentVillage?->en_name ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo?->presentWard?->en_ward_no ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo?->present_area ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo?->presentRoad?->name ?? $user->addressInfo?->present_road ?? '' }}</span></div>
+                <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo?->presentHouse?->house ?? $user->addressInfo?->present_house ?? '' }}</span></div>
             </div>
         </div>
 
@@ -771,3 +784,4 @@ function approvePeople(id) {
     }
 </script>
 @endpush
+

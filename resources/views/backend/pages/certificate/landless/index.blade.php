@@ -149,24 +149,25 @@
                                         <td>{{ ++$key }}</td>
 
                                         <td>
-                                            <img src="{{ asset($certificate->user->photo ?? 'default.png') }}"
-                                                width="40"
-                                                height="40"
-                                                class="img-circle">
+                                            <img src="{{ imageUrl($certificate->user?->image ?? 'default.png') }}"
+                                                width="55"
+                                                height="65"
+                                                class="img"
+                                                onerror="this.src='{{ asset('default.png') }}'">
                                         </td>
 
                                         <td>{{ $certificate->certificate_number ?? bnValue($certificate->system_id ?? '') }}</td>
 
                                         <td>
                                             <span class="citizen-id">
-                                                {{ bnValue($certificate->system_id ?? '') }}
+                                                {{ $certificate->user?->people?->approved_id ?? 'No ID' }}
                                             </span><br>
-                                            {{ $certificate->user->name ?? '' }}
+                                            {{ $certificate->user?->name ?? '' }}
                                         </td>
 
                                         <td>
-                                            {{ $certificate->user->address ?? '' }} <br>
-                                            <strong>{{ $certificate->user->mobile ?? '' }}</strong>
+                                            {{ $certificate->user?->address ?? '' }} <br>
+                                            <strong>{{ $certificate->user?->mobile ?? '' }}</strong>
                                         </td>
 
                                         <td>{{ $certificate->land_type ?? 'N/A' }}</td>

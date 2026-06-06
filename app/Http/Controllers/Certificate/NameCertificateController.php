@@ -27,10 +27,15 @@ class NameCertificateController extends Controller
      */
     public function index()
     {
-        $data['certificates'] = NameCertificate::with('user')
-        ->whereHas('user', function($q1){
-            $q1->applyMultitenancy();
-        })->latest()->get();
+        $data['certificates'] = NameCertificate::with([
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district'
+        ])
+        ->applyMultitenancy()
+        ->latest()
+        ->get();
         return view('backend.pages.certificate.name.index', $data);
     }
 
@@ -154,27 +159,59 @@ class NameCertificateController extends Controller
         return $pdf->stream('name-certificate.pdf');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Certificate\NameCertificate  $nameCertificate
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(NameCertificate $nameCertificate)
+    public function edit($id)
     {
-        //
+        $data['certificate'] = NameCertificate::findOrFail($id);
+        $data['users'] = User::with('people')
+        ->where('status', true)
+        ->where('role_id', 5)
+        ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
+        ->applyMultitenancy()
+        ->get();
+        return view('backend.pages.certificate.name.edit', $data);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Certificate\NameCertificate  $nameCertificate
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, NameCertificate $nameCertificate)
+    public function update(Request $request, $id)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'name_english' => 'required|string',
+            'name_bangla' => 'required|string',
+        ]);
+
+        if ($validate->fails()) {
+            $data['status'] = false;
+            $data['message'] = "Sorry! Invalid Entry.";
+            $data['errors'] = $validate->errors();
+            return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+        }
+
+        try {
+            $certificate = NameCertificate::findOrFail($id);
+            $certificate->user_id = $request->user_id;
+            $certificate->name_english = $request->name_english;
+            $certificate->name_bangla = $request->name_bangla;
+            $certificate->save();
+
+            $data['status'] = true;
+            $data['message'] = "Certificate updated successfully!";
+            $data['result'] = $certificate;
+            $data['code'] = 200;
+            $data['redirect_url'] = route('name.index');
+            return response()->json($data, 200);
+        } catch (\Throwable $th) {
+            $data['status'] = false;
+            $data['message'] = "Something went wrong! Please try again...";
+            $data['errors'] = $th->getMessage();
+            return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
+        }
     }
 
     /**

@@ -19,7 +19,7 @@
             line-height: 1.4;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
-            background: #fff;
+            background: #ffffff !important;
         }
 
         .trade-license-page {
@@ -154,15 +154,18 @@
             text-align: center;
         }
         
-        .fees-table-new td:nth-child(2) {
-            text-align: left;
-            width: 50%;
+        .fees-table-new td:nth-child(1) {
+            width: 15%;
         }
         
-        .fees-table-new td:nth-child(3),
-        .fees-table-new td:nth-child(4) {
+        .fees-table-new td:nth-child(2) {
+            text-align: left;
+            width: 55%;
+        }
+        
+        .fees-table-new td:nth-child(3) {
             text-align: right;
-            width: 20%;
+            width: 30%;
         }
 
         .fees-total {
@@ -177,6 +180,9 @@
         }
 
         @media print {
+            html, body {
+                background: #ffffff !important;
+            }
             .no-print {
                 display: none !important;
             }
@@ -184,22 +190,32 @@
                 background-color: transparent !important;
                 color: black !important;
             }
-            .fees-grand-total, .fees-total, .fees-table-new th {
-                background-color: #f0f0f0 !important;
+            .fees-table-new th {
+                background-color: #dcdcdc !important;
                 color: black !important;
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .fees-total {
+                background-color: #f8f8f8 !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .fees-grand-total {
-                background-color: #e8e8e8 !important;
+                background-color: #dcdcdc !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .fees-table-new th, .fees-table-new td {
                 border: 1px solid #333 !important;
             }
             .trade-license-page {
-                border: none;
+                border: 4px solid #556b2f !important;
             }
             .inner-border {
-                border: none;
+                border: 2px solid #556b2f !important;
             }
         }
         .signature-area {
@@ -321,7 +337,6 @@
                 <tr>
                     <th>ক্রমিক নং</th>
                     <th>ফি এর বিষয়</th>
-                    <th>বকেয়া</th>
                     <th>টাকা</th>
                 </tr>
             </thead>
@@ -330,44 +345,39 @@
                     <tr>
                         <td>১</td>
                         <td>নিবন্ধন ফি (Registration)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->registration_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr>
                         <td>২</td>
                         <td>রাস্তা ফি (Road)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->road_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr>
                         <td>৩</td>
                         <td>ফিটনেস ফি (Fitness)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->fitness_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr>
                         <td>৪</td>
                         <td>ভ্যাট (VAT)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->vat_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr>
                         <td>৫</td>
                         <td>ট্যাক্স (Tax)</td>
-                        <td></td>
                         <td>{{ currencyFormat($fee->tax_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr class="fees-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">মোট:</td>
+                        <td colspan="2" style="text-align: right; padding-right: 20px;">মোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($fee->total_fee) ?? '০.০০' }}</td>
                     </tr>
                     <tr class="fees-grand-total">
-                        <td colspan="3" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
+                        <td colspan="2" style="text-align: right; padding-right: 20px;">সর্বমোট:</td>
                         <td style="text-align: right;">{{ currencyFormat($fee->total_fee) ?? '০.০০' }}</td>
                     </tr>
                 @else
                     <tr>
-                        <td colspan="4" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
+                        <td colspan="3" class="text-center py-4">কোন ফি নির্ধারণ করা নেই</td>
                     </tr>
                 @endif
             </tbody>

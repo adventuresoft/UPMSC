@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BasicSettings;
 use App\Http\Controllers\Controller;
 use App\Models\BasicSettings\LandOwnershipType;
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -46,14 +47,21 @@ class LandOwnershipTypeController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), [
-                'en_name' => 'required|unique:land_ownership_types,en_name',
-                'bn_name' => 'required|unique:land_ownership_types,bn_name',
+                'en_name' => 'required',
+                'bn_name' => 'required',
             ]);
 
             if ($validate->fails()) {
                 $data['status'] = false;
                 $data['message'] = "Sorry! Invalid Entry.";
                 $data['errors'] = $validate->errors();
+                return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+            }
+
+            if ($this->hasVisibleDuplicate('en_name', $request->en_name) || $this->hasVisibleDuplicate('bn_name', $request->bn_name)) {
+                $data['status'] = false;
+                $data['message'] = "Sorry! Invalid Entry.";
+                $data['errors'] = new MessageBag(['name' => ['This land ownership type already exists for your area.']]);
                 return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
             }
 
@@ -101,7 +109,7 @@ class LandOwnershipTypeController extends Controller
      */
     public function edit($id)
     {
-        $data['type'] = LandOwnershipType::find($id);
+        $data['type'] = LandOwnershipType::findOrFail($id);
         return view('backend.pages.basic.land.ownership.edit', $data);
     }
 
@@ -116,8 +124,8 @@ class LandOwnershipTypeController extends Controller
     {
         try {
             $validate = Validator::make($request->all(), [
-                'en_name' => 'required|unique:land_ownership_types,en_name,'. $id,
-                'bn_name' => 'required|unique:land_ownership_types,bn_name,'. $id,
+                'en_name' => 'required',
+                'bn_name' => 'required',
             ]);
 
             if ($validate->fails()) {
@@ -126,6 +134,13 @@ class LandOwnershipTypeController extends Controller
                 $data['errors'] = $validate->errors();
                 return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
             }
+
+                if ($this->hasVisibleDuplicate('en_name', $request->en_name, $id) || $this->hasVisibleDuplicate('bn_name', $request->bn_name, $id)) {
+                    $data['status'] = false;
+                    $data['message'] = "Sorry! Invalid Entry.";
+                    $data['errors'] = new MessageBag(['name' => ['This land ownership type already exists for your area.']]);
+                    return response(json_encode($data, JSON_PRETTY_PRINT), 400)->header('Content-Type', 'application/json');
+                }
 
                 $query = LandOwnershipType::find($id);
 
@@ -191,5 +206,12 @@ class LandOwnershipTypeController extends Controller
              $data['errors'] = $th;
              return response(json_encode($data, JSON_PRETTY_PRINT), 500)->header('Content-Type', 'application/json');
          }
+    }
+
+    private function hasVisibleDuplicate(string $column, ?string $value, ?int $ignoreId = null): bool
+    {
+        return LandOwnershipType::where($column, $value)
+            ->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))
+            ->exists();
     }
 }

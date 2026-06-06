@@ -57,6 +57,7 @@ use App\Http\Controllers\Certificate\ResidentialCertificateController;
 use App\Http\Controllers\Certificate\PermanentCitizenCertificateController;
 use App\Http\Controllers\Certificate\AgeCertificateController;
 use App\Http\Controllers\Certificate\FinancialInstabilityCertificateController;
+use App\Http\Controllers\Certificate\GuardianAcceptanceCertificateController;
 
 use App\Http\Controllers\Certificate\OrphanCertificateController;
 use App\Http\Controllers\Certificate\ChildlessCertificateController;
@@ -120,6 +121,7 @@ use App\Http\Controllers\People\PeopleAuthController;
 use App\Http\Controllers\People\PeopleDashboardController;
 use App\Http\Controllers\PeopleCredentialController;
 use App\Http\Controllers\People\PeopleApplicationController;
+use App\Http\Controllers\ReliefCardController;
 use App\Http\Controllers\People\PeopleRegistrationController;
 use App\Http\Controllers\People\PeopleStatusController;
 use Illuminate\Support\Facades\Route;
@@ -134,6 +136,8 @@ Route::get('/sms', function(){
 Route::get('test-api', [HomeController::class, 'testHttpRequest']);
 
 // Login
+Route::get('/tl/{id}', [App\Http\Controllers\Organization\TradeLicenseController::class, 'publicPreview'])->name('trade-license.public-verify');
+
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/login-check', [LoginController::class, 'loginCheck'])->name('login.check');
 
@@ -222,6 +226,9 @@ Route::get('/get-villages-by-union/{unionID}', [VillageController::class, 'villa
 Route::get('/get-mouzas-by-thana/{thanaID}', [MouzaController::class, 'mouzasByThana']);
 Route::get('/get-areas-by-village/{villageID}', [VillageAreaController::class, 'areasByVillage']);
 Route::get('/get-houses-by-village-area/{areaID}', [HouseController::class, 'getHouseByArea']);
+Route::get('/get-blocks-by-village-ward/{villageID}/{wardID}', [HouseController::class, 'getBlocksByVillageWard']);
+Route::get('/get-houses-by-block/{villageID}/{wardID}/{block}', [HouseController::class, 'getHousesByBlock']);
+Route::get('/get-owner-by-house/{houseID}', [HouseController::class, 'getOwnerByHouse']);
 Route::get('/search-user-by-system-id/{systemID}', [PeopleController::class, 'searchUser'])->name('user.searchBySystemID');
 Route::get('/search-people', [PeopleController::class, 'searchPeople'])->name('people.search');
 Route::get('/get-organization-info-by-system-id/{systemID}', [OrganizationController::class, 'getOrganizationBySystemId'])->name('getOrganizationBySystemId');
@@ -236,7 +243,7 @@ Route::post('/voter-area-approve', [VoterAreaCertificateController::class, 'appr
 
 Route::get('/profession-type-options-by-profession/{professionID}', [ProfessionTypeController::class, 'professionTypeOptions']);
 Route::get('/profession-category-options-by-profession-type/{professionTypeID}', [ProfessionCategoryController::class, 'professionCategoryOptions' ]);
-Route::get('/profession-subcategory-options-by-profession-category/{professionCategoryID}', [ ProfessionSubcategoryController::class, 'professionSubcategoryOptions'  ] );
+Route::get('/profession-subcategory-options-by-profession-category/{professionCategoryID}', [ ProfessionSubCategoryController::class, 'professionSubcategoryOptions'  ] );
 
 Route::get('/house-category-options-by-type-id/{type_id}', [HouseCategoryController::class, 'getCategoryOptions']);
 Route::get('/house-single-ownership-form', [HouseOwnershipController::class, 'loadOwnershipForm']);
@@ -308,6 +315,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
 
     Route::resource('certificate/birth', BirthCertificateController::class);
+    Route::get('certificate/birth/bn/{id}', [BirthCertificateController::class, 'bn_certificate'])->name('birth.bn_certificate');
     Route::resource('certificate/unmarried', UnmarriedCertificateController::class);
     Route::get('certificate/unmarried/bn/{id}', [UnmarriedCertificateController::class, 'bn_certificate'])->name('unmarried.bn_certificate');
     Route::resource('certificate/married', MarriedCertificateController::class);
@@ -343,6 +351,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::get('certificate/residential/bn/{id}', [ResidentialCertificateController::class, 'bn_certificate'])->name('residential.bn_certificate');
     Route::resource('certificate/guardian-income', GuardianCertificateController::class);
     Route::get('certificate/guardian-income/bn/{id}', [GuardianCertificateController::class, 'bn_certificate'])->name('guardian-income.bn_certificate');
+    Route::resource('certificate/guardian-acceptance', GuardianAcceptanceCertificateController::class);
+    Route::get('certificate/guardian-acceptance/bn/{id}', [GuardianAcceptanceCertificateController::class, 'bn_certificate'])->name('guardian-acceptance.bn_certificate');
 
 
     Route::prefix('basic-settings')->name('basic-settings.')->group(function () {
@@ -489,6 +499,9 @@ Route::get('/organization/trade-license/{id}/payment/success', [TradeLicenseCont
     Route::get('peopleapprovedlist', [PeopleController::class, 'approvedlist'])
     ->name('peopleapprovedlist');
 
+    Route::get('peoplesearch', [PeopleController::class, 'searchPeoplePage'])
+    ->name('peoplesearch');
+
     Route::get('people/credentials', [PeopleCredentialController::class, 'index'])->name('peoples.credentials');
     Route::post('/people/approve/{id}', [PeopleController::class, 'approve'])
         ->name('people.approve');
@@ -528,6 +541,9 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
     Route::get('vehicle/license', [VehicleController::class, 'licenseList'])->name('vehicle.license.list');
     Route::get('vehicle/license/{id}/view', [VehicleController::class, 'licenseShow'])->name('vehicle.license.show');
     Route::get('vehicle/license/{id}/print', [VehicleController::class, 'licensePrint'])->name('vehicle.license.print');
+    Route::post('vehicle/{id}/manual-payment/store', [VehicleController::class, 'storeManualPayment'])->name('vehicle.manual-payment.store');
+    Route::get('vehicle/{id}/online-payment', [VehicleController::class, 'onlinePayment'])->name('vehicle.online-payment');
+    Route::get('vehicle/{id}/payment/success', [VehicleController::class, 'paymentSuccess'])->name('vehicle.payment.success');
     Route::get('vehicle/get-fees/{id}', [VehicleController::class, 'getFees'])->name('vehicle.get.fees');
     Route::post('vehicle/approve', [VehicleController::class, 'approve'])->name('vehicle.approve');
     Route::get('vehicle/fees', [VehicleController::class, 'feesHub'])->name('vehicle.fees.hub');
@@ -544,6 +560,7 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
 
     Route::resource('tax', TaxController::class);
     Route::post('tax-status', [TaxController::class, 'taxStatus'])->name('tax.status');
+    Route::post('tax/{id}/manual-payment', [TaxController::class, 'storeManualPayment'])->name('tax.manual-payment.store');
 
     Route::get('taxes', function () {
         return redirect()->route('tax.index');
@@ -565,7 +582,11 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
     Route::resource('institute-type', InstituteTypeController::class);
     Route::resource('institute-category', InstituteCategoryController::class);
 
-
+    // Relief Card Routes (Admin)
+    Route::get('relief-card', [ReliefCardController::class, 'index'])->name('relief-card.index');
+    Route::post('relief-card/approve', [ReliefCardController::class, 'approve'])->name('relief-card.approve');
+    Route::post('relief-card/reject', [ReliefCardController::class, 'reject'])->name('relief-card.reject');
+    Route::delete('relief-card/{id}', [ReliefCardController::class, 'destroy'])->name('relief-card.destroy');
 
 });
 
@@ -592,6 +613,8 @@ Route::prefix('people-portal')->name('people.')->group(function () {
             Route::get('/vehicle', [PeopleApplicationController::class, 'vehicleCreate'])->name('vehicle.create');
             Route::get('/tax', [PeopleApplicationController::class, 'taxCreate'])->name('tax.create');
             Route::get('/grant', function() { return view('people.applications.grant'); })->name('grant.create');
+            Route::get('/relief-card', [PeopleApplicationController::class, 'reliefCardCreate'])->name('relief-card.create');
+            Route::post('/relief-card', [PeopleApplicationController::class, 'reliefCardStore'])->name('relief-card.store');
 
             // Registration Tabs (People Info)
             Route::prefix('registration')->name('registration.')->group(function () {
@@ -628,3 +651,21 @@ Route::prefix('people-portal')->name('people.')->group(function () {
         });
     });
 });
+
+// Route to serve uploads from the root directory locally (XAMPP/artisan serve)
+Route::get('uploads/{path}', function ($path) {
+    $filePath = base_path('uploads/' . $path);
+    if (file_exists($filePath)) {
+        return response()->file($filePath);
+    }
+    abort(404);
+})->where('path', '.*');
+
+Route::get('upload/{path}', function ($path) {
+    $filePath = base_path('upload/' . $path);
+    if (file_exists($filePath)) {
+        return response()->file($filePath);
+    }
+    abort(404);
+})->where('path', '.*');
+

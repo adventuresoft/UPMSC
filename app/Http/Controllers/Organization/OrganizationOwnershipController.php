@@ -117,7 +117,7 @@ public function saveNewOwnership(Request $request)
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $image_name = time() . '.' . $image->getClientOriginalExtension();
-            $image->move('uploads/users/', $image_name);
+            $image->move(base_path('uploads/users/'), $image_name);
             $user->image = 'uploads/users/' . $image_name;
         }
 
@@ -406,11 +406,12 @@ public function saveNewOwnership(Request $request)
         $data['districts'] =  District::where('status', true)->orderBy('name')->get();
         $data['countries'] =  Country::orderBy('name')->get();
          $data['divisions'] = Division::where('status', true)->get();
-        $organization= Organization::with('ownership')->find($id);
+        $organization = Organization::with('ownership')->applyMultitenancy()->find($id);
         if($organization) {
             $data['organization'] = $organization;
             return view('backend.pages.organization.tabs.ownership', $data);
         }
+        abort(403, 'Access denied: organization not found in your union.');
     }
 
     /**
@@ -453,3 +454,4 @@ public function saveNewOwnership(Request $request)
         }
     }
 }
+

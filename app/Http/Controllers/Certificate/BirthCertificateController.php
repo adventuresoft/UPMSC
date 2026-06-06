@@ -4,7 +4,12 @@ namespace App\Http\Controllers\Certificate;
 
 use App\Http\Controllers\Controller;
 use App\Models\Certificate\BirthCertificate;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BirthCertificateController extends Controller
 {
@@ -12,79 +17,196 @@ class BirthCertificateController extends Controller
     {
         $this->middleware('unionAdmin')->except('index', 'show');
     }
+
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return view('backend.pages.certificate.birth.index');
+        $data['certificates'] = BirthCertificate::with([
+            'user.people',
+            'user.familyInfo',
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district',
+        ])
+        ->applyMultitenancy()
+        ->latest()
+        ->get();
+
+        return view('backend.pages.certificate.birth.index', $data);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        return view('backend.pages.certificate.birth.create');
+        $data['users'] = User::with('people')
+            ->where('status', true)
+            ->whereNotIn('role_id', [1, 2, 3, 4])
+            ->applyMultitenancy()
+            ->whereHas('people', function ($q) {
+                $q->whereNotNull('approved_id');
+            })
+            ->get();
+
+        return view('backend.pages.certificate.birth.create', $data);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Sorry! Invalid Entry.',
+                'errors'  => $validate->errors(),
+                'code'    => 400,
+            ], 400);
+        }
+
+        $result = DB::transaction(function () use ($request) {
+            try {
+                $certificate           = new BirthCertificate();
+                $certificate->user_id  = $request->user_id;
+                $certificate->created_by = Auth::id();
+                $certificate->save();
+
+                return [
+                    'status'       => true,
+                    'message'      => 'Birth certificate generated successfully!',
+                    'result'       => $certificate,
+                    'code'         => 200,
+                    'redirect_url' => route('certificate/birth.index'),
+                ];
+            } catch (\Throwable $th) {
+                return [
+                    'status'  => false,
+                    'message' => 'Something went wrong! Please try again...',
+                    'errors'  => $th->getMessage(),
+                    'code'    => 500,
+                ];
+            }
+        });
+
+        return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'])
+            ->header('Content-Type', 'application/json');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Certificate\BirthCertificate  $birthCertificate
-     * @return \Illuminate\Http\Response
+     * Display / print the certificate (EN).
      */
-    public function show(BirthCertificate $birthCertificate)
+    public function show($id)
     {
-        return view('backend.pages.certificate.birth.show');
+        $data['certificate'] = BirthCertificate::with([
+            'user.people',
+            'user.familyInfo',
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district',
+        ])->findOrFail($id);
+
+        return view('backend.pages.certificate.birth.certificate', $data);
+    }
+
+    /**
+     * Display / print the certificate (BN).
+     */
+    public function bn_certificate($id)
+    {
+        $data['certificate'] = BirthCertificate::with([
+            'user.people',
+            'user.familyInfo',
+            'user.addressInfo.permanentVillage',
+            'user.addressInfo.permanentWard',
+            'user.addressInfo.permanentPostOffice',
+            'user.institute.union.thana.district',
+        ])->findOrFail($id);
+
+        return view('backend.pages.certificate.birth.bn_certificate', $data);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Certificate\BirthCertificate  $birthCertificate
-     * @return \Illuminate\Http\Response
      */
-    public function edit(BirthCertificate $birthCertificate)
+    public function edit($id)
     {
-        return view('backend.pages.certificate.birth.edit');
+        $data['certificate'] = BirthCertificate::applyMultitenancy()->findOrFail($id);
+        $data['users'] = User::with('people')
+            ->where('status', true)
+            ->whereNotIn('role_id', [1, 2, 3, 4])
+            ->applyMultitenancy()
+            ->whereHas('people', function ($q) {
+                $q->whereNotNull('approved_id');
+            })
+            ->get();
+
+        return view('backend.pages.certificate.birth.edit', $data);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Certificate\BirthCertificate  $birthCertificate
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, BirthCertificate $birthCertificate)
+    public function update(Request $request, $id)
     {
-        //
+        $certificate = BirthCertificate::applyMultitenancy()->findOrFail($id);
+
+        $validate = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Sorry! Invalid Entry.',
+                'errors'  => $validate->errors(),
+            ], 400);
+        }
+
+        try {
+            $certificate->user_id = $request->user_id;
+            $certificate->save();
+
+            return response()->json([
+                'status'       => true,
+                'message'      => 'Certificate updated successfully!',
+                'redirect_url' => route('certificate/birth.index'),
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Update failed: ' . $th->getMessage(),
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Certificate\BirthCertificate  $birthCertificate
-     * @return \Illuminate\Http\Response
      */
-    public function destroy(BirthCertificate $birthCertificate)
+    public function destroy($id)
     {
-        //
+        try {
+            $certificate = BirthCertificate::applyMultitenancy()->findOrFail($id);
+            $certificate->delete();
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Certificate deleted successfully!',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Delete failed: ' . $th->getMessage(),
+            ], 500);
+        }
     }
 }

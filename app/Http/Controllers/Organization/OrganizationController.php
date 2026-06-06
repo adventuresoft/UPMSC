@@ -73,6 +73,7 @@ public function getOrganizationBySystemId($system_id)
         'ownership.user.familyInfo',
         'ownership.user.addressInfo'
     ])
+    ->applyMultitenancy()
     ->where('status', 1)
     ->where(function ($query) use ($searchKey) {
         $query->where('approved_id', $searchKey)
@@ -267,14 +268,14 @@ public function getOrganizationBySystemId_01_05_26($system_id)
 
     public function index()
     {
-        $data['organizations'] = Organization::with('category')->where('status',0)->latest()->get();
+        $data['organizations'] = Organization::with('category')->applyMultitenancy()->where('status',0)->latest()->get();
         return view('backend.pages.organization.index', $data);
     }
 
 
        public function approved_index()
     {
-        $data['organizations'] = Organization::with('category')->where('status',1)->latest()->get();
+        $data['organizations'] = Organization::with('category')->applyMultitenancy()->where('status',1)->latest()->get();
         return view('backend.pages.organization.approved_index', $data);
     }
 
@@ -285,7 +286,7 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         $data['categories'] = OrganizationCategory::where('status', true)->latest()->get();
         $data['ownership_types'] = OrganizationOwnershipType::where('status', true)->latest()->get();
         $data['wards'] = UnionWard::where('status', true)->get();
-        $data['roads'] = Road::where('institute_id', Auth::user()->institute_id)->get();
+        $data['roads'] = Road::applyMultitenancy()->get();
         $data['divisions'] = Division::where('status', true)->get();
         $data['districts'] = [];
         $data['thanas'] = [];
@@ -294,13 +295,13 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         // dd($data['divisions']);
 
        $data['post_officeses']=PostOffice::latest()->get();
-        $institute = Institute::find(Auth::user()->institute_id);
-        if($institute )
-        {
-            $data['villages'] = Village::where('union_id', $institute->union_id )->get();
-
-        }else {
-            $data['villages'] = [];
+        $instituteId = Auth::user()->institute_id;
+        if ($instituteId) {
+            $institute = Institute::find($instituteId);
+            $data['villages'] = Village::where('union_id', $institute->union_id)->get();
+        } else {
+            // Superadmin or no institute - show all or handle differently
+            $data['villages'] = Village::get();
         }
 
         return view('backend.pages.organization.create', $data);
@@ -603,24 +604,24 @@ public function getOrganizationBySystemId_01_05_26($system_id)
 
     public function show($id)
     {
-         $data['organization'] = $organization=Organization::find($id);
+         $data['organization'] = $organization = Organization::applyMultitenancy()->findOrFail($id);
         if($data['organization'] ){
             $data['areas'] = OrganizationWorkArea::where('organization_subcategory_id', $data['organization']->organization_subcategory_id)->where('status', true)->latest()->get();
             $data['types'] = OrganizationType::where('organization_category_id', $data['organization']->organization_category_id)->where('status', true)->latest()->get();
             $data['categories'] = OrganizationCategory::where('status', true)->latest()->get();
             $data['ownership_types'] = OrganizationOwnershipType::where('status', true)->latest()->get();
             $data['wards'] = UnionWard::where('status', true)->get();
-            $data['roads'] = Road::where('institute_id', Auth::user()->institute_id)->get();
+            $data['roads'] = Road::applyMultitenancy()->get();
             // return response()->json($data, 200);
              $data['divisions'] = Division::where('status', true)->get();
             $data['post_officeses']=PostOffice::latest()->get();
 
-            $institute = Institute::find(Auth::user()->institute_id);
-            if($institute)
-            {
-                $data['villages'] = Village::where('union_id', $institute->union_id )->get();
-            }else {
-                $data['villages'] = [];
+            $instituteId = Auth::user()->institute_id;
+            if ($instituteId) {
+                $institute = Institute::find($instituteId);
+                $data['villages'] = Village::where('union_id', $institute->union_id)->get();
+            } else {
+                $data['villages'] = Village::get();
             }
 
             return view('backend.pages.organization.show', $data);
@@ -631,14 +632,14 @@ public function getOrganizationBySystemId_01_05_26($system_id)
 
     public function edit($id)
     {
-        $data['organization'] = $organization=Organization::find($id);
+        $data['organization'] = $organization = Organization::applyMultitenancy()->findOrFail($id);
         if($data['organization'] ){
             $data['areas'] = OrganizationWorkArea::where('organization_subcategory_id', $data['organization']->organization_subcategory_id)->where('status', true)->latest()->get();
             $data['types'] = OrganizationType::where('organization_category_id', $data['organization']->organization_category_id)->where('status', true)->latest()->get();
             $data['categories'] = OrganizationCategory::where('status', true)->latest()->get();
             $data['ownership_types'] = OrganizationOwnershipType::where('status', true)->latest()->get();
             $data['wards'] = UnionWard::where('status', true)->get();
-            $data['roads'] = Road::where('institute_id', Auth::user()->institute_id)->get();
+            $data['roads'] = Road::applyMultitenancy()->get();
             // return response()->json($data, 200);
              $data['divisions'] = Division::where('status', true)->get();
              $data['districts'] = District::where('division_id',$organization->division_id)->where('status', true)->get();
@@ -651,12 +652,16 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         // dd($data['divisions']);
        $data['post_officeses']=PostOffice::latest()->get();
 
-            $institute = Institute::find(Auth::user()->institute_id);
-            if($institute)
-            {
-                $data['villages'] = Village::where('union_id', $institute->union_id )->get();
-            }else {
-                $data['villages'] = [];
+            $instituteId = Auth::user()->institute_id;
+            if ($instituteId) {
+                $institute = Institute::find($instituteId);
+                $data['villages'] = Village::where('union_id', $institute->union_id)->get();
+            } else {
+                // Keep the organization's union villages if we already have them above, 
+                // but this seems to be a fallback list.
+                if (!$data['villages']) {
+                    $data['villages'] = Village::get();
+                }
             }
 
             return view('backend.pages.organization.edit', $data);

@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Pourashava extends Model
 {
     use HasFactory;
+    public function District()
+    {
+        return $this->belongsTo(District::class, 'district_id', 'id');
+    }
 }

@@ -177,28 +177,44 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        $login = $request->input('login_id');
+        $login = trim($request->input('login_id'));
         $password = $request->input('password');
+        
+        \Illuminate\Support\Facades\Log::info("--- LOGIN ATTEMPT ---");
+        \Illuminate\Support\Facades\Log::info("Login ID provided: " . $login);
 
-        // Try to find the user by email, system_id, or mobile
-        $user = User::where(function($query) use ($login) {
+        $cleanPhone = preg_replace('/[^0-9]/', '', $login);
+
+        // Try to find the user by email, system_id, or mobile (ignoring spaces/dashes)
+        $user = User::where('status', 1)->where(function($query) use ($login, $cleanPhone) {
             $query->where('email', $login)
                   ->orWhere('system_id', $login)
                   ->orWhere('mobile', $login);
-        })->where('status', 1)->first();
+                  
+            if (!empty($cleanPhone)) {
+                $query->orWhereRaw("REPLACE(REPLACE(mobile, ' ', ''), '-', '') = ?", [$cleanPhone]);
+            }
+        })->first();
 
         if ($user) {
-            $credentials = [
-                'email' => $user->email,
-                'password' => $password,
-            ];
-
-            if (Auth::attempt($credentials)) {
-                return redirect()->route('dashboard');
+            \Illuminate\Support\Facades\Log::info("User found in DB! ID: {$user->id}, Email: {$user->email}");
+            
+            if (\Illuminate\Support\Facades\Hash::check($password, $user->password)) {
+                \Illuminate\Support\Facades\Log::info("Password match SUCCESS.");
+                // Log the user in directly, bypassing Auth::attempt's secondary query
+                Auth::login($user);
+                
+                // Regenerate session to prevent session fixation attacks
+                $request->session()->regenerate();
+                return redirect()->intended(route('dashboard'));
+            } else {
+                \Illuminate\Support\Facades\Log::warning("Password match FAILED for user ID {$user->id}. Hash in DB: " . substr($user->password, 0, 10) . "...");
             }
+        } else {
+            \Illuminate\Support\Facades\Log::warning("User NOT FOUND in DB or status is not 1 for login_id: " . $login);
         }
 
-        return redirect()->route('login')->with('error', 'Invalid credentials. Please try again.');
+        return back()->with('error', 'Invalid credentials. Please try again.')->withInput(['login_id' => $login]);
     }
 
     public function profile()

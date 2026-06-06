@@ -7,9 +7,11 @@ use App\Models\BasicSettings\RoadType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\Multitenantable;
+
 class Road extends Model
 {
-    use HasFactory;
+    use HasFactory, Multitenantable;
 
     public static $snakeAttributes = false;
     public $table = 'roads';

@@ -48,12 +48,6 @@
         margin-bottom: 8px;
     }
 
-    .header-logos img {
-        width: 80px;
-        height: 80px;
-        object-fit: contain;
-    }
-
     .union-title {
         text-align: center;
         font-size: 22px;
@@ -212,12 +206,26 @@ $owner = $license->organization->ownership->firstWhere('is_trade_license')?->use
 $fees = json_decode($license->fees ?? '{}', true) ?? [];
 
 $feeList = [
-'ট্রেড লাইসেন্স ফিস', 'ট্রেড লাইসেন্স নবায়ন ফিস', 'সারচার্জ', 'আয়কর/উৎসকর',
+'ট্রেড লাইসেন্স ফিস', 'ট্রেড লাইসেন্স নবায়ন ফিস', 'সারচার্জ', 'আয়কর/উৎসকর',
 'সাইনবোর্ড কর', 'ভ্যাট', 'সংশোধনী ফিস', 'অন্যান্য ফিস'
 ];
 
 $total = array_reduce($feeList, fn($sum, $f) => $sum + (float)($fees[$f] ?? 0), 0);
 list($start, $end) = explode('-', $license->taxYear->name);
+
+$institute = $license->organization->institute;
+$auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
+$thanaBn = '';
+$districtBn = '';
+
+if ($institute->union && $institute->union->thana) {
+    $thanaBn = $institute->union->thana->bn_name ?? '';
+    $districtBn = $institute->union->thana->district->bn_name ?? '';
+} elseif ($institute->pourashava) {
+    $districtBn = $institute->pourashava->District->bn_name ?? '';
+} elseif ($institute->cityCorporation) {
+    $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+}
 @endphp
 
 <div class="certificate-page">
@@ -226,10 +234,15 @@ list($start, $end) = explode('-', $license->taxYear->name);
         {{-- Header Logos --}}
         <div class="header-logos">
             <img src="{{ asset('images/dhaka.png') }}">
-            <div>
-                <h6 class="text-center">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h6>
-                <div class="union-title">৩নং শুকতাইল ইউনিয়ন পরিষদ</div>
-                <div class="union-subtitle">No. 3 Shukhtail Union Parishad</div>
+            <div style="text-align: center; line-height: 1.1;">
+                <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+                <div class="union-title" style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                <div class="union-subtitle" style="color:#2e3192; font-size: 20px; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
+                <div style="font-size: 13px; color: #000;">
+                    @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
+                    জেলাঃ {{ $districtBn }},
+                    বাংলাদেশ।
+                </div>
             </div>
             <img src="{{ asset('images/govt-bd-logo.png') }}">
         </div>
@@ -252,9 +265,9 @@ list($start, $end) = explode('-', $license->taxYear->name);
         </div>
 
         <div class="validity-info">
-            নবায়ন/নতুন <br>
+            নবায়ন/নতুন <br>
             অর্থ বছর: {{ $license->taxYear->name }} <br>
-            এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত
+            এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত
         </div>
 
         <p class="intro-text">

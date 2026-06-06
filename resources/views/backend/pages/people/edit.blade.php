@@ -157,8 +157,8 @@
                                     </div>
                                     <div class="col-sm-6">
                                         @php
-                                            $imagePath = $user->image && file_exists(public_path($user->image)) 
-                                                ? asset($user->image) 
+                                            $imagePath = $user->image && file_exists(base_path($user->image)) 
+                                                ? imageUrl($user->image) 
                                                 : asset('public/no-image-found.jpeg');
                                         @endphp
                                         <img class="img-fluid img-thumbnail" src="{{ $imagePath }}" id="preview" alt="Preview" width="100" height="100">
@@ -274,3 +274,4 @@
         });
     </script>
 @endpush
+

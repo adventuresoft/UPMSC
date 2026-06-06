@@ -20,12 +20,6 @@
                                 <h3 class="card-title" style="font-size:24px; font-weight: semi-bold;">Organization Information</h3>
                             </div>
 
-                            <div class="col-md-6 text-right">
-                                @if (create_permission())
-                                <a href="{{ route('organization.create') }}" class="btn btn-primary">Create</a>
-                                <a href="{{ route('organization.index') }}" class="btn btn-primary">List</a>
-                                @endif
-                            </div>
                         </div>
                     </div>
                         <!-- /.card-header -->
@@ -80,7 +74,6 @@
                               <thead>
                                 <tr>
                                     <th>Sl.</th>
-                                    <th>Application ID</th>
                                     <th>Approved ID</th>
                                     <th>Orgazition Name</th>
                                     <th>Owner Name</th>
@@ -96,7 +89,6 @@
                                   @foreach ($organizations as $key=>$organization)
                                     <tr>
                                         <td>{{++$key}}</td>
-                                        <td>{{$organization->application_id}}</td>
                                         <td>{{$organization->approved_id}}</td>
                                         <td>{{$organization->name}}</td>
                                         <td>

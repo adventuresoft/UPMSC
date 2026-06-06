@@ -172,7 +172,7 @@
                                         </td>-->
 
                                         <td>
-                                            <img src="{{ asset($user->image ?? 'default.png') }}"
+                                            <img src="{{ imageUrl($user->image ?? 'default.png') }}"
                                                 width="45"
                                                 height="55"
                                                 class="img"
@@ -206,7 +206,12 @@
                                         </td>
 
                                         <td>
-                                           {{ optional($user->professionalInfos)->pluck('designation')->implode(', ') }}
+                                            {{ optional($user->professionalInfos)->map(function($info) {
+                                                return collect([
+                                                    $info->subcategory?->category?->type?->profession?->en_name ?? '',
+                                                    $info->designation ?? ''
+                                                ])->filter()->implode(' - ');
+                                            })->filter()->implode(', ') }}
                                         </td>
 
                                         <td>
@@ -216,15 +221,15 @@
                                             @endphp
                                             {{ $instituteFind['institute']->name ?? '' }} {{ $instituteFind['institute_type'] ?? '' }} -->
                                           <strong>Present Address:</strong>  {{ collect([
-    $user->addressInfo->presentDistrict->name ?? '',
-    $user->addressInfo->presentThana->name ?? '',
-    $user->addressInfo->presentUnion->name ?? '',
-    $user->addressInfo->presentPostoffice->name ?? '',
-    $user->addressInfo->presentVillage->en_name ?? '',
-    $user->addressInfo->presentWard->en_ward_no ?? '',
-    $user->addressInfo->present_area ?? '',
-    $user->addressInfo->presentRoad->name ?? '',
-    $user->addressInfo->presentHouse->house ?? ''
+    $user->addressInfo?->presentDistrict?->name ?? '',
+    $user->addressInfo?->presentThana?->name ?? '',
+    $user->addressInfo?->presentUnion?->name ?? '',
+    $user->addressInfo?->presentPostoffice?->name ?? '',
+    $user->addressInfo?->presentVillage?->en_name ?? '',
+    $user->addressInfo?->presentWard?->en_ward_no ?? '',
+    $user->addressInfo?->present_area ?? '',
+    $user->addressInfo?->presentRoad?->name ?? $user->addressInfo?->present_road ?? '',
+    $user->addressInfo?->presentHouse?->house ?? $user->addressInfo?->present_house ?? ''
 ])->filter()->implode(', ') }} <!--
 
 <br/>
@@ -245,7 +250,7 @@ Permanent Address:</strong>
 
                                         <td>
                                             <div class="table-action">
-                                                @if (Auth::user()->institute_id && create_permission())
+                                                @if ((is_superadmin() || Auth::user()->institute_id) && create_permission())
                                                 <a href="{{ route('people.edit', $user->id) }}" 
                                                     class="btn btn-primary btn-sm btn-action" title="Edit">
                                                     <i class="fa fa-edit"></i>

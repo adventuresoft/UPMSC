@@ -36,25 +36,36 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="area" class="font-weight-bold">Assigned Area</label>
-                                        @if(is_institutional_admin())
+                                        @if(is_institutional_admin() && !is_superadmin())
                                             <input type="text" name="area" class="form-control form-control-premium" id="area" value="{{ $assigned_area }}" readonly style="background-color:#e9ecef;">
                                             <small class="text-muted font-italic">Automatically assigned based on your jurisdiction.</small>
                                         @else
                                             <select name="area" id="area" class="form-control select2" required>
                                                 <option value="">-- Select Area --</option>
+                                                <option value="All">All System Areas (Full Access)</option>
+                                                <optgroup label="Districts (for DC)">
+                                                    @foreach($districts as $d)
+                                                        <option value="District:{{ $d->id }}">{{ $d->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                                <optgroup label="Thanas (for UNO/ENO)">
+                                                    @foreach($thanas as $t)
+                                                        <option value="Thana:{{ $t->id }}">{{ $t->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
                                                 <optgroup label="Unions">
                                                     @foreach($unions as $union)
-                                                        <option value="{{ $union->name }}">{{ $union->name }}</option>
+                                                        <option value="Union:{{ $union->id }}">{{ $union->name }}</option>
                                                     @endforeach
                                                 </optgroup>
                                                 <optgroup label="Pourashavas">
                                                     @foreach($pourashavas as $p)
-                                                        <option value="{{ $p->name }}">{{ $p->name }}</option>
+                                                        <option value="Pourashava:{{ $p->id }}">{{ $p->name }}</option>
                                                     @endforeach
                                                 </optgroup>
                                                 <optgroup label="City Corporations">
                                                     @foreach($city_corps as $c)
-                                                        <option value="{{ $c->name }}">{{ $c->name }}</option>
+                                                        <option value="City Corp:{{ $c->id }}">{{ $c->name }}</option>
                                                     @endforeach
                                                 </optgroup>
                                             </select>

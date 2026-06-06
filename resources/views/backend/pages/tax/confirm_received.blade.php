@@ -86,7 +86,7 @@
                                             <th>ওয়ার্ড নং</th>
                                             <th>{{ $tax->unionWard->bn_ward_no ?? '' }}</th>
                                             <th>এলাকা</th>
-                                            <th>{{ $tax->villageArea->bn_name ?? '' }}</th>
+                                            <th>{{ $tax->house->block_section ?? '' }}</th>
                                         </tr>
                                         <tr>
                                             <th>বাড়ি নং</th>
@@ -100,7 +100,7 @@
                                 <table class=" table my-2 user_info_table">
                                     <tr>
                                         <td><img class="user_img" height="60" width="60"
-                                                src="{{ asset($tax->user->image ?? 'public/no-image-found.jpeg') }}"></td>
+                                                src="{{ imageUrl($tax->user->image ?? 'public/no-image-found.jpeg') }}"></td>
                                         <td> নাম: <strong class="user_name">{{ $tax->user->people->bn_name ?? '' }}</strong>
                                         </td>
                                         <td> পিতার নাম: <strong
