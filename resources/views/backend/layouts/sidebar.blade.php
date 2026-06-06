@@ -1367,9 +1367,30 @@
           @endcan
 
           <li class="nav-item ">
-            <a href="{{route('chairman.index')}}" class="nav-link {{$subMenu ==  'chairmanList'?'active':''}}">
+            <a href="{{route('chairman.chairmanList')}}" class="nav-link {{$subMenu ==  'chairmanList'?'active':''}}">
               <i class="far fa-circle nav-icon"></i>
               <p>Chairman List</p>
+            </a>
+          </li>
+          
+          <li class="nav-item ">
+            <a href="{{route('chairman.memberList')}}" class="nav-link {{$subMenu ==  'memberList'?'active':''}}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Members List</p>
+            </a>
+          </li>
+
+          <li class="nav-item ">
+            <a href="{{route('chairman.reserveMemberList')}}" class="nav-link {{$subMenu ==  'reserveMemberList'?'active':''}}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Reserve Members</p>
+            </a>
+          </li>
+
+          <li class="nav-item ">
+            <a href="{{route('chairman.panelList')}}" class="nav-link {{$subMenu ==  'panelList'?'active':''}}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Panel</p>
             </a>
           </li>
 

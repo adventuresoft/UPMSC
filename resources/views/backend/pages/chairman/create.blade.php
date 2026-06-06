@@ -162,7 +162,7 @@
                             <td class="colon">:</td>
                             <td class="inputfield">
                                 <select type="text" class="form-control select2" id="chairman_id" name="userinfo[]">
-                                    <option>Please select chairman</option>                                    @if(isset($unionPeople) && $unionPeople->count())
+                                    <option value="">Please select chairman</option>                                    @if(isset($unionPeople) && $unionPeople->count())
                                         @foreach($unionPeople as $person)
                                             <option value="{{ $person->user_id }}">{{ $person->User->system_id }} : {{ $person->User->name }}</option>
                                         @endforeach
@@ -181,7 +181,7 @@
                             <td class="wordno">ওয়ার্ড নং-১ </td>
                             <td class="inputfield"> 
                                 <select class="form-control select2" name="userinfo[]" id="word_1_id">
-                                    <option>Please Select</option>
+                                    <option value="">Please Select</option>
                                 </select>
                             </td>
                         </tr>
@@ -191,7 +191,7 @@
                             <td>ওয়ার্ড নং-২</td>
                             <td>
                                 <select class="form-control select2" name="userinfo[]" id="word_2_id">
-                                    <option>Please Select</option>
+                                    <option value="">Please Select</option>
                                 </select>
                             </td>
                         </tr>
@@ -201,7 +201,7 @@
                             <td>ওয়ার্ড নং-৩</td>
                             <td>
                                 <select class="form-control select2" name="userinfo[]" id="word_3_id">
-                                    <option>Please Select</option>
+                                    <option value="">Please Select</option>
                                 </select>
                             </td>
                         </tr> 
@@ -211,7 +211,7 @@
                             <td>ওয়ার্ড নং-৪</td>
                             <td>
                                <select class="form-control select2" name="userinfo[]" id="word_4_id">
-                                <option>Please Select</option>
+                                <option value="">Please Select</option>
                             </select>
                         </td>
                     </tr>
@@ -221,7 +221,7 @@
                         <td>ওয়ার্ড নং-৫</td>
                         <td>
                           <select class="form-control select2" name="userinfo[]" id="word_5_id">
-                            <option>Please Select</option>
+                            <option value="">Please Select</option>
                         </select>
                     </td>
                 </tr>
@@ -231,7 +231,7 @@
                     <td>ওয়ার্ড নং-৬</td>
                     <td>
                         <select class="form-control select2" name="userinfo[]" id="word_6_id">
-                            <option>Please Select</option>
+                            <option value="">Please Select</option>
                         </select>
                     </td>
                 </tr>
@@ -241,7 +241,7 @@
                     <td>ওয়ার্ড নং-৭</td>
                     <td>
                        <select class="form-control select2" name="userinfo[]" id="word_7_id">
-                        <option>Please Select</option>
+                        <option value="">Please Select</option>
                     </select>
                 </td>
             </tr> 
@@ -251,7 +251,7 @@
                 <td>ওয়ার্ড নং-৮</td>
                 <td>
                   <select class="form-control select2" name="userinfo[]" id="word_8_id">
-                    <option>Please Select</option>
+                    <option value="">Please Select</option>
                 </select>
             </td>
         </tr>
@@ -261,7 +261,7 @@
             <td>ওয়ার্ড নং-৯</td>
             <td>
               <select class="form-control select2" name="userinfo[]" id="word_9_id">
-                <option>Please Select</option>
+                <option value="">Please Select</option>
             </select>
         </td>
     </tr>
@@ -278,7 +278,7 @@
             <td class="inputfield">
              
               <select class="form-control select2" name="userinfo[]" id="reserved_word_1_id">
-                <option>Please Select</option>
+                <option value="">Please Select</option>
             </select>
         </td>
     </tr>
@@ -288,7 +288,7 @@
         <td>ওয়ার্ড নং-২ (৪,৫,৬) </td>
         <td>
          <select class="form-control select2" name="userinfo[]" id="reserved_word_2_id">
-            <option>Please Select</option>
+            <option value="">Please Select</option>
         </select>
     </td>
 </tr>
@@ -298,7 +298,7 @@
     <td>ওয়ার্ড নং-৩ (৭,৮,৯)</td>
     <td>
         <select class="form-control select2" name="userinfo[]" id="reserved_word_3_id">
-            <option>Please Select</option>
+            <option value="">Please Select</option>
         </select>
     </td>
 </tr> 
@@ -312,7 +312,7 @@
             <td class="colon">:</td>
             <td class="inputfield">
                <select class="form-control select2" name="userinfo[]" id="panel_chairman_id">
-                <option>Please Select</option>
+                <option value="">Please Select</option>
             </select>
         </td>
     </tr>

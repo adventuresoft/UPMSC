@@ -208,7 +208,7 @@
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">(মোহাম্মাদ রানা)</p>
+                        <p class="mb-1">({{ get_chairman_name_en($certificate) }})</p>
                         <p class="mb-0">চেয়ারম্যান</p>
                         <p class="mb-0">৩ নং শুকতাইল ইউনিয়ন পরিষদ</p>
                         <p class="mb-0" style="font-size:14px;">
