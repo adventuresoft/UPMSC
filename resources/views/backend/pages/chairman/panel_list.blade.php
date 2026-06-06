@@ -270,7 +270,7 @@
 
               // Get first council for logo
               $first_council = $councils->first();
-              $institute = $institutes[$first_council->union_id] ?? null;
+              $institute = $first_council ? ($institutes[$first_council->union_id] ?? null) : null;
               if ($institute && $institute->left_image) {
                   $logoUrl = imageUrl($institute->left_image);
               } elseif ($institute && $institute->top_image) {
