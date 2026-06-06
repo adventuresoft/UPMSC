@@ -57,7 +57,7 @@
 
         .union-title {
             text-align: center;
-            font-size: 25px;
+            font-size: 24px;
             font-weight: bold;
             color: #006600;
         }

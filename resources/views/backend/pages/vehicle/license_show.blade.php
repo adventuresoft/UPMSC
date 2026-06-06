@@ -61,7 +61,7 @@
 
     .union-subtitle {
         text-align: center;
-        font-size: 24px;
+        font-size: 25px;
         color: #003366;
     }
 

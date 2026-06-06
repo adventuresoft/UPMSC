@@ -299,7 +299,7 @@
             <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
             <div class="union-header" style="text-align: center; line-height: 1.1;">
                         <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
-                        <div class="union-title-bn" style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                        <div class="union-title-bn" style="font-size: 20px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
                         <div class="union-title-en" style="color:#2e3192; font-size: 20px; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
                         <p class="union-address" style="font-size: 13px; color: #000;">
                             @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
