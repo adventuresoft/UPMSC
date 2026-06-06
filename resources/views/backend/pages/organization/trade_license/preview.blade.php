@@ -532,7 +532,7 @@
                             <span>:</span>
                         </div>
                         <div style="flex: 1; text-align: right; padding-right: 10px; font-weight: bold;">
-                            {{ bnValue(currencyFormat((float) $amount)) }}/-
+                            {{ bnValue(currencyFormat((float) $amount)) }}
                         </div>
                     </div>
                 @endforeach
@@ -543,7 +543,7 @@
                         <span>:</span>
                     </div>
                     <div style="flex: 1; text-align: right; padding-right: 10px;">
-                        {{ bnValue(currencyFormat($totalFee)) }}/-
+                        {{ bnValue(currencyFormat($totalFee)) }}
                     </div>
                 </div>
             @else
