@@ -136,16 +136,16 @@
                     </div>
 
                     <div class="col-8 text-center">
-                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -16px;">
+                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -16px; line-height: 1;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
-                        <h2 class="text-success font-weight-bold mb-0" style="font-size:28px;">
+                        <h2 class="text-success font-weight-bold mb-0" style="font-size:28px; line-height: 1.1; margin-top: -10px;">
                             {{ $certificate->user->institute->union->bn_name ?? '' }}
                         </h2>
-                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:32px;">
+                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:-5px; font-size:32px; line-height: 1.1;">
                             {{ $certificate->user->institute->union->name ?? '' }}
                         </h3>
-                        <p class="mb-0" style="font-size:15px;">
+                        <p class="mb-0" style="font-size:15px; margin-top:-2px; line-height: 1.2;">
                             উপজেলাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
                             বাংলাদেশ।
@@ -180,14 +180,14 @@
                         <p>
                             <span style="margin-left:40px;"></span>
                             এই মর্মে প্রত্যয়ন করা যাচ্ছে যে,
-                            {{ $certificate->user->people->gender == 1 ? 'জনাব' : 'জনাবা' }}
-                            <strong>{{ $certificate->user->people->bn_name ?? '' }}</strong>
+                            {{ optional($certificate->user->people)->gender == 1 ? 'জনাব' : 'জনাবা' }}
+                            <strong>{{ optional($certificate->user->people)->bn_name ?? '' }}</strong>
                             <!-- <p>
     <strong>English Name:</strong> {{ $certificate->name_english }} <br>
     <strong>Bangla Name:</strong> {{ $certificate->name_bangla }}
 </p> -->
 ওরফে <strong>{{ $certificate->name_bangla }}</strong>
-                            আইডি নং <strong>{{ bnValue($certificate->user->people->approved_id ?? '') }}</strong>,
+                            আইডি নং <strong>{{ bnValue(optional($certificate->user->people)->approved_id ?? '') }}</strong>,
                             পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
                             মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }},
                             ঠিকানাঃ 
@@ -201,7 +201,7 @@
                             উপজেলা: - {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলা: - {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
                             তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং এই ইউনিয়নের স্থায়ী বাসিন্দা। 
-                            আমার জানা মতে উক্ত {{ $certificate->user->people->bn_name ?? '' }} 
+                            আমার জানা মতে উক্ত {{ optional($certificate->user->people)->bn_name ?? '' }} 
                             ওরফে {{ $certificate->name_bangla }} একই ব্যক্তি।
                         </p>
 
