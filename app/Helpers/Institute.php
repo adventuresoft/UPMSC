@@ -101,4 +101,74 @@ if (!function_exists('deathCauseBn')) {
     }
 }
 
+if (!function_exists('get_chairman_name_en')) {
+    function get_chairman_name_en($certificate) {
+        $unionId = $certificate->user->institute->union_id ?? null;
+        $chairmanName = '(Chairman)';
+        if ($unionId) {
+            $member = \App\Models\CouncilMember::whereHas('council', function($q) use ($unionId) {
+                    $q->where('union_id', $unionId)->where('status', 1)
+                      ->whereDate('start_date', '<=', now())->whereDate('end_date', '>=', now());
+                })->where('concilor_designation_id', 1)->where('status', 1)->latest()->first();
 
+            if (!$member) { 
+                $member = \App\Models\CouncilMember::whereHas('council', function($q) use ($unionId) {
+                        $q->where('union_id', $unionId)->where('status', 1);
+                    })->where('concilor_designation_id', 1)->where('status', 1)->latest()->first(); 
+            }
+
+            if ($member) {
+                $user = \App\Models\User::find($member->user_id);
+                if ($user) {
+                    $chairmanName = optional($user->people)->en_name ?? optional($user->people)->name ?? $user->name ?? $chairmanName;
+                }
+            }
+        }
+        if ($chairmanName === '(Chairman)') {
+            $instituteId = $certificate->user->institute_id ?? null;
+            if ($instituteId) {
+                $adminUser = \App\Models\User::where('institute_id', $instituteId)->where('role_id', 6)->first();
+                if ($adminUser) {
+                    $chairmanName = optional($adminUser->people)->en_name ?? optional($adminUser->people)->name ?? $adminUser->name ?? $chairmanName;
+                }
+            }
+        }
+        return $chairmanName;
+    }
+}
+
+if (!function_exists('get_chairman_name_bn')) {
+    function get_chairman_name_bn($certificate) {
+        $unionId = $certificate->user->institute->union_id ?? null;
+        $chairmanName = 'চেয়ারম্যান';
+        if ($unionId) {
+            $member = \App\Models\CouncilMember::whereHas('council', function($q) use ($unionId) {
+                    $q->where('union_id', $unionId)->where('status', 1)
+                      ->whereDate('start_date', '<=', now())->whereDate('end_date', '>=', now());
+                })->where('concilor_designation_id', 1)->where('status', 1)->latest()->first();
+
+            if (!$member) { 
+                $member = \App\Models\CouncilMember::whereHas('council', function($q) use ($unionId) {
+                        $q->where('union_id', $unionId)->where('status', 1);
+                    })->where('concilor_designation_id', 1)->where('status', 1)->latest()->first(); 
+            }
+
+            if ($member) {
+                $user = \App\Models\User::find($member->user_id);
+                if ($user) {
+                    $chairmanName = optional($user->people)->bn_name ?? $user->name ?? $chairmanName;
+                }
+            }
+        }
+        if ($chairmanName === 'চেয়ারম্যান') {
+            $instituteId = $certificate->user->institute_id ?? null;
+            if ($instituteId) {
+                $adminUser = \App\Models\User::where('institute_id', $instituteId)->where('role_id', 6)->first();
+                if ($adminUser) {
+                    $chairmanName = optional($adminUser->people)->bn_name ?? $adminUser->name ?? $chairmanName;
+                }
+            }
+        }
+        return $chairmanName;
+    }
+}

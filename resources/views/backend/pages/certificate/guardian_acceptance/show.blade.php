@@ -221,35 +221,6 @@
 
                 <!-- ================= Signature ================= -->
                 @php
-                    use App\Models\Council;
-                    use App\Models\CouncilMember;
-                    $unionId = $certificate->user->institute->union_id ?? $institute->union_id ?? null;
-                    $instId  = $certificate->user->institute_id ?? $institute->id ?? null;
-                    $chairmanEnName = '(Chairman)';
-                    $identifierName = $chairmanEnName;
-                    if ($unionId) {
-                        $council = Council::where('union_id', $unionId)->where('status', 1)->whereDate('start_date', '<=', now())->whereDate('end_date', '>=', now())->latest()->first();
-                        if (!$council) { $council = Council::where('union_id', $unionId)->where('status', 1)->latest()->first(); }
-                        if ($council) {
-                            $member = CouncilMember::where('council_id', $council->id)->where('concilor_designation_id', 1)->where('status', 1)->first();
-                            if ($member) {
-                                $chairUser = \App\Models\User::find($member->user_id);
-                                if ($chairUser) {
-                                    $chairmanEnName = optional($chairUser->people)->en_name ?? optional($chairUser->people)->name ?? $chairUser->name ?? $chairmanEnName;
-                                    $identifierName = $chairmanEnName;
-                                }
-                            }
-                        }
-                    }
-                    // Fallback: use Institute Admin (role_id=6) name
-                    if ($identifierName === '(Chairman)' && $instId) {
-                        $adminUser = \App\Models\User::where('institute_id', $instId)->where('role_id', 6)->first();
-                        if ($adminUser) {
-                            $identifierName = optional($adminUser->people)->en_name ?? optional($adminUser->people)->name ?? $adminUser->name ?? $identifierName;
-                            $chairmanEnName = $identifierName;
-                        }
-                    }
-
                     $guardianNid = $certificate->guardian->nid ?? $certificate->guardian->people->nid ?? '';
                     $guardianMobile = $certificate->guardian->mobile ?? $certificate->guardian->people->mobile ?? '';
                 @endphp
@@ -267,7 +238,7 @@
                     <div class="chairman">
                         <div style="height:40px;"></div>
                         <p class="mb-1"><strong>Identifier</strong></p>
-                        <p class="mb-1">{{ $identifierName }}</p>
+                        <p class="mb-1">{{ get_chairman_name_en($certificate) }}</p>
                         <p class="mb-0">Chairman</p>
                         <p class="mb-0">{{ $union->name ?? '' }}</p>
                         <p class="mb-0" style="font-size:14px;">{{ $thana->name ?? '' }}, {{ $district->name ?? '' }}</p>

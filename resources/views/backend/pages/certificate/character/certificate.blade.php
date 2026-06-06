@@ -221,7 +221,7 @@ To my knowledge, he is of good character and has not been involved in any crime 
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">(Mohammad Rana)</p>
+                        <p class="mb-1">({{ get_chairman_name_en($certificate) }})</p>
                         <p class="mb-0">Chairman</p>
                         <p class="mb-0"> {{ $certificate->user->institute->union->name ?? '' }} </p>
                         <p class="mb-0" style="font-size:14px;">

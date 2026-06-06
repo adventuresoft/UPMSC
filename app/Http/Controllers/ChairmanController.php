@@ -180,18 +180,21 @@ class ChairmanController extends Controller
                         $position=4;
                         $word_no_text='';
                     }
-                    $cmember=new CouncilMember;
-                    $cmember->council_id=$council->id;
-                    $cmember->word_no_text=$word_no_text;
+                    $userId = $request->userinfo[$i-1] ?? null;
+                    if($userId && is_numeric($userId)) {
+                        $cmember=new CouncilMember;
+                        $cmember->council_id=$council->id;
+                        $cmember->word_no_text=$word_no_text;
 
-                    $cmember->user_id=$request->userinfo[$i-1];
-                    $cmember->concilor_designation_id=$position;
-                    $cmember->start_date=date('Y-m-d',strtotime($request->start_date));
-                    $cmember->end_date=date('Y-m-d',strtotime($request->end_date));
-                    $cmember->status=1;
-                    $cmember->order=$i;
+                        $cmember->user_id=$userId;
+                        $cmember->concilor_designation_id=$position;
+                        $cmember->start_date=date('Y-m-d',strtotime($request->start_date));
+                        $cmember->end_date=date('Y-m-d',strtotime($request->end_date));
+                        $cmember->status=1;
+                        $cmember->order=$i;
 
-                    $cmember->save();
+                        $cmember->save();
+                    }
 
                 }
                 $data['status'] = true;
@@ -343,16 +346,19 @@ public function fromupdate(Request $request)
                     else{
                         $position=4;
                     }
-                    $cmember=new CouncilMember;
-                    $cmember->council_id=$council->id;
-                    $cmember->user_id=$request->userinfo[$i-1];
-                    $cmember->concilor_designation_id=$position;
-                    $cmember->start_date=date('Y-m-d',strtotime($request->start_date));
-                    $cmember->end_date=date('Y-m-d',strtotime($request->end_date));
-                    $cmember->status=1;
-                    $cmember->order=$i;
+                    $userId = $request->userinfo[$i-1] ?? null;
+                    if($userId && is_numeric($userId)) {
+                        $cmember=new CouncilMember;
+                        $cmember->council_id=$council->id;
+                        $cmember->user_id=$userId;
+                        $cmember->concilor_designation_id=$position;
+                        $cmember->start_date=date('Y-m-d',strtotime($request->start_date));
+                        $cmember->end_date=date('Y-m-d',strtotime($request->end_date));
+                        $cmember->status=1;
+                        $cmember->order=$i;
 
-                    $csave=$cmember->save();                    
+                        $csave=$cmember->save();
+                    }                    
                 }
                 $data['status'] = true;
                 $data['message'] = "Council Update successfully.";
@@ -456,6 +462,79 @@ public function councilorUpdate(Request $request){
     return response(json_encode($result, JSON_PRETTY_PRINT), $result['code'])->header('Content-Type', 'application/json');
 }
 
+public function chairmanList()
+{
+    $user = Auth::user();
+    $query = CouncilMember::with(['user', 'council', 'council.union', 'council.union.Thana', 'council.union.Thana.District', 'council.union.Thana.District.Division'])
+        ->where('concilor_designation_id', 1);
 
+    if(isset($user->institute->union_id) && $user->institute->union_id) {
+        $query->whereHas('council', function($q) use ($user) {
+            $q->where('union_id', $user->institute->union_id);
+        });
+    }
+
+    $data['members'] = $query->paginate(100);
+    return view('backend.pages.chairman.chairman_list', $data);
+}
+
+public function memberList()
+{
+    $user = Auth::user();
+    $query = CouncilMember::with(['user', 'council', 'council.union', 'council.union.Thana', 'council.union.Thana.District', 'council.union.Thana.District.Division'])
+        ->where('concilor_designation_id', 2);
+
+    if(isset($user->institute->union_id) && $user->institute->union_id) {
+        $query->whereHas('council', function($q) use ($user) {
+            $q->where('union_id', $user->institute->union_id);
+        });
+    }
+
+    $data['members'] = $query->paginate(100);
+    return view('backend.pages.chairman.member_list', $data);
+}
+
+public function reserveMemberList()
+{
+    $user = Auth::user();
+    $query = CouncilMember::with(['user', 'council', 'council.union', 'council.union.Thana', 'council.union.Thana.District', 'council.union.Thana.District.Division'])
+        ->where('concilor_designation_id', 3);
+
+    if(isset($user->institute->union_id) && $user->institute->union_id) {
+        $query->whereHas('council', function($q) use ($user) {
+            $q->where('union_id', $user->institute->union_id);
+        });
+    }
+
+    $data['members'] = $query->paginate(100);
+    return view('backend.pages.chairman.reserve_member_list', $data);
+}
+
+public function panelList()
+{
+    $user = Auth::user();
+    $query = CouncilMember::with(['user', 'council', 'council.union', 'council.union.Thana', 'council.union.Thana.District', 'council.union.Thana.District.Division']);
+
+    if(isset($user->institute->union_id) && $user->institute->union_id) {
+        $query->whereHas('council', function($q) use ($user) {
+            $q->where('union_id', $user->institute->union_id);
+        });
+    }
+
+    $data['councils'] = Council::with(['union', 'union.Thana', 'union.Thana.District', 'union.Thana.District.Division'])
+        ->where(function($q) use ($user) {
+            if(isset($user->institute->union_id) && $user->institute->union_id) {
+                $q->where('union_id', $user->institute->union_id);
+            }
+        })->get();
+        
+    $data['members'] = $query->get();
+
+    // Preload all institutes for the councils' unions to avoid N+1 in the view
+    $unionIds = $data['councils']->pluck('union_id')->filter()->unique()->values();
+    $data['institutes'] = \App\Models\Institute::whereIn('union_id', $unionIds)->get()->keyBy('union_id');
+
+    return view('backend.pages.chairman.panel_list', $data);
+}
 
 }

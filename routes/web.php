@@ -411,6 +411,10 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::controller(ChairmanController::class)->prefix('chairman')->name('chairman.')->group(function () {
          Route::post('/personalstore', 'personalstore')->name('personalstore');
          Route::post('/autocomplete/fetch', 'fetch')->name('fetch');
+         Route::get('/list/chairman', 'chairmanList')->name('chairmanList');
+         Route::get('/list/member', 'memberList')->name('memberList');
+         Route::get('/list/reserve-member', 'reserveMemberList')->name('reserveMemberList');
+         Route::get('/list/panel', 'panelList')->name('panelList');
 
          // Route::get('/family/{user_id}', 'family')->name('family');
          // Route::post('/familyStore', 'familyStore')->name('familyStore');

@@ -211,7 +211,7 @@
                     <div class="qr-code" id="qrcode"></div>
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1" >({{ $certificate->user->institute->superUser->people->bn_name ?? $certificate->user->institute->superUser->name ?? 'চেয়ারম্যান' }})</p>
+                        <p class="mb-1" >({{ get_chairman_name_bn($certificate) }})</p>
                         <p class="mb-0">চেয়ারম্যান</p>
                         <p class="mb-0">{{ $certificate->user->institute->union->bn_name ?? '' }}</p>
                         <p class="mb-0" style="font-size:14px;">{{ $certificate->user->institute->union->thana->bn_name ?? '' }}, {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</p>
