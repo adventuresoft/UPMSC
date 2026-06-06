@@ -163,8 +163,9 @@
                         <td class="wordno">{{ $wordTitles}}</td>
                         <td class="inputfield">
                             <select type="text" class="form-control select2" id="member_id" name="member_id">
+                                <option value="">Select</option>
                                 @foreach($chairmans as $chairman)
-                                <option value="{{$chairman->user_id}}">{{$chairman->User->name}}</option>
+                                <option value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
                                 @endforeach
                             </select>
 

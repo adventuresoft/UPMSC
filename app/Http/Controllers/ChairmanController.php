@@ -81,7 +81,10 @@ class ChairmanController extends Controller
         if($user->institute && $user->institute->union_id) {
             $union = Union::find($user->institute->union_id);
             $data['userUnion'] = $union;
-            $data['unionPeople'] = AddressInfo::where('present_union_id', $user->institute->union_id)->get();
+            $data['unionPeople'] = AddressInfo::where(function ($query) use ($user) {
+                $query->where('present_union_id', $user->institute->union_id)
+                      ->orWhere('permanent_union_id', $user->institute->union_id);
+            })->get()->unique('user_id')->values();
             
             // Get the hierarchy: union -> thana -> district -> division
             if($union && $union->thana) {
@@ -251,7 +254,10 @@ class ChairmanController extends Controller
  public function getPeopleByUnion(Request $request, $id){
     $html = '<option value="">Select Select</option>';
 
-    $thanas = AddressInfo::where('present_union_id', $id)->get();
+    $thanas = AddressInfo::where(function ($query) use ($id) {
+                $query->where('present_union_id', $id)
+                      ->orWhere('permanent_union_id', $id);
+            })->get()->unique('user_id')->values();
     if(count($thanas)) {
         foreach ($thanas as $thana) {
          $html .='<option value="'.$thana->user_id.'">'.$thana->User->system_id.' : '.$thana->User->name.'</option>';
@@ -281,7 +287,10 @@ public function edit($id)
 
     $data['thanas'] = Thana::where('district_id',$council->union->Thana->district_id)->get();
     $data['unions'] = Union::where('thana_id',$council->union->thana_id)->get();
-    $data['chairmans']=AddressInfo::where('present_union_id', $council->union_id)->get();
+    $data['chairmans']=AddressInfo::where(function ($query) use ($council) {
+                $query->where('present_union_id', $council->union_id)
+                      ->orWhere('permanent_union_id', $council->union_id);
+            })->get()->unique('user_id')->values();
 
     return view('backend.pages.chairman.edit', $data);
 }
@@ -396,7 +405,10 @@ public function changeMember($id){
             abort(403, 'Unauthorized: Council Member does not belong to your union');
         }
     }
-    $data['chairmans']=AddressInfo::where('present_union_id', $council->union_id)->get();
+    $data['chairmans']=AddressInfo::where(function ($query) use ($council) {
+                $query->where('present_union_id', $council->union_id)
+                      ->orWhere('permanent_union_id', $council->union_id);
+            })->get()->unique('user_id')->values();
     $data['council']=$council;
     $data['cm']=$cm;
     return view('backend.pages.chairman.show_single', $data);
@@ -513,24 +525,40 @@ public function reserveMemberList()
 public function panelList()
 {
     $user = Auth::user();
+    $isSuperAdmin = in_array($user->role_id, [1, 4]);
+    $selectedUnionId = request('union_id', null);
+
     $query = CouncilMember::with(['user', 'council', 'council.union', 'council.union.Thana', 'council.union.Thana.District', 'council.union.Thana.District.Division']);
 
-    if(isset($user->institute->union_id) && $user->institute->union_id) {
+    if($isSuperAdmin && $selectedUnionId) {
+        $query->whereHas('council', function($q) use ($selectedUnionId) {
+            $q->where('union_id', $selectedUnionId);
+        });
+    } elseif(isset($user->institute->union_id) && $user->institute->union_id) {
         $query->whereHas('council', function($q) use ($user) {
             $q->where('union_id', $user->institute->union_id);
         });
     }
 
-    $data['councils'] = Council::with(['union', 'union.Thana', 'union.Thana.District', 'union.Thana.District.Division'])
-        ->where(function($q) use ($user) {
-            if(isset($user->institute->union_id) && $user->institute->union_id) {
-                $q->where('union_id', $user->institute->union_id);
-            }
-        })->get();
+    $councilsQuery = Council::with(['union', 'union.Thana', 'union.Thana.District', 'union.Thana.District.Division']);
+
+    if($isSuperAdmin && $selectedUnionId) {
+        $councilsQuery->where('union_id', $selectedUnionId);
+    } elseif(isset($user->institute->union_id) && $user->institute->union_id) {
+        $councilsQuery->where('union_id', $user->institute->union_id);
+    }
+
+    $data['councils'] = $councilsQuery->get();
         
     $data['members'] = $query->get();
 
-    // Preload all institutes for the councils' unions to avoid N+1 in the view
+    $data['isSuperAdmin'] = $isSuperAdmin;
+    $data['selectedUnionId'] = $selectedUnionId;
+
+    if($isSuperAdmin) {
+        $data['unions'] = \App\Models\Union::with(['Thana', 'Thana.District', 'Thana.District.Division'])->get();
+    }
+
     $unionIds = $data['councils']->pluck('union_id')->filter()->unique()->values();
     $data['institutes'] = \App\Models\Institute::whereIn('union_id', $unionIds)->get()->keyBy('union_id');
 

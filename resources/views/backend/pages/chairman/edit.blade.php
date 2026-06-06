@@ -126,8 +126,9 @@
                         <td class="colon">:</td>
                         <td class="inputfield">
                             <select type="text" class="form-control select2" id="chairman_id" name="userinfo[]">
+                                <option value="">Select</option>
                                 @foreach($chairmans as $chairman)
-                                <option {{$oldchairman->User->id==$chairman->id?'selected':''}} value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+                                <option {{$oldchairman->User->id==$chairman->user_id?'selected':''}} value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
                                 @endforeach
                             </select>
                             
@@ -153,8 +154,9 @@
                     @endphp
                     <td class="inputfield"> 
                         <select class="form-control select2" name="userinfo[]" id="word_1_id">
+                           <option value="">Select</option>
                            @foreach($chairmans as $chairman)
-                           <option value="{{$chairman->user_id}}">{{$chairman->User->name}}</option>
+                           <option {{$member1->User->id==$chairman->user_id?'selected':''}} value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
                            @endforeach
                        </select>
                    </td>
@@ -176,8 +178,9 @@
 
             <td>
                 <select class="form-control select2" name="userinfo[]" id="word_2_id">
+                    <option value="">Select</option>
                     @foreach($chairmans as $chairman)
-                    <option {{$member2->User->id==$chairman->user_id?'selected':''}}  value="{{$chairman->user_id}}">{{$chairman->User->name}}</option>
+                    <option {{$member2->User->id==$chairman->user_id?'selected':''}}  value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
                     @endforeach
                 </select>
             </td>
@@ -198,8 +201,9 @@
 
         <td>
             <select class="form-control select2" name="userinfo[]" id="word_3_id">
+                <option value="">Select</option>
                 @foreach($chairmans as $chairman)
-                <option {{$member3->User->id==$chairman->id?'selected':''}}  value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+                <option {{$member3->User->id==$chairman->user_id?'selected':''}}  value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
                 @endforeach
             </select>
         </td>
@@ -219,8 +223,9 @@
     @endphp
     <td>
      <select class="form-control select2" name="userinfo[]" id="word_4_id">
+        <option value="">Select</option>
         @foreach($chairmans as $chairman)
-        <option {{$member4->User->id==$chairman->id?'selected':''}}  value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+        <option {{$member4->User->id==$chairman->user_id?'selected':''}}  value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
         @endforeach
     </select>
 </td>
@@ -240,8 +245,9 @@
 @endphp
 <td>
   <select class="form-control select2" name="userinfo[]" id="word_5_id">
+    <option value="">Select</option>
     @foreach($chairmans as $chairman)
-    <option {{$member5->User->id==$chairman->id?'selected':''}}  value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+    <option {{$member5->User->id==$chairman->user_id?'selected':''}}  value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
     @endforeach
 </select>
 </td>
@@ -261,8 +267,9 @@
 @endphp
 <td>
     <select class="form-control select2" name="userinfo[]" id="word_6_id">
+     <option value="">Select</option>
      @foreach($chairmans as $chairman)
-     <option {{$member6->User->id==$chairman->id?'selected':''}}  value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+     <option {{$member6->User->id==$chairman->user_id?'selected':''}}  value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
      @endforeach
  </select>
 </td>
@@ -282,8 +289,9 @@
 @endphp
 <td>
  <select class="form-control select2" name="userinfo[]" id="word_7_id">
+    <option value="">Select</option>
     @foreach($chairmans as $chairman)
-    <option {{$member7->User->id==$chairman->id?'selected':''}}  value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+    <option {{$member7->User->id==$chairman->user_id?'selected':''}}  value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
     @endforeach
 </select>
 </td>
@@ -303,8 +311,9 @@
 @endphp
 <td>
   <select class="form-control select2" name="userinfo[]" id="word_8_id">
+     <option value="">Select</option>
      @foreach($chairmans as $chairman)
-     <option {{$member8->User->id==$chairman->id?'selected':''}}  value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+     <option {{$member8->User->id==$chairman->user_id?'selected':''}}  value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
      @endforeach
  </select>
 </td>
@@ -324,8 +333,9 @@
 @endphp
 <td>
   <select class="form-control select2" name="userinfo[]" id="word_9_id">
+    <option value="">Select</option>
     @foreach($chairmans as $chairman)
-    <option  {{$member9->User->id==$chairman->id?'selected':''}} value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+    <option  {{$member9->User->id==$chairman->user_id?'selected':''}} value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
     @endforeach
 </select>
 </td>
@@ -353,8 +363,9 @@
         <td class="inputfield">
 
           <select class="form-control select2" name="userinfo[]" id="reserved_word_1_id">
+           <option value="">Select</option>
            @foreach($chairmans as $chairman)
-           <option {{$resmember->User->id==$chairman->id?'selected':''}} value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+           <option {{$resmember->User->id==$chairman->user_id?'selected':''}} value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
            @endforeach
        </select>
    </td>
@@ -374,8 +385,9 @@
 @endphp
 <td>
    <select class="form-control select2" name="userinfo[]" id="reserved_word_2_id">
+    <option value="">Select</option>
     @foreach($chairmans as $chairman)
-    <option {{$resmember2->User->id==$chairman->id?'selected':''}} value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+    <option {{$resmember2->User->id==$chairman->user_id?'selected':''}} value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
     @endforeach
 </select>
 </td>
@@ -395,10 +407,11 @@
 @endphp
 <td>
     <select class="form-control select2" name="userinfo[]" id="reserved_word_3_id">
-        @foreach($chairmans as $chairman)
-        <option {{$resmember3->User->id==$chairman->id?'selected':''}} value="{{$chairman->id}}">{{$chairman->User->name}}</option>
-        @endforeach
-    </select>
+            <option value="">Select</option>
+            @foreach($chairmans as $chairman)
+            <option {{$resmember3->User->id==$chairman->user_id?'selected':''}} value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
+            @endforeach
+        </select>
 </td>
 </tr> 
 </table>
@@ -421,8 +434,9 @@
         @endphp
         <td class="inputfield">
          <select class="form-control select2" name="userinfo[]" id="panel_chairman_id">
+            <option value="">Select</option>
             @foreach($chairmans as $chairman)
-            <option {{$panelChairman->User->id==$chairman->id?'selected':''}} value="{{$chairman->id}}">{{$chairman->User->name}}</option>
+            <option {{$panelChairman->User->id==$chairman->user_id?'selected':''}} value="{{$chairman->user_id}}">{{$chairman->User->system_id}} : {{$chairman->User->name}}</option>
             @endforeach
         </select>
     </td>

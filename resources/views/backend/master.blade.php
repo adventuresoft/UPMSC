@@ -72,8 +72,8 @@
     }
 
     .main-sidebar {
-        background: var(--upms-sidebar) !important;
-        border-right: 1px solid var(--upms-sidebar-border) !important;
+        background: linear-gradient(to bottom, #d6e0df, #eaf0f0) !important;
+        border-right: 0 !important;
         box-shadow: none !important;
     }
 
@@ -81,10 +81,11 @@
         display: flex;
         align-items: center;
         min-height: 70px;
-        background: var(--upms-sidebar) !important;
-        border-bottom: 1px solid var(--upms-sidebar-border) !important;
+        background: linear-gradient(to bottom, #d6e0df, #eaf0f0) !important;
+        border-bottom: 0 !important;
         color: var(--upms-text) !important;
         font-weight: 700;
+        box-shadow: none !important;
     }
 
     .brand-link .brand-text {
@@ -99,21 +100,55 @@
         opacity: 1 !important;
     }
 
+    /* Set sidebar to a good width first */
+    .main-sidebar {
+        width: 250px !important;
+        max-width: 250px !important;
+        min-width: 250px !important;
+        overflow: visible !important; /* Allow everything to show */
+        padding: 0 !important;
+        margin: 0 !important;
+    }
     .sidebar {
         max-height: calc(100vh - 70px);
-        overflow-y: auto;
-        overflow-x: hidden;
+        overflow-y: auto !important;
+        overflow-x: visible !important; /* Allow submenus to show */
+        /* Hide scrollbars but keep functionality */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        /* Keep padding for the menu */
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    /* Hide native scrollbars in Webkit browsers (Chrome, Safari) */
+    .sidebar::-webkit-scrollbar,
+    .main-sidebar::-webkit-scrollbar {
+        display: none !important;
+    }
+    /* Make overlay scrollbar handle/track invisible (not display none!) */
+    .os-scrollbar {
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+    /* Adjust content wrapper to fit sidebar */
+    body:not(.sidebar-collapse) .content-wrapper,
+    body:not(.sidebar-collapse) .main-footer,
+    body:not(.sidebar-collapse) .main-header {
+        margin-left: 250px !important;
     }
 
     .nav-sidebar {
         padding-top: 8px;
         padding-bottom: 20px;
+        padding-right: 12px;
+        padding-left: 12px;
     }
 
     .nav-sidebar .nav-item > .nav-link {
         color: rgba(33, 50, 67, 0.9) !important;
         border-radius: 8px;
-        margin: 6px 8px;
+        margin: 8px 0;
+        padding: 12px 16px;
         transition: background-color .18s ease, color .18s ease, transform .18s ease;
         background: transparent !important;
     }
@@ -135,10 +170,13 @@
     }
 
     .nav-sidebar .nav-treeview {
-        margin: 2px 8px 6px;
-        padding: 4px 0;
+        margin: 8px 12px 12px;
+        padding: 8px 0;
         background: var(--upms-sidebar-dark);
-        border-radius: 8px;
+        border-radius: 10px;
+    }
+    .nav-sidebar .nav-treeview .nav-link {
+        padding: 10px 16px !important;
     }
 
     /* Ensure submenu text is dark so it's visible on light sidebar */

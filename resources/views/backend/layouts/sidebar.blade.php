@@ -38,7 +38,7 @@
     
     $isLand = $isPath(['land*']) || in_array($_subMenu, ['LandCreate', 'LandList']);
     
-    $isVehicle = $isPath(['vehicle*']) || in_array($_subMenu, ['VehicleCreate', 'VehicleList', 'VehicleApprovalList', 'VehicleGenerateInvoice', 'VehicleLicense', 'VehicleOwnershipChangeApplication', 'VehicleOwnershipChangeApproval', 'VehicleAddFeesNewSetup', 'VehicleAddFeesList']);
+    $isVehicle = $isPath(['vehicle*']) || in_array($_subMenu, ['VehicleCreate', 'VehicleList', 'VehicleApprovalList', 'VehicleGenerateInvoice', 'VehicleLicense', 'VehicleAddFeesNewSetup', 'VehicleAddFeesList']);
     
     $isRoad = $isPath(['road*']) || in_array($_subMenu, ['RoadCreate', 'RoadList']);
 
@@ -172,10 +172,10 @@
           </ul>
         </li>
         <li class="nav-item">
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();" class="nav-link text-danger">
-                <i class="nav-icon fas fa-sign-out-alt"></i>
-                <p>Logout</p>
-            </a>
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();" class="nav-link text-danger">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <p>Logout</p>
+          </a>
         </li>
         @else
         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
@@ -1047,6 +1047,7 @@
           </a>
         </li>
 
+        {{-- Ownership Change - Routes not defined
         <li class="nav-item has-treeview @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") menu-open @endif">
           <a href="#" class="nav-link @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") active @endif">
             <i class="far @if($subMenu == "VehicleOwnershipChangeApplication" || $subMenu == "VehicleOwnershipChangeApproval") fa-dot-circle @else fa-circle @endif nav-icon"></i>
@@ -1059,20 +1060,22 @@
             <li class="nav-item">
               <a href="#" class="nav-link @if( $subMenu == "VehicleOwnershipChangeApplication") active @endif">
                 <i class="far @if($subMenu == "VehicleOwnershipChangeApplication") fa-dot-circle @else fa-circle @endif nav-icon"></i>
-                <p>Application for Change Ownership</p>
+                <p>Application</p>
               </a>
             </li>
             <li class="nav-item">
               <a href="#" class="nav-link @if( $subMenu == "VehicleOwnershipChangeApproval") active @endif">
                 <i class="far @if($subMenu == "VehicleOwnershipChangeApproval") fa-dot-circle @else fa-circle @endif nav-icon"></i>
-                <p>Ownership Change Approval</p>
+                <p>Approval</p>
               </a>
             </li>
           </ul>
         </li>
+        --}}
 
       </ul>
     </li>
+    @endcan
 
     {{-- Road Info --}}
     @can('road.read')
@@ -1088,7 +1091,7 @@
 
         @can('road.create')
         <li class="nav-item">
-          <a href="{{route('road.create')}}" class="nav-link @if($subMenu == "RoadCreate") active  @endif">
+          <a href="{{route('road.create')}}" class="nav-link @if($subMenu == "RoadCreate") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Create</p>
           </a>
@@ -1096,7 +1099,7 @@
         @endcan
 
         <li class="nav-item">
-          <a href="{{route('road.index')}}" class="nav-link @if($subMenu == "RoadList") active  @endif ">
+          <a href="{{route('road.index')}}" class="nav-link @if($subMenu == "RoadList") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Road List</p>
           </a>
@@ -1106,70 +1109,38 @@
     </li>
     @endcan
 
-    {{-- Bridge Info --}}
-    @can('bridge.read')
-    <li class="nav-item {{ $isPath(['bridge*']) ? 'menu-open' : '' }}">
+    {{-- Market Info --}}
+    @can('market.read')
+    <li class="nav-item">
       <a href="#" class="nav-link">
-      <i class="nav-icon fas fa-archway"></i>
-      <p>
-        Bridge Info
-        <i class="right fas fa-angle-left"></i>
-      </p>
-    </a>
-    <ul class="nav nav-treeview">
+        <i class="nav-icon fas fa-store"></i>
+        <p>
+          Market Info
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        @can('market.create')
+        <li class="nav-item">
+          <a href="{{route('market.create')}}" class="nav-link @if($subMenu == "MarketCreate") active @endif">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Create</p>
+          </a>
+        </li>
+        @endcan
 
-      @can('bridge.create')
-      <li class="nav-item">
-        <a href="{{route('bridge.create')}}" class="nav-link @if($subMenu == "BridgeCreate") active @endif">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Create</p>
-        </a>
-      </li>
-      @endcan
+        <li class="nav-item">
+          <a href="{{route('market.index')}}" class="nav-link @if($subMenu == "MarketList") active @endif ">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Market List</p>
+          </a>
+        </li>
 
-      <li class="nav-item">
-        <a href="{{route('bridge.index')}}" class="nav-link @if($subMenu == "BridgeList") active @endif">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Bridge List</p>
-        </a>
-      </li>
+      </ul>
+    </li>
+    @endcan
 
-    </ul>
-  </li>
-  @endcan
-
-  {{-- Market Info --}}
-  @can('market.read')
-  <li class="nav-item {{ ($subMenu == "MarketCreate" || $subMenu == "MarketList") ? 'menu-open' : '' }}">
-    <a href="#" class="nav-link">
-      <i class="nav-icon fas fa-store"></i>
-      <p>
-        Market Info
-        <i class="right fas fa-angle-left"></i>
-      </p>
-    </a>
-    <ul class="nav nav-treeview">
-      @can('market.create')
-      <li class="nav-item">
-        <a href="{{route('market.create')}}" class="nav-link @if($subMenu == "MarketCreate") active @endif">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Create</p>
-        </a>
-      </li>
-      @endcan
-
-      <li class="nav-item">
-        <a href="{{route('market.index')}}" class="nav-link @if($subMenu == "MarketList") active @endif ">
-          <i class="far fa-circle nav-icon"></i>
-          <p>Market List</p>
-        </a>
-      </li>
-
-    </ul>
-  </li>
-  @endcan
-
-  {{-- Ferry Info --}}
+    {{-- Ferry Info --}}
           <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-ship"></i>
@@ -1306,7 +1277,7 @@
              Marriage & Divorce
              <i class="right fas fa-angle-left"></i>
            </p>
-         </a>
+          </a>
          <ul class="nav nav-treeview">
 
           @can('marriage.create')
@@ -1335,7 +1306,7 @@
           @endcan
 
           <li class="nav-item">
-            <a href="{{route('divorce.index')}}" class="nav-link {{$subMenu =='DivorceList' ?'active':'' }}">
+            <a href="{{route('divorce.index')}}" class="nav-link {{$subMenu =='DivorceList' ?'active':''}}">
               <i class="far fa-circle nav-icon"></i>
               <p>View Divorce List</p>
             </a>
@@ -1398,66 +1369,6 @@
       </li>
       @endcan
 
-      {{-- Member/Councilor Info --}}
-      @can('councilor.read')
-      <li class="nav-item {{ $isCouncilor ? 'menu-open' : '' }}">
-        <a href="#" class="nav-link">
-          <i class="nav-icon fas fa-user-friends"></i>
-          <p>
-            Member/Councilor Info
-            <i class="right fas fa-angle-left"></i>
-          </p>
-        </a>
-        <ul class="nav nav-treeview">
-
-          @can('councilor.create')
-          <li class="nav-item">
-            <a href="{{route('councilor.create')}}" class="nav-link {{$subMenu ==  'councilorCreate'?'active':''}}">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Add New Member</p>
-            </a>
-          @endcan
-        </ul>
-      </li>
-
-        {{-- Member/Commitee  --}}
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-users-cog"></i>
-            <p>
-              Member/Commitee
-              <i class="right fas fa-angle-left"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Add New Member</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>View</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>View Ex Member</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-
-
-
-
-
-
-        @endcan
-      @endcan
       @endif
       </ul>
     </nav>

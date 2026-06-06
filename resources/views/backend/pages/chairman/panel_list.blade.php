@@ -3,42 +3,83 @@
 <style>
 /* No external @import - use system + existing fonts */
 .panel-container {
-    background: linear-gradient(to bottom, #d6e0df, #eaf0f0);
-    padding: 40px 20px 60px;
+    background: white;
+    padding: 20px 20px 60px;
     font-family: 'Source Sans Pro', sans-serif;
+}
+.union-selector {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    padding: 15px;
+    background: #f4f6f9;
+    border-radius: 8px;
+    text-align: center;
+}
+.union-selector label {
+    font-weight: 600;
+    margin-right: 10px;
+}
+.union-selector select {
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    min-width: 250px;
+}
+.union-selector button {
+    padding: 8px 20px;
+    margin-left: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.union-selector button:hover {
+    background: #0056b3;
 }
 .panel-header {
     text-align: center;
     margin-bottom: 40px;
+    padding: 20px;
 }
-.logo-box {
-    display: inline-block;
-    background: #fff;
-    border-top: 4px solid #e11d48;
-    padding: 12px 25px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    margin-bottom: 18px;
-    border-radius: 4px;
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
 }
-.logo-box img {
-    height: 65px;
-    max-width: 220px;
+.logo-left, .logo-right {
+    flex: 0 0 auto;
+}
+.logo-left img, .logo-right img {
+    height: 100px;
     object-fit: contain;
 }
-.union-ribbon {
-    background: linear-gradient(to bottom, #f43f5e, #be123c);
-    color: white;
-    display: inline-block;
-    padding: 14px 45px;
-    font-size: 26px;
-    font-weight: 900;
-    text-transform: uppercase;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.22);
-    letter-spacing: 2px;
-    border: 3px solid #fff;
-    border-radius: 4px;
+.header-text {
+    flex: 1;
+    padding: 0 20px;
+    text-align: center;
 }
-/* Cards Grid - 4 per row */
+.govt-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    margin: 0 0 8px 0;
+}
+.union-title-green {
+    font-size: 30px;
+    font-weight: 800;
+    color: #006600;
+    margin: 0 0 8px 0;
+}
+.union-title-blue {
+    font-size: 28px;
+    font-weight: 700;
+    color: #003366;
+    margin: 0;
+}
+/* Cards Grid - 3 per row */
 .panel-grid {
     display: flex;
     flex-wrap: wrap;
@@ -48,24 +89,24 @@
     justify-content: center;
     align-items: stretch;
 }
-/* Make all cards fill the grid cell height */
+/* Make all cards fill the grid cell height and set width for 3 per row */
 .panel-grid .member-card {
     height: 100%;
     flex-shrink: 0;
+    width: calc((100% - 50px) / 3); /* 3 columns with 25px gap */
 }
-/* Section title spans all 4 columns */
+/* Section title */
 .section-title {
-    grid-column: 1 / -1;
     width: 100%;
     text-align: center;
-    margin: 24px 0 8px 0;
-    font-size: 22px;
+    margin: 24px 0 24px 0;
+    font-size: 26px;
     font-weight: 800;
-    color: #111827;
+    color: #006600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 2px solid #cbd5e1;
-    padding-bottom: 10px;
+    letter-spacing: 2px;
+    border-bottom: 3px solid #006600;
+    padding-bottom: 12px;
 }
 /* Member card */
 .member-card {
@@ -79,64 +120,15 @@
     overflow: hidden;
     width: 100%;
 }
-/* Chairman card - largest */
-.chairman-card {
-    max-width: 280px;
-}
-/* Panel Chairman card - medium */
-.panel-chairman-card {
-    max-width: 250px;
-}
-/* Regular and Reserve member cards - smallest */
+
+/* All cards have consistent max width for 3 per row */
+.chairman-card,
+.panel-chairman-card,
 .regular-member-card,
 .reserve-member-card {
-    max-width: 200px;
+    max-width: 320px;
 }
 .member-card:hover { transform: translateY(-5px); }
-/* Special badge for chairman */
-.chairman-badge {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, #4d7c0f, #365314);
-    color: white;
-    min-width: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    font-size: 16px;
-    letter-spacing: 2px;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    text-align: center;
-    padding: 10px 0;
-    z-index: 10;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-}
-/* Adjust badge size for chairman card */
-.chairman-card .chairman-badge {
-    min-width: 55px;
-    font-size: 17px;
-}
-/* Adjust badge size for panel chairman card */
-.panel-chairman-card .chairman-badge {
-    min-width: 50px;
-    font-size: 16px;
-}
-/* Special badge for panel chairman */
-.panel-chair-badge {
-    background: linear-gradient(to bottom, #0f766e, #042f2e);
-}
-/* Special badge for regular member */
-.member-badge {
-    background: linear-gradient(to bottom, #1d4ed8, #1e3a8a);
-}
-/* Special badge for reserve member */
-.reserve-badge {
-    background: linear-gradient(to bottom, #db2777, #9d174d);
-}
 .card-photo-bg {
     height: 240px;
     width: 100%;
@@ -146,6 +138,16 @@
     align-items: flex-end;
     justify-content: center;
 }
+.card-info {
+    background: white;
+    padding: 15px 12px;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
 .bg-green  { background: linear-gradient(to bottom, #a3e635, #65a30d); }
 .bg-blue   { background: linear-gradient(to bottom, #38bdf8, #0284c7); }
 .bg-purple { background: linear-gradient(to bottom, #c084fc, #9333ea); }
@@ -154,16 +156,15 @@
 .bg-teal   { background: linear-gradient(to bottom, #2dd4bf, #0f766e); }
 .bg-gray   { background: linear-gradient(to bottom, #9ca3af, #4b5563); }
 .card-photo-bg img {
-    height: 93%;
+    height: 100%;
     width: 100%;
     object-fit: cover;
     object-position: top center;
-    filter: drop-shadow(0 10px 12px rgba(0,0,0,0.25));
     z-index: 2;
 }
 .card-info {
     background: white;
-    padding: 12px 10px;
+    padding: 15px 12px;
     text-align: center;
     flex-grow: 1;
     display: flex;
@@ -171,18 +172,25 @@
     justify-content: center;
 }
 .member-name {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
     color: #e11d48;
     text-transform: uppercase;
     margin: 0 0 4px 0;
-    line-height: 1.2;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 .member-desig {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: #1f2937;
     margin: 0;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 </style>
 @endpush
@@ -204,12 +212,38 @@
     </div>
   </section>
 
+  <!-- Union Selector (Super Admin Only) -->
+  @if($isSuperAdmin)
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="union-selector">
+            <form method="GET" action="{{ route('chairman.panelList') }}" id="unionSelectorForm">
+              <label for="union_id">Select Union:</label>
+              <select name="union_id" id="union_id" class="form-control select2" style="width: 400px;">
+                <option value="">-- Select Union --</option>
+                @foreach($unions as $union)
+                  <option value="{{ $union->id }}" {{ $selectedUnionId == $union->id ? 'selected' : '' }}>
+                    {{ $union->name }} ({{ $union->Thana->name ?? '' }}, {{ $union->Thana->District->name ?? '' }})
+                  </option>
+                @endforeach
+              </select>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  @endif
+
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
 
+          @if(!$isSuperAdmin || ($isSuperAdmin && $selectedUnionId))
           @php $bgColors = ['bg-blue','bg-purple','bg-pink','bg-orange','bg-teal','bg-gray']; @endphp
           @php $noImg = asset('public/no-image-found.jpeg'); @endphp
 
@@ -248,24 +282,44 @@
 
           <div class="panel-container mb-5">
 
-            <!-- Header: Logo + Union Name -->
+            <!-- Header: Dynamic Union Info -->
             <div class="panel-header">
-              <div class="logo-box">
-                <img src="{{ $logoUrl }}" alt="Union Logo" onerror="this.onerror=null;this.src='{{ $noImg }}'">
-              </div>
-              <br>
-              <div class="union-ribbon">
-                UNION PANEL
+              <div class="header-content">
+                <!-- Left Logo -->
+                <div class="logo-left">
+                  @if ($institute && $institute->left_image)
+                    <img src="{{ imageUrl($institute->left_image) }}" alt="Left Logo" onerror="this.onerror=null;this.src='{{ asset('assets/images/logo/govt-bd-logo.png') }}'">
+                  @else
+                    <img src="{{ asset('assets/images/logo/govt-bd-logo.png') }}" alt="Left Logo">
+                  @endif
+                </div>
+
+                <!-- Header Text -->
+                <div class="header-text">
+                  <p class="govt-title">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</p>
+                  @if($first_council && $first_council->union)
+                    <p class="union-title-green">{{ $first_council->union->bn_name ?? $first_council->union->name ?? 'Union Parishad' }}</p>
+                    <p class="union-title-blue">{{ $first_council->union->name ?? '' }}</p>
+                  @endif
+                </div>
+
+                <!-- Right Logo -->
+                <div class="logo-right">
+                  @if ($institute && $institute->right_image)
+                    <img src="{{ imageUrl($institute->right_image) }}" alt="Right Logo" onerror="this.onerror=null;this.src='{{ asset('assets/images/logo/govt-bd-logo.png') }}'">
+                  @else
+                    <img src="{{ asset('assets/images/logo/govt-bd-logo.png') }}" alt="Right Logo">
+                  @endif
+                </div>
               </div>
             </div>
 
-            <div class="panel-grid">
-
-              <!-- All Chairmen -->
+            <!-- Segment 1: Chairman Section -->
+            <div class="panel-grid mb-5">
+              <div class="section-title">CHAIRMAN</div>
               @if($all_chairmen->count() > 0)
               @foreach($all_chairmen as $chairman)
               <div class="member-card chairman-card">
-                <div class="chairman-badge">CHAIRMAN</div>
                 <div class="card-photo-bg bg-green">
                   <img src="{{ $chairman->user->image ? imageUrl($chairman->user->image) : $noImg }}"
                        alt="Chairman"
@@ -278,30 +332,14 @@
               </div>
               @endforeach
               @endif
+            </div>
 
-              <!-- All Panel Chairmen -->
-              @if($all_panel_chairmen->count() > 0)
-              @foreach($all_panel_chairmen as $panel_chairman)
-              <div class="member-card panel-chairman-card">
-                <div class="chairman-badge panel-chair-badge">PANEL CHAIR</div>
-                <div class="card-photo-bg bg-teal">
-                  <img src="{{ $panel_chairman->user->image ? imageUrl($panel_chairman->user->image) : $noImg }}"
-                       alt="Panel Chairman"
-                       onerror="this.onerror=null;this.src='{{ $noImg }}'">
-                </div>
-                <div class="card-info">
-                  <p class="member-name">{{ $panel_chairman->user->name ?? 'N/A' }}</p>
-                  <p class="member-desig">Panel Chairman</p>
-                </div>
-              </div>
-              @endforeach
-              @endif
-
-              <!-- All Regular Members (4 per row) -->
+            <!-- Segment 2: Regular Members Section -->
+            <div class="panel-grid mb-5">
+              <div class="section-title">REGULAR MEMBERS</div>
               @if($all_regular_members->count() > 0)
               @foreach($all_regular_members as $index => $rm)
               <div class="member-card regular-member-card">
-                <div class="chairman-badge member-badge">MEMBER</div>
                 <div class="card-photo-bg {{ $bgColors[$index % count($bgColors)] }}">
                   <img src="{{ $rm->user->image ? imageUrl($rm->user->image) : $noImg }}"
                        alt="Member"
@@ -314,12 +352,14 @@
               </div>
               @endforeach
               @endif
+            </div>
 
-              <!-- All Reserve Members (4 per row) -->
+            <!-- Segment 3: Reserve Members Section -->
+            <div class="panel-grid mb-5">
+              <div class="section-title">RESERVE MEMBERS</div>
               @if($all_reserve_members->count() > 0)
               @foreach($all_reserve_members as $index => $rwm)
               <div class="member-card reserve-member-card">
-                <div class="chairman-badge reserve-badge">RESERVE</div>
                 <div class="card-photo-bg {{ $bgColors[($index + 2) % count($bgColors)] }}">
                   <img src="{{ $rwm->user->image ? imageUrl($rwm->user->image) : $noImg }}"
                        alt="Reserve Member"
@@ -332,9 +372,35 @@
               </div>
               @endforeach
               @endif
+            </div>
 
-            </div><!-- /.panel-grid -->
+            <!-- Segment 4: Panel Chairman Section -->
+            <div class="panel-grid">
+              <div class="section-title">PANEL CHAIRMAN</div>
+              @if($all_panel_chairmen->count() > 0)
+              @foreach($all_panel_chairmen as $panel_chairman)
+              <div class="member-card panel-chairman-card">
+                <div class="card-photo-bg bg-teal">
+                  <img src="{{ $panel_chairman->user->image ? imageUrl($panel_chairman->user->image) : $noImg }}"
+                       alt="Panel Chairman"
+                       onerror="this.onerror=null;this.src='{{ $noImg }}'">
+                </div>
+                <div class="card-info">
+                  <p class="member-name">{{ $panel_chairman->user->name ?? 'N/A' }}</p>
+                  <p class="member-desig">Panel Chairman</p>
+                </div>
+              </div>
+              @endforeach
+              @endif
+            </div>
           </div><!-- /.panel-container -->
+          @else
+          <div class="card">
+            <div class="card-body text-center py-5">
+              <h4 class="text-muted">Please select a union from the dropdown above to view the panel</h4>
+            </div>
+          </div>
+          @endif
 
         </div>
       </div>
@@ -342,4 +408,19 @@
   </section>
 @endsection
 @push('script')
+<script type="text/javascript">
+  $(document).ready(function() {
+    // Initialize Select2
+    $('#union_id').select2({
+      theme: 'bootstrap4',
+      placeholder: '-- Select Union --',
+      allowClear: true
+    });
+
+    // Handle select change
+    $('#union_id').on('change', function() {
+      $('#unionSelectorForm').submit();
+    });
+  });
+</script>
 @endpush
