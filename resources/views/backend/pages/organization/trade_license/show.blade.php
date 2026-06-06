@@ -405,7 +405,7 @@
                     নতুন<br>
                     অর্থ বছর: {{ $license->taxYear->name }} <br>
                     <span style="color: red;">এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত</span> <br><br><br>
-                    <span style="font-size: 16px;">ট্রেড লাইসেন্স নম্বর: <strong style="font-size: 18px;">{{ bnValue($license->system_id) }}</strong></span><br>
+                    <span style="font-size: 16px;">নম্বর: <strong style="font-size: 18px;">{{ bnValue($license->system_id) }}</strong></span><br>
                 </div>
             </div>
 
