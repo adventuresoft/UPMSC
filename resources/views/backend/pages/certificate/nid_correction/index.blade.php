@@ -153,7 +153,7 @@
                                         <img src="{{ imageUrl($displayImage) }}" style="width: 55px; height: 65px; border-radius: 0; object-fit: cover;" onerror="this.onerror=null;this.src='{{ asset('assets/images/person-avatar.png') }}'">
                                     </td>
                                     <td class="text-center" style="font-size: 16px;">
-                                        {{ bnValue($certificate->system_id) }}
+                                        {{($certificate->system_id) }}
                                     </td>
                                     <td>
                                         <span style="font-weight: bold; font-size: 16px;">{{ bnValue($displayNid) }}</span><br>

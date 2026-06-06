@@ -187,7 +187,7 @@
 
                                         <td>
                                             <span class="badge-nid">
-                                                {{ $certificate->certificate_number ?? bnValue($certificate->system_id ?? 'N/A') }}
+                                                {{ $certificate->certificate_number ??($certificate->system_id ?? 'N/A') }}
                                             </span>
                                         </td>
 

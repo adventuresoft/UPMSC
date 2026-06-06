@@ -400,7 +400,7 @@
             <img src="{{ asset('images/dhaka.png') }}">
             <div class="header-text-block" style="text-align: center; line-height: 1.1;">
                 <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
-                <div style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                <div style="font-size: 20px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
                 <div style="font-size: 20px; color: #2e3192; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
                 <div style="font-size: 13px; color: #000;">
                     @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
@@ -427,7 +427,7 @@
                     নতুন<br>
                     অর্থ বছর: {{ $license->taxYear->name }} <br>
                     <span style="color: red;">এই ট্রেড লাইসেন্সের মেয়াদ {{ bnValue(trim($end)) }} সনের ৩০ জুন পর্যন্ত</span> <br><br><br>
-                    <span style="font-size: 16px;">ট্রেড লাইসেন্স নম্বর: <strong style="font-size: 18px;">{{ bnValue($license->system_id) }}</strong></span><br>
+                    <span style="font-size: 16px;">নম্বর: <strong style="font-size: 18px;">{{ bnValue($license->system_id) }}</strong></span><br>
                 </div>
             </div>
 
@@ -532,7 +532,7 @@
                             <span>:</span>
                         </div>
                         <div style="flex: 1; text-align: right; padding-right: 10px; font-weight: bold;">
-                            {{ bnValue(currencyFormat((float) $amount)) }}/-
+                            {{ bnValue(currencyFormat((float) $amount)) }}
                         </div>
                     </div>
                 @endforeach
@@ -543,7 +543,7 @@
                         <span>:</span>
                     </div>
                     <div style="flex: 1; text-align: right; padding-right: 10px;">
-                        {{ bnValue(currencyFormat($totalFee)) }}/-
+                        {{ bnValue(currencyFormat($totalFee)) }}
                     </div>
                 </div>
             @else
