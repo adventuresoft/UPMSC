@@ -175,7 +175,7 @@
                                             onerror="this.src='{{ asset('default.png') }}'">
                                     </td>
 
-                                    <td>{{ bnValue($certificate->system_id) }}</td>
+                                    <td>{{($certificate->system_id) }}</td>
 
                                     <td>
                                         <span class="citizen-id">
