@@ -378,7 +378,7 @@
                         $districtBn = $institute->cityCorporation->District->bn_name ?? '';
                     }
                 @endphp
-                <div style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                <div style="font-size: 20px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
                 <div style="font-size: 20px; color: #2e3192; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
                 <div style="font-size: 13px; color: #000;">
                     @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif

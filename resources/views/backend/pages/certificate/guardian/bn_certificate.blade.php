@@ -138,7 +138,7 @@
                         <h2 class="text-success font-weight-bold mb-0" style="font-size:28px; line-height: 1.1; margin-top: -10px;">
                             {{ $certificate->user->institute->union->bn_name ?? '' }}
                         </h2>
-                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:-5px; font-size:32px; line-height: 1.1;">
+                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:-5px; font-size:29px; line-height: 1.1;">
                             {{ $certificate->user->institute->union->name ?? '' }}
                         </h3>
                         <p class="mb-0" style="font-size:15px; margin-top:-2px; line-height: 1.2;">
