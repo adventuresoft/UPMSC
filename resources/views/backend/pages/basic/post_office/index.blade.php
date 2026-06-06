@@ -1,18 +1,18 @@
-@extends('backend.master', ['mainMenu' => 'Basic', 'subMenu' =>'Union'])
+@extends('backend.master', ['mainMenu' => 'Basic', 'subMenu' =>'PostOffice'])
 @push('style')
 @endpush
-@section('title', 'Union')
+@section('title', 'Post Office')
 @section('content')
    <!-- Content Header (Page header) -->
    <section class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Union</h1>
+          <h1>Post Office</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{route('basic-settings.union.index')}}">Union</a></li>
+            <li class="breadcrumb-item"><a href="{{route('basic-settings.post-office.index')}}">Post Office</a></li>
             <li class="breadcrumb-item active">View</li>
           </ol>
         </div>
@@ -32,10 +32,10 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6 text-left">
-                                    <h3 class="card-title">Union List</h3>
+                                    <h3 class="card-title">Post Office List</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <a href="{{route('basic-settings.union.create')}}" class="btn btn-primary">Create</a>
+                                    <a href="{{route('basic-settings.post-office.create')}}" class="btn btn-primary">Create</a>
                                 </div>
                             </div>
                         </div>
@@ -47,8 +47,9 @@
                               <thead>
                                 <tr>
                                     <th>Sl.</th>
-                                    <th>Union Name</th>
+                                    <th>Post Office Name</th>
                                     <th>Bengali Name</th>
+                                    <th>Postal Code</th>
                                     <th>District</th>
                                     <th>Thana</th>
                                     <th>Status</th>
@@ -57,17 +58,18 @@
                               </thead>
                               <tbody>
 
-                                @if ($unions)
+                                @if ($post_offices)
 
-                                  @foreach ($unions as $key=>$union)
+                                  @foreach ($post_offices as $key=>$post_office)
                                     <tr>
                                       <td>{{++$key}}</td>
-                                      <td>{{$union->name}}</td>
-                                      <td>{{$union->bn_name}}</td>
-                                      <td>{{$union->thana->district->name ?? 'N/A'}}</td>
-                                      <td>{{$union->thana->name ?? 'N/A'}}</td>
+                                      <td>{{$post_office->name}}</td>
+                                      <td>{{$post_office->bn_name}}</td>
+                                      <td>{{$post_office->postal_code}}</td>
+                                      <td>{{$post_office->thana->district->name ?? 'N/A'}}</td>
+                                      <td>{{$post_office->thana->name ?? 'N/A'}}</td>
                                       <td>
-                                          @if($union->status == 1)
+                                          @if($post_office->status == 1)
                                             <span class="badge badge-success">Active</span>
                                           @else
                                             <span class="badge badge-danger">Inactive</span>
@@ -76,14 +78,14 @@
                                       <td>
                                         <div class="table-action">
                                             @if(edit_permission())
-<a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.union.edit', $union->id)}}"><i class="fa fa-edit"></i></a>
+<a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.post-office.edit', $post_office->id)}}"><i class="fa fa-edit"></i></a>
 @endif
 
-                                            <form class="deleteUnion" method="post">
+                                            <form class="deletePostOffice" method="post">
                                               @csrf
                                               @method('DELETE')
-                                              <input type="hidden" class="id" name="id" value="{{$union->id}}">
-                                              <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.union.destroy', $union->id)}}">
+                                              <input type="hidden" class="id" name="id" value="{{$post_office->id}}">
+                                              <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.post-office.destroy', $post_office->id)}}">
                                               <button type="submit" title="Delete" data-toggle="tooltip" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                                             </form>
                                         </div>
@@ -127,7 +129,7 @@
         pageLength: 10,
     });
 
-    $(".deleteUnion").on('submit', function(e){
+    $(".deletePostOffice").on('submit', function(e){
       e.preventDefault();
       var thisForm = $(this);
       var formData = $(this).serialize();
@@ -150,7 +152,7 @@
                         thisForm.find('button[type="submit"]').prop("disabled",false);
                         toastr.success(response.message);
                         setTimeout(function() {
-                            location.href = "{{route('basic-settings.union.index')}}";
+                            location.href = "{{route('basic-settings.post-office.index')}}";
                         }, 2000)
                     },
                     error: function(xhr, status, error) {

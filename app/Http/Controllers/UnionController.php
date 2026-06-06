@@ -33,7 +33,7 @@ class UnionController extends Controller
      */
     public function index()
     {
-        $data['unions'] = Union::with('thana')->latest()->get();
+        $data['unions'] = Union::with('thana.district')->latest()->get();
         return view('backend.pages.basic.union.index', $data);
     }
 

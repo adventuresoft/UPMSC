@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class PostOffice extends Model
 {
     use HasFactory;
+
+    public function thana()
+    {
+        return $this->belongsTo(Thana::class, 'thana_id');
+    }
 }
