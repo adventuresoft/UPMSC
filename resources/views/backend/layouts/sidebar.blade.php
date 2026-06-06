@@ -20,7 +20,7 @@
     $_mainMenu = $mainMenu ?? null;
 
     // Define active states for major sections
-    $isBasicSettings = $isPath(['basic-settings*', '*/basic-settings*']) || in_array($_subMenu, ['CityCorporation', 'CityCorporationWard', 'FamilyCategory', 'FamilySubcategory', 'FamilyType', 'Financialyear', 'HouseType', 'HouseCategory', 'HouseOwnershipType', 'LandType', 'LandClass', 'LandOwnershipType', 'MarketType', 'MarketCategory', 'MarketOwnershipType', 'OrganizationCategory', 'OrganizationSubcategory', 'OrganizationWorkArea', 'OrganizationOwnershipType', 'OrganizationType', 'OrganizationSubtype', 'Profession', 'ProfessionCategory', 'ProfessionSubcategory', 'ProfessionType', 'RoadCategory', 'RoadType', 'RoadOwner', 'ResarvWard', 'VehicleCategory', 'VehicleSubcategory', 'VehicleType', 'UnionWard', 'ReserveWard', 'Village', 'VillageArea', 'Union', 'Year']);
+    $isBasicSettings = $isPath(['basic-settings*', '*/basic-settings*']) || in_array($_subMenu, ['CityCorporation', 'CityCorporationWard', 'FamilyCategory', 'FamilySubcategory', 'FamilyType', 'Financialyear', 'HouseType', 'HouseCategory', 'HouseOwnershipType', 'LandType', 'LandClass', 'LandOwnershipType', 'MarketType', 'MarketCategory', 'MarketOwnershipType', 'OrganizationCategory', 'OrganizationSubcategory', 'OrganizationWorkArea', 'OrganizationOwnershipType', 'OrganizationType', 'OrganizationSubtype', 'Profession', 'ProfessionCategory', 'ProfessionSubcategory', 'ProfessionType', 'RoadCategory', 'RoadType', 'RoadOwner', 'ResarvWard', 'VehicleCategory', 'VehicleSubcategory', 'VehicleType', 'UnionWard', 'ReserveWard', 'Village', 'VillageArea', 'Union', 'PostOffice', 'Year']);
     
     $isAccessManagement = $isRoute(['role.*', 'permission.*', 'user.*']) || (isset($page) && in_array($page, ['role', 'permission', 'rolepermission', 'userper', 'roleuser', 'user']));
     
@@ -346,6 +346,15 @@
         </li>
         @endif
 
+        @if(view_permission('post_office'))
+        <li class="nav-item">
+          <a href="{{route('basic-settings.post-office.index')}}" class="nav-link {{$subMenu =='PostOffice'? 'active':''}} ">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Post Office</p>
+          </a>
+        </li>
+        @endif
+
         @if(view_permission('profession'))
         <li class="nav-item">
           <a href="{{route('basic-settings.profession.index')}}" class="nav-link {{$subMenu == 'CityCorporationWard'?'active':''}} @if($subMenu == "Profession") active @endif">
@@ -426,6 +435,8 @@
           </a>
         </li>
         @endif
+
+
 
         @if(view_permission('union_ward'))
         <li class="nav-item">

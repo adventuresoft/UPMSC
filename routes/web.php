@@ -359,6 +359,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
         Route::resource('village-area', VillageAreaController::class);
         Route::resource('village', VillageController::class);
         Route::resource('union', BasicUnionController::class);
+        Route::resource('post-office', PostOfficeController::class);
         Route::resource('union-ward', UnionWardController::class);
         Route::resource('reserve-ward', ReserveWardController::class);
         Route::resource('city-corporation', CityCorporationController::class);

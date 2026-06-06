@@ -22,79 +22,156 @@ class PostOfficeController extends Controller
 
         return $html;
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $data['post_offices'] = PostOffice::with('thana.district')->latest()->get();
+        return view('backend.pages.basic.post_office.index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $data['divisions'] = \App\Models\Division::all();
+        return view('backend.pages.basic.post_office.create', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        try {
+            $validate = \Illuminate\Support\Facades\Validator::make($request->all(), [
+                'name' => 'required',
+                'thana_id' => 'required',
+            ]);
+
+            if ($validate->fails()) {
+                $data['status'] = false;
+                $data['message'] = "Sorry! Invalid Entry.";
+                $data['errors'] = $validate->errors();
+                return response()->json($data, 400);
+            }
+
+            $postOffice = new PostOffice();
+            $postOffice->name = $request->name;
+            $postOffice->bn_name = $request->bn_name;
+            $postOffice->postal_code = $request->postal_code;
+            $postOffice->url = $request->url;
+            $postOffice->thana_id = $request->thana_id;
+            $postOffice->status = $request->status ? $request->status : 1;
+
+            if ($postOffice->save()) {
+                $data['status'] = true;
+                $data['message'] = "Post Office Saved Successfully!";
+                return response()->json($data, 200);
+            } else {
+                $data['status'] = false;
+                $data['message'] = "Failed to save data!";
+                return response()->json($data, 500);
+            }
+
+        } catch (\Throwable $th) {
+            $data['status'] = false;
+            $data['message'] = "Something went wrong! Please try again...";
+            $data['errors'] = $th->getMessage();
+            return response()->json($data, 500);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        $post_office = PostOffice::with('thana.district')->find($id);
+        $data['post_office'] = $post_office;
+        $data['divisions'] = \App\Models\Division::all();
+        
+        $division_id = null;
+        if($post_office && $post_office->thana && $post_office->thana->district) {
+            $division_id = $post_office->thana->district->division_id;
+            $data['districts'] = \App\Models\District::where('division_id', $division_id)->get();
+            $data['thanas'] = \App\Models\Thana::where('district_id', $post_office->thana->district_id)->get();
+        } else {
+            $data['districts'] = collect();
+            $data['thanas'] = collect();
+        }
+        
+        return view('backend.pages.basic.post_office.edit', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $validate = \Illuminate\Support\Facades\Validator::make($request->all(), [
+                'name' => 'required',
+                'thana_id' => 'required',
+            ]);
+
+            if ($validate->fails()) {
+                $data['status'] = false;
+                $data['message'] = "Sorry! Invalid Entry.";
+                $data['errors'] = $validate->errors();
+                return response()->json($data, 400);
+            }
+
+            $postOffice = PostOffice::find($id);
+
+            if($postOffice) {
+                $postOffice->name = $request->name;
+                $postOffice->bn_name = $request->bn_name;
+                $postOffice->postal_code = $request->postal_code;
+                $postOffice->url = $request->url;
+                $postOffice->thana_id = $request->thana_id;
+                $postOffice->status = $request->status ? $request->status : 1;
+
+                if ($postOffice->save()) {
+                    $data['status'] = true;
+                    $data['message'] = "Post Office Updated Successfully!";
+                    return response()->json($data, 200);
+                } else {
+                    $data['status'] = false;
+                    $data['message'] = "Failed to save data!";
+                    return response()->json($data, 500);
+                }
+            } else {
+                $data['status'] = false;
+                $data['message'] = "Post Office not found!";
+                return response()->json($data, 404);
+            }
+
+        } catch (\Throwable $th) {
+            $data['status'] = false;
+            $data['message'] = "Something went wrong! Please try again...";
+            $data['errors'] = $th->getMessage();
+            return response()->json($data, 500);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        try {
+            $postOffice = PostOffice::find($id);
+            if($postOffice) {
+                if ($postOffice->delete()) {
+                    $data['status'] = true;
+                    $data['message'] = "Post Office Deleted successfully";
+                    return response()->json($data, 200);
+                } else {
+                    $data['status'] = false;
+                    $data['message'] = "Something went wrong! Please try again...";
+                    return response()->json($data, 500);
+                }
+            }else {
+                $data['status'] = false;
+                $data['message'] = "Post Office not found!";
+                return response()->json($data, 404);
+            }
+        } catch (\Throwable $th) {
+            $data['status'] = false;
+            $data['message'] = "Something went wrong! Please try again...";
+            $data['errors'] = $th->getMessage();
+            return response()->json($data, 500);
+        }
     }
 }
