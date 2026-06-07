@@ -784,6 +784,7 @@
             e.preventDefault();
             let thana_id = $(this).val();
             let union_id = $('#union_id');
+            let post_office_id = $('#post_office_id');
             if (thana_id) {
                 $.ajax({
                     type: "GET",
@@ -802,8 +803,55 @@
                         toastr.error(responseText.message);
                     }
                 });
+
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-post-offices-by-thana') }}/"+thana_id,
+                    beforeSend: function() {
+                        post_office_id.prop("disabled", true);
+                        console.log("Searcing Post Offices");
+                    },
+                    success: function(response) {
+                        post_office_id.html(response)
+                        post_office_id.prop("disabled", false);
+                    },
+                    error: function(xhr, status, error) {
+                        post_office_id.prop("disabled", true);
+                        var responseText = jQuery.parseJSON(xhr.responseText);
+                        toastr.error(responseText.message);
+                    }
+                });
             } else {
                 union_id.prop("disabled", true);
+                post_office_id.prop("disabled", true);
+            }
+        })
+
+        $(document).on('change', '#office_thana_id', function(e){
+            e.preventDefault();
+            let thana_id = $(this).val();
+            let post_office_id = $('#office_post_office_id');
+            
+            if (thana_id) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-post-offices-by-thana') }}/"+thana_id,
+                    beforeSend: function() {
+                        post_office_id.prop("disabled", true);
+                        console.log("Searcing Post Offices");
+                    },
+                    success: function(response) {
+                        post_office_id.html(response)
+                        post_office_id.prop("disabled", false);
+                    },
+                    error: function(xhr, status, error) {
+                        post_office_id.prop("disabled", true);
+                        var responseText = jQuery.parseJSON(xhr.responseText);
+                        toastr.error(responseText.message);
+                    }
+                });
+            } else {
+                post_office_id.prop("disabled", true);
             }
         })
 
