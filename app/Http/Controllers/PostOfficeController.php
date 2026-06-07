@@ -19,45 +19,66 @@ class PostOfficeController extends Controller
         $division_id = null;
         $is_union_admin = false;
 
-        if ($user->role_id == 6 && $user->area) {
+        if ($user->role_id == 6) {
             $is_union_admin = true;
-            $area = trim($user->area);
             
-            if (str_contains($area, 'Union:')) {
-                $unionId = str_replace('Union:', '', $area);
-                $union = Union::find($unionId);
-                if ($union && $union->upazilla) {
-                    $thana_id = $union->thana_id;
-                    if ($union->upazilla->district) {
-                        $district_id = $union->upazilla->district_id;
-                        if ($union->upazilla->district->division) {
-                            $division_id = $union->upazilla->district->division_id;
-                        }
-                    }
-                }
-            } elseif (str_contains($area, 'Upazilla:')) {
-                $thana_id = str_replace('Upazilla:', '', $area);
-                $upazilla = Upazilla::find($thana_id);
-                if ($upazilla) {
-                    if ($upazilla->district) {
-                        $district_id = $upazilla->district_id;
-                        if ($upazilla->district->division) {
-                            $division_id = $upazilla->district->division_id;
+            // First try from institute
+            if ($user->institute_id) {
+                $institute = $user->institute;
+                if ($institute) {
+                    if ($institute->union_id && $institute->union) {
+                        $union = $institute->union;
+                        $thana_id = $union->thana_id;
+                        if ($union->upazilla) {
+                            if ($union->upazilla->district) {
+                                $district_id = $union->upazilla->district_id;
+                                if ($union->upazilla->district->division) {
+                                    $division_id = $union->upazilla->district->division_id;
+                                }
+                            }
                         }
                     }
                 }
             }
-        } elseif ($user->institute_id) {
-            $institute = $user->institute;
-            if ($institute) {
-                if ($institute->union_id && $institute->union) {
-                    $is_union_admin = true;
-                    $thana_id = $institute->union->thana_id;
-                    if ($institute->union->upazilla) {
-                        if ($institute->union->upazilla->district) {
-                            $district_id = $institute->union->upazilla->district_id;
-                            if ($institute->union->upazilla->district->division) {
-                                $division_id = $institute->union->upazilla->district->division_id;
+            
+            // If not found from institute, try from area field
+            if (!$thana_id && $user->area) {
+                $area = trim($user->area);
+                
+                if (str_contains($area, 'Union:')) {
+                    $unionId = trim(str_replace('Union:', '', $area));
+                    $union = Union::find($unionId);
+                    if ($union && $union->upazilla) {
+                        $thana_id = $union->thana_id;
+                        if ($union->upazilla->district) {
+                            $district_id = $union->upazilla->district_id;
+                            if ($union->upazilla->district->division) {
+                                $division_id = $union->upazilla->district->division_id;
+                            }
+                        }
+                    }
+                } elseif (str_contains($area, 'Upazilla:')) {
+                    $thana_id = trim(str_replace('Upazilla:', '', $area));
+                    $upazilla = Upazilla::find($thana_id);
+                    if ($upazilla) {
+                        if ($upazilla->district) {
+                            $district_id = $upazilla->district_id;
+                            if ($upazilla->district->division) {
+                                $division_id = $upazilla->district->division_id;
+                            }
+                        }
+                    }
+                } else {
+                    // Try to find union by name
+                    $union = Union::where('name', $area)
+                                ->orWhere('bn_name', $area)
+                                ->first();
+                    if ($union && $union->upazilla) {
+                        $thana_id = $union->thana_id;
+                        if ($union->upazilla->district) {
+                            $district_id = $union->upazilla->district_id;
+                            if ($union->upazilla->district->division) {
+                                $division_id = $union->upazilla->district->division_id;
                             }
                         }
                     }

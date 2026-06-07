@@ -17,5 +17,10 @@ class Union extends Model
     {
         return $this->belongsTo(Upazilla::class, 'thana_id', 'id');
     }
+    
+    public function thana()
+    {
+        return $this->upazilla();
+    }
 
 }
