@@ -13,9 +13,9 @@ class Union extends Model
     protected $table = 'unions';
     protected $fillable = ['name', 'bn_name', 'url', 'status', 'thana_id'];
 
-    public function thana()
+    public function upazilla()
     {
-        return $this->belongsTo(Thana::class, 'thana_id', 'id');
+        return $this->belongsTo(Upazilla::class, 'thana_id', 'id');
     }
 
 }

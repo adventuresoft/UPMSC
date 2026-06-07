@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CityCorporation;
 use App\Models\Pourashava;
 use App\Models\ProjectType;
-use App\Models\Thana;
+use App\Models\Upazilla;
 use Illuminate\Http\Request;
 
 class ProjectTypeController extends Controller
@@ -17,7 +17,7 @@ class ProjectTypeController extends Controller
 
         switch ($institute_type) {
             case 1:
-                $data['thanas'] = Thana::where('district_id', $district_id)->get();
+                $data['thanas'] = Upazilla::where('district_id', $district_id)->get();
                 return view('authenticate.pages.load.union', $data);
                 break;
 
@@ -44,7 +44,7 @@ class ProjectTypeController extends Controller
 
         switch ($institute_type) {
             case 1:
-                $data['thanas'] = Thana::where('district_id', $district_id)->get();
+                $data['thanas'] = Upazilla::where('district_id', $district_id)->get();
                 return view('backend.pages.institute.load.union', $data);
                 break;
 

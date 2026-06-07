@@ -1,9 +1,9 @@
 <div>
     <div class="row form-group">
-        <label for="thana"  class="col-sm-2 col-form-label">Thana</label>
+        <label for="thana"  class="col-sm-2 col-form-label">Upazilla</label>
         <div class="col-sm-9">
             <select name="thana" required id="thana" class="form-control">
-                <option value="">Select Thana</option>
+                <option value="">Select Upazilla</option>
                 @if (count($thanas))
                     @foreach ($thanas as $thana)
                         <option value="{{$thana->id}}">{{$thana->name}}</option>

@@ -51,7 +51,7 @@
                                     <th>Bengali Name</th>
                                     <th>Postal Code</th>
                                     <th>District</th>
-                                    <th>Thana</th>
+                                    <th>Upazilla</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -66,8 +66,8 @@
                                       <td>{{$post_office->name}}</td>
                                       <td>{{$post_office->bn_name}}</td>
                                       <td>{{$post_office->postal_code}}</td>
-                                      <td>{{$post_office->thana->district->name ?? 'N/A'}}</td>
-                                      <td>{{$post_office->thana->name ?? 'N/A'}}</td>
+                                      <td>{{$post_office->upazilla->district->name ?? 'N/A'}}</td>
+                                      <td>{{$post_office->upazilla->name ?? 'N/A'}}</td>
                                       <td>
                                           @if($post_office->status == 1)
                                             <span class="badge badge-success">Active</span>

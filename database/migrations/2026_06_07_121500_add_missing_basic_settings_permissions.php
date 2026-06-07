@@ -1,33 +1,20 @@
 <?php
 
-namespace Database\Seeders;
-
+use Illuminate\Database\Migrations\Migration;
 use App\Models\Permission;
 use App\Models\Role;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class PermissionSeeder extends Seeder
+class AddMissingBasicSettingsPermissions extends Migration
 {
     /**
-     * Run the database seeds.
+     * Run the migrations.
      *
      * @return void
      */
-    public function run()
+    public function up()
     {
-        // Standard actions for every module
-        $actions = ['read', 'create', 'update', 'delete'];
-
-        // Comprehensive module list from sidebar/web.php
         $modules = [
             'basic-settings',
-            'institutional-admin',
-            'certificate',
-            'bridge',
-            'market',
-            'people',
-            'dashboard',
             'city_corporation',
             'city_corporation_ward',
             'family_category',
@@ -46,57 +33,22 @@ class PermissionSeeder extends Seeder
             'organization_ownership_type',
             'post_office',
             'profession',
+            'profession_type',
             'profession_category',
             'profession_subcategory',
-            'profession_type',
             'road_category',
             'road_type',
             'road_owner',
             'reserve_ward',
-            'vehicle_category',
-            'vehicle_subcategory',
-            'vehicle_type',
-            'union_ward',
-            'village',
-            'village_area',
             'union',
-            'institute',
-            'institute_category',
-            'institute_type',
-            'age_certificate',
-            'character_certificate',
-            'childless_certificate',
-            'citizen_certificate',
-            'disability_certificate',
-            'financial_instability_certificate',
-            'guardian_certificate',
-            'landless_certificate',
-            'married_certificate',
-            'name_certificate',
-            'nid_correction_certificate',
-            'orphan_certificate',
-            'permanent_citizen_certificate',
-            'remarried_certificate',
-            'residential_certificate',
-            'unmarried_certificate',
-            'voter_area_certificate',
-            'voter_list_certificate',
-            'yearly_income_certificate',
-            'organization',
-            'trade_license',
-            'tax',
-            'house',
-            'land',
-            'vehicle',
-            'road',
-            'marriage',
-            'divorce',
-            'chairman',
-            'councilor',
-            'role',
-            'permission',
-            'user'
+            'union_ward',
+            'vehicle_category',
+            'vehicle_type',
+            'village',
+            'village_area'
         ];
+
+        $actions = ['read', 'create', 'update', 'delete'];
 
         foreach ($modules as $module) {
             foreach ($actions as $action) {
@@ -111,7 +63,7 @@ class PermissionSeeder extends Seeder
         // Assign all permissions to Superadmin (Role 1) and Developer (Role 4)
         $superAdminRole = Role::find(1);
         $developerRole = Role::find(4);
-        
+
         if ($superAdminRole) {
             $allPermissions = Permission::all();
             $superAdminRole->syncPermissions($allPermissions);
@@ -121,5 +73,15 @@ class PermissionSeeder extends Seeder
             $allPermissions = Permission::all();
             $developerRole->syncPermissions($allPermissions);
         }
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        // No rollback required for permission additions
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class UnionController extends Controller
 {
 
-    public function unionsByThana(Request $request, $id)
+    public function unionsByUpazilla(Request $request, $id)
     {
         $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Union</option>';
 
@@ -33,7 +33,7 @@ class UnionController extends Controller
      */
     public function index()
     {
-        $data['unions'] = Union::with('thana.district')->latest()->get();
+        $data['unions'] = Union::with('upazilla.district')->latest()->get();
         return view('backend.pages.basic.union.index', $data);
     }
 
@@ -44,7 +44,7 @@ class UnionController extends Controller
      */
     public function create()
     {
-        $data['thanas'] = \App\Models\Thana::latest()->get();
+        $data['upazillas'] = \App\Models\Upazilla::latest()->get();
         return view('backend.pages.basic.union.create', $data);
     }
 
@@ -114,7 +114,7 @@ class UnionController extends Controller
     public function edit($id)
     {
         $data['union'] = Union::find($id);
-        $data['thanas'] = \App\Models\Thana::latest()->get();
+        $data['upazillas'] = \App\Models\Upazilla::latest()->get();
         return view('backend.pages.basic.union.edit', $data);
     }
 

@@ -268,7 +268,7 @@
             if (thana_id) {
                 $.ajax({
                     type: "GET",
-                    url: "{{ url('/get-unions-by-thana') }}/"+thana_id,
+                    url: "{{ url('/get-unions-by-upazilla') }}/"+thana_id,
                     beforeSend: function() {
                         $('#union').prop("disabled", true);
                         console.log("Searcing Unions");

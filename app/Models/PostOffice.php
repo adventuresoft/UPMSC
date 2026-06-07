@@ -9,8 +9,8 @@ class PostOffice extends Model
 {
     use HasFactory;
 
-    public function thana()
+    public function upazilla()
     {
-        return $this->belongsTo(Thana::class, 'thana_id');
+        return $this->belongsTo(Upazilla::class, 'thana_id');
     }
 }

@@ -46,7 +46,7 @@
                                             <label for="division_id" class="col-auto col-form-label">Division <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                             <div class="col">
                                                 @php
-                                                    $selectedDivision = $post_office->thana->district->division_id ?? null;
+                                                    $selectedDivision = $post_office->upazilla->district->division_id ?? null;
                                                 @endphp
                                                 <select class="form-control select2" id="division_id" disabled>
                                                     <option value="">Select Division</option>
@@ -65,7 +65,7 @@
                                             <label for="district_id" class="col-auto col-form-label">District <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                             <div class="col">
                                                 @php
-                                                    $selectedDistrict = $post_office->thana->district_id ?? null;
+                                                    $selectedDistrict = $post_office->upazilla->district_id ?? null;
                                                 @endphp
                                                 <select class="form-control select2" id="district_id" disabled>
                                                     <option value="">Select District</option>
@@ -81,13 +81,13 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group row align-items-center">
-                                            <label for="thana_id" class="col-auto col-form-label">Thana <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
+                                            <label for="thana_id" class="col-auto col-form-label">Upazilla <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                             <div class="col">
                                                 <select class="form-control select2" id="thana_id" disabled>
-                                                    <option value="">Select Thana</option>
-                                                    @if(isset($thanas))
-                                                        @foreach($thanas as $thana)
-                                                            <option value="{{$thana->id}}" {{$post_office->thana_id == $thana->id ? 'selected' : ''}}>{{$thana->name}}</option>
+                                                    <option value="">Select Upazilla</option>
+                                                    @if(isset($upazillas))
+                                                        @foreach($upazillas as $upazilla)
+                                                            <option value="{{$upazilla->id}}" {{$post_office->thana_id == $upazilla->id ? 'selected' : ''}}>{{$upazilla->name}}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -152,38 +152,6 @@
 <script>
     $(document).ready(function() {
         $('.select2').select2();
-
-        $('#division_id').on('change', function() {
-            var divisionID = $(this).val();
-            if(divisionID) {
-                $.ajax({
-                    url: '/get-districts-by-division/'+divisionID,
-                    type: "GET",
-                    success:function(data) {
-                        $('#district_id').html(data);
-                        $('#thana_id').html('<option value="">Select Thana</option>');
-                    }
-                });
-            } else {
-                $('#district_id').html('<option value="">Select District</option>');
-                $('#thana_id').html('<option value="">Select Thana</option>');
-            }
-        });
-
-        $('#district_id').on('change', function() {
-            var districtID = $(this).val();
-            if(districtID) {
-                $.ajax({
-                    url: '/get-thanas-by-district/'+districtID,
-                    type: "GET",
-                    success:function(data) {
-                        $('#thana_id').html(data);
-                    }
-                });
-            } else {
-                $('#thana_id').html('<option value="">Select Thana</option>');
-            }
-        });
 
         $("#postOfficeForm").on('submit', function(e) {
             e.preventDefault();

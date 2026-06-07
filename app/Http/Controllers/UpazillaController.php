@@ -2,26 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Mouza;
+use App\Models\Upazilla;
 use Illuminate\Http\Request;
 
-class MouzaController extends Controller
+class UpazillaController extends Controller
 {
 
-    public function mouzasByUpazilla($thana_id)
+    public function upazillasByDistrict(Request $request, $id)
     {
-        $html = '<option value="">Select Mouza</option>';
+        $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Upazilla</option>';
 
-        $mouzas = Mouza::where('thana_id', $thana_id)->get();
+        $upazillas = Upazilla::where('district_id', $id)->get();
 
-        if(count($mouzas)) {
-            foreach ($mouzas as $mouza) {
-               $html .='<option value="'.$mouza->id.'">'.$mouza->name.'</option>';
+        if(count($upazillas)) {
+            foreach ($upazillas as $upazilla) {
+               $html .='<option value="'.$upazilla->id.'">'.$upazilla->name.'</option>';
             }
         }
 
         return $html;
     }
+
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -56,10 +60,10 @@ class MouzaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Mouza  $mouza
+     * @param  \App\Models\Upazilla  $upazilla
      * @return \Illuminate\Http\Response
      */
-    public function show(Mouza $mouza)
+    public function show(Upazilla $upazilla)
     {
         //
     }
@@ -67,10 +71,10 @@ class MouzaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Mouza  $mouza
+     * @param  \App\Models\Upazilla  $upazilla
      * @return \Illuminate\Http\Response
      */
-    public function edit(Mouza $mouza)
+    public function edit(Upazilla $upazilla)
     {
         //
     }
@@ -79,10 +83,10 @@ class MouzaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Mouza  $mouza
+     * @param  \App\Models\Upazilla  $upazilla
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Mouza $mouza)
+    public function update(Request $request, Upazilla $upazilla)
     {
         //
     }
@@ -90,10 +94,10 @@ class MouzaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Mouza  $mouza
+     * @param  \App\Models\Upazilla  $upazilla
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Mouza $mouza)
+    public function destroy(Upazilla $upazilla)
     {
         //
     }

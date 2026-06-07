@@ -109,7 +109,7 @@ use App\Http\Controllers\RoadController;
 use App\Http\Controllers\Tax\TaxController;
 use App\Http\Controllers\Tax\TaxRateController;
 use App\Http\Controllers\Tax\TaxYearController;
-use App\Http\Controllers\ThanaController;
+use App\Http\Controllers\UpazillaController;
 use App\Http\Controllers\UnionController;
 use App\Http\Controllers\PostOfficeController;
 use App\Http\Controllers\VehicleController;
@@ -217,13 +217,13 @@ Route::post('/backend/load-project-type-content', [ProjectTypeController::class,
 
 // Find Dependencies
 Route::get('/get-districts-by-division/{divisionID}', [DistrictController::class, 'districtsByDivision']);
-Route::get('/get-thanas-by-district/{districtID}', [ThanaController::class, 'thanasByDistrict']);
-Route::get('/get-post-offices-by-thana/{thanaID}', [PostOfficeController::class, 'postOfficesByThana']);
+Route::get('/get-upazillas-by-district/{districtID}', [UpazillaController::class, 'upazillasByDistrict']);
+Route::get('/get-post-offices-by-upazilla/{upazillaID}', [PostOfficeController::class, 'postOfficesByUpazilla']);
 Route::get('/get-word-by-union/{unionID}', [UnionWardController::class, 'wordByUnion']);
 Route::get('/get-citi-corporation-by-district/{districtID}', [CityCorporationController::class, 'cityCorporationByDistrict']);
-Route::get('/get-unions-by-thana/{thanaID}', [UnionController::class, 'unionsByThana']);
+Route::get('/get-unions-by-upazilla/{upazillaID}', [UnionController::class, 'unionsByUpazilla']);
 Route::get('/get-villages-by-union/{unionID}', [VillageController::class, 'villagesByUnion']);
-Route::get('/get-mouzas-by-thana/{thanaID}', [MouzaController::class, 'mouzasByThana']);
+Route::get('/get-mouzas-by-upazilla/{upazillaID}', [MouzaController::class, 'mouzasByUpazilla']);
 Route::get('/get-areas-by-village/{villageID}', [VillageAreaController::class, 'areasByVillage']);
 Route::get('/get-houses-by-village-area/{areaID}', [HouseController::class, 'getHouseByArea']);
 Route::get('/get-blocks-by-village-ward/{villageID}/{wardID}', [HouseController::class, 'getBlocksByVillageWard']);

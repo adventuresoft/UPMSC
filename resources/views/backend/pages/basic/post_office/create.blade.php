@@ -43,14 +43,25 @@
                                         <div class="form-group row align-items-center">
                                             <label for="division_id" class="col-auto col-form-label">Division <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                             <div class="col">
-                                                <select class="form-control select2" name="division_id" id="division_id" required>
-                                                    <option value="">Select Division</option>
-                                                    @if($divisions)
-                                                        @foreach($divisions as $division)
-                                                            <option value="{{$division->id}}">{{$division->name}}</option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
+                                                @if(isset($is_union_admin) && $is_union_admin && isset($selected_division))
+                                                    <select class="form-control select2" name="division_id" id="division_id" disabled>
+                                                        <option value="">Select Division</option>
+                                                        @if($divisions)
+                                                            @foreach($divisions as $division)
+                                                                <option value="{{$division->id}}" {{$selected_division == $division->id ? 'selected' : ''}}>{{$division->name}}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                @else
+                                                    <select class="form-control select2" name="division_id" id="division_id" required>
+                                                        <option value="">Select Division</option>
+                                                        @if($divisions)
+                                                            @foreach($divisions as $division)
+                                                                <option value="{{$division->id}}">{{$division->name}}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                @endif
                                                 <span class="text-danger error-text division_id-error"></span>
                                             </div>
                                         </div>
@@ -60,9 +71,18 @@
                                         <div class="form-group row align-items-center">
                                             <label for="district_id" class="col-auto col-form-label">District <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                             <div class="col">
-                                                <select class="form-control select2" name="district_id" id="district_id" required>
-                                                    <option value="">Select District</option>
-                                                </select>
+                                                @if(isset($is_union_admin) && $is_union_admin && isset($selected_district) && isset($districts))
+                                                    <select class="form-control select2" name="district_id" id="district_id" disabled>
+                                                        <option value="">Select District</option>
+                                                        @foreach($districts as $district)
+                                                            <option value="{{$district->id}}" {{$selected_district == $district->id ? 'selected' : ''}}>{{$district->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    <select class="form-control select2" name="district_id" id="district_id" required>
+                                                        <option value="">Select District</option>
+                                                    </select>
+                                                @endif
                                                 <span class="text-danger error-text district_id-error"></span>
                                             </div>
                                         </div>
@@ -70,11 +90,21 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group row align-items-center">
-                                            <label for="thana_id" class="col-auto col-form-label">Thana <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
+                                            <label for="thana_id" class="col-auto col-form-label">Upazilla <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                             <div class="col">
-                                                <select class="form-control select2" name="thana_id" id="thana_id" required>
-                                                    <option value="">Select Thana</option>
-                                                </select>
+                                                @if(isset($is_union_admin) && $is_union_admin && isset($selected_thana) && isset($upazillas))
+                                                    <input type="hidden" name="thana_id" value="{{$selected_thana}}">
+                                                    <select class="form-control select2" id="thana_id" disabled>
+                                                        <option value="">Select Upazilla</option>
+                                                        @foreach($upazillas as $upazilla)
+                                                            <option value="{{$upazilla->id}}" {{$selected_thana == $upazilla->id ? 'selected' : ''}}>{{$upazilla->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    <select class="form-control select2" name="thana_id" id="thana_id" required>
+                                                        <option value="">Select Upazilla</option>
+                                                    </select>
+                                                @endif
                                                 <span class="text-danger error-text thana_id-error"></span>
                                             </div>
                                         </div>
@@ -146,12 +176,12 @@
                     type: "GET",
                     success:function(data) {
                         $('#district_id').html(data);
-                        $('#thana_id').html('<option value="">Select Thana</option>');
+                        $('#thana_id').html('<option value="">Select Upazilla</option>');
                     }
                 });
             } else {
                 $('#district_id').html('<option value="">Select District</option>');
-                $('#thana_id').html('<option value="">Select Thana</option>');
+                $('#thana_id').html('<option value="">Select Upazilla</option>');
             }
         });
 
@@ -159,14 +189,14 @@
             var districtID = $(this).val();
             if(districtID) {
                 $.ajax({
-                    url: '/get-thanas-by-district/'+districtID,
+                    url: '/get-upazillas-by-district/'+districtID,
                     type: "GET",
                     success:function(data) {
                         $('#thana_id').html(data);
                     }
                 });
             } else {
-                $('#thana_id').html('<option value="">Select Thana</option>');
+                $('#thana_id').html('<option value="">Select Upazilla</option>');
             }
         });
 

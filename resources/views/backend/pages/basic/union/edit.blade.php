@@ -40,13 +40,13 @@
                             <div class="card-body">
 
                                 <div class="form-group row">
-                                    <label for="thana_id" class="col-sm-2 col-form-label">Thana <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
+                                    <label for="thana_id" class="col-sm-2 col-form-label">Upazilla <span class="text-danger" title="Required" data-toggle="tooltip">*</span></label>
                                     <div class="col-sm-9">
                                         <select class="form-control select2" name="thana_id" id="thana_id" required>
-                                            <option value="">Select Thana</option>
-                                            @if($thanas)
-                                                @foreach($thanas as $thana)
-                                                    <option value="{{$thana->id}}" {{$union->thana_id == $thana->id ? 'selected' : ''}}>{{$thana->name}}</option>
+                                            <option value="">Select Upazilla</option>
+                                            @if($upazillas)
+                                                @foreach($upazillas as $upazilla)
+                                                    <option value="{{$upazilla->id}}" {{$union->thana_id == $upazilla->id ? 'selected' : ''}}>{{$upazilla->name}}</option>
                                                 @endforeach
                                             @endif
                                         </select>

@@ -19,6 +19,7 @@ use App\Models\People\JulyFighterInfo;
 use App\Models\Pourashava;
 use App\Models\Union;
 use App\Models\CityCorporation;
+use App\Models\Upazilla;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -180,10 +181,10 @@ class User extends Authenticatable
 
         // Priority 1: Use the manual 'area' text or structured area info
         if ($this->area) {
-            if (str_contains($this->area, 'Thana:')) {
-                $thanaId = str_replace('Thana:', '', $this->area);
-                $thana = Thana::find($thanaId);
-                return $thana ? $thana->name : "Thana ID: " . $thanaId;
+            if (str_contains($this->area, 'Upazilla:')) {
+                $upazillaId = str_replace('Upazilla:', '', $this->area);
+                $upazilla = Upazilla::find($upazillaId);
+                return $upazilla ? $upazilla->name : "Upazilla ID: " . $upazillaId;
             }
             if (str_contains($this->area, 'District:')) {
                 $districtId = str_replace('District:', '', $this->area);
@@ -320,10 +321,10 @@ class User extends Authenticatable
             } elseif (str_contains($user->area, 'City Corp:')) {
                 $column = 'permanent_union_id'; // assuming city corp uses the same column
                 $locationIds = [str_replace('City Corp:', '', $user->area)];
-            } elseif (str_contains($user->area, 'Thana:')) {
-                $thanaId = str_replace('Thana:', '', $user->area);
+            } elseif (str_contains($user->area, 'Upazilla:')) {
+                $upazillaId = str_replace('Upazilla:', '', $user->area);
                 $column = 'permanent_thana_id';
-                $locationIds = [$thanaId];
+                $locationIds = [$upazillaId];
             } elseif (str_contains($user->area, 'District:')) {
                 $districtId = str_replace('District:', '', $user->area);
                 $column = 'permanent_district_id';
@@ -346,7 +347,7 @@ class User extends Authenticatable
                                     $uSq->whereIn('thana_id', $locationIds);
                                 });
                             } elseif ($column === 'permanent_district_id') {
-                                $instSq->whereHas('union.thana', function($uSq) use ($locationIds) {
+                                $instSq->whereHas('union.upazilla', function($uSq) use ($locationIds) {
                                     $uSq->whereIn('district_id', $locationIds);
                                 });
                             }
@@ -411,8 +412,8 @@ class User extends Authenticatable
         if (stripos($area, 'City Corp:') !== false) {
             return trim(str_ireplace('City Corp:', '', $area));
         }
-        if (stripos($area, 'Thana:') !== false) {
-            return trim(str_ireplace('Thana:', '', $area));
+        if (stripos($area, 'Upazilla:') !== false) {
+            return trim(str_ireplace('Upazilla:', '', $area));
         }
         if (stripos($area, 'District:') !== false) {
             return trim(str_ireplace('District:', '', $area));

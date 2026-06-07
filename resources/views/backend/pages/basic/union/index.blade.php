@@ -50,7 +50,7 @@
                                     <th>Union Name</th>
                                     <th>Bengali Name</th>
                                     <th>District</th>
-                                    <th>Thana</th>
+                                    <th>Upazilla</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -64,8 +64,8 @@
                                       <td>{{++$key}}</td>
                                       <td>{{$union->name}}</td>
                                       <td>{{$union->bn_name}}</td>
-                                      <td>{{$union->thana->district->name ?? 'N/A'}}</td>
-                                      <td>{{$union->thana->name ?? 'N/A'}}</td>
+                                      <td>{{$union->upazilla->district->name ?? 'N/A'}}</td>
+                                      <td>{{$union->upazilla->name ?? 'N/A'}}</td>
                                       <td>
                                           @if($union->status == 1)
                                             <span class="badge badge-success">Active</span>
