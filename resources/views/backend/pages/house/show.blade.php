@@ -56,7 +56,7 @@
     }
 
     .union-title-en {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
         color: #2e3192;
         margin: 2px 0;

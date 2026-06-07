@@ -69,7 +69,7 @@
     }
 
     .union-title-en {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
         color: #2e3192;
         margin: 2px 0;
@@ -471,7 +471,7 @@
                 @php
                     $imagePath = $user->image && file_exists(base_path($user->image)) 
                         ? imageUrl($user->image) 
-                        : asset('public/no-image-found.jpeg');
+                        : asset('default.png');
                 @endphp
                 <img src="{{ $imagePath }}" alt="Profile Photo">
             </div>

@@ -56,7 +56,7 @@
     }
 
     .union-title-en {
-        font-size: 18px;
+        font-size: 24px;
         font-weight: bold;
         color: #2e3192;
         margin: 2px 0;
@@ -345,7 +345,7 @@
             <div class="profile-serial-title">স্বামীর পূর্ণ বিবরণ (Husband Details)</div>
             <div class="profile-top">
                 <div class="profile-photo">
-                    <img src="{{ $divorce->husband_photo ? imageUrl($divorce->husband_photo) : ($divorce->husbandUser && $divorce->husbandUser->image ? imageUrl($divorce->husbandUser->image) : asset('no-image-found.jpeg')) }}" alt="Husband Photo">
+                    <img src="{{ $divorce->husband_photo ? imageUrl($divorce->husband_photo) : ($divorce->husbandUser && $divorce->husbandUser->image ? imageUrl($divorce->husbandUser->image) : asset('default.png')) }}" alt="Husband Photo">
                 </div>
                 <div class="profile-info-list">
                     <div class="info-row">
@@ -428,7 +428,7 @@
             <div class="profile-serial-title">স্ত্রীর পূর্ণ বিবরণ (Wife Details)</div>
             <div class="profile-top">
                 <div class="profile-photo">
-                    <img src="{{ $divorce->wife_photo ? imageUrl($divorce->wife_photo) : ($divorce->wifeUser && $divorce->wifeUser->image ? imageUrl($divorce->wifeUser->image) : asset('no-image-found.jpeg')) }}" alt="Wife Photo">
+                    <img src="{{ $divorce->wife_photo ? imageUrl($divorce->wife_photo) : ($divorce->wifeUser && $divorce->wifeUser->image ? imageUrl($divorce->wifeUser->image) : asset('default.png')) }}" alt="Wife Photo">
                 </div>
                 <div class="profile-info-list">
                     <div class="info-row">

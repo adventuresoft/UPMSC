@@ -57,7 +57,7 @@
 
         .union-title {
             text-align: center;
-            font-size: 25px;
+            font-size: 24px;
             font-weight: bold;
             color: #006600;
         }
@@ -223,7 +223,7 @@
         ? ($ownerOrganization?->image ?? null)
         : ($ownerUser?->image ?? null);
 
-    $ownerPhotoUrl = $ownerPhotoPath ? imageUrl($ownerPhotoPath) : asset('public/no-image-found.jpeg');
+    $ownerPhotoUrl = $ownerPhotoPath ? imageUrl($ownerPhotoPath) : asset('default.png');
 
     $totalFee = $fee ? $fee->total_fee : 0;
 @endphp
@@ -258,7 +258,7 @@
 
             <div style="text-align:right">
                 তারিখ: {{ bnValue(date('d/m/Y', strtotime($vehicle->created_at))) }}<br>
-                <img src="{{ $ownerPhotoUrl }}" style="width:1.5in;height:1.9in;object-fit:cover; border:2px solid #000;" onerror="this.src='{{ asset('public/no-image-found.jpeg') }}';">
+                <img src="{{ $ownerPhotoUrl }}" style="width:1.5in;height:1.9in;object-fit:cover; border:2px solid #000;" onerror="this.src='{{ asset('default.png') }}';">
             </div>
         </div>
 

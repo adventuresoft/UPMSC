@@ -16,8 +16,8 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    width: 267mm;
-    height: 374mm;
+    width: 210mm;
+    height: 297mm;
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
@@ -111,13 +111,13 @@
         }
 
         @page {
-            size: A4 portrait;
-            margin: 0 !important;
+            size: a4 portrait;
+            margin: 0mm !important;
         }
 
         html, body {
-            width: 267mm !important;
-            height: 374mm !important;
+            width: 100% !important;
+            height: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
             overflow: hidden !important;
@@ -125,22 +125,41 @@
         }
 
         .container {
-            width: 267mm !important;
-            max-width: 267mm !important;
-            height: 374mm !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 100% !important;
             padding: 0 !important;
             margin: 0 !important;
             overflow: hidden !important;
         }
 
+        .certificate-card {
+            width: 100% !important;
+            height: 100vh !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background-size: 100% 100% !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+        }
+
         
+
+        .content-wrapper,
+        .wrapper {
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
 
         .main-header,
         .main-sidebar,
         .main-footer,
         .content-header,
-        .content-wrapper,
-        .wrapper,
         .app-footer {
             display: none !important;
         }
@@ -187,7 +206,7 @@
                                 $district = $institute->cityCorporation->District->name ?? '';
                             }
                         @endphp
-                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:28px;">
+                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:23px;">
                             {{ $auth->name ?? '' }}
                         </h3>
                         <h4 class="text-success font-Nikosh-bold mb-0" style="font-size:24px;">
@@ -226,17 +245,17 @@
 
                 <!-- ================= Body ================= -->
                 <div class="row mt-2 align-items-center">
-                    <div class="col-4 text-left">
+                    <div class="col-3 text-left">
                         <strong>No:</strong>  <span style="font-weight:bold;color:blue">{{ $certificate->system_id ?? '' }}</span>
                     </div>
 
-                    <div class="col-4 text-center">
+                    <div class="col-6 text-center">
                         <span class="badge text-light px-4 py-2" style="font-size:22px; border-radius:26px;; background-color: #2F318C;">
-                            Certificate of Inheritance
+                            Certificate of Succession
                         </span>
                     </div>
 
-                    <div class="col-4 text-right">
+                    <div class="col-3 text-right">
                         <strong>Date: </strong> {{ date('d/m/Y', strtotime($certificate->created_at)) }} 
                     </div>
                 </div>
@@ -296,6 +315,7 @@ His death registration number is -
                             </strong>।
                             To the best of my knowledge, at the time of his death he left behind the heirs/heirs mentioned in the table below.
                         </p>
+
 
                         <p class="text-center"><strong>- List of heirs -</strong></p>
 

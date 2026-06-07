@@ -299,7 +299,7 @@
             <img src="{{ asset('images/dhaka.png') }}" alt="City Logo">
             <div class="union-header" style="text-align: center; line-height: 1.1;">
                         <div style="font-size: 14px; color: #000; margin-bottom: 4px;">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
-                        <div class="union-title-bn" style="font-size: 26px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
+                        <div class="union-title-bn" style="font-size: 20px; color: #006600; font-weight: bold; margin-bottom: 4px;">{{ $auth->bn_name ?? '৩নং শুকতাইল ইউনিয়ন পরিষদ' }}</div>
                         <div class="union-title-en" style="color:#2e3192; font-size: 20px; font-weight: bold; margin-bottom: 4px;">{{ $auth->name ?? 'No. 3 Shukhtail Union Parishad' }}</div>
                         <p class="union-address" style="font-size: 13px; color: #000;">
                             @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
@@ -317,7 +317,7 @@
 
         <div class="photo-badge">
             <div class="photo-box">
-                <img src="{{ $organization->logo ? imageUrl($organization->logo) : asset('public/no-image-found.jpeg') }}" alt="Organization Logo">
+                <img src="{{ $organization->logo ? imageUrl($organization->logo) : asset('default.png') }}" alt="Organization Logo">
             </div>
             <div class="id-info-columns">
                 <div class="id-info-item"><span>Name :</span> {{ $organization->name }}</div>
@@ -400,7 +400,7 @@
 
                     <div class="owner-top">
                         <div class="owner-photo">
-                            <img src="{{ $owner->user?->image ? imageUrl($owner->user->image) : asset('public/no-image-found.jpeg') }}" alt="Owner Photo" onerror="this.onerror=null; this.src='{{ asset('public/no-image-found.jpeg') }}'">
+                            <img src="{{ $owner->user?->image ? imageUrl($owner->user->image) : asset('default.png') }}" alt="Owner Photo" onerror="this.onerror=null; this.src='{{ asset('default.png') }}'">
                         </div>
                         <div class="owner-pill-list">
                             <div class="owner-pill"><span>Name :</span> <strong>{{ $owner->user?->name ?? $owner->user_name ?? '-' }}</strong></div>
