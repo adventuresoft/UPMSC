@@ -13,23 +13,23 @@
     <style type="text/tailwindcss">
         @layer utilities {
             .form-input {
-                @apply w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded focus:ring-1 focus:ring-[#046307] focus:border-transparent outline-none transition-all duration-300 text-xs h-[38px] shadow-sm hover:border-gray-300;
+                @apply w-full px-3 py-1.5 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-[#046307]/30 focus:border-[#046307] outline-none transition-all duration-300 text-sm h-[38px] shadow-sm hover:border-gray-400;
             }
             .form-label {
-                @apply block text-[10px] font-bold text-gray-700 uppercase tracking-widest mb-1;
+                @apply block text-xs font-bold text-gray-800 mb-1.5 tracking-wide;
             }
             .section-title {
-                @apply text-sm font-black text-[#046307] border-b border-gray-100 pb-2 mb-6 mt-8 flex items-center gap-2 uppercase tracking-tight;
+                @apply text-sm font-extrabold text-[#046307] border-b-2 border-[#046307]/20 pb-2.5 mb-5 mt-7 flex items-center gap-2 uppercase tracking-widest;
             }
             .select2-container--default .select2-selection--single {
                 height: 38px !important;
-                border: 1px solid #e5e7eb !important;
-                border-radius: 0.25rem !important;
-                background-color: #f9fafb !important;
+                border: 1px solid #d1d5db !important;
+                border-radius: 0.375rem !important;
+                background-color: #ffffff !important;
             }
             .select2-container--default .select2-selection--single .select2-selection__rendered {
                 line-height: 36px !important;
-                font-size: 12px !important;
+                font-size: 13px !important;
                 color: #374151 !important;
                 padding-left: 0.75rem !important;
             }
@@ -132,19 +132,7 @@
     </nav>
 
     <main>
-      <section class="bg-[#efefef] pt-4 pb-6 border-b border-gray-200">
-        <div class="container mx-auto px-4 text-center">
-          <div class="flex flex-col items-center justify-center">
-            <h2 class="text-base font-black tracking-tight text-gray-900 mb-1 uppercase">
-              সিটিজেন সার্ভিস ম্যানেজমেন্ট এন্ড সেন্ট্রাল রিপোর্টিং সিস্টেম
-            </h2>
-            <p class="text-[10px] text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              নাগরিক পোর্টালে প্রবেশ করতে প্রথমে আবেদন করুন। আবেদন অনুমোদনের পর লগইন করে সকল সেবা গ্রহণ করুন।
-            </p>
-          </div>
-        </div>
-      </section>
-
+      
       <div class="container mx-auto max-w-5xl px-4 mt-6 pb-20">
         <div class="bg-white rounded-lg shadow-[0_5px_25px_rgba(0,0,0,0.05)] overflow-hidden border border-gray-100">
           <div class="bg-gray-50 border-b border-gray-100 px-6 py-4 text-center">
@@ -266,7 +254,7 @@
                     <label class="form-label" for="mobile">মোবাইল নম্বর <span class="text-red-500">*</span></label>
                     <div class="flex items-stretch">
                         <span class="bg-gray-50 border border-r-0 border-gray-200 rounded-l flex items-center px-3 text-gray-500 text-xs h-[38px] shadow-sm font-medium">+88</span>
-                        <input type="tel" required name="mobile" id="mobile" class="form-input rounded-l-none" placeholder="017XXXXXXXX">
+                        <input type="tel" required name="mobile" id="mobile" class="form-input rounded-l-none" placeholder="017XXXXXXXX" maxlength="11" inputmode="numeric" autocomplete="tel" oninput="validateMobileInput(this)">
                     </div>
                     <small class="error mobile-error text-red-500"></small>
                 </div>
@@ -473,6 +461,31 @@
     <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 
     <script>
+        // Mobile number: block Bangla digits, max 11 English digits
+        function validateMobileInput(input) {
+            const banglaDigits = /[\u09E6-\u09EF]/g;
+            const errorEl = document.querySelector('.mobile-error');
+
+            if (banglaDigits.test(input.value)) {
+                input.value = input.value.replace(banglaDigits, '');
+                errorEl.textContent = 'Please type in English';
+                return;
+            }
+
+            // Remove any non-digit characters
+            input.value = input.value.replace(/\D/g, '');
+
+            // Limit to 11 digits
+            if (input.value.length > 11) {
+                input.value = input.value.slice(0, 11);
+            }
+
+            // Clear error if valid
+            if (input.value.length > 0 && input.value.length <= 11) {
+                errorEl.textContent = '';
+            }
+        }
+
         $(document).ready(function() {
             $('.select2').select2({
                 width: '100%'

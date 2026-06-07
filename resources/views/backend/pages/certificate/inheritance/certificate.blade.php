@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Succession'])
+@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Inheritance'])
 
 @push('style')
 <style>
@@ -173,7 +173,7 @@
 </style>
 @endpush
 
-@section('title', 'Succession Certificate')
+@section('title', 'Inheritance Certificate')
 
 @section('content')
 <div class="container p-0">
@@ -188,34 +188,34 @@
                     </div>
 
                     <div class="col-8 text-center">
-                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -16px; line-height: 1;">
-                            গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
+                        <h2 class="text- font-Tahoma-bold mb-0" style="font-size:16px;">
+                          Government of the People's Republic of Bangladesh
                         </h2>
                         @php
                             $institute = $certificate->user->institute;
                             $auth = $institute->union ?? ($institute->pourashava ?? $institute->cityCorporation);
-                            $thanaBn = '';
-                            $districtBn = '';
+                            $thana = '';
+                            $district = '';
                             
                             if ($institute->union && $institute->union->thana) {
-                                $thanaBn = $institute->union->thana->bn_name ?? '';
-                                $districtBn = $institute->union->thana->district->bn_name ?? '';
+                                $thana = str_replace('Upazila', '', $institute->union->thana->name);
+                                $district = $institute->union->thana->district->name ?? '';
                             } elseif ($institute->pourashava) {
-                                $districtBn = $institute->pourashava->District->bn_name ?? '';
+                                $district = $institute->pourashava->District->name ?? '';
                             } elseif ($institute->cityCorporation) {
-                                $districtBn = $institute->cityCorporation->District->bn_name ?? '';
+                                $district = $institute->cityCorporation->District->name ?? '';
                             }
                         @endphp
-                        <h2 class="text-success font-weight-bold mb-0" style="font-size:23px; line-height: 1.1; margin-top: -10px;">
-                            {{ $auth->bn_name ?? '' }}
-                        </h2>
-                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:-5px; font-size:24px; line-height: 1.1;">
+                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:23px;">
                             {{ $auth->name ?? '' }}
                         </h3>
-                        <p class="mb-0" style="font-size:15px; margin-top:-2px; line-height: 1.2;">
-                            @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
-                            জেলাঃ {{ $districtBn }},
-                            বাংলাদেশ।
+                        <h4 class="text-success font-Nikosh-bold mb-0" style="font-size:24px;">
+                            {{ $auth->bn_name ?? '' }}
+                        </h4>
+                        <p class="mb-0" style="font-size:15px;">
+                            @if($thana) Thana: {{ $thana }}, @endif
+                            District: {{ $district }},
+                            Bangladesh
                         </p>
                     </div>
 
@@ -224,21 +224,39 @@
                     </div>
                 </div>
 
-                <!-- ================= Title ================= -->
+                <!-- ================= Title ================= 
+                <div class="row mt-3 align-items-center">
+                    <div class="col-4 text-left">
+                        <strong> NO: </strong >  <span style="font-weight:bold;color:blue">      {{ $certificate->system_id ?? '' }}   </span>
+                    </div>
+
+                    <div class="col-4 text-center">
+                        <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px; background-color: #2F318C;">
+                           Citizenship Certificate
+                        </span>
+                    </div>
+
+                    <div class="col-4 text-right">
+                        <strong>Date:</strong>
+                        {{ date('d/m/Y', strtotime($certificate->created_at)) }}
+                    </div>
+                </div>
+                -->
+
+                <!-- ================= Body ================= -->
                 <div class="row mt-2 align-items-center">
                     <div class="col-3 text-left">
-                        <strong>নম্বরঃ</strong>  <span style="font-weight:bold;color:blue">{{ bnValue($certificate->system_id ?? '') }}</span>
+                        <strong>No:</strong>  <span style="font-weight:bold;color:blue">{{ $certificate->system_id ?? '' }}</span>
                     </div>
 
                     <div class="col-6 text-center">
                         <span class="badge text-light px-4 py-2" style="font-size:22px; border-radius:26px;; background-color: #2F318C;">
-                            ওয়ারিশান সনদ
+                            Certificate of Inheritance
                         </span>
                     </div>
 
                     <div class="col-3 text-right">
-                        <strong>তারিখঃ</strong>
-                        {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }} খ্রিঃ
+                        <strong>Date: </strong> {{ date('d/m/Y', strtotime($certificate->created_at)) }} 
                     </div>
                 </div>
 
@@ -248,59 +266,36 @@
 
                         <p>
                             <span style="margin-left:40px;"></span>
-                            এই মর্মে প্রত্যয়ন করা যাচ্ছে যে,
-                            {{ $certificate->user->people->gender == 1 ? 'জনাব' : 'জনাবা' }}
-                            <strong>{{ $certificate->user->people->bn_name ?? '' }}</strong>,
-                            আইডি নং <strong>{{ bnValue($certificate->user->people->approved_id?? '') }}</strong>,
-                            পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
-                            মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }}।
+                            This is to certify that ,
+                            {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Mrs.' }}
+                            <strong>{{ $certificate->user->people->name ?? '' }}</strong>,
+                            ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
+                            Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>
+                            and Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
                             @php 
                                 $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
                                 $bc = $certificate->user->birth_certificate ?? $certificate->user->people->birth_certificate ?? '';
                             @endphp
                             @if($nid && $nid != '1111111114')
-                                এনআইডিঃ {{ bnValue($nid) }},
+                                NID No. <strong>{{ $nid }}</strong>,
                             @elseif($bc)
-                                জন্ম নিবন্ধন নং- {{ bnValue($bc) }},
+                                Birth Certificate No. <strong>{{ $bc }}</strong>,
                             @endif
-                            ঠিকানাঃ গ্রাম- {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                            ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
-                            ডাকঘর: - 
-                            
+                            Address: Village : - <span>{{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }}</span>,
+                            Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},
+                            Post Office: - 
 {{ optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->bn_name ?? '' }}
 @if(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code)
     {{ bnValue(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code) }},
 @endif
-                            @if($thanaBn) উপজেলা- {{ $thanaBn }}, @endif
-                            জেলা- {{ $districtBn }}।
-                            তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ছিলেন। গত 
-                            <strong>
-                                @if($certificate->deathPerson)
-                                    {{ $certificate->deathPerson->date_of_death ? bnValue(date('d/m/Y', strtotime($certificate->deathPerson->date_of_death))) : '০০/০০/০০০০' }}
-                                @else
-                                    {{ $certificate->date_of_death ? bnValue(date('d/m/Y', strtotime($certificate->date_of_death))) : '০০/০০/০০০০' }}
-                                @endif
-                            </strong> খ্রিঃ তারিখে 
-                            <strong>
-                                @if($certificate->deathPerson)
-                                    {{ deathCauseBn($certificate->deathPerson->cause_of_death ?? 'অজ্ঞাত কারণ') }}
-                                @else
-                                    {{ deathCauseBn($certificate->death_cause ?? 'অজ্ঞাত কারণ') }}
-                                @endif
-                            </strong> জনিত কারণে তিনি মৃত্যুবরণ করেন।
-                            তার মৃত্যু নিবন্ধন নম্বর - 
-                            <strong>
-                                @if($certificate->deathPerson)
-                                    {{ bnValue($certificate->deathPerson->system_id ?? '') }}
-                                @else
-                                    {{ bnValue($certificate->death_reg_no ?? '') }}
-                                @endif
-                            </strong>।
-                            আমার জানা মতে মৃত্যুর সময় তিনি নিম্ন ছকে বর্ণিত উত্তরাধিকারী/ওয়ারিশগণকে রেখে গিয়েছেন।
+                            Upzila:- <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,
+                            District: - <span>{{ $certificate->user->institute->union->thana->district->name ?? '' }}</span>.
+                            He is a permanent resident of this union. 
+                            
+                            According to the information provided by him/her, the heirs/successors listed in the table below are present.
                         </p>
 
-
-                        <p class="text-center"><strong>- ওয়ারিশগণের তালিকা -</strong></p>
+                        <p class="text-center"><strong>- List of heirs -</strong></p>
 
                         @php
                             $members = is_null($certificate->members) ? [] : json_decode($certificate->members, true);
@@ -309,11 +304,11 @@
                         <table class="member-table">
                             <thead>
                                 <tr>
-                                    <th>ক্র.নং</th>
-                                    <th>ওয়ারিশের নাম</th>
-                                    <th>সম্পর্ক</th>
-                                    <th>এনআইডি</th>
-                                    <th>বয়স</th>
+                                    <th>S/N</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>NID</th>
+                                    <th>Relation</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -321,13 +316,13 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $member['name'] }}</td>
-                                        <td>{{ $member['relation'] }}</td>
-                                        <td>{{ $member['nid'] }}</td>
                                         <td>{{ $member['age'] }}</td>
+                                        <td>{{ $member['nid'] }}</td>
+                                        <td>{{ $member['relation'] }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5">কোনো ওয়ারিশ তথ্য পাওয়া যায়নি</td>
+                                        <td colspan="5">No heir information found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -335,13 +330,13 @@
 
                         <p style="margin-top:10px;">
                             <span style="margin-left:40px;"></span>
-                            আমি তাদের সার্বিক কল্যাণ ও মঙ্গলময় জীবন কামনা করি।
+                           I wish him all the best and a prosperous life.
                         </p>
 
                     </div>
                 </div>
 
-                <!-- ===== Signature ===== -->
+                <!-- ================= Signature ================= -->
                 <div class="certificate-signature">
                      <div class="qr-code"  id="qrcode">
                         <!--<img src="{{ asset('images/scanner.png') }}">-->
@@ -350,16 +345,16 @@
                     <div class="chairman">
                         <div style="height:40px;"></div>
                         <p class="mb-1">({{ get_chairman_name_en($certificate) }})</p>
-                        <p class="mb-0">চেয়ারম্যান</p>
-                        <p class="mb-0">৩ নং শুকতাইল ইউনিয়ন পরিষদ</p>
+                        <p class="mb-0">Chairman</p>
+                        <p class="mb-0"> {{ $certificate->user->institute->union->name ?? '' }} </p>
                         <p class="mb-0" style="font-size:14px;">
-                            @if($thanaBn) {{ $thanaBn }}, @endif
-                            {{ $districtBn }}
+                            {{ $certificate->user->institute->union->thana->name ?? '' }},
+                            {{ $certificate->user->institute->union->thana->district->name ?? '' }}
                         </p>
                     </div>
                 </div>
 
-                <!-- ===== Footer ===== -->
+                <!-- ================= Footer ================= -->
                 <div class="certificate-footer">
                     This report generated by UPMS | Powered by <strong>Adventure Soft</strong>
                 </div>
@@ -401,7 +396,7 @@
 @push('script')
 <script>
     function goToIndex(){
-        window.location.href = "{{ route('succession.index') }}";
+        window.location.href = "{{ route('inheritance.index') }}";
     }
 </script>
 @endpush

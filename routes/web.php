@@ -116,6 +116,7 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ChairmanController;
 use App\Http\Controllers\CounsilorController;
 use App\Http\Controllers\SuccessionController;
+use App\Http\Controllers\InheritanceController;
 use App\Http\Controllers\CertificateVerifyController;
 use App\Http\Controllers\People\PeopleAuthController;
 use App\Http\Controllers\People\PeopleDashboardController;
@@ -312,6 +313,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
     Route::resource('certificate/succession', SuccessionController::class);
     Route::get('certificate/succession/bn/{id}', [SuccessionController::class, 'bn_certificate'])->name('succession.bn_certificate');
+
+    Route::resource('certificate/inheritance', InheritanceController::class);
+    Route::get('certificate/inheritance/bn/{id}', [InheritanceController::class, 'bn_certificate'])->name('inheritance.bn_certificate');
 
 
     Route::resource('certificate/birth', BirthCertificateController::class);

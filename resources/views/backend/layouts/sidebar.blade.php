@@ -794,6 +794,13 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a href="{{route('inheritance.index')}}" class="nav-link  @if($subMenu == "Inheritance") active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Inheritance</p>
+        </a>
+      </li>
+
     </ul>
   </li>
   @endif

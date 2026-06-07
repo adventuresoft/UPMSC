@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Succession'])
+@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Inheritance'])
 
 @push('style')
 <style>
@@ -173,7 +173,7 @@
 </style>
 @endpush
 
-@section('title', 'Succession Certificate')
+@section('title', 'Inheritance Certificate')
 
 @section('content')
 <div class="container p-0">
@@ -273,32 +273,9 @@
 @endif
                             @if($thanaBn) উপজেলা- {{ $thanaBn }}, @endif
                             জেলা- {{ $districtBn }}।
-                            তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা ছিলেন। গত 
-                            <strong>
-                                @if($certificate->deathPerson)
-                                    {{ $certificate->deathPerson->date_of_death ? bnValue(date('d/m/Y', strtotime($certificate->deathPerson->date_of_death))) : '০০/০০/০০০০' }}
-                                @else
-                                    {{ $certificate->date_of_death ? bnValue(date('d/m/Y', strtotime($certificate->date_of_death))) : '০০/০০/০০০০' }}
-                                @endif
-                            </strong> খ্রিঃ তারিখে 
-                            <strong>
-                                @if($certificate->deathPerson)
-                                    {{ deathCauseBn($certificate->deathPerson->cause_of_death ?? 'অজ্ঞাত কারণ') }}
-                                @else
-                                    {{ deathCauseBn($certificate->death_cause ?? 'অজ্ঞাত কারণ') }}
-                                @endif
-                            </strong> জনিত কারণে তিনি মৃত্যুবরণ করেন।
-                            তার মৃত্যু নিবন্ধন নম্বর - 
-                            <strong>
-                                @if($certificate->deathPerson)
-                                    {{ bnValue($certificate->deathPerson->system_id ?? '') }}
-                                @else
-                                    {{ bnValue($certificate->death_reg_no ?? '') }}
-                                @endif
-                            </strong>।
-                            আমার জানা মতে মৃত্যুর সময় তিনি নিম্ন ছকে বর্ণিত উত্তরাধিকারী/ওয়ারিশগণকে রেখে গিয়েছেন।
+                            তিনি অত্র ইউনিয়নের একজন স্থায়ী বাসিন্দা । 
+                            তার দেয়া তথ্য মতে নিম্ন ছকে বর্ণিত উত্তরাধিকারীগণ রয়েছেন ।
                         </p>
-
 
                         <p class="text-center"><strong>- ওয়ারিশগণের তালিকা -</strong></p>
 
@@ -401,7 +378,7 @@
 @push('script')
 <script>
     function goToIndex(){
-        window.location.href = "{{ route('succession.index') }}";
+        window.location.href = "{{ route('inheritance.index') }}";
     }
 </script>
 @endpush

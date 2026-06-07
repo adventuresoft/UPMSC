@@ -1,10 +1,14 @@
+@extends('frontend.master')
+
+@section('content')
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UPMS | SUKTAIL UNION PARISHAD</title>
+  <title>CLMS || CLMS </title>
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Splide CSS -->
@@ -33,52 +37,20 @@
 <body class="font-inter">
   <!-- top bar -->
   <div class="top-bar">
-    <div class="container mx-auto md:px-32 px-4 max-w-screen-xl">
-      <div class="flex flex-col md:flex-row md:justify-start justify-center items-center">
-        <div class="w-full flex justify-end md:hidden">
-          <button id="mobile-menu-btn" class="md:hidden p-2 text-black" aria-label="Open mobile menu"
-            title="Open mobile menu">
-            <!-- Hamburger Icon -->
-            <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-              stroke="white">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-
-            <!-- Close Icon -->
-            <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 hidden" fill="none"
-              viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <div class="flex flex-col md:flex-row items-center gap-8 py-2">
-          <img src="{{asset('assets/images/logo/govt-bd-logo.png')}}" class="h-20 w-auto object-contain"
-            alt="Govt Logo" />
-          <div class="text-black text-center md:text-left">
-            <h1 class="md:text-[18px] font-bold leading-tight">
-              Citizen Service Management and Central Reporting System
-            </h1>
-            <p class="text-[10px] font-medium opacity-90">Local Government Division, Local Government Ministry,
-              Bangladesh</p>
-          </div>
-        </div>
-
-        <!-- Removed Admin Login -->
-      </div>
-    </div>
+    
   </div>
   <!-- Navigation -->
-  <nav class="navbar md:block hidden bg-[#046307] shadow-md">
+  <nav class="md:block hidden bg-[#046307]">
     <div class="container mx-auto md:px-32 px-4 max-w-screen-xl">
       <!-- Navigation Links -->
       <ul
-        class="nav-links flex items-center md:justify-start justify-center gap-10 py-2 text-xs font-bold uppercase tracking-wider">
+        class="nav-links flex items-center md:justify-start justify-center gap-10 py-1.5 leading-none text-xs font-bold uppercase tracking-wider">
         <li class="flex items-center">
           <a href="{{url('/')}}" class="inline-flex items-center gap-2">
             <span
-              class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/30 text-white transition-all hover:bg-white/10"
+              class="inline-flex h-6 w-6 items-center justify-center rounded border border-white/30 text-white transition-all hover:bg-gray/10"
               aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-3.5 w-3.5">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
                 <path
                   d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
                 <path
@@ -154,7 +126,7 @@
   </nav>
 
   <!-- Mobile Navbar -->
-  <nav class="navbar md:hidden bg-white shadow-md relative">
+  <nav class="md:hidden bg-white shadow-md relative">
     <div id="mobile-menu"
       class="fixed top-0 left-0 h-full w-72 bg-white text-gray-900 transform -translate-x-full transition-transform duration-300 ease-in-out z-50 shadow-lg">
       <div class="p-4 space-y-2">
@@ -227,7 +199,7 @@
         <div class="mx-auto max-w-7xl text-center font-bengali">
           <h2
             class="text-lg font-bold tracking-tight text-[#1a1a1a] sm:text-xl md:text-2xl lg:text-[32px] lg:whitespace-nowrap">
-            সিটিজেন সার্ভিস ম্যানেজমেন্ট এন্ড সেন্ট্রাল রিপোর্টিং সিস্টেম
+            সার্টিফিকেট ও লাইসেন্স ম্যানেজমেন্ট সলিউশন
           </h2>
           <p class="mx-auto mt-1 text-[10px] font-medium text-gray-700 sm:text-xs md:text-sm">
             এই প্ল্যাটফর্মে আপনি আপনার প্রয়োজনীয় সেবাগুলো পেতে পারেন।
@@ -460,22 +432,24 @@
             ['title' => 'আইনশৃঙ্খলা বাহিনী সমূহ', 'icon' => '<path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z" /><path d="M9.5 12.5 11 14l3.5-4" />'],
             ['title' => 'গোয়েন্দা বিভাগ সমূহ', 'icon' => '<path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle cx="12" cy="12" r="3" /><path d="M18 18l2 2" />'],
             ['title' => 'বাণিজ্যিক প্রতিষ্ঠান সমূহ', 'icon' => '<path d="M4 21V7h16v14" /><path d="M8 7V5h8v2" /><path d="M8 11h8M8 15h8" /><path d="M10 21v-3h4v3" />'],
+            ['title' => 'ইলেকট্রনিক মিডিয়া সমূহ', 'icon' => '<path d="M12 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" /><path d="M6.7 10.7l5.3 5.3 5.3-5.3" /><path d="M12 16V10" />'],
+            ['title' => 'প্রিন্ট মিডিয়া সমূহ', 'icon' => '<path d="M12 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" /><path d="M6.7 10.7l5.3 5.3 5.3-5.3" /><path d="M12 16V10" />']
           ];
         @endphp
 
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 justify-items-center">
+        <div class="flex flex-wrap justify-center gap-1.5 mx-auto max-w-4xl">
           @foreach($proyojonioCards as $card)
-            <div
-              class="h-full w-full max-w-[190px] rounded-lg border border-[#d8dce8] bg-[#e8ebf0]/80 px-4 py-5 text-center shadow-sm">
-              <div class="mx-auto flex h-10 w-10 items-center justify-center rounded-lg text-black">
+            <a href="#"
+              class="group flex flex-col items-center justify-center w-[calc(50%-0.375rem)] md:w-[calc(25%-0.5625rem)] max-w-[180px] rounded-xl border border-gray-200 bg-white px-3 py-4 text-center shadow-sm transition-all duration-300 hover:shadow-md hover:border-[#B0E0E6] hover:-translate-y-1">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#f8fafc] text-[#4b5563] transition-colors duration-300 group-hover:bg-[#B0E0E6]/20 group-hover:text-[#046307]">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true">
                   {!! $card['icon'] !!}
                 </svg>
               </div>
-              <h3 class="mt-2 text-[10px] font-bold leading-tight tracking-tight text-[#4459c2]">{{ $card['title'] }}</h3>
-            </div>
+              <h3 class="mt-3 text-[12px] font-semibold leading-tight tracking-tight text-gray-700 transition-colors duration-300 group-hover:text-[#046307]">{{ $card['title'] }}</h3>
+            </a>
           @endforeach
         </div>
 
