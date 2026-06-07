@@ -137,6 +137,18 @@
         margin-left: 250px !important;
     }
 
+    @media print {
+        body:not(.sidebar-collapse) .content-wrapper,
+        body:not(.sidebar-collapse) .main-footer,
+        body:not(.sidebar-collapse) .main-header {
+            margin-left: 0 !important;
+        }
+        .content-wrapper {
+            padding: 0 !important;
+            margin-top: 0 !important;
+        }
+    }
+
     .nav-sidebar {
         padding-top: 8px;
         padding-bottom: 20px;
