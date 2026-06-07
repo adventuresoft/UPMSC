@@ -232,7 +232,7 @@
 
                     <div class="col-6 text-center">
                         <span class="badge text-light px-4 py-2" style="font-size:22px; border-radius:26px;; background-color: #2F318C;">
-                            ওয়ারিশান সনদ
+                            উত্তরাধিকার সনদ
                         </span>
                     </div>
 
