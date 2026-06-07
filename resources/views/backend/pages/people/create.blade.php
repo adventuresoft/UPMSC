@@ -152,7 +152,7 @@
                                         <span class="error image-error text-danger"></span>
                                     </div>
                                     <div class="col-sm-6">
-                                        <img class="img-fluid img-thumbnail" src="{{ asset('no-image-found.jpeg') }}" id="preview" alt="Preview" width="100" height="100">
+                                        <img class="img-fluid img-thumbnail" src="{{ asset('default.png') }}" id="preview" alt="Preview" width="100" height="100">
                                     </div>
                                 </div>
 

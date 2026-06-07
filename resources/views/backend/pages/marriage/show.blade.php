@@ -345,7 +345,7 @@
             <div class="profile-serial-title">বরের পূর্ণ বিবরণ (Groom Details)</div>
             <div class="profile-top">
                 <div class="profile-photo">
-                    <img src="{{ $marriage->groom_photo ? imageUrl($marriage->groom_photo) : ($marriage->groomUser && $marriage->groomUser->image ? imageUrl($marriage->groomUser->image) : asset('no-image-found.jpeg')) }}" alt="Groom Photo">
+                    <img src="{{ $marriage->groom_photo ? imageUrl($marriage->groom_photo) : ($marriage->groomUser && $marriage->groomUser->image ? imageUrl($marriage->groomUser->image) : asset('default.png')) }}" alt="Groom Photo">
                 </div>
                 <div class="profile-info-list">
                     <div class="info-row">
@@ -428,7 +428,7 @@
             <div class="profile-serial-title">কনের পূর্ণ বিবরণ (Bride Details)</div>
             <div class="profile-top">
                 <div class="profile-photo">
-                    <img src="{{ $marriage->bride_photo ? imageUrl($marriage->bride_photo) : ($marriage->brideUser && $marriage->brideUser->image ? imageUrl($marriage->brideUser->image) : asset('no-image-found.jpeg')) }}" alt="Bride Photo">
+                    <img src="{{ $marriage->bride_photo ? imageUrl($marriage->bride_photo) : ($marriage->brideUser && $marriage->brideUser->image ? imageUrl($marriage->brideUser->image) : asset('default.png')) }}" alt="Bride Photo">
                 </div>
                 <div class="profile-info-list">
                     <div class="info-row">

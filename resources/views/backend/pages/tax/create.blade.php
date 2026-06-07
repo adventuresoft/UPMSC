@@ -115,7 +115,7 @@
 
                                     <table class=" table my-2 user_info_table d-none">
                                         <tr>
-                                            <td><img class="user_img" height="60" width="60" src="{{asset('public/no-image-found.jpeg')}}"></td>
+                                            <td><img class="user_img" height="60" width="60" src="{{asset('default.png')}}"></td>
                                             <td> নাম: <strong class="user_name"></strong> </td>
                                             <td> পিতার নাম: <strong class="user_father_name"></strong></td>
                                         </tr>
@@ -464,7 +464,7 @@
                                 let imgUrl = user.image.startsWith('http') ? user.image : "{{ asset('') }}" + user.image;
                                 $(".user_img").attr('src', imgUrl);
                             } else {
-                                $(".user_img").attr('src', "{{ asset('public/no-image-found.jpeg') }}");
+                                $(".user_img").attr('src', "{{ asset('default.png') }}");
                             }
                         }
 

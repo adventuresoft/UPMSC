@@ -55,7 +55,7 @@
                                                 <input type="file" @if(!$institute->left_image) required @endif id="left_image" name="left_image">
                                                 <small class="error left_image-error text-danger"></small><br>
                                                 <img class="img-fluid img-thumbnail my-3" height="120" width="120"
-                                                    src="{{ $institute->left_image ?? asset('public/no-image-found.jpeg') }}" id="left_image_preview"
+                                                    src="{{ $institute->left_image ?? asset('default.png') }}" id="left_image_preview"
                                                     alt="leftImagePreview">
                                             </div>
                                         </div>

@@ -323,7 +323,7 @@
             @if($ownerUser)
                 <div class="photo-badge">
                     <div class="photo-box">
-                        <img src="{{ $ownerUser->image ? imageUrl($ownerUser->image) : asset('public/no-image-found.jpeg') }}" alt="Owner Photo" onerror="this.src='{{ asset('public/no-image-found.jpeg') }}'">
+                        <img src="{{ $ownerUser->image ? imageUrl($ownerUser->image) : asset('default.png') }}" alt="Owner Photo" onerror="this.src='{{ asset('default.png') }}'">
                     </div>
                     <div class="id-info-columns">
                         <div class="id-info-item"><span>Name (Bangla) :</span> {{ $ownerUser->people?->bn_name ?? '-' }}</div>

@@ -289,7 +289,7 @@
                                             <div class="form-group row">
                                                 <label for="image" class="col-sm-2 col-form-label"></label>
                                                 <div class="col-sm-9">
-                                                    <img class="img-fluid img-thumbnail" src="{{ $user->image ? imageUrl($user->image) : asset('public/no-image-found.jpeg') }}" id="preview" alt="Preview" width="100" height="100">
+                                                    <img class="img-fluid img-thumbnail" src="{{ $user->image ? imageUrl($user->image) : asset('default.png') }}" id="preview" alt="Preview" width="100" height="100">
                                                 </div>
                                             </div>
 

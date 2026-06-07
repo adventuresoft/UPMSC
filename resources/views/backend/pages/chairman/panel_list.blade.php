@@ -211,7 +211,7 @@
         <div class="col-md-12">
 
           @php $bgColors = ['bg-blue','bg-purple','bg-pink','bg-orange','bg-teal','bg-gray']; @endphp
-          @php $noImg = asset('public/no-image-found.jpeg'); @endphp
+          @php $noImg = asset('default.png'); @endphp
 
           @php
               // Collect all members from all councils in hierarchy order

@@ -274,7 +274,7 @@
                     @if(Auth::guard('people')->user()->image)
                         <img src="{{ asset(Auth::guard('people')->user()->image) }}" alt="Avatar">
                     @else
-                        {{ strtoupper(substr(Auth::guard('people')->user()->name, 0, 1)) }}
+                        <img src="{{ asset('default.png') }}" alt="Avatar">
                     @endif
                 </div>
                 <div class="text-start">

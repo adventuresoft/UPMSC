@@ -99,7 +99,7 @@
                                 <div class="form-group row">
                                     <label for="image" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-9">
-                                        <img class="img-fluid img-thumbnail" src="{{asset('public/no-image-found.jpeg')}}" id="preview" alt="Preview" width="3" height="3">
+                                        <img class="img-fluid img-thumbnail" src="{{asset('default.png')}}" id="preview" alt="Preview" width="3" height="3">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -111,7 +111,7 @@
                                 <div class="form-group row">
                                     <label for="image" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-9">
-                                        <img class="img-fluid img-thumbnail" src="{{asset('public/no-image-found.jpeg')}}" id="preview" alt="Preview" width="3" height="3">
+                                        <img class="img-fluid img-thumbnail" src="{{asset('default.png')}}" id="preview" alt="Preview" width="3" height="3">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -123,7 +123,7 @@
                                 <div class="form-group row">
                                     <label for="image" class="col-sm-2 col-form-label"></label>
                                     <div class="col-sm-9">
-                                        <img class="img-fluid img-thumbnail" src="{{asset('public/no-image-found.jpeg')}}" id="preview" alt="Preview" width="3" height="3">
+                                        <img class="img-fluid img-thumbnail" src="{{asset('default.png')}}" id="preview" alt="Preview" width="3" height="3">
                                     </div>
                                 </div>
 

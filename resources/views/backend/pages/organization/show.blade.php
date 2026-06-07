@@ -317,7 +317,7 @@
 
         <div class="photo-badge">
             <div class="photo-box">
-                <img src="{{ $organization->logo ? imageUrl($organization->logo) : asset('public/no-image-found.jpeg') }}" alt="Organization Logo">
+                <img src="{{ $organization->logo ? imageUrl($organization->logo) : asset('default.png') }}" alt="Organization Logo">
             </div>
             <div class="id-info-columns">
                 <div class="id-info-item"><span>Name :</span> {{ $organization->name }}</div>
@@ -400,7 +400,7 @@
 
                     <div class="owner-top">
                         <div class="owner-photo">
-                            <img src="{{ $owner->user?->image ? imageUrl($owner->user->image) : asset('public/no-image-found.jpeg') }}" alt="Owner Photo" onerror="this.onerror=null; this.src='{{ asset('public/no-image-found.jpeg') }}'">
+                            <img src="{{ $owner->user?->image ? imageUrl($owner->user->image) : asset('default.png') }}" alt="Owner Photo" onerror="this.onerror=null; this.src='{{ asset('default.png') }}'">
                         </div>
                         <div class="owner-pill-list">
                             <div class="owner-pill"><span>Name :</span> <strong>{{ $owner->user?->name ?? $owner->user_name ?? '-' }}</strong></div>
