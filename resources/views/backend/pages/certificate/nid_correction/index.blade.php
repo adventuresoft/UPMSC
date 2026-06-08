@@ -131,10 +131,9 @@
                                 <tr>
                                     <th>SL</th>
                                     <th>Photo</th>
-                                    <th>Certificate No</th>
+                                    <th>Certificate No & Date</th>
                                     <th>NID & Name</th>
                                     <th>Address & Mobile</th>
-                                    <th>Date</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -153,7 +152,8 @@
                                         <img src="{{ imageUrl($displayImage) }}" style="width: 55px; height: 65px; border-radius: 0; object-fit: cover;" onerror="this.onerror=null;this.src='{{ asset('assets/images/person-avatar.png') }}'">
                                     </td>
                                     <td class="text-center" style="font-size: 16px;">
-                                        {{($certificate->system_id) }}
+                                        <strong>{{ $certificate->system_id }}</strong><br>
+                                        <small class="text-muted">{{ date('d-m-Y', strtotime($certificate->created_at)) }}</small>
                                     </td>
                                     <td>
                                         <span style="font-weight: bold; font-size: 16px;">{{ bnValue($displayNid) }}</span><br>
@@ -179,9 +179,7 @@
                                             @endif
                                         </small>
                                     </td>
-                                    <td class="text-center">
-                                        {{ date('d-m-Y', strtotime($certificate->created_at)) }}
-                                    </td>
+
                                     <td class="text-center" style="white-space: nowrap;">
                                         <div class="d-flex align-items-center justify-content-center" style="gap: 5px;">
                                             @if (edit_permission('nid_correction_certificate'))

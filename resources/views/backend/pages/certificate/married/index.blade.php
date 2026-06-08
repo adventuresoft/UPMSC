@@ -130,11 +130,10 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th>Photo</th>
-                                    <th>Certificate No</th>
+                                    <th>Certificate No & Date</th>
                                     <th>Spouse ID & Name</th>
                                     <th>Address & Mobile</th>
                                     <th>Marriage Date</th>
-                                    <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -153,7 +152,10 @@
                                                 onerror="this.src='{{ asset('default.png') }}'">
                                         </td>
 
-                                        <td>{{ $certificate->certificate_number ??($certificate->system_id ?? '') }}</td>
+                                        <td>
+                                        <strong>{{ $certificate->system_id }}</strong><br>
+                                        <small class="text-muted">{{ \Carbon\Carbon::parse($certificate->created_at)->format('d-m-Y') }}</small>
+                                    </td>
 
                                         <td>
                                             @php
@@ -179,8 +181,6 @@
                                                 : 'N/A' }}
                                         </td>
 
-                                        <td>{{ $certificate->created_at->format('d-m-Y') }}</td>
-
                                         <td>
                                             <a target="_blank"
                                                 href="{{ route('married.show', $certificate->id) }}"
@@ -198,7 +198,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="8" class="text-center text-muted">
+                                        <td colspan="100%" class="text-center text-muted">
                                             No married certificates found.
                                         </td>
                                     </tr>

@@ -161,12 +161,10 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th>Photo</th>
-                                    <th>Certificate No</th>
+                                    <th>Certificate No & Date</th>
                                     <th>ID & Name</th>
                                     <th>Address & Mobile</th>
                                     <th>Voter Area Details</th>
-                                    <th>Status</th>
-                                    <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -187,8 +185,9 @@
 
                                         <td>
                                             <span class="badge-nid">
-                                                {{ $certificate->certificate_number ??($certificate->system_id ?? 'N/A') }}
-                                            </span>
+                                                <strong>{{ $certificate->certificate_number ??($certificate->system_id ?? 'N/A') }}</strong>
+                                            </span><br>
+                                            <small class="text-muted">{{ $certificate->created_at ? date('d-m-Y', strtotime($certificate->created_at)) : 'N/A' }}</small>
                                         </td>
 
                                         <td>
@@ -212,30 +211,9 @@
                                             @endif
                                         </td>
 
-                                        <td>
-                                            @php
-                                                $status = $certificate->status;
-                                                $statusText = 'Pending';
-                                                $statusClass = 'pending';
-                                                
-                                                if($status == 1 || $status == 'approved') {
-                                                    $statusText = 'Approved';
-                                                    $statusClass = 'approved';
-                                                } elseif($status == 2 || $status == 'rejected') {
-                                                    $statusText = 'Rejected';
-                                                    $statusClass = 'rejected';
-                                                }
-                                            @endphp
-                                            <span class="status-badge {{ $statusClass }}">
-                                                {{ $statusText }}
-                                            </span>
-                                        </td>
 
-                                        <td>
-                                            <span class="badge-date">
-                                                {{ $certificate->created_at ? date('d-m-Y', strtotime($certificate->created_at)) : 'N/A' }}
-                                            </span>
-                                        </td>
+
+
 
                                         <td style="white-space: nowrap;">
                                             <div class="d-flex align-items-center justify-content-center" style="gap: 5px;">
@@ -271,7 +249,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="9" class="empty-state">
+                                        <td colspan="100%" class="empty-state">
                                             <i class="fas fa-folder-open"></i>
                                             <h5>No voter area certificates found</h5>
                                             <p class="text-muted">Get started by creating a new certificate.</p>

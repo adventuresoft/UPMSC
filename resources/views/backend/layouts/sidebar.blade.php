@@ -50,12 +50,32 @@
 
     $isReliefCard = $isPath(['relief-card*']) || $_subMenu == 'ReliefCardList';
 @endphp
+
+<style>
+  .nav-sidebar .nav-item {
+    margin: 0px !important;
+    padding: 0px !important;
+  }
+  .nav-sidebar .nav-link {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    line-height: 1.2 !important;
+  }
+  .nav-sidebar .nav-treeview > .nav-item > .nav-link {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+  }
+  .nav-sidebar p {
+    margin-bottom: 0 !important;
+  }
+</style>
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
   <!-- Brand Logo -->
   @php
       $currentLogo = asset('backend/img/AdminLTELogo.png');
-      $currentBrandText = 'UPMS';
+      $currentBrandText = 'CLMS';
 
       if (Auth::guard('web')->check() && Auth::guard('web')->user()->institute) {
           $inst = Auth::guard('web')->user()->institute;

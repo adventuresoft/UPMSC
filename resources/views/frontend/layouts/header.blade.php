@@ -424,6 +424,10 @@
         font-size: 22px;
     }
 
+    ul.nav-links{
+        margin-bottom: 0px!important;
+    }
+
     .gov-mobile-drawer {
         position: fixed;
         top: 0;
