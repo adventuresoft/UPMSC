@@ -163,9 +163,9 @@ class UserController extends Controller
     {
         $user = User::with(['roles'])->find($id);
 
-        // Institutional admins can only edit users they created
-        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id()) {
-            abort(403, 'You can only edit users you created.');
+        // Institutional admins can only edit users they created OR their own profile
+        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id() && $user->id !== Auth::id()) {
+            abort(403, 'You can only edit users you created or your own profile.');
         }
 
         $roles = Role::all();
@@ -206,9 +206,9 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        // Institutional admins can only update users they created
-        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id()) {
-            abort(403, 'You can only update users you created.');
+        // Institutional admins can only update users they created OR their own profile
+        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id() && $user->id !== Auth::id()) {
+            abort(403, 'You can only update users you created or your own profile.');
         }
 
         $this->validate($request, [
@@ -216,10 +216,11 @@ class UserController extends Controller
             'email' => 'required',
         ]);
 
-        $image =  $user ->image;
+        $image =  $user->image;
         if ($request->hasFile('image')) {
-            $image = time() . '.' . $request->image->getClientOriginalExtension();
-            $request->image->move(base_path('upload/users/images'), $image);
+            $image_name = time() . '.' . $request->image->getClientOriginalExtension();
+            $image = 'uploads/users/' . $image_name;
+            $request->image->move(base_path('uploads/users/'), $image_name);
         }
         $user->image = $image;
 
@@ -284,6 +285,10 @@ class UserController extends Controller
     public function changePass($id)
     {
         $user = User::find($id);
+        // Institutional admins can only change password for users they created OR their own profile
+        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id() && $user->id !== Auth::id()) {
+            abort(403, 'You can only change password for users you created or your own profile.');
+        }
         return view('backend.pages.user.changePassword', compact('user'))->with(['title' => 'User Change Password', 'page' => 'user']);
     }
 
@@ -297,10 +302,15 @@ class UserController extends Controller
      */
     public function updatePass(Request $request, $id)
     {
+        $user = User::find($id);
+        // Institutional admins can only change password for users they created OR their own profile
+        if (is_institutional_admin() && !is_superadmin() && $user->created_by !== Auth::id() && $user->id !== Auth::id()) {
+            abort(403, 'You can only change password for users you created or your own profile.');
+        }
+
         $this->validate($request, [
             'password' => 'required|min:6|confirmed',
         ]);
-        $user = User::find($id);
         $user->password = $request->password;
         $user->save();
         session()->flash("success", "Information Update Successfully");

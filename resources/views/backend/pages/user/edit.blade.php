@@ -83,32 +83,66 @@
                             <div class="col-md-4 border-left">
                                 <h5 class="font-weight-bold text-muted mb-4"><i class="fas fa-shield-alt mr-2"></i> Security Identity</h5>
                                 
-                                <div class="form-group">
-                                    <label for="roles" class="font-weight-bold">Security Role</label>
-                                    <select name="roles" id="roles" class="form-control select2" data-placeholder="Select a Role" required>
-                                        <option value=""></option>
-                                        @foreach($roles as $role)
-                                            <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>
-                                                {{ $role->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <small class="text-muted d-block mt-2">Updating the role automatically updates all associated capabilities.</small>
+                                <!-- Profile Image -->
+                                <div class="form-group mb-4">
+                                    <label class="font-weight-bold d-block">Profile Image</label>
+                                    <div class="text-center mb-3">
+                                        @if($user->image)
+                                            <img src="{{ imageUrl($user->image) }}" alt="{{ $user->name }}" class="img-circle elevation-2" style="width: 120px; height: 120px; object-fit: cover;">
+                                        @else
+                                            <div class="img-circle elevation-2 bg-gray-100 d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                                                <i class="fas fa-user text-gray-500" style="font-size: 48px;"></i>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" name="image" class="custom-file-input" id="image" accept="image/*">
+                                        <label class="custom-file-label" for="image">Choose new profile image</label>
+                                    </div>
+                                    <small class="text-muted d-block mt-2">Leave empty to keep the current image.</small>
                                 </div>
 
-                                <div class="form-group mt-5">
-                                    <label class="font-weight-bold d-block">Account Status Flag</label>
-                                    <div class="mt-2">
-                                        <div class="custom-control custom-radio mb-2">
-                                            <input type="radio" id="status_active" name="status" value="1" class="custom-control-input" {{$user->status==1?'checked':''}}>
-                                            <label class="custom-control-label text-success font-weight-bold" for="status_active">Verified / Active</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="status_pending" name="status" value="0" class="custom-control-input" {{$user->status==0?'checked':''}}>
-                                            <label class="custom-control-label text-warning font-weight-bold" for="status_pending">Pending Review</label>
+                                @if(!is_institutional_admin() || is_superadmin() || $user->id !== Auth::id())
+                                    <div class="form-group">
+                                        <label for="roles" class="font-weight-bold">Security Role</label>
+                                        <select name="roles" id="roles" class="form-control select2" data-placeholder="Select a Role" required>
+                                            <option value=""></option>
+                                            @foreach($roles as $role)
+                                                <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <small class="text-muted d-block mt-2">Updating the role automatically updates all associated capabilities.</small>
+                                    </div>
+
+                                    <div class="form-group mt-5">
+                                        <label class="font-weight-bold d-block">Account Status Flag</label>
+                                        <div class="mt-2">
+                                            <div class="custom-control custom-radio mb-2">
+                                                <input type="radio" id="status_active" name="status" value="1" class="custom-control-input" {{$user->status==1?'checked':''}}>
+                                                <label class="custom-control-label text-success font-weight-bold" for="status_active">Verified / Active</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="status_pending" name="status" value="0" class="custom-control-input" {{$user->status==0?'checked':''}}>
+                                                <label class="custom-control-label text-warning font-weight-bold" for="status_pending">Pending Review</label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @else
+                                    <input type="hidden" name="roles" value="{{ $user->role_id }}">
+                                    <input type="hidden" name="status" value="{{ $user->status }}">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold d-block">Security Role</label>
+                                        <div class="text-muted">{{ $user->roles->first()->name ?? 'N/A' }}</div>
+                                    </div>
+                                    <div class="form-group mt-5">
+                                        <label class="font-weight-bold d-block">Account Status</label>
+                                        <div class="text-{{ $user->status == 1 ? 'success' : 'warning' }} font-weight-bold">
+                                            {{ $user->status == 1 ? 'Verified / Active' : 'Pending Review' }}
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -133,6 +167,23 @@
         $('.select2').select2({
             theme: 'bootstrap4',
             width: '100%'
+        });
+
+        // Custom file input label update
+        $('#image').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+
+            // Image preview
+            var input = this;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var previewContainer = $('#image').closest('.form-group').find('.text-center');
+                    previewContainer.html('<img src="' + e.target.result + '" alt="Preview" class="img-circle elevation-2" style="width: 120px; height: 120px; object-fit: cover;">');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         });
     });
 </script>

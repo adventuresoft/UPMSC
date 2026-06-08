@@ -131,17 +131,52 @@
       <!-- User Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-user"></i>
+          @if(Auth::guard('web')->check())
+            @if(Auth::user()->image)
+              <img src="{{ imageUrl(Auth::user()->image) }}" alt="User" class="img-circle elevation-2" style="width: 32px; height: 32px; object-fit: cover;">
+            @else
+              <i class="far fa-user"></i>
+            @endif
+          @elseif(Auth::guard('people')->check())
+            @if(Auth::guard('people')->user()->image)
+              <img src="{{ imageUrl(Auth::guard('people')->user()->image) }}" alt="User" class="img-circle elevation-2" style="width: 32px; height: 32px; object-fit: cover;">
+            @else
+              <i class="far fa-user"></i>
+            @endif
+          @endif
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          {{-- <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-id-badge mr-2"></i> Profile
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-cog mr-2"></i> Settings
-          </a> --}}
+          @if(Auth::guard('web')->check())
+            <div class="dropdown-item">
+              <div class="media">
+                <div class="media-body">
+                  <h3 class="dropdown-item-title">{{ Auth::user()->name }}</h3>
+                  <p class="text-sm text-muted">{{ Auth::user()->email }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="{{ route('user.edit', Auth::user()->id) }}" class="dropdown-item">
+              <i class="fas fa-id-badge mr-2"></i> Edit Profile
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ route('user.changePass', Auth::user()->id) }}" class="dropdown-item">
+              <i class="fas fa-key mr-2"></i> Change Password
+            </a>
+          @elseif(Auth::guard('people')->check())
+            <div class="dropdown-item">
+              <div class="media">
+                <div class="media-body">
+                  <h3 class="dropdown-item-title">{{ Auth::guard('people')->user()->name }}</h3>
+                  <p class="text-sm text-muted">{{ Auth::guard('people')->user()->mobile }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="{{ route('people.profile') }}" class="dropdown-item">
+              <i class="fas fa-id-badge mr-2"></i> My Profile
+            </a>
+          @endif
           <div class="dropdown-divider"></div>
           <button type="button" onclick="event.preventDefault();document.getElementById('logoutForm').submit();" class="dropdown-item">
             <i class="fas fa-sign-out-alt mr-2"></i> Logout
