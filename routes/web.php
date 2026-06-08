@@ -12,6 +12,9 @@ use App\Http\Controllers\BasicSettings\FamilyTypeController;
 use App\Http\Controllers\BasicSettings\HouseOwnerTypeController;
 use App\Http\Controllers\BasicSettings\HouseCategoryController;
 use App\Http\Controllers\BasicSettings\HouseTypeController;
+use App\Http\Controllers\BasicSettings\HouseClassController;
+use App\Http\Controllers\BasicSettings\CountryController;
+use App\Http\Controllers\BasicSettings\OrganizationSubtypeController;
 use App\Http\Controllers\BasicSettings\LandClassController;
 use App\Http\Controllers\BasicSettings\LandOwnershipTypeController;
 use App\Http\Controllers\BasicSettings\LandTypeController;
@@ -397,6 +400,10 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
         Route::resource('family-subcategory', FamilySubCategoryController::class);
         Route::resource('family-type', FamilyTypeController::class);
 
+        Route::resource('house-class', HouseClassController::class);
+        Route::resource('country', CountryController::class);
+        Route::resource('organization-subtype', OrganizationSubtypeController::class);
+        Route::resource('organization-class', OrganizationClassController::class);
         Route::resource('vehicle-type', VehicleTypeController::class);
         Route::resource('vehicle-category', VehicleCategoryController::class);
         Route::resource('vehicle-subcategory', VehicleSubCategoryController::class);

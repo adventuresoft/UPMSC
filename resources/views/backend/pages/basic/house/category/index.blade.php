@@ -72,13 +72,15 @@
 @endif
                                             <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('basic-settings.house-category.show', $item->id)}}"><i class="fa fa-eye"></i></a>
 
-                                            <form class="deleteCategory" method="post">
-                                              @csrf
-                                              @method('DELETE')
-                                              <input type="hidden" class="id" name="id" value="{{$item->id}}">
-                                              <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.house-category.destroy', $item->id)}}">
-                                              <button type="submit" class="btn btn-sm btn-danger" title="Delete" data-toggle="tooltip" ><i class="fa fa-trash"></i></button>
-                                            </form>
+                                            @if(delete_permission('house_category'))
+                                          <form class="deleteCategory" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" class="id" name="id" value="{{$item->id}}">
+                                            <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.house-category.destroy', $item->id)}}">
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete" data-toggle="tooltip"><i class="fa fa-trash"></i></button>
+                                          </form>
+                                          @endif
                                         </div>
                                       </td>
                                     </tr>

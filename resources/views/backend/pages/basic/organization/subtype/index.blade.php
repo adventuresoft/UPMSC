@@ -68,6 +68,7 @@
                                           @if(edit_permission())
 <a class="btn btn-primary" href="{{route('basic-settings.organization-subtype.edit', $item->id)}}">Edit</a>
 @endif
+                                          @if(delete_permission('organization_subtype'))
                                           <form class="deleteType" method="post">
                                             @csrf
                                             @method('DELETE')
@@ -75,6 +76,7 @@
                                             <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.organization-subtype.destroy', $item->id)}}">
                                             <button type="submit" class="btn btn-danger">Delete</button>
                                           </form>
+                                          @endif
                                       </div>
                                     </td>
                                   </tr>

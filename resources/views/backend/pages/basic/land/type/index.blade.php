@@ -73,6 +73,7 @@
 @endif
                                             <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('basic-settings.land-type.show', $item->id)}}"><i class="fa fa-eye"></i></a>
 
+                                            @if(delete_permission('land_type'))
                                             <form class="deleteType" method="post">
                                               @csrf
                                               @method('DELETE')
@@ -80,6 +81,7 @@
                                               <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.land-type.destroy', $item->id)}}">
                                               <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></button>
                                             </form>
+                                            @endif
                                         </div>
                                       </td>
                                     </tr>

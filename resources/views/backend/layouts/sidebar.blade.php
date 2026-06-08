@@ -20,7 +20,7 @@
     $_mainMenu = $mainMenu ?? null;
 
     // Define active states for major sections
-    $isBasicSettings = $isPath(['basic-settings*', '*/basic-settings*']) || in_array($_subMenu, ['CityCorporation', 'CityCorporationWard', 'FamilyCategory', 'FamilySubcategory', 'FamilyType', 'Financialyear', 'HouseType', 'HouseCategory', 'HouseOwnershipType', 'LandType', 'LandClass', 'LandOwnershipType', 'MarketType', 'MarketCategory', 'MarketOwnershipType', 'OrganizationCategory', 'OrganizationSubcategory', 'OrganizationWorkArea', 'OrganizationOwnershipType', 'OrganizationType', 'OrganizationSubtype', 'Profession', 'ProfessionCategory', 'ProfessionSubcategory', 'ProfessionType', 'RoadCategory', 'RoadType', 'RoadOwner', 'ResarvWard', 'VehicleCategory', 'VehicleSubcategory', 'VehicleType', 'UnionWard', 'ReserveWard', 'Village', 'VillageArea', 'Union', 'PostOffice', 'Year']);
+    $isBasicSettings = $isPath(['basic-settings*', '*/basic-settings*']) || in_array($_subMenu, ['CityCorporation', 'CityCorporationWard', 'FamilyCategory', 'FamilySubcategory', 'FamilyType', 'Financialyear', 'HouseType', 'HouseCategory', 'HouseClass', 'HouseOwnershipType', 'LandType', 'LandClass', 'LandOwnershipType', 'MarketType', 'MarketCategory', 'MarketOwnershipType', 'OrganizationCategory', 'OrganizationSubcategory', 'OrganizationWorkArea', 'OrganizationOwnershipType', 'OrganizationType', 'OrganizationSubtype', 'OrganizationClass', 'Profession', 'ProfessionCategory', 'ProfessionSubcategory', 'ProfessionType', 'RoadCategory', 'RoadType', 'RoadOwner', 'ResarvWard', 'VehicleCategory', 'VehicleSubcategory', 'VehicleType', 'UnionWard', 'ReserveWard', 'Village', 'VillageArea', 'Union', 'PostOffice', 'Country', 'Year']);
     
     $isAccessManagement = $isRoute(['role.*', 'permission.*', 'user.*']) || (isset($page) && in_array($page, ['role', 'permission', 'rolepermission', 'userper', 'roleuser', 'user']));
     
@@ -274,6 +274,15 @@
         </li>
         @endif
 
+        @if(view_permission('house_class'))
+        <li class="nav-item">
+          <a href="{{route('basic-settings.house-class.index')}}" class="nav-link  @if($subMenu == "HouseClass") active @endif">
+            <i class="far fa-circle nav-icon"></i>
+            <p>House Class</p>
+          </a>
+        </li>
+        @endif
+
         @if(view_permission('land_type'))
         <li class="nav-item">
           <a href="{{route('basic-settings.land-type.index')}}" class="nav-link   @if($subMenu == "LandType") active @endif">
@@ -333,6 +342,24 @@
           <a href="{{route('basic-settings.organization-type.index')}}" class="nav-link {{$subMenu == 'CityCorporationWard'?'active':''}} @if($subMenu == "OrganizationType") active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Organization Type</p>
+          </a>
+        </li>
+        @endif
+
+        @if(view_permission('organization_subtype'))
+        <li class="nav-item">
+          <a href="{{route('basic-settings.organization-subtype.index')}}" class="nav-link {{$subMenu == 'OrganizationSubtype'?'active':''}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Organization Subtype</p>
+          </a>
+        </li>
+        @endif
+
+        @if(view_permission('organization_class'))
+        <li class="nav-item">
+          <a href="{{route('basic-settings.organization-class.index')}}" class="nav-link {{$subMenu == 'OrganizationClass'?'active':''}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Organization Class</p>
           </a>
         </li>
         @endif
@@ -461,6 +488,51 @@
           <a href="{{route('basic-settings.vehicle-type.index')}}" class="nav-link {{$subMenu == 'VehicleType'?'active':''}}  ">
             <i class="far fa-circle nav-icon"></i>
             <p>Vehicle Type</p>
+          </a>
+        </li>
+        @endif
+
+        @if(view_permission('vehicle_subcategory'))
+        <li class="nav-item">
+          <a href="{{route('basic-settings.vehicle-subcategory.index')}}" class="nav-link {{$subMenu == 'VehicleSubcategory'?'active':''}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Vehicle Subcategory</p>
+          </a>
+        </li>
+        @endif
+
+        @if(view_permission('market_type'))
+        <li class="nav-item">
+          <a href="{{route('basic-settings.market-type.index')}}" class="nav-link {{$subMenu == 'MarketType'?'active':''}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Market Type</p>
+          </a>
+        </li>
+        @endif
+
+        @if(view_permission('market_category'))
+        <li class="nav-item">
+          <a href="{{route('basic-settings.market-category.index')}}" class="nav-link {{$subMenu == 'MarketCategory'?'active':''}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Market Category</p>
+          </a>
+        </li>
+        @endif
+
+        @if(view_permission('market_ownership_type'))
+        <li class="nav-item">
+          <a href="{{route('basic-settings.market-ownership-type.index')}}" class="nav-link {{$subMenu == 'MarketOwnershipType'?'active':''}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Market Ownership Type</p>
+          </a>
+        </li>
+        @endif
+
+        @if(view_permission('country'))
+        <li class="nav-item">
+          <a href="{{route('basic-settings.country.index')}}" class="nav-link {{$subMenu == 'Country'?'active':''}}">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Country</p>
           </a>
         </li>
         @endif

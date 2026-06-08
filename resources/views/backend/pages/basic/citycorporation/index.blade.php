@@ -79,6 +79,7 @@
 <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.city-corporation.edit', $cityCorporation->id)}}"><i class="fa fa-edit"></i></a>
 @endif
 
+                                            @if(delete_permission('city_corporation'))
                                             <form class="deleteCityCorporation" method="post">
                                               @csrf
                                               @method('DELETE')
@@ -86,6 +87,7 @@
                                               <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.city-corporation.destroy', $cityCorporation->id)}}">
                                               <button type="submit" title="Delete" data-toggle="tooltip" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                                             </form>
+                                            @endif
                                         </div>
                                       </td>
                                     </tr>

@@ -71,6 +71,7 @@
 @endif
                                             <a class="btn btn-sm btn-info"  title="Show" data-toggle="tooltip" href="{{route('basic-settings.road-owner.edit', $item->id)}}"><i class="fa fa-trash"></i></a>
 
+                                            @if(delete_permission('road_owner'))
                                             <form class="deleteOwner" method="post">
                                               @csrf
                                               @method('DELETE')
@@ -78,6 +79,7 @@
                                               <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.road-owner.destroy', $item->id)}}">
                                               <button type="submit" class="btn btn-sm btn-danger" title="Delete" data-toggle="tooltip"><i class="fa fa-trash"></i></button>
                                             </form>
+                                            @endif
                                         </div>
                                       </td>
                                     </tr>

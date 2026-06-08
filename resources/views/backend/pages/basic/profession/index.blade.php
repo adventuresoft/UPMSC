@@ -86,6 +86,7 @@
                                                                 <i class="fa fa-eye"></i>
                                                             </a>
 
+                                                            @if(delete_permission('profession'))
                                                             <form class="deleteType" method="post">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -100,6 +101,7 @@
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
                                                             </form>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                 </tr>

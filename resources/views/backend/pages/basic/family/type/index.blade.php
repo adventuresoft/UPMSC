@@ -72,6 +72,7 @@
 @endif
                                             <a class="btn btn-sm btn-info" data-toggle="tooltip" title="Show" href="{{route('basic-settings.family-type.show', $item->id)}}"><i class="fa fa-eye"></i></a>
 
+                                            @if(delete_permission('family_type'))
                                             <form class="deleteType" method="post">
                                               @csrf
                                               @method('DELETE')
@@ -79,6 +80,7 @@
                                               <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.family-type.destroy', $item->id)}}">
                                               <button type="submit" data-toggle="tooltip" title="Delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                                             </form>
+                                            @endif
                                         </div>
                                       </td>
                                     </tr>

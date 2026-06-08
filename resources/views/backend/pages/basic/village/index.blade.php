@@ -76,6 +76,7 @@
 @endif
                                             <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('basic-settings.village.show', $village->id)}}"><i class="fa fa-eye"></i></a>
 
+                                            @if(delete_permission('village'))
                                             <form class="deleteVillage" method="post">
                                               @csrf
                                               @method('DELETE')
@@ -83,6 +84,7 @@
                                               <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.village.destroy', $village->id)}}">
                                               <button type="submit" title="Edit" data-toggle="tooltip" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                                             </form>
+                                            @endif
                                         </div>
                                       </td>
                                     </tr>

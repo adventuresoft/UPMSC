@@ -73,6 +73,7 @@
 @endif
                                           <a class="btn btn-sm btn-info" data-toggle="tooltip" title="Show" href="{{route('basic-settings.organization-work-area.show', $area->id)}}"><i class="fa fa-eye"></i></a>
 
+                                          @if(delete_permission('organization_work_area'))
                                           <form class="deleteSubCategory" method="post">
                                             @csrf
                                             @method('DELETE')
@@ -80,6 +81,7 @@
                                             <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.organization-work-area.destroy', $area->id)}}">
                                             <button type="submit" data-toggle="tooltip" title="Delete" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
                                           </form>
+                                          @endif
                                       </div>
                                       </td>
                                   </tr>

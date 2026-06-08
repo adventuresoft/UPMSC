@@ -72,6 +72,7 @@
 @endif
                                             <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('basic-settings.reserve-ward.show', $ward->id)}}"><i class="fa fa-eye"></i></a>
 
+                                            @if(delete_permission('reserve_ward'))
                                             <form class="deleteWard" method="post">
                                               @csrf
                                               @method('DELETE')
@@ -79,6 +80,7 @@
                                               <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.reserve-ward.destroy', $ward->id)}}">
                                               <button type="submit" class="btn btn-sm btn-danger" title="Edit" data-toggle="tooltip"><i class="fa fa-trash"></i></button>
                                             </form>
+                                            @endif
                                         </div>
                                       </td>
                                     </tr>

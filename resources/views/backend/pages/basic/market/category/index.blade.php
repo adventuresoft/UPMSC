@@ -67,6 +67,7 @@
                                           @if(edit_permission())
 <a class="btn btn-primary" href="{{route('basic-settings.market-category.edit', $item->id)}}">Edit</a>
 @endif
+                                          @if(delete_permission('market_category'))
                                           <form class="deleteCategory" method="post">
                                             @csrf
                                             @method('DELETE')
@@ -74,6 +75,7 @@
                                             <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.market-category.destroy', $item->id)}}">
                                             <button type="submit" class="btn btn-danger">Delete</button>
                                           </form>
+                                          @endif
                                       </div>
                                     </td>
                                   </tr>

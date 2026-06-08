@@ -85,6 +85,7 @@
                                                           href="{{ route('basic-settings.profession-category.show', $category->id) }}">
                                                           <i class="fa fa-eye"></i>
                                                         </a>
+                                                      @if(delete_permission('profession_category'))
                                                       <form class="deleteSubCategory" method="post">
                                                           @csrf
                                                           @method('DELETE')
@@ -94,6 +95,7 @@
                                                               value="{{ route('basic-settings.profession-category.destroy', $category->id) }}">
                                                           <button type="submit" class="btn btn-sm btn-danger" title="Delete" data-toggle="tooltip" ><i class="fa fa-trash"></i></button>
                                                       </form>
+                                                      @endif
                                                   </div>
                                               </td>
                                           </tr>

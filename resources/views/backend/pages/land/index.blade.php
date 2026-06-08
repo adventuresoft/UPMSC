@@ -112,11 +112,13 @@
                                             <div class="table-action justify-content-center">
                                                 <a href="{{ route('land.show', $land->id) }}" class="btn btn-sm btn-info" title="View"><i class="fas fa-eye"></i></a>
                                                 <a href="{{ route('land.edit', $land->id) }}" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-edit"></i></a>
+                                                @if(delete_permission('land'))
                                                 <form action="{{ route('land.destroy', $land->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this record?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
                                                 </form>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

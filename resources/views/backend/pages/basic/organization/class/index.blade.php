@@ -73,6 +73,7 @@
                                         @if(edit_permission())
 <a class="btn btn-primary" href="{{route('basic-settings.organization-class.edit', $class->id)}}">Edit</a>
 @endif
+                                        @if(delete_permission('organization_class'))
                                         <form class="deleteClass" method="post">
                                           @csrf
                                           @method('DELETE')
@@ -80,6 +81,7 @@
                                           <input type="hidden" class="deleteUrl" name="deleteUrl" value="{{route('basic-settings.organization-class.destroy', $class->id)}}">
                                           <button type="submit" class="btn btn-danger">Delete</button>
                                         </form>
+                                        @endif
                                     </div>
                                     </td>
                                 </tr>

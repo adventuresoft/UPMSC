@@ -36,13 +36,16 @@ class PermissionSeeder extends Seeder
             'house_ownership_type',
             'house_type',
             'house_category',
+            'house_class',
             'land_type',
             'land_class',
             'land_ownership_type',
             'organization_category',
             'organization_subcategory',
+            'organization_subtype',
             'organization_work_area',
             'organization_type',
+            'organization_class',
             'organization_ownership_type',
             'post_office',
             'profession',
@@ -95,7 +98,11 @@ class PermissionSeeder extends Seeder
             'councilor',
             'role',
             'permission',
-            'user'
+            'user',
+            'country',
+            'market_type',
+            'market_category',
+            'market_ownership_type'
         ];
 
         foreach ($modules as $module) {
