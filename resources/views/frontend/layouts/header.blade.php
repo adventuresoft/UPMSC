@@ -594,7 +594,7 @@
 
         {{-- ══ TOP UTILITY BAR ══ --}}
     <div class="gov-top-bar">
-        <div class="container-fluid">
+        <div class="container-fluid container mx-auto px-5 max-w-[1200px]">
             <div class="gov-top-bar-inner">
                 <div class="gov-datetime">
                     <span><i class="far fa-calendar-alt"></i> <span id="govDate"></span></span>
@@ -607,14 +607,14 @@
 
     {{-- ══ MAIN HEADER — Emblem + Title ══ --}}
     <div class="gov-main-header">
-        <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between">
+        <div class="container-fluid container mx-auto px-5 max-w-[1200px]">
+            <div class="d-flex flex align-items-center items-center justify-content-between justify-between">
 
                 {{-- Brand --}}
                 <div class="gov-brand">
                     <img src="{{ asset('assets/images/logo/govt-bd-logo.png') }}" class="gov-emblem"
                         alt="Government of Bangladesh Emblem" onerror="this.style.display='none'">
-                    <div class="gov-brand-divider d-none d-md-block"></div>
+                    <div class="gov-brand-divider d-none d-md-block hidden md:block"></div>
                     <div class="gov-title-block">
                         <p class="gov-title-bn">সার্টিফিকেট ও লাইসেন্স ম্যানেজমেন্ট সলিউশন</p>
                         <p class="gov-title-en">Certificate and License Management Solution</p>
