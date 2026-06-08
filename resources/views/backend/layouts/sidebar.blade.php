@@ -75,7 +75,7 @@
   <!-- Brand Logo -->
   @php
       $currentLogo = asset('backend/img/AdminLTELogo.png');
-      $currentBrandText = 'UPMS';
+      $currentBrandText = 'CLMS';
 
       if (Auth::guard('web')->check() && Auth::guard('web')->user()->institute) {
           $inst = Auth::guard('web')->user()->institute;
