@@ -364,32 +364,32 @@
         এক নজরে
       </h2>
       <div class="container mx-auto max-w-4xl px-4">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 justify-items-center">
-          <div
-            class="h-full w-full max-w-[190px] rounded-lg border border-[#d8dce8] bg-[#e8ebf0]/80 px-2 py-3 text-center shadow-sm">
-            <div class="mx-auto flex h-10 w-10 items-center justify-center text-[#4459c2]">
-              <img src="{{ asset('images/union1.jpeg') }}" alt="মোট ইউনিয়ন" class="h-10 w-10 object-contain" />
+        <div class="flex flex-wrap justify-center gap-1.5 mx-auto max-w-4xl">
+
+          <div class="group flex flex-col items-center justify-center w-[calc(50%-0.375rem)] md:w-[calc(25%-0.5625rem)] max-w-[180px] rounded-xl border border-gray-200 bg-white px-3 py-4 text-center shadow-sm transition-all duration-300 hover:shadow-md hover:border-[#B0E0E6] hover:-translate-y-1">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#f0f9f0] transition-colors duration-300 group-hover:bg-[#B0E0E6]/20 overflow-hidden">
+              <img src="{{ asset('images/union1.jpeg') }}" alt="মোট ইউনিয়ন" class="h-10 w-10 object-contain" />
             </div>
-            <h3 class="mt-2 text-[10px] font-bold tracking-tight text-[#4459c2]">মোট ইউনিয়ন</h3>
-            <p class="mt-0.5 text-base font-bold tracking-tight text-[#7fbc4e]">4578</p>
+            <h3 class="mt-3 text-[12px] font-semibold leading-tight tracking-tight text-gray-700 transition-colors duration-300 group-hover:text-[#046307]">মোট ইউনিয়ন</h3>
+            <p class="mt-1 text-xl font-bold tracking-tight text-[#046307]">4578</p>
           </div>
-          <div
-            class="h-full w-full max-w-[190px] rounded-lg border border-[#d8dce8] bg-[#e8ebf0]/80 px-2 py-3 text-center shadow-sm">
-            <div class="mx-auto flex h-10 w-10 items-center justify-center text-[#4459c2]">
+
+          <div class="group flex flex-col items-center justify-center w-[calc(50%-0.375rem)] md:w-[calc(25%-0.5625rem)] max-w-[180px] rounded-xl border border-gray-200 bg-white px-3 py-4 text-center shadow-sm transition-all duration-300 hover:shadow-md hover:border-[#B0E0E6] hover:-translate-y-1">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#f0f9f0] transition-colors duration-300 group-hover:bg-[#B0E0E6]/20 overflow-hidden">
               <img src="{{ asset('images/poroshova1.jpeg') }}" alt="মোট পৌরসভা" class="h-10 w-10 object-contain" />
             </div>
-            <h3 class="mt-2 text-[10px] font-bold tracking-tight text-[#4459c2]">মোট পৌরসভা</h3>
-            <p class="mt-0.5 text-base font-bold tracking-tight text-[#7fbc4e]">330</p>
+            <h3 class="mt-3 text-[12px] font-semibold leading-tight tracking-tight text-gray-700 transition-colors duration-300 group-hover:text-[#046307]">মোট পৌরসভা</h3>
+            <p class="mt-1 text-xl font-bold tracking-tight text-[#046307]">330</p>
           </div>
-          <div
-            class="h-full w-full max-w-[190px] rounded-lg border border-[#d8dce8] bg-[#e8ebf0]/80 px-2 py-3 text-center shadow-sm">
-            <div class="mx-auto flex h-10 w-10 items-center justify-center text-[#4459c2]">
-              <img src="{{ asset('images/citykor1.jpeg') }}" alt="মোট সিটি কর্পোরেশন"
-                class="h-10 w-10 object-contain" />
+
+          <div class="group flex flex-col items-center justify-center w-[calc(50%-0.375rem)] md:w-[calc(25%-0.5625rem)] max-w-[180px] rounded-xl border border-gray-200 bg-white px-3 py-4 text-center shadow-sm transition-all duration-300 hover:shadow-md hover:border-[#B0E0E6] hover:-translate-y-1">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#f0f9f0] transition-colors duration-300 group-hover:bg-[#B0E0E6]/20 overflow-hidden">
+              <img src="{{ asset('images/citykor1.jpeg') }}" alt="মোট সিটি কর্পোরেশন" class="h-10 w-10 object-contain" />
             </div>
-            <h3 class="mt-2 text-[10px] font-bold tracking-tight text-[#4459c2]">মোট সিটি কর্পোরেশন</h3>
-            <p class="mt-0.5 text-base font-bold tracking-tight text-[#7fbc4e]">13</p>
+            <h3 class="mt-3 text-[12px] font-semibold leading-tight tracking-tight text-gray-700 transition-colors duration-300 group-hover:text-[#046307]">মোট সিটি কর্পোরেশন</h3>
+            <p class="mt-1 text-xl font-bold tracking-tight text-[#046307]">13</p>
           </div>
+
         </div>
       </div>
     </section>
@@ -441,7 +441,7 @@
           @foreach($proyojonioCards as $card)
             <a href="#"
               class="group flex flex-col items-center justify-center w-[calc(50%-0.375rem)] md:w-[calc(25%-0.5625rem)] max-w-[180px] rounded-xl border border-gray-200 bg-white px-3 py-4 text-center shadow-sm transition-all duration-300 hover:shadow-md hover:border-[#B0E0E6] hover:-translate-y-1">
-              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#f8fafc] text-[#4b5563] transition-colors duration-300 group-hover:bg-[#B0E0E6]/20 group-hover:text-[#046307]">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#f0f9f0] text-[#4b5563] transition-colors duration-300 group-hover:bg-[#B0E0E6]/20 group-hover:text-[#046307]">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true">
