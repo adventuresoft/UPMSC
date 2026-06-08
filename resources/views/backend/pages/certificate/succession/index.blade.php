@@ -107,11 +107,9 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th>Photo</th>
-                                    <th>Certificate No</th>
+                                    <th>Certificate No & Date</th>
                                     <th>ID & Name</th>
                                     <th>Address & Mobile</th>
-                                    <!-- <th>Quantity</th> -->
-                                    <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -133,7 +131,10 @@
                                             onerror="this.src='{{ asset('default.png') }}'">
                                     </td>
 
-                                    <td>{{ ($certificate->system_id) }}</td>
+                                    <td>
+                                        <strong>{{ ($certificate->system_id) }}</strong><br>
+                                        <small class="text-muted">{{ $certificate->created_at->format('d-m-Y') }}</small>
+                                    </td>
 
                                     <td>
                                         <span class="citizen-id">
@@ -156,10 +157,6 @@
                                    {{ $certificate->user?->institute?->union?->thana?->bn_name ?? '' }},
                                    {{ $certificate->user?->institute?->union?->thana?->district?->bn_name ?? '' }}।
                                     </td>
-
-                                    <!-- <td>{{ $certificate->quantity }}</td> -->
-
-                                    <td>{{ $certificate->created_at->format('d-m-Y') }}</td>
 
                                     <td>
 

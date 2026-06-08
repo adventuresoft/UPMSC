@@ -120,12 +120,10 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th>Photo</th>
-                                    <th>Certificate No</th>
+                                    <th>Certificate No & Date</th>
                                     <th>ID & Name</th>
-                                    <th>Death Date</th>
+                                    <th>Date of Death</th>
                                     <th>Cause of Death</th>
-                                    <th>Quantity</th>
-                                    <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -144,7 +142,10 @@
                                                 onerror="this.src='{{ asset('default.png') }}'">
                                         </td>
 
-                                        <td>{{ $certificate->certificate_number ?? ($certificate->system_id ?? '') }}</td>
+                                        <td>
+                                            <strong>{{ $certificate->certificate_number ?? ($certificate->system_id ?? '') }}</strong><br>
+                                            <small class="text-muted">{{ $certificate->created_at->format('d-m-Y') }}</small>
+                                        </td>
 
                                         <td>
                                             <span class="citizen-id">
@@ -160,10 +161,6 @@
                                         </td>
 
                                         <td>{{ $certificate->cause_of_death ?? 'N/A' }}</td>
-
-                                        <td>{{ $certificate->quantity ?? '' }}</td>
-
-                                        <td>{{ $certificate->created_at->format('d-m-Y') }}</td>
 
                                         <td>
                                             <a target="_blank"
@@ -188,7 +185,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="9" class="text-center text-muted">
+                                        <td colspan="7" class="text-center text-muted">
                                             No death certificates found.
                                         </td>
                                     </tr>

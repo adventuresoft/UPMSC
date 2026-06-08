@@ -141,13 +141,10 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th>Photo</th>
-                                    <th>Certificate No</th>
+                                    <th>Certificate No & Date</th>
                                     <th>ID & Name</th>
                                     <th>Address & Mobile</th>
                                     <th>Income Range</th>
-                                    <th>Reason</th>
-                                    <th>Quantity</th>
-                                    <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -166,7 +163,10 @@
                                                 onerror="this.src='{{ asset('default.png') }}'">
                                         </td>
 
-                                        <td>{{ $certificate->certificate_number ??($certificate->system_id ?? '') }}</td>
+                                        <td>
+                                        <strong>{{ $certificate->system_id }}</strong><br>
+                                        <small class="text-muted">{{ \Carbon\Carbon::parse($certificate->created_at)->format('d-m-Y') }}</small>
+                                    </td>
 
                                         <td>
                                             <span class="citizen-id">
@@ -183,10 +183,6 @@
                                         <td>{{ $certificate->income_range ?? 'N/A' }}</td>
 
                                         <td>{{ $certificate->reason ?? 'N/A' }}</td>
-
-                                        <td>{{ $certificate->quantity ?? '' }}</td>
-
-                                        <td>{{ $certificate->created_at->format('d-m-Y') }}</td>
 
                                         <td>
                                             <a target="_blank"
@@ -205,7 +201,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="10" class="empty-state">
+                                        <td colspan="100%" class="empty-state">
                                             <i class="fas fa-folder-open"></i>
                                             <h5>No certificates found</h5>
                                             <p class="text-muted">Get started by creating a new certificate.</p>

@@ -108,11 +108,9 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th>Photo</th>
-                                    <th>Certificate No</th>
+                                    <th>Certificate No & Date</th>
                                     <th>ID & Name</th>
                                     <th>Address & Mobile</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -134,7 +132,10 @@
                                             onerror="this.src='{{ asset('default.png') }}'">
                                     </td>
 
-                                    <td>{{ Value($certificate->system_id) }}</td>
+                                    <td>
+                                        <strong>{{ Value($certificate->system_id) }}</strong><br>
+                                        <small class="text-muted">{{ Value(date('d/m/Y', strtotime($certificate->created_at??date('Y/m/d')))) }}</small>
+                                    </td>
 
                                     <td>
                                         <span class="citizen-id">
@@ -153,16 +154,6 @@
                                   @endif <br>
                                    {{ $certificate->user?->institute?->union?->thana?->bn_name ?? '' }},
                                    {{ $certificate->user?->institute?->union?->thana?->district?->bn_name ?? '' }}।
-                                    </td>
-
-                                    <td>{{ Value(date('d/m/Y', strtotime($certificate->created_at??date('Y/m/d')))) }}</td>
-
-                                    <td>
-                                        @if($certificate->status == 0)
-                                            <span class="badge badge-warning">Pending</span>
-                                        @else
-                                            <span class="badge badge-success">Approved</span>
-                                        @endif
                                     </td>
 
                                     <td>
