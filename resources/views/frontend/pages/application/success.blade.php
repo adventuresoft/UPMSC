@@ -36,7 +36,7 @@
             />
             <div class="text-black text-center md:text-left">
               <h1 class="md:text-[18px] font-bold leading-tight">
-                Citizen Service Management and Central Reporting System
+                Certificate and License Management Solution
               </h1>
               <p class="text-[10px] font-medium opacity-90">Local Government Division, Local Government Ministry, Bangladesh</p>
             </div>
