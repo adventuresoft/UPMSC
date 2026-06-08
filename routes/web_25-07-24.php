@@ -98,7 +98,7 @@ use App\Http\Controllers\RoadController;
 use App\Http\Controllers\Tax\TaxController;
 use App\Http\Controllers\Tax\TaxRateController;
 use App\Http\Controllers\Tax\TaxYearController;
-use App\Http\Controllers\ThanaController;
+use App\Http\Controllers\UpazillaController;
 use App\Http\Controllers\UnionController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
@@ -132,7 +132,7 @@ Route::post('/backend/load-project-type-content', [ProjectTypeController::class,
 
 // Find Dependencies
 Route::get('/get-districts-by-division/{divisionID}', [DistrictController::class, 'districtsByDivision']);
-Route::get('/get-thanas-by-district/{districtID}', [ThanaController::class, 'thanasByDistrict']);
+Route::get('/get-thanas-by-district/{districtID}', [UpazillaController::class, 'thanasByDistrict']);
 Route::get('/get-unions-by-thana/{thanaID}', [UnionController::class, 'unionsByThana']);
 Route::get('/get-villages-by-union/{unionID}', [VillageController::class, 'villagesByUnion']);
 Route::get('/get-mouzas-by-thana/{thanaID}', [MouzaController::class, 'mouzasByThana']);

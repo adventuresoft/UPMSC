@@ -39,7 +39,9 @@
                                     <h3 class="card-title" style="font-size:24px; font-weight: semi-bold;">Land Information</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
+                                    @if(create_permission('land'))
                                     <a href="{{route('land.create')}}" class="btn btn-primary">Create</a>
+                                    @endif
                                     <a href="{{route('land.index')}}" class="btn btn-primary">List</a>
                                 </div>
                             </div>
@@ -110,8 +112,12 @@
                                         <td class="text-center">{{ $land->owner_id }} - {{ $ownerName }}</td>
                                         <td class="text-center">
                                             <div class="table-action justify-content-center">
+                                                @if(view_permission('land'))
                                                 <a href="{{ route('land.show', $land->id) }}" class="btn btn-sm btn-info" title="View"><i class="fas fa-eye"></i></a>
+                                                @endif
+                                                @if(edit_permission('land'))
                                                 <a href="{{ route('land.edit', $land->id) }}" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-edit"></i></a>
+                                                @endif
                                                 @if(delete_permission('land'))
                                                 <form action="{{ route('land.destroy', $land->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this record?');">
                                                     @csrf

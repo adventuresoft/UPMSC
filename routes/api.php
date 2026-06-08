@@ -4,7 +4,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\BasicSettings\VillageController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\HouseController;
-use App\Http\Controllers\ThanaController;
+use App\Http\Controllers\UpazillaController;
 use App\Http\Controllers\UnionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +28,6 @@ Route::post('application-store', [ApplicationController::class, 'store']);
 Route::get('/house-options/{id}', [HouseController::class, 'options']);
 Route::get('/get-villages-by-union/{unionID}', [VillageController::class, 'villagesByUnion']);
 Route::get('/get-districts-by-division/{divisionID}', [DistrictController::class, 'districtsByDivision']);
-Route::get('/get-thanas-by-district/{districtID}', [ThanaController::class, 'thanasByDistrict']);
+Route::get('/get-thanas-by-district/{districtID}', [UpazillaController::class, 'thanasByDistrict']);
 Route::get('/get-unions-by-thana/{thanaID}', [UnionController::class, 'unionsByThana']);
 

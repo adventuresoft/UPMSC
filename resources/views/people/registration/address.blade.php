@@ -73,7 +73,63 @@
 @push('script')
 <script>
     $(document).ready(function() {
-        // Implement dependent dropdowns logic here or use existing global listeners
+        // Initialize select2
+        $('.select2-division').select2();
+        $('.select2-district').select2();
+
+        // Division → District
+        $(document).on('change', '.select2-division', function(e){
+            e.preventDefault();
+            let division_id = $(this).val();
+            let targetDistrictId = $(this).data('target');
+            let $district = $('#' + targetDistrictId);
+            let $thana = $('#' + targetDistrictId.replace('district', 'thana'));
+
+            if ($thana) {
+                $thana.html('<option value="">নির্বাচন করুন</option>');
+            }
+
+            if (division_id) {
+                $district.prop('disabled', true).html('<option value="">লোড হচ্ছে...</option>');
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("/get-districts-by-division") }}/' + division_id,
+                    success: function(response) {
+                        $district.html(response).prop('disabled', false);
+                    },
+                    error: function() {
+                        $district.html('<option value="">নির্বাচন করুন</option>').prop('disabled', false);
+                    }
+                });
+            } else {
+                $district.html('<option value="">নির্বাচন করুন</option>').prop('disabled', true);
+            }
+        });
+
+        // District → Thana
+        $(document).on('change', '.select2-district', function(e){
+            e.preventDefault();
+            let district_id = $(this).val();
+            let targetThanaId = $(this).data('target');
+            let $thana = $('#' + targetThanaId);
+
+            if (district_id) {
+                $thana.prop('disabled', true).html('<option value="">লোড হচ্ছে...</option>');
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url("/get-thanas-by-district") }}/' + district_id,
+                    success: function(response) {
+                        $thana.html(response).prop('disabled', false);
+                    },
+                    error: function() {
+                        $thana.html('<option value="">নির্বাচন করুন</option>').prop('disabled', false);
+                    }
+                });
+            } else {
+                $thana.html('<option value="">নির্বাচন করুন</option>').prop('disabled', true);
+            }
+        });
+
         $("#citizenAddressForm").on('submit', function(e) {
             e.preventDefault();
             let thisForm = $(this);
@@ -93,7 +149,7 @@
                 },
                 error: function(xhr) {
                     var responseText = jQuery.parseJSON(xhr.responseText);
-                    toastr.error(responseText.message || "ত্রুটি হয়েছে");
+                    toastr.error(responseText.message || "ত্রুটি হয়েছে");
                 }
             });
         });

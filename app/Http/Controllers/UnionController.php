@@ -20,7 +20,26 @@ class UnionController extends Controller
 
         if(count($unions)) {
             foreach ($unions as $union) {
-               $html .='<option value="'.$union->id.'">'.$union->name.'</option>';
+               $html .='<option value="'.$union->id.'">'.($union->bn_name ?: $union->name).'</option>';
+            }
+        }
+
+        return $html;
+    }
+
+    public function unionsByThana(Request $request, $id)
+    {
+        $html = '<option value="">ইউনিয়ন নির্বাচন করুন</option>';
+
+        $unions = Union::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
+            ->where('status', true)
+            ->where('thana_id', $id)
+            ->orderBy('name')
+            ->get();
+
+        if(count($unions)) {
+            foreach ($unions as $union) {
+               $html .='<option value="'.$union->id.'">'.($union->bn_name ?: $union->name).'</option>';
             }
         }
 

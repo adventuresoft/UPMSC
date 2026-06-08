@@ -38,6 +38,14 @@
             }
         }
     </style>
+    <style>
+        .select2-hidden-accessible {
+            display: none !important;
+        }
+        .select2-container {
+            width: 100% !important;
+        }
+    </style>
   </head>
   <body class="bg-[#f3f4f6] font-inter">
     <!-- top bar -->
@@ -487,9 +495,21 @@
         }
 
         $(document).ready(function() {
-            $('.select2').select2({
-                width: '100%'
-            });
+            console.log('Document ready! Initializing...');
+            
+            // First initialize all select2 elements
+            function initAllSelect2() {
+                $('.select2').each(function() {
+                    var $el = $(this);
+                    if (!$el.hasClass('select2-hidden-accessible')) {
+                        $el.select2({ width: '100%' });
+                    }
+                });
+            }
+            
+            initAllSelect2();
+            
+            console.log('All select2 initialized!');
 
             function calculateAge(dob) {
                 if (!dob) return '';
@@ -556,6 +576,8 @@
                 let prefix = _this_id.split("_")[0];
                 let val = _this.val();
 
+                console.log('Change detected on:', _this_id, 'prefix:', prefix, 'value:', val);
+
                 if (_this_id.includes('division')) {
                     findDistrict(val, prefix);
                 } else if (_this_id.includes('district')) {
@@ -568,17 +590,21 @@
             });
 
             function refreshSelect2(selector) {
+                console.log('Refreshing select2 for:', selector);
                 var $el = $(selector);
                 if ($el.hasClass('select2-hidden-accessible')) {
-                    $el.trigger('change');
-                } else {
-                    $el.select2({ width: '100%' });
+                    console.log('Destroying existing select2');
+                    $el.select2('destroy');
                 }
+                console.log('Initializing new select2');
+                $el.select2({ width: '100%' });
             }
 
             function findDistrict(division, prefix) {
                 if (!division) return;
+                console.log('findDistrict called, division:', division, 'prefix:', prefix);
                 $.get("{{ url('/get-districts-by-division') }}/" + division, {id: prefix}, function(res) {
+                    console.log('findDistrict response:', res);
                     var $el = $('#' + prefix + "_district");
                     $el.html(res);
                     refreshSelect2($el);
@@ -588,16 +614,22 @@
 
             function findThana(district, prefix) {
                 if (!district) return;
+                console.log('findThana called with district:', district, 'prefix:', prefix);
                 $.get("{{ url('/get-thanas-by-district') }}/" + district, {id: prefix}, function(res) {
+                    console.log('Received response from get-thanas-by-district:', res);
                     var $el = $('#' + prefix + "_thana");
+                    console.log('Target element length:', $el.length);
                     $el.html(res);
                     refreshSelect2($el);
                     $el.trigger('change');
+                }).fail(function(xhr, status, error) {
+                    console.error('Error fetching thanas:', xhr.responseText || error);
                 });
             }
 
             function findThanaDependencies(thana, prefix) {
                 if (!thana) return;
+                console.log('findThanaDependencies called, thana:', thana, 'prefix:', prefix);
                 // Load Unions
                 $.get("{{ url('/get-unions-by-thana') }}/" + thana, {id: prefix}, function(res) {
                     var $el = $('#' + prefix + "_union");

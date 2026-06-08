@@ -10,13 +10,13 @@ class DistrictController extends Controller
 
     public function districtsByDivision(Request $request, $id)
     {
-        $html = '<option value="">Select District</option>';
+        $html = '<option value="">জেলা নির্বাচন করুন</option>';
 
         $districts = District::where('division_id', $id)->get();
 
         if(count($districts)) {
             foreach ($districts as $district) {
-               $html .='<option value="'.$district->id.'">'.$district->name.'</option>';
+               $html .='<option value="'.$district->id.'">'.($district->bn_name ?: $district->name).'</option>';
             }
         }
 

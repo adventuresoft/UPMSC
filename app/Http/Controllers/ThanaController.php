@@ -10,13 +10,13 @@ class ThanaController extends Controller
 
     public function thanasByDistrict(Request $request, $id)
     {
-        $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Thana</option>';
+        $html = '<option value="">উপজেলা নির্বাচন করুন</option>';
 
         $thanas = Thana::where('district_id', $id)->get();
 
         if(count($thanas)) {
             foreach ($thanas as $thana) {
-               $html .='<option value="'.$thana->id.'">'.$thana->name.'</option>';
+               $html .='<option value="'.$thana->id.'">'.($thana->bn_name ?: $thana->name).'</option>';
             }
         }
 

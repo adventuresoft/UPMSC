@@ -222,10 +222,13 @@ Route::post('/backend/load-project-type-content', [ProjectTypeController::class,
 // Find Dependencies
 Route::get('/get-districts-by-division/{divisionID}', [DistrictController::class, 'districtsByDivision']);
 Route::get('/get-upazillas-by-district/{districtID}', [UpazillaController::class, 'upazillasByDistrict']);
+Route::get('/get-thanas-by-district/{districtID}', [UpazillaController::class, 'thanasByDistrict']);
 Route::get('/get-post-offices-by-upazilla/{upazillaID}', [PostOfficeController::class, 'postOfficesByUpazilla']);
+Route::get('/get-post-offices-by-thana/{thanaID}', [PostOfficeController::class, 'postOfficesByUpazilla']);
 Route::get('/get-word-by-union/{unionID}', [UnionWardController::class, 'wordByUnion']);
 Route::get('/get-citi-corporation-by-district/{districtID}', [CityCorporationController::class, 'cityCorporationByDistrict']);
 Route::get('/get-unions-by-upazilla/{upazillaID}', [UnionController::class, 'unionsByUpazilla']);
+Route::get('/get-unions-by-thana/{thanaID}', [UnionController::class, 'unionsByThana']);
 Route::get('/get-villages-by-union/{unionID}', [VillageController::class, 'villagesByUnion']);
 Route::get('/get-mouzas-by-upazilla/{upazillaID}', [MouzaController::class, 'mouzasByUpazilla']);
 Route::get('/get-areas-by-village/{villageID}', [VillageAreaController::class, 'areasByVillage']);

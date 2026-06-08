@@ -10,17 +10,22 @@ class UpazillaController extends Controller
 
     public function upazillasByDistrict(Request $request, $id)
     {
-        $html = '<option value="">Select '.($request->id ? ucfirst($request->id) : '').' Upazilla</option>';
+        $html = '<option value="">উপজেলা নির্বাচন করুন</option>';
 
         $upazillas = Upazilla::where('district_id', $id)->get();
 
         if(count($upazillas)) {
             foreach ($upazillas as $upazilla) {
-               $html .='<option value="'.$upazilla->id.'">'.$upazilla->name.'</option>';
+               $html .='<option value="'.$upazilla->id.'">'.($upazilla->bn_name ?: $upazilla->name).'</option>';
             }
         }
 
         return $html;
+    }
+
+    public function thanasByDistrict(Request $request, $id)
+    {
+        return $this->upazillasByDistrict($request, $id);
     }
 
 
