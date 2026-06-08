@@ -37,6 +37,11 @@
                             <div class="col-md-6">
                                 <h3 class="card-title font-bold text-lg"><i class="fas fa-hand-holding-heart mr-2"></i>Relief Card Applications</h3>
                             </div>
+                            <div class="col-md-6 text-right">
+                                <a href="{{ route('relief-card.create') }}" class="btn btn-sm btn-light font-bold text-pink-700 shadow-sm">
+                                    <i class="fas fa-plus mr-2"></i> Create New
+                                </a>
+                            </div>
                         </div>
                     </div>
 

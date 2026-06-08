@@ -603,9 +603,11 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
 
     // Relief Card Routes (Admin)
     Route::get('relief-card', [ReliefCardController::class, 'index'])->name('relief-card.index');
-    Route::post('relief-card/approve', [ReliefCardController::class, 'approve'])->name('relief-card.approve');
-    Route::post('relief-card/reject', [ReliefCardController::class, 'reject'])->name('relief-card.reject');
-    Route::delete('relief-card/{id}', [ReliefCardController::class, 'destroy'])->name('relief-card.destroy');
+                Route::get('relief-card/create', [ReliefCardController::class, 'create'])->name('relief-card.create');
+                Route::post('relief-card', [ReliefCardController::class, 'store'])->name('relief-card.store');
+                Route::post('relief-card/approve', [ReliefCardController::class, 'approve'])->name('relief-card.approve');
+                Route::post('relief-card/reject', [ReliefCardController::class, 'reject'])->name('relief-card.reject');
+                Route::delete('relief-card/{id}', [ReliefCardController::class, 'destroy'])->name('relief-card.destroy');
 
 });
 

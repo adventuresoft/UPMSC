@@ -18,6 +18,7 @@
                     <div class="dropdown-menu dropdown-menu-right shadow-lg border-0 rounded-xl mt-2">
                         <a class="dropdown-item py-2 px-4 text-sm font-medium hover:bg-gray-50" href="{{ route('people.applications.certificate.create') }}">সনদপত্র আবেদন</a>
                         <a class="dropdown-item py-2 px-4 text-sm font-medium hover:bg-gray-50" href="{{ route('people.applications.trade-license.create') }}">ট্রেড লাইসেন্স আবেদন</a>
+                        <a class="dropdown-item py-2 px-4 text-sm font-medium hover:bg-gray-50" href="{{ route('people.applications.relief-card.create') }}">রিলিফ কার্ড আবেদন</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item py-2 px-4 text-sm font-medium hover:bg-gray-50 text-gray-400" href="#">অন্যান্য (শীঘ্রই আসছে)</a>
                     </div>
