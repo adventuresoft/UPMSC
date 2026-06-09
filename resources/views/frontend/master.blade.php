@@ -55,6 +55,7 @@
             @yield('content')
         </section>
         <!-- Footer Top Section-->
+        @include('frontend.layouts.footer')
     </div>
 
     <nav class="main-menu" id="mmmenu">

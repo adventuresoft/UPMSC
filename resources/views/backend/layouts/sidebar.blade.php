@@ -65,6 +65,9 @@
     padding-top: 1px !important;
     padding-bottom: 1px !important;
   }
+  .nav-sidebar .nav-treeview > .nav-item > .nav-link > .nav-icon {
+    font-size: 10px !important;
+  }
   .nav-sidebar p {
     margin-bottom: 0 !important;
   }
