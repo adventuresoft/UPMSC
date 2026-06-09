@@ -188,7 +188,7 @@
                     </div>
 
                     <div class="col-8 text-center">
-                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -16px; line-height: 1;">
+                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; ">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
                         @php
@@ -206,13 +206,13 @@
                                 $districtBn = $institute->cityCorporation->District->bn_name ?? '';
                             }
                         @endphp
-                        <h2 class="text-success font-weight-bold mb-0" style="font-size:23px; line-height: 1.1; margin-top: -10px;">
+                        <h2 class="text-success font-weight-bold mb-0" style="font-size:23px; ">
                             {{ $auth->bn_name ?? '' }}
                         </h2>
-                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:-5px; font-size:24px; line-height: 1.1;">
+                        <h3 class="font-weight-bold" style="color:#2e3192;  font-size:24px; line-height: 1.1;">
                             {{ $auth->name ?? '' }}
                         </h3>
-                        <p class="mb-0" style="font-size:15px; margin-top:-2px; line-height: 1.2;">
+                        <p class="mb-0" style="font-size:15px; ">
                             @if($thanaBn) উপজেলাঃ {{ $thanaBn }}, @endif
                             জেলাঃ {{ $districtBn }},
                             বাংলাদেশ।

@@ -129,16 +129,16 @@
                     </div>
 
                     <div class="col-8 text-center">
-                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -16px; line-height: 1;">
+                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; ">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
-                        <h2 class="text-success font-weight-bold mb-0" style="font-size:28px; line-height: 1.1; margin-top: -10px;">
+                        <h2 class="text-success font-weight-bold mb-0" style="font-size:28px; ">
                             {{ $certificate->user->institute->union->bn_name ?? '' }}
                         </h2>
-                        <h3 class="font-weight-bold" style="color:#2e3192; margin-top:-5px; font-size:29px; line-height: 1.1;">
+                        <h3 class="font-weight-bold" style="color:#2e3192;  font-size:29px; line-height: 1.1;">
                             {{ $certificate->user->institute->union->name ?? '' }}
                         </h3>
-                        <p class="mb-0" style="font-size:15px; margin-top:-2px; line-height: 1.2;">
+                        <p class="mb-0" style="font-size:15px; ">
                             থানাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
                             বাংলাদেশ।

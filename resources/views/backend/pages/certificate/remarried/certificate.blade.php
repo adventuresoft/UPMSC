@@ -138,7 +138,7 @@
                         <h2 class="text- font-Nikosh-bold mb-0" style="font-size:20px;"> গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h2>
                         <h2 class="text-success font-weight-bold mb-0" style="font-size:32px;">৩নং শুকতাইল ইউনিয়ন পরিষদ</h2>
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:35px;">No. 3 Suktail Union Parishad</h3>
-                        <p class="mb-0" style="font-size:15px; margin-top:-2px; line-height: 1.2;">
+                        <p class="mb-0" style="font-size:15px; ">
                            Thana: <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,
                             District: <span>{{ $certificate->user->institute->union->thana->district->name ?? '' }}</span>, Bangladesh.
                         </p>
