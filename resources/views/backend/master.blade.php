@@ -100,19 +100,20 @@
         opacity: 1 !important;
     }
 
-    /* Set sidebar to a good width first */
-    .main-sidebar {
-        width: 250px !important;
-        max-width: 250px !important;
-        min-width: 250px !important;
-        overflow: visible !important; /* Allow everything to show */
-        padding: 0 !important;
-        margin: 0 !important;
+    /* Set sidebar to a good width first for desktop */
+    @media (min-width: 992px) {
+        .main-sidebar {
+            width: 250px !important;
+        }
+        body:not(.sidebar-collapse) .content-wrapper,
+        body:not(.sidebar-collapse) .main-footer,
+        body:not(.sidebar-collapse) .main-header {
+            margin-left: 250px !important;
+        }
     }
     .sidebar {
         max-height: calc(100vh - 70px);
         overflow-y: auto !important;
-        overflow-x: visible !important; /* Allow submenus to show */
         /* Hide scrollbars but keep functionality */
         scrollbar-width: none; /* Firefox */
         -ms-overflow-style: none; /* IE and Edge */
@@ -129,12 +130,6 @@
     .os-scrollbar {
         opacity: 0 !important;
         pointer-events: none !important;
-    }
-    /* Adjust content wrapper to fit sidebar */
-    body:not(.sidebar-collapse) .content-wrapper,
-    body:not(.sidebar-collapse) .main-footer,
-    body:not(.sidebar-collapse) .main-header {
-        margin-left: 250px !important;
     }
 
     @media print {
