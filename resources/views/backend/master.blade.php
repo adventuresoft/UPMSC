@@ -279,6 +279,13 @@ width:100%!important;
     }
   </style>
   @stack('style')
+
+  <style>
+    @font-face {
+        font-family: 'Kalpurush-Bold';
+        src: url('{{ asset("clientAdmin/fonts/Kalpurush-Bold.ttf") }}') format('truetype');
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     @if(Auth::guard('web')->check())

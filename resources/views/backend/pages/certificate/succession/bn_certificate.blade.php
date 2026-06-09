@@ -188,7 +188,7 @@
                     </div>
 
                     <div class="col-8 text-center">
-                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; ">
+                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -10px;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
                         @php
@@ -206,7 +206,7 @@
                                 $districtBn = $institute->cityCorporation->District->bn_name ?? '';
                             }
                         @endphp
-                        <h2 class="text-success font-weight-bold mb-0" style="font-size:23px; ">
+                        <h2 class="text-success font-weight-bold mb-0" style="font-family: 'Kalpurush-Bold', sans-serif; font-size:23px; ">
                             {{ $auth->bn_name ?? '' }}
                         </h2>
                         <h3 class="font-weight-bold" style="color:#2e3192;  font-size:24px; line-height: 1.1;">

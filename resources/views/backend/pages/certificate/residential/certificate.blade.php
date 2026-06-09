@@ -136,8 +136,8 @@
                     </div>
 
                     <div class="col-8 text-center">
-                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:20px;"> গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h2>
-                        <h2 class="text-success font-weight-bold mb-0" style="font-size:32px;">{{ $certificate->user->institute->union->bn_name ?? '' }}</h2>
+                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:20px; position: relative; top: -10px;"> গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</h2>
+                        <h2 class="text-success font-weight-bold mb-0" style="font-family: 'Kalpurush-Bold', sans-serif; font-size:32px;">{{ $certificate->user->institute->union->bn_name ?? '' }}</h2>
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:35px;">{{ $certificate->user->institute->union->name ?? '' }}</h3>
                         <p class="mb-0" style="font-size:15px; ">
                             Thana: <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,

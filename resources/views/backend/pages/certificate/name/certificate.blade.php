@@ -142,7 +142,7 @@
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:30px;">
                             {{ $certificate->user->institute->union->name ?? '' }}
                         </h3>
-                        <h2 class="text-success font-Nikosh-bold mb-0" style="font-size:28px;">
+                        <h2 class="text-success font-Nikosh-bold mb-0" style="font-family: 'Kalpurush-Bold', sans-serif; font-size:28px;">
                             {{ $certificate->user->institute->union->bn_name ?? '' }}
                         </h2>
                         <p class="mb-0" style="font-size:15px;">

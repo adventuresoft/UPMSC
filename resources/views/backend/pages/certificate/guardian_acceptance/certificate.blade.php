@@ -152,7 +152,7 @@
                         <h2 class="mb-0" style="font-size:20px; font-weight: normal; color: #000;">
                             Government of the People's Republic of Bangladesh
                         </h2>
-                        <h2 class="text-success font-weight-bold mb-0" style="font-size:32px; margin-top: 5px;">
+                        <h2 class="text-success font-weight-bold mb-0" style="font-family: 'Kalpurush-Bold', sans-serif; font-size:32px; margin-top: 5px;">
                             {{ $union->bn_name ?? '' }}
                         </h2>
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:30px;">

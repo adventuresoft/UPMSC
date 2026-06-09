@@ -130,7 +130,7 @@
                     </div>
 
                     <div class="col-8 text-center">
-                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; ">
+                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -10px;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
                         <h2 class="text-success font-weight-bold mb-0" style="font-size:28px; ">

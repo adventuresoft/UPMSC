@@ -209,7 +209,7 @@
                         <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:23px;">
                             {{ $auth->name ?? '' }}
                         </h3>
-                        <h4 class="text-success font-Nikosh-bold mb-0" style="font-size:24px;">
+                        <h4 class="text-success font-Nikosh-bold mb-0" style="font-family: 'Kalpurush-Bold', sans-serif; font-size:24px;">
                             {{ $auth->bn_name ?? '' }}
                         </h4>
                         <p class="mb-0" style="font-size:15px;">
