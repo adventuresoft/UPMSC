@@ -30,6 +30,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use App\Services\PeopleCredentialService;
 use App\Services\AdaReachSmsService;
+use App\Jobs\SendApprovalSms;
 
 class PeopleController extends Controller
 {
@@ -268,7 +269,7 @@ class PeopleController extends Controller
         $this->applyUnionAdminPeopleFilter($query);
         $query->applyMultitenancy();
 
-        $user = auth()->user();
+        $user = Auth::user();
         $permittedAreas = collect();
         $permittedWards = \App\Models\UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
             ->where('status', true)
@@ -359,7 +360,7 @@ class PeopleController extends Controller
 
     protected function applyUnionAdminPeopleFilter(&$query)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         if (!$user || $user->role_id != 6) {
             return;
         }
@@ -872,29 +873,22 @@ class PeopleController extends Controller
             DB::commit();
             Log::info('[PeopleApproval] Transaction committed');
 
-            // ── Send welcome SMS ──────────────────────────────────────────
-            $smsSent = false;
-            $smsError = null;
+            // Send SMS via Queue (Async)
             $phone = $people->user->mobile ?? $people->mobile;
-
             if ($phone) {
-                Log::info('[PeopleApproval] Sending SMS', ['phone' => $phone]);
-                $smsMessage = AdaReachSmsService::buildApprovalMessage(
+                SendApprovalSms::dispatch(
+                    $people->id,
                     $people->user->name ?? ($people->bn_name ?? ($people->name ?? 'Citizen')),
                     $loginId,
                     $password,
-                    $approvedId
+                    $approvedId,
+                    $phone
                 );
-                $smsResult = $this->smsService->send($phone, $smsMessage);
-                $smsSent = $smsResult['success'] ?? false;
-                $smsError = !$smsSent ? ($smsResult['response']['description'] ?? 'API Error') : null;
-                Log::info('[PeopleApproval] SMS dispatch finished', ['success' => $smsSent]);
             }
 
             return response()->json([
                 'status' => true,
                 'message' => 'Approved Successfully!',
-                'sms_status' => $smsSent,
                 'people_id' => $approvedId,
                 'redirect_url' => route('peopleapprovedlist')
             ], 200);

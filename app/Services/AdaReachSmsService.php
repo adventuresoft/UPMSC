@@ -72,7 +72,8 @@ class AdaReachSmsService
             Log::info('[AdaReachSMS] Sending request', ['payload' => $payload]);
 
             $response = Http::withoutVerifying()
-                ->timeout(20)
+                ->timeout(60)  // Increased from 20 → 60 seconds
+                ->connectTimeout(30)
                 ->withHeaders([
                     'Authorization' => "Bearer {$token}",
                     'Content-Type'  => 'application/json',
@@ -167,7 +168,8 @@ class AdaReachSmsService
     {
         try {
             $response = Http::withoutVerifying()
-                ->timeout(15)
+                ->timeout(60)  // Increased from 15 → 60 seconds
+                ->connectTimeout(30)
                 ->withHeaders(['Content-Type' => 'application/json'])
                 ->post("{$this->baseUrl}/auth/tokens", [
                     'username' => $this->username,
@@ -197,7 +199,8 @@ class AdaReachSmsService
     {
         try {
             $response = Http::withoutVerifying()
-                ->timeout(15)
+                ->timeout(60)  // Increased from 15 → 60 seconds
+                ->connectTimeout(30)
                 ->withHeaders([
                     'Content-Type'  => 'application/json',
                     'Authorization' => "Bearer {$refreshToken}",

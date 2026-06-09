@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\AddressInfoController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApplicationController;
@@ -603,11 +604,15 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
 
     // Relief Card Routes (Admin)
     Route::get('relief-card', [ReliefCardController::class, 'index'])->name('relief-card.index');
-                Route::get('relief-card/create', [ReliefCardController::class, 'create'])->name('relief-card.create');
-                Route::post('relief-card', [ReliefCardController::class, 'store'])->name('relief-card.store');
-                Route::post('relief-card/approve', [ReliefCardController::class, 'approve'])->name('relief-card.approve');
-                Route::post('relief-card/reject', [ReliefCardController::class, 'reject'])->name('relief-card.reject');
-                Route::delete('relief-card/{id}', [ReliefCardController::class, 'destroy'])->name('relief-card.destroy');
+    Route::get('relief-card/create', [ReliefCardController::class, 'create'])->name('relief-card.create');
+    Route::post('relief-card', [ReliefCardController::class, 'store'])->name('relief-card.store');
+    Route::get('relief-card/{id}/edit', [ReliefCardController::class, 'edit'])->name('relief-card.edit');
+    Route::put('relief-card/{id}', [ReliefCardController::class, 'update'])->name('relief-card.update');
+    Route::post('relief-card/approve', [ReliefCardController::class, 'approve'])->name('relief-card.approve');
+    Route::post('relief-card/reject', [ReliefCardController::class, 'reject'])->name('relief-card.reject');
+    Route::post('relief-card/update-status', [ReliefCardController::class, 'updateStatus'])->name('relief-card.update-status');
+    Route::post('relief-card/delete-ward', [ReliefCardController::class, 'deleteWard'])->name('relief-card.delete-ward');
+    Route::delete('relief-card/{id}', [ReliefCardController::class, 'destroy'])->name('relief-card.destroy');
 
 });
 
@@ -689,4 +694,53 @@ Route::get('upload/{path}', function ($path) {
     }
     abort(404);
 })->where('path', '.*');
+
+
+// Cache Clear Route (Only for Authenticated Admins)
+Route::middleware('auth')->group(function () {
+    Route::get('/clear-cache', function () {
+        // Clear all caches
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        return redirect()->back()->with('success', 'Cache cleared successfully!');
+    })->name('clear-cache');
+    
+    // API Connectivity Test Route
+    Route::get('/test-sms-api', function () {
+        $baseUrl = config('sms.adarreach_base_url', 'https://api.mobireach.com.bd');
+        $results = [];
+        
+        // Test 1: DNS resolution
+        $host = parse_url($baseUrl, PHP_URL_HOST);
+        $ip = gethostbyname($host);
+        $results['dns'] = "Host {$host} resolves to {$ip}";
+        
+        // Test 2: cURL to API
+        try {
+            $ch = curl_init($baseUrl . '/auth/tokens');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $error = curl_error($ch);
+            curl_close($ch);
+            
+            $results['http'] = "HTTP Response: {$httpCode}";
+            if ($error) {
+                $results['http_error'] = $error;
+            }
+        } catch (\Throwable $e) {
+            $results['http_exception'] = $e->getMessage();
+        }
+        
+        return response()->json([
+            'base_url' => $baseUrl,
+            'tests' => $results
+        ]);
+    })->name('test-sms-api');
+});
 
