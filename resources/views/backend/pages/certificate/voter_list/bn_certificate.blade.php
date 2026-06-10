@@ -76,31 +76,47 @@
         }
 
         html, body {
-            width: 297mm !important;
-            height: 210mm !important;
+            width: 100% !important;
+            height: auto !important;
             margin: 0 !important;
             padding: 0 !important;
-            overflow: hidden !important;
+            overflow: visible !important;
             background: #ffffff !important;
         }
 
-        .container {
-            width: 297mm !important;
-            max-width: 297mm !important;
-            height: 210mm !important;
+        .content-wrapper,
+        .wrapper {
+            background: #ffffff !important;
             padding: 0 !important;
             margin: 0 !important;
-            overflow: hidden !important;
         }
 
-        
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: visible !important;
+        }
+
+        .certificate-card,
+        .certificate-body,
+        .inner-frame {
+            page-break-inside: avoid !important;
+            overflow: visible !important;
+            box-sizing: border-box !important;
+        }
+
+        .certificate-bg {
+            display: block !important;
+        }
 
         .main-header,
         .main-sidebar,
         .main-footer,
         .content-header,
-        .content-wrapper,
-        .wrapper,
+        .page-footer,
         .app-footer {
             display: none !important;
         }
@@ -109,6 +125,15 @@
         #cancelPageButton,
         .btn {
             display: none !important;
+        }
+
+        .badge {
+            color: #ffffff !important;
+            background-color: #2F318C !important;
+        }
+
+        .text-light {
+            color: #ffffff !important;
         }
     }
 </style>

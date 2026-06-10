@@ -5,22 +5,84 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Character Certificate</title>
-
+    <link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}">
     <style>
+        .container {
+            max-width: 100% !important;
+        }
+
         body {
-            background-color: #00000008 !important;
+            background-color: #ffffff !important;
             padding: 0;
             margin: 0;
         }
 
-        .first-border {
-            border: 1px solid black;
-            padding: 1rem;
+        .certificate-card {
+            max-width: 100%;
+            margin: 0 auto;
+            width: 297mm;
+            height: 210mm;
+            position: relative;
+            overflow: hidden;
         }
 
-        .second-border {
-            border: 1px solid #17a2b8;
-            padding: 1rem;
+        .certificate-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .certificate-body {
+            width: 100%;
+            height: 100%;
+            padding: 15mm;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .inner-frame {
+            border: 0px solid #0dcaf0;
+            height: 100%;
+            padding: 15mm;
+            position: relative;
+        }
+
+        .certificate-footer {
+            position: absolute;
+            bottom: 8px;
+            left: 15mm;
+            right: 15mm;
+            font-size: 11px;
+            text-align: left;
+            opacity: 0.9;
+        }
+
+        .certificate-signature {
+            position: absolute;
+            bottom: 14mm;
+            left: 15mm;
+            right: 15mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .certificate-signature .qr-code img {
+            height: 100px;
+            width: 100px;
+        }
+
+        .certificate-signature .chairman {
+            text-align: center;
+            font-weight: 600;
+            margin-right: 10mm;
         }
 
         .text-center {
@@ -35,34 +97,21 @@
             text-align: left;
         }
 
-        .text-danger {
-            color: #dc3545;
-        }
-
-        .bg-success {
-            background-color: #28a745;
-        }
-
-        .bg-blue {
-            background-color: #28a745;
-        }
-        .text-green{
+        .text-success {
             color: #28a745;
         }
-        .text-blue{
-            color: #1a73e8
+
+        .text-danger {
+            color: #dc3545;
         }
 
         .text-light {
             color: #fff;
         }
 
-
-        .wrapper {
-            background-color: #ffffff;
+        .bg-success {
+            background-color: #28a745;
         }
-
-
 
         .ml-2 {
             padding-left: 2rem;
@@ -71,133 +120,170 @@
         .mr-2 {
             padding-right: 2rem;
         }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-sizing: border-box !important;
+            }
+
+            @page {
+                size: A4 landscape;
+                margin: 0 !important;
+            }
+
+            html,
+            body {
+                width: 297mm !important;
+                height: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                background: #ffffff !important;
+            }
+
+            .container {
+                width: 297mm !important;
+                max-width: 297mm !important;
+                height: 210mm !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: hidden !important;
+            }
+
+            .certificate-card,
+            .certificate-body,
+            .inner-frame {
+                page-break-inside: avoid !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="wrapper">
-            <div class="first-border">
-                <div class="second-border">
-                    <div class="card">
-                        <div class="card-body">
-                            <table>
+    <div class="container p-0">
+        <div class="certificate-card">
+            <img src="{{ asset('images/bg-images.jpeg') }}" alt="" class="certificate-bg">
+            <div class="certificate-body">
+                <div class="inner-frame">
 
-                                <thead>
-                                    <tr>
-                                        <td colspan="3" class="text-center">
-                                            <img height="90" width="90" class="mx-auto d-block"
-                                                src="{{ imageUrl($certificate->user->institute->top_image) }}"
-                                                alt="top_image">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-right mr-2">
-
-                                            <img height="90" width="90" class="mx-auto d-block"
-                                                src="{{ imageUrl($certificate->user->institute->left_image) }}"
-                                                alt="left_image">
-                                            <h4 class="text-success mt-4 text-green">No. : {{ $certificate->system_id ?? '' }}</h4>
-                                        </td>
-                                        <td class="text-center">
-                                            <h2 >
-                                                <strong class="text-danger bold">
-                                                    {{ $certificate->user->institute->union->name ?? '' }}
-                                                </strong> 
-                                                <br>
-                                                <span style="font-size: 14px">
-                                                    PS.:- <strong
-                                                        class="text-blue">{{ $certificate->user->institute->union->thana->name ?? '' }}</strong>,
-                                                    Dist.:- <strong
-                                                        class="text-blue">{{ $certificate->user->institute->union->thana->district->name ?? '' }}</strong>,
-                                                    <strong class="text-blue">Dhaka</strong>, Bangladesh.
-                                                </span>
-                                            </h2>
-                                            
-                                            <h3 class="text-light bg-success bold">Character  Certificate</h3>
-                                        </td>
-                                        <td class="text-left ml-2">
-                                            <img height="90" width="90" class="mx-auto d-block"
-                                                src="{{ imageUrl($certificate->user->institute->right_image) }}"
-                                                alt="right_image">
-
-                                            <h4 class="text-success mt-4">Date :
-                                                {{ date('d.m.Y', strtotime($certificate->created_at)) }}
-                                            </h4>
-                                        </td>
-                                    </tr>
-
-                                </thead>
-
-
-                                <tbody>
-                                    <tr>
-                                        <td colspan="3">
-                                            <p>This is to certify that <strong
-                                                    class="text-blue">{{ $certificate->user->name ?? '' }}</strong>
-                                                Id no.: <strong class="text-blue">
-                                                    {{ $certificate->user->system_id ?? '' }}</strong>
-                                                son of <strong
-                                                    class="text-blue">{{ family_live_status($certificate->user->familyInfo->father_live_status ?? 0) }}
-                                                    {{ $certificate->user->familyInfo->father_name ?? '' }}</strong> &
-                                                <strong
-                                                    class="text-blue">{{ family_live_status($certificate->user->familyInfo->mother_live_status ?? 0) }}
-                                                    {{ $certificate->user->familyInfo->mother_name ?? '' }}</strong>,
-                                                Village: <strong
-                                                    class="text-blue">{{ $certificate->user->addressInfo->village ?? '' }}</strong>,
-                                                <strong class="text-blue">Ward
-                                                    No.-{{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }}</strong>,
-                                                PO.:
-                                                <strong
-                                                    class="text-blue">{{ $certificate->user->institute->union->name ?? '' }}</strong>,
-                                                PS.
-                                                : <strong
-                                                    class="text-blue">{{ $certificate->user->institute->union->thana->name ?? '' }}</strong>,
-                                                Dist.: <strong
-                                                    class="text-blue">{{ $certificate->user->institute->union->thana->district->name ?? '' }}</strong>,
-                                                is known to me for about long time.
-                                                <br>
-                                                He is a citizen of Bangladesh by birth.
-                                            </p>
-                                            <p>To the best of my knowledge, he bears a good moral character and is not
-                                                involved is such
-                                                activities which are against the country freedom and peace.</p>
-                                            <p>I wish all success and prosperity in his life.</p>
-
-
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-
-
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3" class="text-right">
-                                            <p>Chairman/Meyor</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <p>NB.: Any Query <a href="https://www.upbd.com"
-                                                    target="_blank">www.upbd.com</a></p>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-
-
-
-                            </table>
+                    <!-- ================= Header ================= -->
+                    <div class="row align-items-center">
+                        <div class="col-2 text-center">
+                            <img height="90" width="90" src="{{ isset($certificate->user->institute->left_image) ? imageUrl($certificate->user->institute->left_image) : asset('images/dhaka.png') }}">
                         </div>
+
+                        <div class="col-8 text-center">
+                            <h2 class="text- font-Tahoma-bold mb-0" style="font-size:16px;">
+                              Government of the People's Republic of Bangladesh
+                            </h2>
+                            <h3 class="font-weight-bold" style="color:#2e3192; margin-top:2px; font-size:30px;">
+                                {{ $certificate->user->institute->union->name ?? '' }}
+                            </h3>
+                            <h2 class="text-success font-Nikosh-bold mb-0" style="font-family: 'Kalpurush-Bold', sans-serif; font-size:28px;">
+                                {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            </h2>
+                            <p class="mb-0" style="font-size:15px;">
+                                Thana: {{ $certificate->user->institute->union->thana->name ?? '' }},
+                                District: {{ $certificate->user->institute->union->thana->district->name ?? '' }},
+                                Bangladesh
+                            </p>
+                        </div>
+
+                        <div class="col-2 text-center">
+                            <img height="90" width="90" src="{{ asset('images/govt-bd-logo.png') }}">
+                        </div>
+                    </div>
+
+                    <!-- ================= Title ================= -->
+                    <div class="row mt-3 align-items-center">
+                        <div class="col-4 text-left">
+                            <strong>No:</strong>  <span style="font-weight:bold;color:blue">{{ $certificate->system_id ?? '' }}</span>
+                        </div>
+
+                        <div class="col-4 text-center">
+                            <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px; background-color: #2F318C;">
+                                Character certificate
+                            </span>
+                        </div>
+
+                        <div class="col-4 text-right">
+                            <strong>Date: </strong> {{ date('d/m/Y', strtotime($certificate->created_at)) }}
+                        </div>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="row mt-5">
+                        <div class="col-12" style="font-size:18px; line-height:1.9; text-align:justify;">
+                            <p>
+                                <span style="margin-left:40px;"></span>
+                                 This is to certify that ,
+                                {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Mrs.' }}
+                                <strong>{{ $certificate->user->people->name ?? '' }}</strong>,
+                                ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
+                                Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>
+                                and Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
+                                @php 
+                                    $nid = $certificate->user->nid ?? $certificate->user->people->nid ?? '';
+                                    $bc = $certificate->user->birth_certificate ?? $certificate->user->people->birth_certificate ?? '';
+                                @endphp
+                                @if($nid && $nid != '1111111114')
+                                    NID No. <strong>{{ $nid }}</strong>,
+                                @elseif($bc)
+                                    Birth Certificate No. <strong>{{ $bc }}</strong>,
+                                @endif
+                                Date of Birth: {{ $certificate->user->people->date_of_birth ? date('d/m/Y', strtotime($certificate->user->people->date_of_birth)) : '' }},
+                                Address: Village : - <span>{{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }}</span>,
+                                Word:- {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }},
+                                Post Office: - {{ optional($certificate->user->addressInfo->permanentPostOffice)->name ?? '' }}-
+                                @if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
+                                {{ $certificate->user->addressInfo->permanentPostOffice->postal_code }},
+                                @endif
+                                Upzila:- <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,
+                                District: - <span>{{ $certificate->user->institute->union->thana->district->name ?? '' }}</span>.
+                               He is a Bangladeshi citizen by birth and a permanent resident of this union.
+                            To my knowledge, he is of good character and has not been involved in any crime against law and order or the state.
+                            </p>
+
+                            <p style="margin-left:40px;">
+                                I wish him all the best and a prosperous life.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- ================= Signature ================= -->
+                    @include('backend.partials.chairman_signature', ['certificate' => $certificate])
+
+                    <!-- ================= Footer ================= -->
+                    <div class="certificate-footer">
+                        This report generated by CLMS | Powered by <strong>Adventure Soft</strong>
                     </div>
                 </div>
             </div>
         </div>
-        <footer class="card-footer">
-            <p>This report generated by CLMS || Power by:<a href="https://www.adventuresoft.com.bd"> Adventure Soft</a></p>
-        </footer>
+
+        <div class="text-center mt-2 mb-4">
+            <button id="cancelPageButton" class="btn btn-danger btn-sm px-4" onclick="window.history.back();">
+                Cancel
+            </button>
+            <button id="printPageButton" class="btn btn-success btn-sm px-4 ms-2" onclick="window.print();">
+                Print
+            </button>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script>
+        new QRCode(document.getElementById("qrcode"), {
+            text: "{{ url('/certificate/verify?system_id=' . $certificate->system_id) }}",
+            width: 150,
+            height: 150
+        });
+    </script>
 </body>
 
 </html>
+

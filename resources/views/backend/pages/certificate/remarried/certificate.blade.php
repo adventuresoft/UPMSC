@@ -69,55 +69,79 @@
     }
 
     /* Print Control */
-        @media print {
-        * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            box-sizing: border-box !important;
-        }
+                        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-sizing: border-box !important;
+            }
 
-        @page {
-            size: A4 landscape;
-            margin: 0 !important;
-        }
+            @page {
+                size: A4 landscape;
+                margin: 0 !important;
+            }
 
-        html, body {
-            width: 297mm !important;
-            height: 210mm !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow: hidden !important;
-            background: #ffffff !important;
-        }
+            html, body {
+                width: 297mm !important;
+                height: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                background: #ffffff !important;
+            }
 
-        .container {
-            width: 297mm !important;
-            max-width: 297mm !important;
-            height: 210mm !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            overflow: hidden !important;
-        }
+            .content-wrapper,
+            .wrapper {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
 
-        
+            .container {
+                width: 297mm !important;
+                max-width: 297mm !important;
+                height: 210mm !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: hidden !important;
+            }
 
-        .main-header,
-        .main-sidebar,
-        .main-footer,
-        .content-header,
-        .content-wrapper,
-        .wrapper,
-        .app-footer {
-            display: none !important;
-        }
+            .certificate-card,
+            .certificate-body,
+            .inner-frame {
+                page-break-inside: avoid !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+            }
 
-        #printPageButton,
-        #cancelPageButton,
-        .btn {
-            display: none !important;
-        }
-    }
-</style>
+            .certificate-bg {
+                display: block !important;
+            }
+
+            .main-header,
+            .main-sidebar,
+            .main-footer,
+            .content-header,
+            .page-footer,
+            .app-footer {
+                display: none !important;
+            }
+
+            #printPageButton,
+            #cancelPageButton,
+            .btn {
+                display: none !important;
+            }
+
+            .badge {
+                color: #ffffff !important;
+                background-color: #2F318C !important;
+            }
+
+            .text-light {
+                color: #ffffff !important;
+            }
+        }</style>
 @endpush
 
 @section('title', 'Remarried Certificate')
@@ -209,21 +233,7 @@
 
                 <!-- Signature Area -->
                 <div class="certificate-signature">
-                    <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
-
-                   <div class="chairman">
-                        <div style="height:40px;"></div>
-                        <p class="mb-1">({{ get_chairman_name_en($certificate) }})</p>
-                        <p class="mb-0">Chairman</p>
-                        <p class="mb-0">No.3 Shuktail Union Parishad </p>
-                        <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->name ?? '' }}
-                        </p>
-                    </div>
-                </div>
+                    @include('backend.partials.chairman_signature', ['certificate' => $certificate])
 
                 <!-- Footer -->
                 <div class="certificate-footer">
@@ -274,3 +284,6 @@
     }
 </script>
 @endpush
+
+
+

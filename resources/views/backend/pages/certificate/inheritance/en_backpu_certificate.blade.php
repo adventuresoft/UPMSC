@@ -6,21 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Inheritance Certificate</title>
 
-    <style>
+        <style>
+        .container {
+            max-width: 100% !important;
+        }
+
         body {
-            background-color: #fff !important;
+            background-color: #ffffff !important;
             padding: 0;
             margin: 0;
         }
 
         .first-border {
-            border: 1px solid black;
-            padding: 1.25rem;
+            max-width: 100%;
+            margin: 0 auto;
+            width: 297mm;
+            height: 210mm;
+            position: relative;
+            overflow: hidden;
+            background-image: url('{{ asset('images/bg-images.jpeg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
         }
 
         .second-border {
-            border: 1px solid #17a2b8;
-            padding: 1.25rem;
+            border: 0px solid transparent;
+            height: 100%;
+            padding: 15mm;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .card-body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
         }
 
         .text-center {
@@ -35,10 +59,8 @@
             text-align: left;
         }
 
-        .text-dark {
-            color: #000;
-            font-weight: 400;
-            font-size: 14px;
+        .text-danger {
+            color: #dc3545;
         }
 
         .bg-success {
@@ -49,13 +71,6 @@
             color: #fff;
         }
 
-
-        .wrapper {
-            background-color: #ffffff;
-        }
-
-
-
         .ml-2 {
             padding-left: 2rem;
         }
@@ -64,42 +79,45 @@
             padding-right: 2rem;
         }
 
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-sizing: border-box !important;
+            }
 
-       #member-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 16px;
-            font-family: Arial, sans-serif;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            @page {
+                size: A4 landscape;
+                margin: 0 !important;
+            }
+
+            html,
+            body {
+                width: 297mm !important;
+                height: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                background: #ffffff !important;
+            }
+
+            .container {
+                width: 297mm !important;
+                max-width: 297mm !important;
+                height: 210mm !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: hidden !important;
+            }
+
+            .first-border,
+            .second-border,
+            .card-body {
+                page-break-inside: avoid !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+            }
         }
-
-       #member-table thead tr {
-            background-color: #009879;
-            color: #ffffff;
-        }
-
-       #member-table th, td {
-            padding: 5px 7px;
-        }
-
-        .bold{
-            font-weight: 500;
-        }
-
-        strong {
-            font-weight: 500;
-        }
-
-        .certificate-title{
-            font-size: 16px;
-        }
-
-        .union-title{
-            font-size: 18px;
-        }
-
-
     </style>
 </head>
 
@@ -244,3 +262,4 @@
 </body>
 
 </html>
+

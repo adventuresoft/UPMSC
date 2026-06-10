@@ -8,16 +8,23 @@
 
 /* ===== Certificate Canvas ===== */
     .certificate-card {
-    max-width: 100%;
-    margin: 0 auto;
-        background-image: url('{{ asset('images/bg-images.jpeg') }}');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
+        max-width: 100%;
+        margin: 0 auto;
         width: 297mm;
         height: 210mm;
         position: relative;
         overflow: hidden;
+    }
+
+    .certificate-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        pointer-events: none;
     }
 
     .certificate-body {
@@ -25,6 +32,9 @@
         height: 100%;
         padding: 15mm;
         box-sizing: border-box;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
     }
 
     /* Inner Frame */
@@ -69,55 +79,79 @@
     }
 
     /* Print Control */
-        @media print {
-        * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            box-sizing: border-box !important;
-        }
+                        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-sizing: border-box !important;
+            }
 
-        @page {
-            size: A4 landscape;
-            margin: 0 !important;
-        }
+            @page {
+                size: A4 landscape;
+                margin: 0 !important;
+            }
 
-        html, body {
-            width: 297mm !important;
-            height: 210mm !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow: hidden !important;
-            background: #ffffff !important;
-        }
+            html, body {
+                width: 297mm !important;
+                height: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                background: #ffffff !important;
+            }
 
-        .container {
-            width: 297mm !important;
-            max-width: 297mm !important;
-            height: 210mm !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            overflow: hidden !important;
-        }
+            .content-wrapper,
+            .wrapper {
+                background: #ffffff !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
 
-        
+            .container {
+                width: 297mm !important;
+                max-width: 297mm !important;
+                height: 210mm !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: hidden !important;
+            }
 
-        .main-header,
-        .main-sidebar,
-        .main-footer,
-        .content-header,
-        .content-wrapper,
-        .wrapper,
-        .app-footer {
-            display: none !important;
-        }
+            .certificate-card,
+            .certificate-body,
+            .inner-frame {
+                page-break-inside: avoid !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+            }
 
-        #printPageButton,
-        #cancelPageButton,
-        .btn {
-            display: none !important;
-        }
-    }
-</style>
+            .certificate-bg {
+                display: block !important;
+            }
+
+            .main-header,
+            .main-sidebar,
+            .main-footer,
+            .content-header,
+            .page-footer,
+            .app-footer {
+                display: none !important;
+            }
+
+            #printPageButton,
+            #cancelPageButton,
+            .btn {
+                display: none !important;
+            }
+
+            .badge {
+                color: #ffffff !important;
+                background-color: #2F318C !important;
+            }
+
+            .text-light {
+                color: #ffffff !important;
+            }
+        }</style>
 @endpush
 
 @section('title', 'Character Certificate')
@@ -125,7 +159,8 @@
 @section('content')
 <div class="container p-0">
     <div class="certificate-card">
-        <div class="certificate-body border border-dark">
+        <img src="{{ asset('images/bg-images.jpeg') }}" alt="" class="certificate-bg">
+        <div class="certificate-body">
             <div class="inner-frame">
 
                 <!-- ================= Header ================= -->
@@ -214,22 +249,7 @@ To my knowledge, he is of good character and has not been involved in any crime 
                 </div>
 
                 <!-- ================= Signature ================= -->
-                <div class="certificate-signature">
-                    <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
-
-                    <div class="chairman">
-                        <div style="height:40px;"></div>
-                        <p class="mb-1">({{ get_chairman_name_en($certificate) }})</p>
-                        <p class="mb-0">Chairman</p>
-                        <p class="mb-0"> {{ $certificate->user->institute->union->name ?? '' }} </p>
-                        <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->name ?? '' }}
-                        </p>
-                    </div>
-                </div>
+                @include('backend.partials.chairman_signature', ['certificate' => $certificate])
 
                 <!-- ================= Footer ================= -->
                 <div class="certificate-footer">
@@ -283,3 +303,7 @@ To my knowledge, he is of good character and has not been involved in any crime 
     }
 </script>
 @endpush
+
+
+
+

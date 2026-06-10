@@ -106,36 +106,49 @@
         }
 
         @page {
-            size: A4 landscape;
-            margin: 0 !important;
+            size: A4 portrait;
+            margin: 0mm !important;
         }
 
         html, body {
-            width: 297mm !important;
-            height: 210mm !important;
+            width: 100% !important;
+            height: auto !important;
             margin: 0 !important;
             padding: 0 !important;
-            overflow: hidden !important;
+            overflow: visible !important;
             background: #ffffff !important;
         }
 
-        .container {
-            width: 297mm !important;
-            max-width: 297mm !important;
-            height: 210mm !important;
+        .content-wrapper,
+        .wrapper {
+            background: #ffffff !important;
             padding: 0 !important;
             margin: 0 !important;
-            overflow: hidden !important;
         }
 
-        
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-height: auto !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: visible !important;
+        }
+
+        .form-container {
+            width: 210mm !important;
+            min-height: 297mm !important;
+            margin: auto !important;
+            padding: 15mm !important;
+            box-shadow: none !important;
+            background: #ffffff !important;
+            position: relative !important;
+        }
 
         .main-header,
         .main-sidebar,
         .main-footer,
         .content-header,
-        .content-wrapper,
-        .wrapper,
         .app-footer {
             display: none !important;
         }

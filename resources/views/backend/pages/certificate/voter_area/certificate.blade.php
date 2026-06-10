@@ -89,27 +89,71 @@
         border-top: 1px solid #e0e0e0;
     }
 
-    @media print {
+                    @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-sizing: border-box !important;
+            }
+
         @page {
-            size: A4 portrait;
-            margin: 0;
+            size: a4 portrait;
+            margin: 0mm !important;
         }
-        body { background: none !important; margin: 0; padding: 0; }
-        .certificate-canvas { padding: 0; background: none; }
-        .form-container {
-            box-shadow: none;
-            margin: 0 auto;
-            padding: 15mm 10mm;
-            width: 210mm;
-            min-height: auto;
-            page-break-after: always;
-            box-sizing: border-box;
-            border: none;
+
+        html, body {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
         }
-        .form-container.last-page { page-break-after: auto; }
-        .print-controls, .content-header, .main-header, .main-sidebar, .main-footer { display: none !important; }
-    }
-</style>
+
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
+
+        .certificate-card {
+            width: 100% !important;
+            height: 100vh !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background-size: 100% 100% !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+        }
+
+        .content-wrapper,
+        .wrapper {
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header,
+        .app-footer {
+            display: none !important;
+        }
+
+        #printPageButton,
+        #cancelPageButton,
+        .btn {
+            display: none !important;
+        }
+        }</style>
 @endpush
 
 @section('title', 'Voter Transfer Form-13')
@@ -388,3 +432,5 @@
     </div>
 </div>
 @endsection
+
+

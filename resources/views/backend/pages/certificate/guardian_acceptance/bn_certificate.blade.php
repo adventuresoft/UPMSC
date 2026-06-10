@@ -117,29 +117,8 @@
     $district  = $thana->district ?? null;
 
     // Chairman name
-    use App\Models\Council;
-    use App\Models\CouncilMember;
-    $chairmanName = '';
+    $chairmanName = get_chairman_name_bn($certificate);
     $chairmanUnion = optional($union)->bn_name ?? '';
-    $unionId  = $certificate->user->institute->union_id ?? $institute->union_id ?? null;
-    $instId   = $certificate->user->institute_id ?? $institute->id ?? null;
-
-    if ($unionId) {
-        $council = Council::where('union_id', $unionId)->where('status', 1)
-            ->whereDate('start_date', '<=', now())->whereDate('end_date', '>=', now())->latest()->first();
-        if (!$council) { $council = Council::where('union_id', $unionId)->where('status', 1)->latest()->first(); }
-        if ($council) {
-            $member = CouncilMember::where('council_id', $council->id)->where('concilor_designation_id', 1)->where('status', 1)->first();
-            if ($member) {
-                $cu = \App\Models\User::find($member->user_id);
-                if ($cu) { $chairmanName = optional($cu->people)->bn_name ?? optional($cu->people)->name ?? $cu->name ?? ''; }
-            }
-        }
-    }
-    if (!$chairmanName && $instId) {
-        $adminUser = \App\Models\User::where('institute_id', $instId)->where('role_id', 6)->first();
-        if ($adminUser) { $chairmanName = optional($adminUser->people)->bn_name ?? optional($adminUser->people)->name ?? $adminUser->name ?? ''; }
-    }
 
     // Guardian info
     $guardianNid    = $certificate->guardian->nid ?? $certificate->guardian->people->nid ?? '';

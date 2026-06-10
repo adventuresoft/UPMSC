@@ -26,7 +26,7 @@
             <form id="reliefCardForm" method="POST" action="{{ route('relief-card.store') }}">
                 @csrf
                 <div class="card-body bg-gray-50/20 p-4">
-                    <!-- User Selection -->
+                    <!-- Input Fields (Filters) -->
                     <div class="row">
                         @if(count($wards) > 0)
                         <div class="col-md-4 mb-4">
@@ -43,32 +43,7 @@
                             </select>
                         </div>
                         @endif
-                        <div class="col-md-{{ count($wards) > 0 ? '8' : '12' }} mb-4">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <label class="text-xs font-bold text-gray-600 m-0">Select Citizens <span class="text-red-500">*</span></label>
-                                <button type="button" id="selectAllBtn" class="btn btn-sm btn-primary">Select All</button>
-                            </div>
-                            <select class="form-control border-gray-200 rounded-lg text-sm h-11 focus:ring-pink-500 focus:border-pink-500 select2" name="user_ids[]" id="user_select" required multiple>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" 
-                                        data-ward-id="{{ $user->addressInfo?->permanent_ward_id ?? '' }}"
-                                        {{ (is_array(old('user_ids')) && in_array($user->id, old('user_ids'))) ? 'selected' : '' }}>
-                                        {{ $user->name }} 
-                                        @if($user->people && $user->people->approved_id)
-                                            (ID: {{ $user->people->approved_id }})
-                                        @endif
-                                        @if($user->addressInfo?->permanentWard)
-                                            - Ward {{ $user->addressInfo->permanentWard->en_ward_no ?? $user->addressInfo->permanentWard->bn_ward_no ?? $user->addressInfo->permanentWard->id }}
-                                        @endif
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Input Fields -->
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-4 mb-4">
                             <label class="text-xs font-bold text-gray-600 block mb-2">Relief / Social Security Card Type <span class="text-red-500">*</span></label>
                             <select class="form-control border-gray-200 rounded-lg text-sm h-11 focus:ring-pink-500 focus:border-pink-500" name="relief_type" required>
                                 <option value="">Select card type</option>
@@ -83,11 +58,11 @@
                                 <option value="Materials (উপকরণ)" {{ old('relief_type') == 'Materials (উপকরণ)' ? 'selected' : '' }}>Materials (উপকরণ)</option>
                             </select>
                         </div>
-                        <div class="col-md-3 mb-4">
+                        <div class="col-md-2 mb-4">
                             <label class="text-xs font-bold text-gray-600 block mb-2">Monthly Income (Taka) <span class="text-red-500">*</span></label>
                             <input type="number" class="form-control border-gray-200 rounded-lg text-sm h-11 focus:ring-pink-500" name="monthly_income" required min="0" placeholder="e.g., 5000" value="{{ old('monthly_income') }}">
                         </div>
-                        <div class="col-md-3 mb-4">
+                        <div class="col-md-2 mb-4">
                             <label class="text-xs font-bold text-gray-600 block mb-2">Family Members <span class="text-red-500">*</span></label>
                             <input type="number" class="form-control border-gray-200 rounded-lg text-sm h-11 focus:ring-pink-500" name="family_members" required min="1" value="{{ old('family_members', 1) }}">
                         </div>
@@ -96,7 +71,73 @@
                     <div class="row">
                         <div class="col-md-12 mb-4">
                             <label class="text-xs font-bold text-gray-600 block mb-2">Reason / Requirement Description</label>
-                            <textarea class="form-control border-gray-200 rounded-lg text-sm p-3 focus:ring-pink-500 focus:border-pink-500" name="reason" rows="4" placeholder="Briefly describe the financial situation or why this card is needed...">{{ old('reason') }}</textarea>
+                            <textarea class="form-control border-gray-200 rounded-lg text-sm p-3 focus:ring-pink-500 focus:border-pink-500" name="reason" rows="2" placeholder="Briefly describe the financial situation or why this card is needed...">{{ old('reason') }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Hidden inputs for selected users -->
+                    <div id="selectedUsersContainer"></div>
+
+                    <!-- Selected Users Section -->
+                    <div class="row mb-4" id="selectedUsersSection" style="display: none;">
+                        <div class="col-md-12">
+                            <div class="card card-outline card-info">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-users mr-2"></i>Selected Citizens (<span id="selectedCountDisplay">0</span>)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row" id="selectedUsersGrid">
+                                        <!-- Selected users will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Citizen Table -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <label class="text-xs font-bold text-gray-600 m-0">Select Citizens <span class="text-red-500">*</span> (<span id="selectedCount">0</span> selected)</label>
+                                <button type="button" id="selectAllBtn" class="btn btn-sm btn-primary">Select All</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped" id="citizenTable">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th class="text-center" style="width: 60px;">
+                                                <input type="checkbox" id="selectAllCheckbox">
+                                            </th>
+                                            <th>Photo</th>
+                                            <th>Name</th>
+                                            <th>Approved ID</th>
+                                            <th>Ward</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="citizenTableBody">
+                                        @foreach($users as $user)
+                                        <tr class="citizen-row" data-ward-id="{{ $user->addressInfo?->permanent_ward_id ?? '' }}" data-user-id="{{ $user->id }}" data-name="{{ $user->name }}" data-approved-id="{{ $user->people?->approved_id ?? 'No ID' }}" data-ward-name="{{ $user->addressInfo?->permanentWard ? 'Ward ' . ($user->addressInfo->permanentWard->en_ward_no ?? $user->addressInfo->permanentWard->bn_ward_no ?? $user->addressInfo->permanentWard->id) : '' }}" data-image-url="{{ imageUrl($user->image ?? 'default.png') }}">
+                                            <td class="text-center">
+                                                <input type="checkbox" class="citizen-checkbox" data-user-id="{{ $user->id }}" {{ (is_array(old('user_ids')) && in_array($user->id, old('user_ids'))) ? 'checked' : '' }}>
+                                            </td>
+                                            <td>
+                                                <img src="{{ imageUrl($user->image ?? 'default.png') }}" width="50" height="60" class="img rounded border">
+                                            </td>
+                                            <td>{{ $user->name }}</td>
+                                            <td>{{ $user->people?->approved_id ?? 'No ID' }}</td>
+                                            <td>
+                                                @if($user->addressInfo?->permanentWard)
+                                                    Ward {{ $user->addressInfo->permanentWard->en_ward_no ?? $user->addressInfo->permanentWard->bn_ward_no ?? $user->addressInfo->permanentWard->id }}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="d-flex justify-content-center mt-4">
+                                {{ $users->appends(request()->except('page'))->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,6 +158,8 @@
 <style>
     .content-wrapper { background: #f4f6f9 !important; }
     body { font-family: 'Hind Siliguri', sans-serif; }
+    .citizen-row { cursor: pointer; }
+    .citizen-row:hover { background-color: #fef5f7; }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
 @endpush
@@ -124,69 +167,110 @@
 @push('script')
 <script>
     $(document).ready(function() {
-        // Store original user options
-        var originalUserOptions = $('#user_select').html();
-        // Store selected user IDs
-        var selectedUserIds = [];
-        
-        $('.select2').select2({
-            width: '100%',
-            placeholder: 'Select a citizen'
-        });
+        // Store all users data (passed from controller)
+        var allUsersData = @json($allUsers->keyBy('id'));
 
-        // Initialize selectedUserIds with any pre-selected values
-        selectedUserIds = $('#user_select').val() || [];
+        // Initialize selected users from old input or empty array
+        var selectedUserIds = @json(old('user_ids', []));
 
-        // Function to update user select dropdown
-        function updateUserSelect() {
-            var selectedWardIds = $('#ward_filter').val();
+        // Create hidden inputs for selected users
+        function updateSelectedUsersContainer() {
+            var container = $('#selectedUsersContainer');
+            container.empty();
             
-            // Get all original options
-            var $originalOptions = $(originalUserOptions);
-            
-            // Filter options based on selected wards
-            var filteredOptions = $originalOptions.filter(function() {
-                var optionValue = $(this).val();
-                if (optionValue === '') {
-                    return true;
-                }
-                
-                var optionWardId = $(this).data('ward-id');
-                
-                // If user is already selected, always include them
-                if (selectedUserIds.includes(optionValue)) {
-                    return true;
-                }
-                
-                // Otherwise, filter by ward
-                if (!selectedWardIds || selectedWardIds.length === 0) {
-                    return true;
-                }
-                
-                return selectedWardIds.includes(String(optionWardId));
+            selectedUserIds.forEach(function(userId) {
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'user_ids[]',
+                    value: userId
+                }).appendTo(container);
             });
-            
-            // Update the dropdown
-            $('#user_select').html(filteredOptions);
-            
-            // Re-apply selected state
-            $('#user_select').val(selectedUserIds);
-            
-            // Re-initialize select2
-            $('#user_select').select2('destroy').select2({
-                width: '100%',
-                placeholder: 'Select a citizen'
+
+            updateSelectedCount();
+            renderSelectedUsers();
+        }
+
+        // Function to update selected count
+        function updateSelectedCount() {
+            $('#selectedCount').text(selectedUserIds.length);
+            $('#selectedCountDisplay').text(selectedUserIds.length);
+        }
+
+        // Function to render selected users grid
+        function renderSelectedUsers() {
+            var grid = $('#selectedUsersGrid');
+            var section = $('#selectedUsersSection');
+            grid.empty();
+
+            if (selectedUserIds.length === 0) {
+                section.hide();
+                return;
+            }
+
+            section.show();
+
+            selectedUserIds.forEach(function(userId) {
+                var user = allUsersData[userId];
+                // If user data isn't available, create a minimal card
+                if (!user) {
+                    user = {
+                        id: userId,
+                        name: 'User ' + userId,
+                        approved_id: 'N/A',
+                        ward_name: 'N/A',
+                        image_url: '{{ asset('default.png') }}'
+                    };
+                }
+
+                var card = '<div class="col-md-4 mb-3" id="selectedUserCard-' + userId + '">' +
+                    '<div class="card">' +
+                    '<div class="card-body d-flex align-items-center">' +
+                    '<img src="' + user.image_url + '" width="50" height="60" class="img rounded border mr-3">' +
+                    '<div class="flex-grow-1">' +
+                    '<h6 class="mb-0 font-bold">' + user.name + '</h6>' +
+                    '<small class="text-muted">' + user.approved_id + ' • ' + user.ward_name + '</small>' +
+                    '</div>' +
+                    '<button type="button" class="btn btn-sm btn-danger remove-user-btn" data-user-id="' + userId + '">' +
+                    '<i class="fas fa-times"></i>' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+                grid.append(card);
             });
         }
 
-        // Filter users by selected wards
-        $('#ward_filter').on('change', function() {
-            updateUserSelect();
+        // Initialize selected users container
+        updateSelectedUsersContainer();
+
+        // Initialize checkboxes based on selectedUserIds
+        $('.citizen-checkbox').each(function() {
+            var userId = $(this).data('user-id');
+            if (selectedUserIds.includes(userId)) {
+                $(this).prop('checked', true);
+            }
         });
 
-        // Track selected users
-        $('#user_select').on('change', function() {
-            selectedUserIds = $(this).val() || [];
+        $('.select2').select2({
+            width: '100%',
+            placeholder: 'Select a ward'
+        });
+
+        // Filter citizens by selected wards
+        $('#ward_filter').on('change', function() {
+            var selectedWardIds = $(this).val();
+            $('.citizen-row').each(function() {
+                var rowWardId = $(this).data('ward-id');
+                var $checkbox = $(this).find('.citizen-checkbox');
+                var isChecked = $checkbox.is(':checked');
+                
+                // Show row if no ward selected, or ward matches, or already checked
+                if (!selectedWardIds || selectedWardIds.length === 0 || selectedWardIds.includes(String(rowWardId)) || isChecked) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
         });
 
         // Select All Wards functionality
@@ -204,27 +288,97 @@
             $('#ward_filter').trigger('change');
         });
 
-        // Select All functionality
-        $('#selectAllBtn').on('click', function() {
-            var $options = $('#user_select').find('option:not([value=""])');
-            
-            // Check if all are already selected
-            var allSelected = $options.length === $options.filter(':selected').length;
-            
-            if (allSelected) {
-                // Deselect all visible options
-                var visibleSelectedIds = $options.filter(':selected').map(function() { return $(this).val(); }).get();
-                selectedUserIds = selectedUserIds.filter(id => !visibleSelectedIds.includes(id));
-                $options.prop('selected', false);
+        // Individual checkbox change
+        $(document).on('change', '.citizen-checkbox', function() {
+            var userId = $(this).data('user-id');
+            var isChecked = $(this).is(':checked');
+
+            if (isChecked) {
+                if (!selectedUserIds.includes(userId)) {
+                    selectedUserIds.push(userId);
+                }
             } else {
-                // Select all visible options
-                var visibleIds = $options.map(function() { return $(this).val(); }).get();
-                selectedUserIds = [...new Set([...selectedUserIds, ...visibleIds])];
-                $options.prop('selected', true);
+                selectedUserIds = selectedUserIds.filter(function(id) {
+                    return id !== userId;
+                });
             }
+
+            updateSelectedUsersContainer();
+        });
+
+        // Click row to toggle checkbox
+        $(document).on('click', '.citizen-row td:not(:first-child)', function() {
+            var $checkbox = $(this).closest('.citizen-row').find('.citizen-checkbox');
+            $checkbox.prop('checked', !$checkbox.is(':checked'));
+            $checkbox.trigger('change');
+        });
+
+        // Select All Citizens via button
+        $('#selectAllBtn').on('click', function() {
+            var $visibleCheckboxes = $('.citizen-row:visible').find('.citizen-checkbox');
+            var allVisibleSelected = $visibleCheckboxes.length === $visibleCheckboxes.filter(':checked').length;
             
-            $('#user_select').val(selectedUserIds);
-            $('#user_select').trigger('change');
+            if (allVisibleSelected) {
+                $visibleCheckboxes.each(function() {
+                    var userId = $(this).data('user-id');
+                    $(this).prop('checked', false);
+                    selectedUserIds = selectedUserIds.filter(function(id) {
+                        return id !== userId;
+                    });
+                });
+            } else {
+                $visibleCheckboxes.each(function() {
+                    var userId = $(this).data('user-id');
+                    $(this).prop('checked', true);
+                    if (!selectedUserIds.includes(userId)) {
+                        selectedUserIds.push(userId);
+                    }
+                });
+            }
+
+            updateSelectedUsersContainer();
+        });
+
+        // Select All via header checkbox
+        $('#selectAllCheckbox').on('change', function() {
+            var isChecked = $(this).is(':checked');
+            var $visibleCheckboxes = $('.citizen-row:visible').find('.citizen-checkbox');
+
+            if (isChecked) {
+                $visibleCheckboxes.each(function() {
+                    var userId = $(this).data('user-id');
+                    $(this).prop('checked', true);
+                    if (!selectedUserIds.includes(userId)) {
+                        selectedUserIds.push(userId);
+                    }
+                });
+            } else {
+                $visibleCheckboxes.each(function() {
+                    var userId = $(this).data('user-id');
+                    $(this).prop('checked', false);
+                    selectedUserIds = selectedUserIds.filter(function(id) {
+                        return id !== userId;
+                    });
+                });
+            }
+
+            updateSelectedUsersContainer();
+        });
+
+        // Remove user from selected
+        $(document).on('click', '.remove-user-btn', function() {
+            var userId = $(this).data('user-id');
+            selectedUserIds = selectedUserIds.filter(function(id) {
+                return id !== userId;
+            });
+
+            // Uncheck the checkbox if it's visible on current page
+            var $checkbox = $('.citizen-checkbox[data-user-id="' + userId + '"]');
+            if ($checkbox.length > 0) {
+                $checkbox.prop('checked', false);
+            }
+
+            updateSelectedUsersContainer();
         });
     });
 </script>

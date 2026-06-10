@@ -94,25 +94,71 @@
         margin-top: 10px;
     }
 
-    @media print {
+                    @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-sizing: border-box !important;
+            }
+
         @page {
-            size: A4 portrait;
-            margin: 0;
+            size: a4 portrait;
+            margin: 0mm !important;
         }
-        body {
-            background: none !important;
+
+        html, body {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
         }
-        .form-container {
-            box-shadow: none;
-            margin: 0;
-            width: 100%;
-            padding: 10mm;
+
+        .container {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
         }
-        #printPageButton, #cancelPageButton {
+
+        .certificate-card {
+            width: 100% !important;
+            height: 100vh !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background-size: 100% 100% !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+        }
+
+        .content-wrapper,
+        .wrapper {
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .main-header,
+        .main-sidebar,
+        .main-footer,
+        .content-header,
+        .app-footer {
             display: none !important;
         }
-    }
-</style>
+
+        #printPageButton,
+        #cancelPageButton,
+        .btn {
+            display: none !important;
+        }
+        }</style>
 @endpush
 
 @section('title', 'NID Correction Form-2 (EN)')
@@ -245,3 +291,5 @@
     </div>
 </div>
 @endsection
+
+

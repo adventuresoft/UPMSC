@@ -101,16 +101,36 @@ class ReliefCardController extends Controller
             $wards = \App\Models\UnionWard::where('union_id', $unionId)->get();
         }
 
-        $users = User::with(['people', 'addressInfo.permanentWard'])
+        // Paginate users, 10 per page
+        $users = \App\Models\User::with(['people', 'addressInfo.permanentWard'])
             ->when(!empty($instituteIds), function($query) use ($instituteIds) {
                 $query->whereHas('institute', function($q) use ($instituteIds) {
                     $q->whereIn('id', $instituteIds);
                 });
             })
             ->orderBy('name')
-            ->get();
+            ->paginate(10);
 
-        return view('backend.pages.relief_card.create', compact('users', 'wards'));
+        // Get all users data for JavaScript
+        $allUsers = \App\Models\User::with(['people', 'addressInfo.permanentWard'])
+            ->when(!empty($instituteIds), function($query) use ($instituteIds) {
+                $query->whereHas('institute', function($q) use ($instituteIds) {
+                    $q->whereIn('id', $instituteIds);
+                });
+            })
+            ->orderBy('name')
+            ->get()
+            ->map(function($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'approved_id' => $user->people?->approved_id ?? 'No ID',
+                    'ward_name' => $user->addressInfo?->permanentWard ? 'Ward ' . ($user->addressInfo->permanentWard->en_ward_no ?? $user->addressInfo->permanentWard->bn_ward_no ?? $user->addressInfo->permanentWard->id) : '',
+                    'image_url' => imageUrl($user->image ?? 'default.png')
+                ];
+            });
+
+        return view('backend.pages.relief_card.create', compact('users', 'wards', 'allUsers'));
     }
 
     /**

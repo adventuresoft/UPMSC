@@ -76,12 +76,19 @@
         }
 
         html, body {
-            width: 297mm !important;
-            height: 210mm !important;
+            width: 100% !important;
+            height: auto !important;
             margin: 0 !important;
             padding: 0 !important;
-            overflow: hidden !important;
+            overflow: visible !important;
             background: #ffffff !important;
+        }
+
+        .content-wrapper,
+        .wrapper {
+            background: #ffffff !important;
+            padding: 0 !important;
+            margin: 0 !important;
         }
 
         .container {
@@ -93,14 +100,23 @@
             overflow: hidden !important;
         }
 
-        
+        .certificate-card,
+        .certificate-body,
+        .inner-frame {
+            page-break-inside: avoid !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+        }
+
+        .certificate-bg {
+            display: block !important;
+        }
 
         .main-header,
         .main-sidebar,
         .main-footer,
         .content-header,
-        .content-wrapper,
-        .wrapper,
+        .page-footer,
         .app-footer {
             display: none !important;
         }
@@ -110,11 +126,20 @@
         .btn {
             display: none !important;
         }
+
+        .badge {
+            color: #ffffff !important;
+            background-color: #2F318C !important;
+        }
+
+        .text-light {
+            color: #ffffff !important;
+        }
     }
 </style>
 @endpush
 
-@section('title', 'Citizen Certificate')
+@section('title', 'Orphan Certificate')
 
 @section('content')
 <div class="container p-0">
@@ -208,7 +233,7 @@
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">({{ get_chairman_name_en($certificate) }})</p>
+                        <p class="mb-1">({{ get_chairman_name_bn($certificate) }})</p>
                         <p class="mb-0">চেয়ারম্যান</p>
                         <p class="mb-0">৩ নং শুকতাইল ইউনিয়ন পরিষদ</p>
                         <p class="mb-0" style="font-size:14px;">

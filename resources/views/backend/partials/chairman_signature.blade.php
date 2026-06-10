@@ -1,52 +1,9 @@
 @php
-use App\Models\Council;
-use App\Models\CouncilMember;
-use App\Models\User;
-
-$unionId = $certificate->user->institute->union_id ?? null;
-$chairmanName = '(Chairman)';
+$chairmanName = get_chairman_name_en($certificate);
 $chairmanTitle = 'Chairman';
-$chairmanOrgLine = $certificate->user->institute->union->name ?? '';
-$chairmanThana = $certificate->user->institute->union->thana->name ?? '';
-$chairmanDistrict = $certificate->user->institute->union->thana->district->name ?? '';
-
-if ($unionId) {
-    $council = Council::where('union_id', $unionId)
-        ->where('status', 1)
-        ->whereDate('start_date', '<=', now())
-        ->whereDate('end_date', '>=', now())
-        ->latest()
-        ->first();
-
-    if (!$council) {
-        $council = Council::where('union_id', $unionId)->where('status', 1)->latest()->first();
-    }
-
-    if ($council) {
-        $member = CouncilMember::where('council_id', $council->id)
-            ->where('concilor_designation_id', 1)
-            ->where('status', 1)
-            ->first();
-
-        if ($member) {
-            $user = User::find($member->user_id);
-            if ($user) {
-                $chairmanName = optional($user->people)->name ?? $user->name ?? $chairmanName;
-            }
-        }
-    }
-}
-
-// Fallback: use Institute Admin (role_id=6) name if no Council Chairman found
-if ($chairmanName === '(Chairman)') {
-    $instituteId = $certificate->user->institute_id ?? null;
-    if ($instituteId) {
-        $adminUser = User::where('institute_id', $instituteId)->where('role_id', 6)->first();
-        if ($adminUser) {
-            $chairmanName = optional($adminUser->people)->name ?? $adminUser->name ?? $chairmanName;
-        }
-    }
-}
+$chairmanOrgLine = optional($certificate->user->institute->union)->name ?? '';
+$chairmanThana = optional(optional($certificate->user->institute->union)->thana)->name ?? '';
+$chairmanDistrict = optional(optional(optional($certificate->user->institute->union)->thana)->district)->name ?? '';
 @endphp
 
 <div class="certificate-signature">

@@ -7,62 +7,117 @@
     <title>Certificate</title>
 
     <style>
-           .container {
-        max-width: 100% !important;
-    }
+        .container {
+            max-width: 100% !important;
+        }
 
-body{
-        background-color: #00000008 !important;
-        padding: 0;
-        margin: 0;
-       }
+        body {
+            background-color: #ffffff !important;
+            padding: 0;
+            margin: 0;
+        }
 
-       .first-border{
-        border: 1px solid black;
-        padding: 1.25rem;
-       }
-       .second-border{
-        border: 1px solid #17a2b8;
-        padding: 1.25rem;
-       }
-       .text-center{
-        text-align: center;
-       }
-       .text-right{
-        text-align: right;
-       }
+        .first-border {
+            max-width: 100%;
+            margin: 0 auto;
+            width: 297mm;
+            height: 210mm;
+            position: relative;
+            overflow: hidden;
+            background-image: url('{{ asset('images/bg-images.jpeg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
 
-       .text-left{
-        text-align: left;
-       }
+        .second-border {
+            border: 0px solid transparent;
+            height: 100%;
+            padding: 15mm;
+            position: relative;
+            box-sizing: border-box;
+        }
 
-       .text-danger {
-        color:#dc3545;
-       }
+        .card-body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
 
-       .bg-success{
-        background-color: #28a745;
-       }
+        .text-center {
+            text-align: center;
+        }
 
-       .text-light{
-        color: #fff;
-       }
+        .text-right {
+            text-align: right;
+        }
 
+        .text-left {
+            text-align: left;
+        }
 
-       .wrapper{
-        background-color: #ffffff;
-       }
+        .text-danger {
+            color: #dc3545;
+        }
 
-      
+        .bg-success {
+            background-color: #28a745;
+        }
 
-       .ml-2{
-        padding-left: 2rem;
-       }
-       .mr-2{
-        padding-right: 2rem;
-       }
-       
+        .text-light {
+            color: #fff;
+        }
 
+        .ml-2 {
+            padding-left: 2rem;
+        }
+
+        .mr-2 {
+            padding-right: 2rem;
+        }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                box-sizing: border-box !important;
+            }
+
+            @page {
+                size: A4 landscape;
+                margin: 0 !important;
+            }
+
+            html,
+            body {
+                width: 297mm !important;
+                height: 210mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                background: #ffffff !important;
+            }
+
+            .container {
+                width: 297mm !important;
+                max-width: 297mm !important;
+                height: 210mm !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: hidden !important;
+            }
+
+            .first-border,
+            .second-border,
+            .card-body {
+                page-break-inside: avoid !important;
+                overflow: hidden !important;
+                box-sizing: border-box !important;
+            }
+        }
     </style>
 </head>
 
