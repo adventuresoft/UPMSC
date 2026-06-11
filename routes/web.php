@@ -101,6 +101,7 @@ use App\Http\Controllers\MarketController;
 use App\Http\Controllers\MarriageController;
 use App\Http\Controllers\MouzaController;
 use App\Http\Controllers\Organization\OrganizationController;
+use App\Http\Controllers\Organization\OrganizationTransferController;
 use App\Http\Controllers\Organization\TradeLicenseController;
 use App\Http\Controllers\Organization\OrganizationFeeController;
 use App\Http\Controllers\Organization\OrganizationOwnershipController;
@@ -419,6 +420,14 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
 
     Route::resource('organization', OrganizationController::class);
     Route::get('orgapproved_index', [OrganizationController::class,'approved_index'])->name('orgapproved_index');
+
+    Route::prefix('organization-transfer')->name('organization.transfer.')->group(function () {
+        Route::get('/', [OrganizationTransferController::class, 'index'])->name('index');
+        Route::get('/incoming', [OrganizationTransferController::class, 'incoming'])->name('incoming');
+        Route::post('/request', [OrganizationTransferController::class, 'store'])->name('store');
+        Route::post('/{transfer}/approve', [OrganizationTransferController::class, 'approve'])->name('approve');
+        Route::post('/{transfer}/reject', [OrganizationTransferController::class, 'reject'])->name('reject');
+    });
 
     Route::resource('chairman', ChairmanController::class);
 

@@ -30,7 +30,7 @@
     
     $isCertificate = $isPath(['citizen*', 'character*', 'death*', 'succession*', 'unmarried*', 'married*', 'remarried*', 'landless*', 'name*', 'income*', 'disability-certificate*', 'voter-area*', 'voter-list*', 'nid-correction*', 'childless*', 'orphan*', 'financial-instability*', 'age*', 'permanent-citizen*', 'residential*', 'guardian-income*', 'guardian-acceptance*']) || $_mainMenu == 'Certificate';
     
-    $isOrganization = $isPath(['organization*', 'orgapproved*']) || in_array($_subMenu, ['OrganizationCreate', 'OrganizationList', 'ApprovedOrganizationList', 'OrganizationShow', 'RegistrationFees', 'RenewFees', 'TradeLicense', 'GetTradeLicense']);
+    $isOrganization = $isPath(['organization*', 'orgapproved*']) || in_array($_subMenu, ['OrganizationCreate', 'OrganizationList', 'ApprovedOrganizationList', 'OrganizationShow', 'RegistrationFees', 'RenewFees', 'TradeLicense', 'GetTradeLicense', 'OrganizationTransferRequest', 'IncomingTransferRequest']);
     
     $isTax = $isPath(['tax*', 'taxes*']) || in_array($_subMenu, ['TaxGenerate', 'TaxReceived', 'TaxRateList', 'TaxList']);
     
@@ -946,6 +946,20 @@
       <a href="{{route('organizationA.trade-license.index')}}" class="nav-link @if($subMenu == "TradeLicense") active @endif">
         <i class="far fa-circle nav-icon"></i>
         <p>Generate Invoice </p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="{{ route('organization.transfer.index') }}" class="nav-link @if($subMenu == "OrganizationTransferRequest") active @endif">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Transfer Request</p>
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a href="{{ route('organization.transfer.incoming') }}" class="nav-link @if($subMenu == "IncomingTransferRequest") active @endif">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Incoming Transfer Request</p>
       </a>
     </li>
 

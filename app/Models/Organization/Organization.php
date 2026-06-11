@@ -7,6 +7,7 @@ use App\Models\BasicSettings\OrganizationSubCategory;
 use App\Models\BasicSettings\Village;
 use App\Models\House;
 use App\Models\Institute;
+use App\Models\Organization\OrganizationTransfer;
 use App\Models\Road;
 
 use App\Models\Division;
@@ -228,5 +229,15 @@ class Organization extends Model
         return $this->hasOne(TradeLicense::class, 'organization_id', 'id')->latestOfMany();
     }
 
+    public function transferRequests()
+    {
+        return $this->hasMany(OrganizationTransfer::class, 'organization_id', 'id');
+    }
 
+    public function pendingTransfer()
+    {
+        return $this->hasOne(OrganizationTransfer::class, 'organization_id', 'id')
+            ->where('status', 'pending')
+            ->latestOfMany();
+    }
 }

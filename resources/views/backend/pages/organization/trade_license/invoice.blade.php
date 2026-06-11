@@ -387,6 +387,20 @@
                     ঠিকানা- {{ $organizationAddress }}
                 </div>
             </div>
+
+            @if($organization->pendingTransfer)
+                @php
+                    $targetAuth = $organization->pendingTransfer->toInstitute->union->name ??
+                                  $organization->pendingTransfer->toInstitute->pourashava->name ??
+                                  $organization->pendingTransfer->toInstitute->cityCorporation->name ?? 'Target authority';
+                @endphp
+                <div class="info-group" style="background: #fff3cd; padding: 10px; border-radius: 4px; border: 1px solid #ffeeba;">
+                    <div class="info-header">ট্রান্সফার স্ট্যাটাস:</div>
+                    <div class="info-body">
+                        ট্রান্সফার অনুরোধ প্রক্রিয়াধীন - লক্ষ্য সংস্থা: {{ $targetAuth }}.
+                    </div>
+                </div>
+            @endif
         </div>
 
         <table class="fees-table-new">
