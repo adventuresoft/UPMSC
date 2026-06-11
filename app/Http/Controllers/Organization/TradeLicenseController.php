@@ -156,16 +156,20 @@ class TradeLicenseController extends Controller
 
     public function getTradeLicense()
     {
-        // $data['tax_years'] = TaxYear::where('status', true)->latest()->get();
-        // return view('backend.pages.organization.trade_license.get_license', $data);
-
         $data['trade_licenses'] = TradeLicense::with([
             'taxYear',
             'organization',
             'organization.type',
             'organization.category',
             'organization.subcategory',
-        ])->where('payment_status','paid')->applyMultitenancy()->latest()->get();
+        ])
+        ->whereHas('organization', function ($q) {
+            $q->applyMultitenancy();
+        })
+        ->where('payment_status', 'paid')
+        ->latest()
+        ->get();
+        
         return view('backend.pages.organization.trade_license.paidindex', $data);
     }
 

@@ -74,7 +74,7 @@
             }
             let transferId = $(this).data('id');
             $.ajax({
-                url: '/organization-transfer-requests/' + transferId + '/approve',
+                url: '{{ url("/dashboard/organization-transfer") }}/' + transferId + '/approve',
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}'
@@ -98,7 +98,7 @@
             }
 
             $.ajax({
-                url: '/organization-transfer-requests/' + transferId + '/reject',
+                url: '{{ url("/dashboard/organization-transfer") }}/' + transferId + '/reject',
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',

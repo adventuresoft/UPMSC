@@ -43,6 +43,8 @@ use App\Http\Controllers\BasicSettings\VehicleTypeController;
 use App\Http\Controllers\BasicSettings\VillageController;
 use App\Http\Controllers\BasicSettings\VillageAreaController;
 use App\Http\Controllers\UnionController as BasicUnionController;
+use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\VillageCourtController;
 use App\Http\Controllers\BridgeController;
 use App\Http\Controllers\Certificate\BirthCertificateController;
 use App\Http\Controllers\Certificate\CharacterCertificateController;
@@ -542,6 +544,7 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
     ->name('savenewownership');
     
     Route::resource('institute', InstituteController::class);
+    Route::resource('village-court', VillageCourtController::class);
 
     Route::prefix('institutes')->name('instituteA.')->group(function () {
 

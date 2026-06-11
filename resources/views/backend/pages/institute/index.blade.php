@@ -50,6 +50,7 @@
                               <thead>
                                 <tr>
                                     <th>Sl.</th>
+                                    <th>Logo</th>
                                     <th>Institute Name</th>
                                     <th>Institute Type</th>
                                     <th>Institute Category</th>
@@ -62,6 +63,9 @@
                                     @foreach ($institutes as $key=>$institute)
                                       <tr>
                                           <td>{{++$key}}</td>
+                                          <td>
+                                              <img src="{{ $institute->left_image ? imageUrl($institute->left_image) : asset('default.png') }}" alt="Logo" width="40" height="40" style="object-fit: cover; border-radius: 4px;" onerror="this.onerror=null;this.src='{{ asset('default.png') }}'">
+                                          </td>
                                           <td>
                                             @if ($institute->institute_type_id == 1)
                                               {{$institute->union?->name ?? 'N/A'}}

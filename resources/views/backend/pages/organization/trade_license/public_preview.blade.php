@@ -315,7 +315,7 @@
             </div>
 
             <div class="doc-title-block">
-                <div class="doc-title">ট্রেড লাইসেন্স</div>
+                <div class="doc-title">ট্রেড লাইসেন্স @if($license->organization->transferRequests()->where('status', 'approved')->exists()) <span style="font-size: 12px; background: #ff0000; color: #fff; padding: 2px 6px; border-radius: 4px; vertical-align: middle; margin-left: 5px;">Transferred</span> @endif</div>
                 <div class="validity-info">
                     নতুন<br>
                     অর্থ বছর: {{ $license->taxYear->name }}<br>

@@ -1193,6 +1193,33 @@
     </li>
     @endcan
 
+    {{-- Local Govt. Judiciary --}}
+    @if(is_institutional_admin() || Auth::user()->can('dashboard.read'))
+    <li class="nav-item {{ (isset($subMenu) && in_array($subMenu, ['VillageCourtCreate', 'VillageCourtList'])) ? 'menu-open' : '' }}">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-balance-scale"></i>
+        <p>
+          Local Govt. Judiciary
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="{{ route('village-court.create') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtCreate') active @endif">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Create Notice</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('village-court.index') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtList') active @endif">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Notice List</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    @endif
+
     {{-- Road Info --}}
     @can('road.read')
     <li class="nav-item {{ $isRoad ? 'menu-open' : '' }}">
