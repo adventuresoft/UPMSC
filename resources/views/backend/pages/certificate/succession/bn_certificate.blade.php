@@ -13,9 +13,9 @@
     max-width: 100%;
     margin: 0 auto;
     background-image: url('{{ asset('images/sucsesion.png') }}');
-    background-size: 100% 297mm;
-    background-repeat: repeat-y;
-    background-position: top center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
     width: 210mm;
     min-height: 297mm;
     height: auto;
@@ -140,8 +140,8 @@
             padding: 0 !important;
             border: none !important;
             box-shadow: none !important;
-            background-size: 100% 297mm !important;
-            background-repeat: repeat-y !important;
+            background-size: 100% 100% !important;
+            background-repeat: no-repeat !important;
             position: relative !important;
         }
 
