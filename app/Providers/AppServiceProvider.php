@@ -66,8 +66,8 @@ class AppServiceProvider extends ServiceProvider
             \App\Models\BasicSettings\VehicleType::class,
             \App\Models\BasicSettings\Village::class,
             \App\Models\VillageArea::class,
-            \App\Models\CityCorporationWard::class,
-            \App\Models\UnionWard::class,
+            // \App\Models\CityCorporationWard::class,
+            // \App\Models\UnionWard::class,
         ];
 
         foreach ($basicSettingsModels as $modelClass) {
