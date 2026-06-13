@@ -26,7 +26,7 @@
                             <strong>আবেদন নম্বর:</strong> {{ bnValue($certificate->system_id) }}
                         </div>
                         <div class="col-md-6 text-right">
-                            <strong>আবেদনের তারিখ:</strong> {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }}
+                            আবেদনের তারিখ: {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }}
                         </div>
                     </div>
 

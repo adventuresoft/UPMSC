@@ -192,7 +192,7 @@
                     </div>
 
                     <div class="col-4 text-right">
-                       <strong>Date: </strong> {{ date('d/m/Y', strtotime($certificate->created_at)) }} 
+                       Date: {{ date('d/m/Y', strtotime($certificate->created_at)) }} 
                     </div>
                 </div>
 
@@ -284,16 +284,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
-<script>
-
-    new QRCode(document.getElementById("qrcode"), {
-        text: "{{ url('/certificate/verify?system_id=' . $certificate->system_id) }}",
-        width: 150,
-        height: 150
-    });
-</script>
 
 @endsection
 

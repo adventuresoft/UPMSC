@@ -253,7 +253,8 @@
           </div>
 
           <div class="p-8">
-            <form action="{{ route('certificate.verify') }}" method="GET" class="space-y-6">
+            <form action="{{ route('certificate.verify.search') }}" method="POST" class="space-y-6">
+              @csrf
               <div>
                 <label for="system_id" class="form-label">সনদ নং প্রদান করুন</label>
                 <div class="flex flex-col sm:flex-row gap-3">
@@ -280,42 +281,66 @@
             </form>
 
             @if(isset($data))
-              <div class="mt-10 p-8 bg-green-50 rounded-2xl border-2 border-green-100 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-4 opacity-10">
-                  <i class="fas fa-certificate text-8xl text-green-600"></i>
-                </div>
-                
-                <div class="relative z-10">
-
-                  <div class="flex items-center gap-2 text-green-600 font-bold mb-4">
-                    <i class="fas fa-check-circle"></i>
-                    <span>সঠিক তথ্য পাওয়া গেছে</span>
+              <!-- Result Modal -->
+              <div id="resultModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-[fadeIn_0.3s_ease-out]">
+                  <div class="bg-[#046307] px-6 py-4 flex justify-between items-center text-white">
+                    <h3 class="text-lg font-bold flex items-center gap-2">
+                      <i class="fas fa-check-circle"></i> সঠিক তথ্য পাওয়া গেছে
+                    </h3>
+                    <button onclick="document.getElementById('resultModal').remove()" class="hover:bg-white/20 p-1.5 rounded-lg transition-colors">
+                      <i class="fas fa-times text-xl"></i>
+                    </button>
                   </div>
                   
-                  <div class="space-y-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 pb-4 border-b border-green-100">
-                      <span class="text-sm text-gray-500 uppercase tracking-wider font-bold">সনদ নং:</span>
-                      <span class="text-lg font-mono font-black text-[#046307]">{{ $data->system_id }}</span>
+                  <div class="p-6 relative">
+                    <div class="absolute top-4 right-4 p-4 opacity-5">
+                      <i class="fas fa-certificate text-8xl text-green-600"></i>
                     </div>
                     
-                    <p class="text-gray-700 leading-relaxed">
-                      সনদটি <span class="font-bold text-[#046307]">{{ $data->created_at->format('d M, Y') }}</span> তারিখে 
-                      <span class="font-bold text-gray-900">{{ $data->user->name }}</span>, 
-                      পিতা: <span class="font-medium text-gray-800">{{ $data->user->familyInfo->father_name_bn }}</span>, 
-                      মাতা: <span class="font-medium text-gray-800">{{ $data->user->familyInfo->mother_name_bn }}</span>, 
-                      জন্ম তারিখ: <span class="font-medium text-gray-800">{{ $data->user->people->date_of_birth ?? 'N/A' }}</span>-কে 
-                      <span class="font-bold text-[#046307]">{{ $data->user->institute->union->bn_name ?? '' }}</span> এর চেয়ারম্যান কর্তৃক প্রদান করা হয়েছে।
-                    </p>
+                    <div class="relative z-10 space-y-4">
+                      <div class="flex flex-col gap-1 pb-4 border-b border-gray-100">
+                        <span class="text-xs text-gray-500 uppercase tracking-wider font-bold">সনদ নং:</span>
+                        <span class="text-xl font-mono font-black text-[#046307]">{{ $data->system_id }}</span>
+                      </div>
+                      
+                      <div class="space-y-3 text-gray-700 leading-relaxed text-sm">
+                        <div class="flex">
+                          <span class="w-32 font-bold text-gray-500">ইস্যুর তারিখ:</span>
+                          <span class="font-bold text-[#046307]">{{ $data->created_at ? $data->created_at->format('d M, Y') : 'N/A' }}</span>
+                        </div>
+                        <div class="flex">
+                          <span class="w-32 font-bold text-gray-500">নাম:</span>
+                          <span class="font-bold text-gray-900">{{ $data->user->name ?? $data->user->people->bn_name ?? '--' }}</span>
+                        </div>
+                        <div class="flex">
+                          <span class="w-32 font-bold text-gray-500">পিতা:</span>
+                          <span class="font-medium text-gray-800">{{ $data->user->familyInfo->father_name_bn ?? '--' }}</span>
+                        </div>
+                        <div class="flex">
+                          <span class="w-32 font-bold text-gray-500">মাতা:</span>
+                          <span class="font-medium text-gray-800">{{ $data->user->familyInfo->mother_name_bn ?? '--' }}</span>
+                        </div>
+                        <div class="flex">
+                          <span class="w-32 font-bold text-gray-500">জন্ম তারিখ:</span>
+                          <span class="font-medium text-gray-800">{{ $data->user->people->date_of_birth ?? 'N/A' }}</span>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                          সনদটি <span class="font-bold text-[#046307]">{{ $data->user->institute->union->bn_name ?? '' }}</span> এর চেয়ারম্যান কর্তৃক প্রদান করা হয়েছে।
+                        </div>
+                      
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            @elseif(isset($system_id))
+            @elseif(session('error'))
               <div class="mt-10 p-8 bg-red-50 rounded-2xl border-2 border-red-100 text-center">
                 <div class="text-red-500 text-5xl mb-4">
                   <i class="fas fa-exclamation-triangle"></i>
                 </div>
                 <h3 class="text-xl font-bold text-red-700 mb-2">দুঃখিত!</h3>
-                <p class="text-red-600">প্রদানকৃত সনদ নম্বর দিয়ে কোনো তথ্য পাওয়া যায়নি। অনুগ্রহ করে সঠিক নম্বরটি পুনরায় চেক করুন।</p>
+                <p class="text-red-600">{{ session('error') }}</p>
               </div>
             @endif
           </div>

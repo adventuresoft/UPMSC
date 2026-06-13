@@ -7,7 +7,9 @@ $chairmanDistrict = optional(optional(optional($certificate->user->institute->un
 @endphp
 
 <div class="certificate-signature">
-    <div class="qr-code" id="qrcode"></div>
+    <div class="qr-code">
+        {!! QrCode::encoding('UTF-8')->size(100)->generate(get_qr_text($certificate)) !!}
+    </div>
 
     <div class="chairman">
         <div style="height:40px;"></div>

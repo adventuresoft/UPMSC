@@ -204,7 +204,7 @@
                     </div>
 
                     <div class="col-4 text-right">
-                        <strong>Date:</strong>
+                        Date:
                         {{ date('d/m/Y', strtotime($certificate->created_at)) }}
                     </div>
                 </div>
@@ -276,16 +276,7 @@ To my knowledge, he is not involved in any law and order or anti-state activitie
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
-<script>
-
-    new QRCode(document.getElementById("qrcode"), {
-        text: "{{ url('/certificate/verify?system_id=' . $certificate->system_id) }}",
-        width: 150,
-        height: 150
-    });
-</script>
 
 @endsection
 

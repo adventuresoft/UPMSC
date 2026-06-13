@@ -144,7 +144,7 @@
                     </div>
 
                     <div class="col-4 text-right">
-                        <strong>Date: </strong> {{ date('d/m/Y', strtotime($certificate->created_at)) }} 
+                        Date: {{ date('d/m/Y', strtotime($certificate->created_at)) }} 
                     </div>
                 </div>
 

@@ -106,7 +106,11 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label>Case Date (মামলার তারিখ) <span class="text-danger">*</span></label>
-                                            <input type="date" name="case_date" class="form-control" required value="{{ $case->case_date ? $case->case_date->format('Y-m-d') : date('Y-m-d') }}">
+                                            @php
+                                                $caseDate = $case->case_date ? $case->case_date->format('Y-m-d') : date('Y-m-d');
+                                                $minDate = min(date('Y-m-d', strtotime('-30 days')), $caseDate);
+                                            @endphp
+                                            <input type="date" name="case_date" class="form-control" required value="{{ $caseDate }}" min="{{ $minDate }}" max="{{ date('Y-m-d') }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">

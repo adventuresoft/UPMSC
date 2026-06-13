@@ -170,7 +170,7 @@
                     </div>
 
                     <div class="col-4 text-right">
-                        <strong>তারিখঃ</strong> {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }} খ্রিঃ
+                        তারিখঃ {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }} খ্রিঃ
                     </div>
                 </div>
 
@@ -216,9 +216,7 @@
 
                 <!-- Signature Area -->
                 <div class="certificate-signature">
-                     <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
+                     <div class="qr-code">{!! QrCode::encoding('UTF-8')->size(100)->generate(get_qr_text($certificate)) !!}</div>
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
@@ -260,16 +258,7 @@
         </button>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
-<script>
-
-    new QRCode(document.getElementById("qrcode"), {
-        text: "{{ url('/certificate/verify?system_id=' . $certificate->system_id) }}",
-        width: 150,
-        height: 150
-    });
-</script>
 
 @endsection
 
