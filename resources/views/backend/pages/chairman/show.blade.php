@@ -141,7 +141,10 @@
                                 })->first();
                                 
                                 @endphp
-                                 {{ optional($chairman)->User->name ?? 'N/A' }} <a class="badge badge-info" href="{{route('chairman.changeMember', optional($chairman)->id)}}"> <i class="fas fa-fw fa-pencil"> </i> Edit</a>
+                                 {{ optional($chairman)->User->name ?? 'N/A' }} 
+                                 @if(edit_permission('chairman'))
+                                 <a class="badge badge-info" href="{{route('chairman.changeMember', optional($chairman)->id)}}"> <i class="fas fa-fw fa-pencil"> </i> Edit</a>
+                                 @endif
                             </td>
                         </tr>
                     </table>
@@ -164,7 +167,11 @@
                         <td class="titleheading">সদস্য / কমিশনার </td>
                         <td class="colon">:</td>
                         <td class="wordno">{{$wt}} </td>
-                        <td class="inputfield"> {{ optional($consilmember)->User->name ?? 'N/A' }} <a class="badge badge-info" href="{{route('chairman.changeMember', optional($consilmember)->id)}}"> <i class="fas fa-fw fa-pencil"> </i> Edit</a> </td>
+                        <td class="inputfield"> {{ optional($consilmember)->User->name ?? 'N/A' }} 
+                            @if(edit_permission('chairman'))
+                            <a class="badge badge-info" href="{{route('chairman.changeMember', optional($consilmember)->id)}}"> <i class="fas fa-fw fa-pencil"> </i> Edit</a> 
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
 
@@ -199,7 +206,11 @@
                     <td class="titleheading">সংরক্ষিত মহিলা সদস্য / কমিশনার</td>
                     <td class="colon">:</td>
                     <td class="wordno">{{ $wt}}</td>
-                    <td class="inputfield">{{ optional($consilRemember)->User->name ?? 'N/A' }} <a class="badge badge-info" href="{{route('chairman.changeMember', optional($consilRemember)->id)}}"> <i class="fas fa-fw fa-pencil"> </i> Edit</a></td>
+                    <td class="inputfield">{{ optional($consilRemember)->User->name ?? 'N/A' }} 
+                        @if(edit_permission('chairman'))
+                        <a class="badge badge-info" href="{{route('chairman.changeMember', optional($consilRemember)->id)}}"> <i class="fas fa-fw fa-pencil"> </i> Edit</a>
+                        @endif
+                    </td>
                 </tr>
                 @endforeach
             </table>
@@ -221,7 +232,11 @@
                 <tr>
                     <td class="titleheading">প্যানেল চেয়ারম্যান / মেয়র </td>
                     <td class="colon">:</td>
-                    <td class="inputfield">{{ optional($consilPanel)->User->name ?? 'N/A' }} <a class="badge badge-info" href="{{route('chairman.changeMember', optional($consilPanel)->id)}}"> <i class="fas fa-fw fa-pencil"> </i> Edit</a> </td>
+                    <td class="inputfield">{{ optional($consilPanel)->User->name ?? 'N/A' }} 
+                        @if(edit_permission('chairman'))
+                        <a class="badge badge-info" href="{{route('chairman.changeMember', optional($consilPanel)->id)}}"> <i class="fas fa-fw fa-pencil"> </i> Edit</a> 
+                        @endif
+                    </td>
             </tr>
         </table>
     </div>

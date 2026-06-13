@@ -48,9 +48,11 @@
                                 <h3 class="card-title font-bold text-lg"><i class="fas fa-hand-holding-heart mr-2"></i>Relief Card Applications</h3>
                             </div>
                             <div class="col-md-6 text-right">
+                                @if(create_permission('relief_card'))
                                 <a href="{{ route('relief-card.create') }}" class="btn btn-sm btn-light font-bold text-pink-700 shadow-sm">
                                     <i class="fas fa-plus mr-2"></i> Create New
                                 </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -121,14 +123,18 @@
                                     </td>
                                     <td>
                                         <!-- Edit button (opens modal with edit mode) -->
+                                        @if(edit_permission('relief_card'))
                                         <button class="btn btn-sm btn-warning mb-1 mr-1" data-ward-id="{{ $wardId }}" data-edit-mode="true" onclick="showPeopleModal(this)">
                                             <i class="fas fa-edit mr-1"></i> Edit
                                         </button>
+                                        @endif
                                         
                                         <!-- Delete button (deletes all in ward) -->
+                                        @if(delete_permission('relief_card'))
                                         <button class="btn btn-sm btn-danger mb-1 mr-1" data-ward-id="{{ $wardId }}" data-count="{{ $data['count'] }}" onclick="deleteWard(this)">
                                             <i class="fas fa-trash mr-1"></i> Delete
                                         </button>
+                                        @endif
                                         
                                         <!-- Ward-level status buttons -->
                                         <button class="btn btn-sm btn-success mb-1 mr-1" data-ward-id="{{ $wardId }}" data-status="1" onclick="updateWardStatus(this)">
@@ -235,12 +241,16 @@
                     </td>
                     ${isEditMode ? `
                     <td>
+                        @if(edit_permission('relief_card'))
                         <a href="${card.edit_url}" class="btn btn-sm btn-primary mb-1 mr-1">
                             <i class="fas fa-edit mr-1"></i> Edit
                         </a>
+                        @endif
+                        @if(delete_permission('relief_card'))
                         <button onclick="deleteCard('${card.delete_url}')" class="btn btn-sm btn-danger mb-1">
                             <i class="fas fa-trash mr-1"></i> Delete
                         </button>
+                        @endif
                     </td>
                     ` : ''}
                 </tr>

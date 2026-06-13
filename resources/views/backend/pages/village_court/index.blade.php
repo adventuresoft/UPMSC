@@ -26,7 +26,9 @@
                     <div class="card card-info">
                         <div class="card-header">
                             <h3 class="card-title">Notice List</h3>
+                            @if(create_permission('village_court'))
                             <a href="{{ route('village-court.create') }}" class="btn btn-default btn-sm float-right"><i class="fas fa-plus"></i> Create Notice</a>
+                            @endif
                         </div>
                         <div class="card-body">
                             <table id="example1" class="table table-bordered table-striped">
@@ -63,12 +65,16 @@
                                             <td>
                                                 <div class="btn-group">
                                                     <a href="{{ route('village-court.show', $case->id) }}" class="btn btn-info btn-sm" title="View/Print"><i class="fas fa-eye"></i></a>
+                                                    @if(edit_permission('village_court'))
                                                     <a href="{{ route('village-court.edit', $case->id) }}" class="btn btn-warning btn-sm" title="Edit"><i class="fas fa-edit"></i></a>
+                                                    @endif
+                                                    @if(delete_permission('village_court'))
                                                     <form action="{{ route('village-court.destroy', $case->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this notice?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fas fa-trash"></i></button>
                                                     </form>
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

@@ -35,7 +35,9 @@
                                     <h3 class="card-title">Chairman List</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
+                                    @if(create_permission('chairman'))
                                     <a href="{{route('chairman.create')}}" class="btn btn-primary">Create</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -68,7 +70,9 @@
                                     <td>{{date('d-m-Y',strtotime($council->end_date))}}</td>
                                     <td>{{$council->status==1?'Active':'Inactive'}}</td>
                                     <td>
+                                        @if(edit_permission('chairman'))
                                         <a href="{{ route('chairman.edit', $council->id) }}" class="btn btn-sm btn-info" title="Edit"> <i class="fas fa-pencil-alt"></i> Edit </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
