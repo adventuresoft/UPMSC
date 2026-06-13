@@ -295,13 +295,17 @@ public function getOrganizationBySystemId_01_05_26($system_id)
         // dd($data['divisions']);
 
        $data['post_officeses']=PostOffice::latest()->get();
-        $instituteId = Auth::user()->institute_id;
+        $instituteId = Auth::check() ? Auth::user()->institute_id : null;
         if ($instituteId) {
             $institute = Institute::find($instituteId);
             $data['villages'] = Village::where('union_id', $institute->union_id)->get();
         } else {
             // Superadmin or no institute - show all or handle differently
             $data['villages'] = Village::get();
+        }
+
+        if (!Auth::check() && !Auth::guard('people')->check()) {
+            return view('frontend.pages.application.trade_license', $data);
         }
 
         return view('backend.pages.organization.create', $data);
@@ -524,8 +528,8 @@ public function getOrganizationBySystemId_01_05_26($system_id)
                 $instituteId = $people->user->institute_id ?? null;
                 $createdBy = $people->id;
             } else {
-                $instituteId = Auth::user()->institute_id ?? null;
-                $createdBy = Auth::id();
+                $instituteId = Auth::check() ? (Auth::user()->institute_id ?? null) : null;
+                $createdBy = Auth::check() ? Auth::id() : null;
             }
 
             $resolvedUnionId = $request->union_id;
@@ -647,7 +651,7 @@ public function getOrganizationBySystemId_01_05_26($system_id)
              $data['thanas'] = Thana::where('district_id',$organization->district_id)->where('status', true)->get();
              $data['office_districts'] = District::where('division_id', $organization->office_division_id)->where('status', true)->get();
              $data['office_thanas'] = Thana::where('district_id', $organization->office_district_id)->where('status', true)->get();
-             $data['ups'] = Union::where('thana_id',$organization->thana_id)->where('status', true)->get();
+             $data['unions'] = Union::where('thana_id',$organization->thana_id)->where('status', true)->get();
               $data['villages'] = Village::where('union_id', $organization->union_id )->get();
         // dd($data['divisions']);
        $data['post_officeses']=PostOffice::latest()->get();

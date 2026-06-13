@@ -316,9 +316,6 @@
         </div>
 
         <div class="photo-badge">
-            <div class="photo-box">
-                <img src="{{ $organization->logo ? imageUrl($organization->logo) : asset('default.png') }}" alt="Organization Logo">
-            </div>
             <div class="id-info-columns">
                 <div class="id-info-item"><span>Name :</span> {{ $organization->name }}</div>
                 <div class="id-info-item"><span>Name (Bangla) :</span> {{ $organization->bn_name }}</div>

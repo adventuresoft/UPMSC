@@ -208,6 +208,20 @@
 
     <div class="form-group row">
         <div class="col-sm-4">
+            <label for="union_id">Union <span class="text-danger">*</span></label>
+            <select name="union_id" class="form-control select2 select2bs4" id="union_id" required>
+                <option value="">Select Union</option>
+                @if (isset($unions))
+                    @foreach ($unions as $union)
+                        <option value="{{ $union->id }}"
+                            {{ isset($organization->union_id) && $organization->union_id == $union->id ? 'selected' : '' }}>
+                            {{ $union->bn_name ?? $union->name ?? 'Select Union' }}</option>
+                    @endforeach
+                @endif
+            </select>
+            <small class="text-danger error union_id_error"></small>
+        </div>
+        <div class="col-sm-4">
             <label for="post_office_id">Post Office</label>
             <select name="post_office_id" class="form-control select2 select2bs4" id="post_office_id">
                 <option value="">Select Post Office</option>

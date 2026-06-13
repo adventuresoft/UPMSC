@@ -161,6 +161,12 @@ Route::prefix('application')->name('application.')->group(function () {
     Route::get('success/{system_id}', [ApplicationController::class, 'success'])->name('success');
 });
 
+// Public Organization
+Route::prefix('trade-license-application')->name('public.organization.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Organization\OrganizationController::class, 'create'])->name('create');
+    Route::post('store', [App\Http\Controllers\Organization\OrganizationController::class, 'store'])->name('store');
+});
+
 
 /* permisison */
 // Role route start
