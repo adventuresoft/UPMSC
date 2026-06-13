@@ -102,7 +102,8 @@
 
     /* Set sidebar to a good width first for desktop */
     @media (min-width: 992px) {
-        .main-sidebar {
+        body:not(.sidebar-collapse) .main-sidebar,
+        body.sidebar-mini.sidebar-collapse .main-sidebar:hover {
             width: 250px !important;
         }
         body:not(.sidebar-collapse) .content-wrapper,
@@ -158,11 +159,27 @@
         padding: 12px 16px;
         transition: background-color .18s ease, color .18s ease, transform .18s ease;
         background: transparent !important;
+        position: relative;
+        display: block;
+        width: 100%;
     }
 
     .nav-sidebar .nav-item > .nav-link p,
     .nav-sidebar .nav-item > .nav-link i {
         color: inherit !important;
+    }
+
+    /* Vertically center the right dropdown caret */
+    .nav-sidebar .nav-link > p > .right,
+    .nav-sidebar .nav-link > p > i.right {
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+    }
+
+    /* Fix rotation when menu is open */
+    .nav-sidebar .menu-open > .nav-link > p > .right,
+    .nav-sidebar .menu-open > .nav-link > p > i.right {
+        transform: translateY(-50%) rotate(-90deg) !important;
     }
 
     .nav-sidebar .nav-link:hover {
