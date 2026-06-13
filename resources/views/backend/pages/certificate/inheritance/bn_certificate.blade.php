@@ -13,13 +13,13 @@
     max-width: 100%;
     margin: 0 auto;
     background-image: url('{{ asset('images/sucsesion.png') }}');
-    background-size: cover;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
     width: 210mm;
-    height: 297mm;
+    min-height: 297mm;
+    height: auto;
     position: relative;
-    overflow: hidden;
     box-sizing: border-box;
     margin: 0 auto;
 }
@@ -36,35 +36,33 @@
 
 .inner-frame{
     height: 100%;
+    min-height: 267mm; /* 297mm - 30mm padding */
     padding: 15mm;
     position: relative;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 /* =========================
    FOOTER
 ========================= */
 .certificate-footer {
-    position: absolute;
-    bottom: 6mm;
-    left: 12mm;
-    right: 12mm;
     font-size: 10px;
     text-align: center;
     opacity: 0.85;
+    margin-top: 15px;
 }
 
 /* =========================
    SIGNATURE
 ========================= */
 .certificate-signature {
-    position: absolute;
-    bottom: 16mm;
-    left: 12mm;
-    right: 12mm;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    margin-top: auto;
+    padding-top: 30px;
 }
 
 .certificate-signature .qr-code img{
@@ -135,16 +133,16 @@
 
         .certificate-card {
             width: 100% !important;
-            height: 100vh !important;
+            height: auto !important;
+            min-height: 297mm !important;
             max-width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
             border: none !important;
             box-shadow: none !important;
             background-size: 100% 100% !important;
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
+            background-repeat: no-repeat !important;
+            position: relative !important;
         }
 
         

@@ -33,6 +33,7 @@ class InheritanceController extends Controller
         ->where('status', true)
         ->whereNotIn('role_id', [1, 2, 3, 4])
         ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
+        ->applyMultitenancy()
         ->get();
         return view('backend.pages.certificate.inheritance.create', $data);
     }
@@ -134,6 +135,7 @@ class InheritanceController extends Controller
         ->where('status', true)
         ->where('role_id', 5)
         ->whereHas('people', function ($q) {$q->whereNotNull('approved_id');})
+        ->applyMultitenancy()
         ->get();
         return view('backend.pages.certificate.inheritance.edit', $data);
     }
