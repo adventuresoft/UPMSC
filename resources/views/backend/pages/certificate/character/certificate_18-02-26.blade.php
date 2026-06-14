@@ -200,17 +200,15 @@
 
                     <!-- ================= Title ================= -->
                     <div class="row mt-3 align-items-center">
-                        <div class="col-4 text-left">
+                        <div class="col-3 text-left">
                             <strong>No:</strong>  <span style="font-weight:bold;color:blue">{{ $certificate->system_id ?? '' }}</span>
                         </div>
-
-                        <div class="col-4 text-center">
-                            <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px; background-color: #2F318C;">
+                    <div class="col-6 text-center">
+                        <span class="badge text-light px-4 py-2" style="font-size: clamp(16px, 1.5vw, 24px); white-space: normal; line-height: 1.4; border-radius:28px; background-color: #2F318C;">
                                 Character certificate
                             </span>
-                        </div>
-
-                        <div class="col-4 text-right">
+                    </div>
+                    <div class="col-3 text-right">
                             Date: {{ date('d/m/Y', strtotime($certificate->created_at)) }}
                         </div>
                     </div>
@@ -265,7 +263,7 @@
             </div>
         </div>
 
-        <div class="text-center mt-2 mb-4">
+        <div class="text-center mt-2 mb-4 d-print-none">
             <button id="cancelPageButton" class="btn btn-danger btn-sm px-4" onclick="window.history.back();">
                 Cancel
             </button>

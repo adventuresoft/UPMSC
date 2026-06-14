@@ -224,17 +224,17 @@
 
                 <!-- ================= Title ================= -->
                 <div class="row mt-2 align-items-center">
-                    <div class="col-3 text-left">
+                    <div class="col-2 text-left">
                         <strong>নম্বরঃ</strong>  <span style="font-weight:bold;color:blue">{{ bnValue($certificate->system_id ?? '') }}</span>
                     </div>
 
-                    <div class="col-6 text-center">
+                    <div class="col-8 text-center">
                         <span class="badge text-light px-4 py-2" style="font-size:22px; border-radius:26px;; background-color: #2F318C;">
                             ওয়ারিশান সনদ
                         </span>
                     </div>
 
-                    <div class="col-3 text-right">
+                    <div class="col-2 text-right">
                         তারিখঃ
                         {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }} খ্রিঃ
                     </div>
@@ -365,7 +365,7 @@
     </div>
 
     <!-- ===== Buttons ===== -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <button 
             id="cancelPageButton" 
             class="btn btn-danger btn-sm px-4"

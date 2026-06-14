@@ -182,17 +182,15 @@
 
                 <!-- ================= Title ================= -->
                 <div class="row mt-3 align-items-center">
-                    <div class="col-4 text-left">
+                    <div class="col-3 text-left" style="white-space: nowrap;">
                         <strong> NO: </strong >  <span style="font-weight:bold;color:blue">      {{ $certificate->system_id ?? '' }}   </span>
                     </div>
-
-                    <div class="col-4 text-center">
-                        <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px; background-color: #2F318C;">
+                    <div class="col-6 text-center" style="white-space: nowrap;">
+                        <span class="badge text-light px-4 py-2" style="font-size: clamp(12px, 1.5vw, 20px); white-space: nowrap; border-radius:28px; background-color: #2F318C;">
                            Citizenship Certificate
                         </span>
                     </div>
-
-                    <div class="col-4 text-right">
+                    <div class="col-3 text-right" style="white-space: nowrap;">
                         Date:
                         {{ date('d/m/Y', strtotime($certificate->created_at)) }}
                     </div>
@@ -229,7 +227,7 @@
                             Upzila - {{ $certificate->user?->institute?->union?->thana?->name ?? '' }},
                             District: - {{ $certificate->user?->institute?->union?->thana?->district?->name ?? '' }} .
                            He is a Bangladeshi citizen by birth and a permanent resident of this union.
-To my knowledge, he is not involved in any law and order or anti-state activities.
+His/Her birth registration is properly recorded in this office. To my knowledge, he is not involved in any law and order or anti-state activities.
                         </p>
 
                         <p style="margin-left:40px;">
@@ -251,7 +249,7 @@ To my knowledge, he is not involved in any law and order or anti-state activitie
     </div>
 
     <!-- ================= Buttons ================= -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
                 onclick="window.location.href='{{ route('certificate/birth.index') }}'">
             Cancel

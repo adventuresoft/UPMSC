@@ -175,17 +175,15 @@
 
                 <!-- Title Row -->
                 <div class="row mt-3 align-items-center">
-                    <div class="col-4 text-left">
+                    <div class="col-3 text-left" style="white-space: nowrap;">
                        <strong>No:</strong>  <span style="font-weight:bold;color:blue">{{ $certificate->system_id ?? '' }}</span>
                     </div>
-
-                    <div class="col-4 text-center">
-                        <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px; background-color: #2F318C;">
+                    <div class="col-6 text-center" style="white-space: nowrap;">
+                        <span class="badge text-light px-4 py-2" style="font-size: clamp(12px, 1.5vw, 20px); white-space: nowrap; border-radius:28px; background-color: #2F318C;">
                            Re-Married Certificate
                         </span>
                     </div>
-
-                    <div class="col-4 text-right">
+                    <div class="col-3 text-right" style="white-space: nowrap;">
                         Date: {{ date('d/m/Y', strtotime($certificate->created_at)) }} 
                     </div>
                 </div>
@@ -197,7 +195,7 @@
                             <span style="margin-left:40px;"></span>
                             This is to certify that ,
                             {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Mrs.' }}
-                            <strong>{{ $certificate->user->people->name ?? '' }}</strong>,
+                            <strong>{{ $certificate->user->people->name ?? $certificate->user->name ?? '' }}</strong>,
                             ID No.<strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
                             Father: <span>{{ $certificate->user->familyInfo->father_name ?? '' }}</span>
                             and Mother: <span>{{ $certificate->user->familyInfo->mother_name ?? '' }}</span>,
@@ -223,7 +221,7 @@
                           As far as I know, he <strong>{{ family_marital_status_label(optional($certificate->user->familyInfo)->marital_status ?? null) }}</strong> 
                           
                          And this information is the ward number - {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }}   Verified by its members.
-                        </p>
+                        He/She has legally remarried after the previous marriage. </p>
 
                         <p style="margin-left:40px;">
                               I wish him all the best and a prosperous life.
@@ -232,8 +230,7 @@
                 </div>
 
                 <!-- Signature Area -->
-                <div class="certificate-signature">
-                    @include('backend.partials.chairman_signature', ['certificate' => $certificate])
+                @include('backend.partials.chairman_signature', ['certificate' => $certificate])
 
                 <!-- Footer -->
                 <div class="certificate-footer">
@@ -245,7 +242,7 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <!-- Cancel Button -->
         <button 
             id="cancelPageButton" 

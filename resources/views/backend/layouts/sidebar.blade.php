@@ -28,7 +28,7 @@
     
     $isPeopleInfo = $isPath(['people*', 'peopleapprovedlist*', 'peoplesearch*']) || in_array($_subMenu, ['Create', 'View', 'Show', 'approvedList', 'search']);
     
-    $isCertificate = $isPath(['citizen*', 'character*', 'death*', 'succession*', 'unmarried*', 'married*', 'remarried*', 'landless*', 'name*', 'income*', 'disability-certificate*', 'voter-area*', 'voter-list*', 'nid-correction*', 'childless*', 'orphan*', 'financial-instability*', 'age*', 'permanent-citizen*', 'residential*', 'guardian-income*', 'guardian-acceptance*']) || $_mainMenu == 'Certificate';
+    $isCertificate = $isPath(['citizen*', 'character*', 'death*', 'succession*', 'unmarried*', 'married*', 'remarried*', 'landless*', 'name*', 'income*', 'disability-certificate*', 'voter-area*', 'voter-list*', 'nid-correction*', 'childless*', 'orphan*', 'financial-instability*', 'age*', 'permanent-citizen*', 'residential*', 'guardian-income*', 'guardian-acceptance*', /* <!-- ADDED CERTS SLUGS --> */ 'birth-registration-correction*', 'new-voter-recommendation*', 'voter-registration-agreement*', 'not-rohingya*', 'passport-related*', 'family*', 'alive*', 'missing-person*', 'abandoned-by-husband*', 'widow*', 'dependency*', 'dowryless*', 'unemployment*', 'helplessness*', 'illiteracy*', 'agriculture*', 'fisherman*', 'professional*', 'farmer-fuel-oil-card*', 'no-objection*', 'general*', 'infrastructure-construction-permission*', 'power-of-attorney*', 'ethnic-minority*', 'tribal*', 'indigenous*']) || $_mainMenu == 'Certificate';
     
     $isOrganization = $isPath(['organization*', 'orgapproved*']) || in_array($_subMenu, ['OrganizationCreate', 'OrganizationList', 'ApprovedOrganizationList', 'OrganizationShow', 'RegistrationFees', 'RenewFees', 'TradeLicense', 'GetTradeLicense', 'OrganizationTransferRequest', 'IncomingTransferRequest']);
     
@@ -895,6 +895,191 @@
           <p>Inheritance</p>
         </a>
       </li>
+
+<!-- GENERATED ADMIN CERTS -->
+      <li class="nav-item">
+        <a href="{{route('birth-registration-correction.index')}}" class="nav-link  @if($subMenu == 'BirthRegistrationCorrection') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Birth Reg Correction</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('new-voter-recommendation.index')}}" class="nav-link  @if($subMenu == 'NewVoterRecommendation') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>New Voter Recommendation</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('voter-registration-agreement.index')}}" class="nav-link  @if($subMenu == 'VoterRegistrationAgreement') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Voter Reg Agreement</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('not-rohingya.index')}}" class="nav-link  @if($subMenu == 'NotRohingya') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Not Rohingya</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('passport-related.index')}}" class="nav-link  @if($subMenu == 'PassportRelated') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Passport Related</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('family.index')}}" class="nav-link  @if($subMenu == 'Family') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Family</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('alive.index')}}" class="nav-link  @if($subMenu == 'Alive') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Alive</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('missing-person.index')}}" class="nav-link  @if($subMenu == 'MissingPerson') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Missing Person</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('abandoned-by-husband.index')}}" class="nav-link  @if($subMenu == 'AbandonedByHusband') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Abandoned By Husband</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('widow.index')}}" class="nav-link  @if($subMenu == 'Widow') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Widow</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('dependency.index')}}" class="nav-link  @if($subMenu == 'Dependency') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Dependency</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('dowryless.index')}}" class="nav-link  @if($subMenu == 'Dowryless') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Dowryless</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('unemployment.index')}}" class="nav-link  @if($subMenu == 'Unemployment') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Unemployment</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('helplessness.index')}}" class="nav-link  @if($subMenu == 'Helplessness') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Helplessness</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('illiteracy.index')}}" class="nav-link  @if($subMenu == 'Illiteracy') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Illiteracy</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('agriculture.index')}}" class="nav-link  @if($subMenu == 'Agriculture') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Agriculture</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('fisherman.index')}}" class="nav-link  @if($subMenu == 'Fisherman') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Fisherman</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('professional.index')}}" class="nav-link  @if($subMenu == 'Professional') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Professional</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('farmer-fuel-oil-card.index')}}" class="nav-link  @if($subMenu == 'FarmerFuelOilCard') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Farmer Fuel Card</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('no-objection.index')}}" class="nav-link  @if($subMenu == 'NoObjection') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>No Objection</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('general.index')}}" class="nav-link  @if($subMenu == 'General') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>General</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('infrastructure-construction-permission.index')}}" class="nav-link  @if($subMenu == 'InfrastructureConstructionPermission') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Infra Const Permission</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('power-of-attorney.index')}}" class="nav-link  @if($subMenu == 'PowerOfAttorney') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Power Of Attorney</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('ethnic-minority.index')}}" class="nav-link  @if($subMenu == 'EthnicMinority') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Ethnic Minority</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('tribal.index')}}" class="nav-link  @if($subMenu == 'Tribal') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Tribal</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{{route('indigenous.index')}}" class="nav-link  @if($subMenu == 'Indigenous') active @endif">
+          <i class="far fa-circle nav-icon"></i>
+          <p>Indigenous</p>
+        </a>
+      </li>
+
+
 
     </ul>
   </li>

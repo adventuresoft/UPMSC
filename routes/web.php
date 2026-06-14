@@ -359,6 +359,61 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::resource('certificate/childless', ChildlessCertificateController::class);
     Route::get('certificate/childless/bn/{id}', [ChildlessCertificateController::class, 'bn_certificate'])->name('childless.bn_certificate');
 
+    // Generated Routes
+    Route::resource('certificate/birth-registration-correction', \App\Http\Controllers\Certificate\BirthRegistrationCorrectionCertificateController::class);
+    Route::get('certificate/birth-registration-correction/bn/{id}', [\App\Http\Controllers\Certificate\BirthRegistrationCorrectionCertificateController::class, 'bn_certificate'])->name('birth-registration-correction.bn_certificate');
+    Route::resource('certificate/new-voter-recommendation', \App\Http\Controllers\Certificate\NewVoterRecommendationCertificateController::class);
+    Route::get('certificate/new-voter-recommendation/bn/{id}', [\App\Http\Controllers\Certificate\NewVoterRecommendationCertificateController::class, 'bn_certificate'])->name('new-voter-recommendation.bn_certificate');
+    Route::resource('certificate/voter-registration-agreement', \App\Http\Controllers\Certificate\VoterRegistrationAgreementCertificateController::class);
+    Route::get('certificate/voter-registration-agreement/bn/{id}', [\App\Http\Controllers\Certificate\VoterRegistrationAgreementCertificateController::class, 'bn_certificate'])->name('voter-registration-agreement.bn_certificate');
+    Route::resource('certificate/not-rohingya', \App\Http\Controllers\Certificate\NotRohingyaCertificateController::class);
+    Route::get('certificate/not-rohingya/bn/{id}', [\App\Http\Controllers\Certificate\NotRohingyaCertificateController::class, 'bn_certificate'])->name('not-rohingya.bn_certificate');
+    Route::resource('certificate/passport-related', \App\Http\Controllers\Certificate\PassportRelatedCertificateController::class);
+    Route::get('certificate/passport-related/bn/{id}', [\App\Http\Controllers\Certificate\PassportRelatedCertificateController::class, 'bn_certificate'])->name('passport-related.bn_certificate');
+    Route::resource('certificate/family', \App\Http\Controllers\Certificate\FamilyCertificateController::class);
+    Route::get('certificate/family/bn/{id}', [\App\Http\Controllers\Certificate\FamilyCertificateController::class, 'bn_certificate'])->name('family.bn_certificate');
+    Route::resource('certificate/alive', \App\Http\Controllers\Certificate\AliveCertificateController::class);
+    Route::get('certificate/alive/bn/{id}', [\App\Http\Controllers\Certificate\AliveCertificateController::class, 'bn_certificate'])->name('alive.bn_certificate');
+    Route::resource('certificate/missing-person', \App\Http\Controllers\Certificate\MissingPersonCertificateController::class);
+    Route::get('certificate/missing-person/bn/{id}', [\App\Http\Controllers\Certificate\MissingPersonCertificateController::class, 'bn_certificate'])->name('missing-person.bn_certificate');
+    Route::resource('certificate/abandoned-by-husband', \App\Http\Controllers\Certificate\AbandonedByHusbandCertificateController::class);
+    Route::get('certificate/abandoned-by-husband/bn/{id}', [\App\Http\Controllers\Certificate\AbandonedByHusbandCertificateController::class, 'bn_certificate'])->name('abandoned-by-husband.bn_certificate');
+    Route::resource('certificate/widow', \App\Http\Controllers\Certificate\WidowCertificateController::class);
+    Route::get('certificate/widow/bn/{id}', [\App\Http\Controllers\Certificate\WidowCertificateController::class, 'bn_certificate'])->name('widow.bn_certificate');
+    Route::resource('certificate/dependency', \App\Http\Controllers\Certificate\DependencyCertificateController::class);
+    Route::get('certificate/dependency/bn/{id}', [\App\Http\Controllers\Certificate\DependencyCertificateController::class, 'bn_certificate'])->name('dependency.bn_certificate');
+    Route::resource('certificate/dowryless', \App\Http\Controllers\Certificate\DowrylessCertificateController::class);
+    Route::get('certificate/dowryless/bn/{id}', [\App\Http\Controllers\Certificate\DowrylessCertificateController::class, 'bn_certificate'])->name('dowryless.bn_certificate');
+    Route::resource('certificate/unemployment', \App\Http\Controllers\Certificate\UnemploymentCertificateController::class);
+    Route::get('certificate/unemployment/bn/{id}', [\App\Http\Controllers\Certificate\UnemploymentCertificateController::class, 'bn_certificate'])->name('unemployment.bn_certificate');
+    Route::resource('certificate/helplessness', \App\Http\Controllers\Certificate\HelplessnessCertificateController::class);
+    Route::get('certificate/helplessness/bn/{id}', [\App\Http\Controllers\Certificate\HelplessnessCertificateController::class, 'bn_certificate'])->name('helplessness.bn_certificate');
+    Route::resource('certificate/illiteracy', \App\Http\Controllers\Certificate\IlliteracyCertificateController::class);
+    Route::get('certificate/illiteracy/bn/{id}', [\App\Http\Controllers\Certificate\IlliteracyCertificateController::class, 'bn_certificate'])->name('illiteracy.bn_certificate');
+    Route::resource('certificate/agriculture', \App\Http\Controllers\Certificate\AgricultureCertificateController::class);
+    Route::get('certificate/agriculture/bn/{id}', [\App\Http\Controllers\Certificate\AgricultureCertificateController::class, 'bn_certificate'])->name('agriculture.bn_certificate');
+    Route::resource('certificate/fisherman', \App\Http\Controllers\Certificate\FishermanCertificateController::class);
+    Route::get('certificate/fisherman/bn/{id}', [\App\Http\Controllers\Certificate\FishermanCertificateController::class, 'bn_certificate'])->name('fisherman.bn_certificate');
+    Route::resource('certificate/professional', \App\Http\Controllers\Certificate\ProfessionalCertificateController::class);
+    Route::get('certificate/professional/bn/{id}', [\App\Http\Controllers\Certificate\ProfessionalCertificateController::class, 'bn_certificate'])->name('professional.bn_certificate');
+    Route::resource('certificate/farmer-fuel-oil-card', \App\Http\Controllers\Certificate\FarmerFuelOilCardCertificateController::class);
+    Route::get('certificate/farmer-fuel-oil-card/bn/{id}', [\App\Http\Controllers\Certificate\FarmerFuelOilCardCertificateController::class, 'bn_certificate'])->name('farmer-fuel-oil-card.bn_certificate');
+    Route::resource('certificate/no-objection', \App\Http\Controllers\Certificate\NoObjectionCertificateController::class);
+    Route::get('certificate/no-objection/bn/{id}', [\App\Http\Controllers\Certificate\NoObjectionCertificateController::class, 'bn_certificate'])->name('no-objection.bn_certificate');
+    Route::resource('certificate/general', \App\Http\Controllers\Certificate\GeneralCertificateController::class);
+    Route::get('certificate/general/bn/{id}', [\App\Http\Controllers\Certificate\GeneralCertificateController::class, 'bn_certificate'])->name('general.bn_certificate');
+    Route::resource('certificate/infrastructure-construction-permission', \App\Http\Controllers\Certificate\InfrastructureConstructionPermissionCertificateController::class)->parameters(['infrastructure-construction-permission' => 'icp_cert']);
+    Route::get('certificate/infrastructure-construction-permission/bn/{id}', [\App\Http\Controllers\Certificate\InfrastructureConstructionPermissionCertificateController::class, 'bn_certificate'])->name('infrastructure-construction-permission.bn_certificate');
+    Route::resource('certificate/power-of-attorney', \App\Http\Controllers\Certificate\PowerOfAttorneyCertificateController::class);
+    Route::get('certificate/power-of-attorney/bn/{id}', [\App\Http\Controllers\Certificate\PowerOfAttorneyCertificateController::class, 'bn_certificate'])->name('power-of-attorney.bn_certificate');
+    Route::resource('certificate/ethnic-minority', \App\Http\Controllers\Certificate\EthnicMinorityCertificateController::class);
+    Route::get('certificate/ethnic-minority/bn/{id}', [\App\Http\Controllers\Certificate\EthnicMinorityCertificateController::class, 'bn_certificate'])->name('ethnic-minority.bn_certificate');
+    Route::resource('certificate/tribal', \App\Http\Controllers\Certificate\TribalCertificateController::class);
+    Route::get('certificate/tribal/bn/{id}', [\App\Http\Controllers\Certificate\TribalCertificateController::class, 'bn_certificate'])->name('tribal.bn_certificate');
+    Route::resource('certificate/indigenous', \App\Http\Controllers\Certificate\IndigenousCertificateController::class);
+    Route::get('certificate/indigenous/bn/{id}', [\App\Http\Controllers\Certificate\IndigenousCertificateController::class, 'bn_certificate'])->name('indigenous.bn_certificate');
+
+
     Route::resource('certificate/orphan', OrphanCertificateController::class);
     Route::get('certificate/orphan/bn/{id}', [OrphanCertificateController::class, 'bn_certificate'])->name('orphan.bn_certificate');
     Route::resource('certificate/financial-instability', FinancialInstabilityCertificateController::class);
@@ -762,3 +817,41 @@ Route::middleware('auth')->group(function () {
     })->name('test-sms-api');
 });
 
+
+// New certificate applications
+//for https://clms.com.bd/run-new-migrations
+
+// Route::get('/run-new-migrations', function () {
+//     $migrations = [
+//         'database/migrations/2026_06_14_034813_create_birth_registration_correction_certificates_table.php',
+//         'database/migrations/2026_06_14_034814_create_new_voter_recommendation_certificates_table.php',
+//         'database/migrations/2026_06_14_034815_create_voter_registration_agreement_certificates_table.php',
+//         'database/migrations/2026_06_14_034816_create_not_rohingya_certificates_table.php',
+//         'database/migrations/2026_06_14_034817_create_passport_related_certificates_table.php',
+//         'database/migrations/2026_06_14_034818_create_family_certificates_table.php',
+//         'database/migrations/2026_06_14_034819_create_alive_certificates_table.php',
+//         'database/migrations/2026_06_14_034820_create_missing_person_certificates_table.php',
+//         'database/migrations/2026_06_14_034821_create_abandoned_by_husband_certificates_table.php',
+//         'database/migrations/2026_06_14_034822_create_widow_certificates_table.php',
+//         'database/migrations/2026_06_14_034823_create_dependency_certificates_table.php',
+//         'database/migrations/2026_06_14_034824_create_dowryless_certificates_table.php',
+//         'database/migrations/2026_06_14_034825_create_unemployment_certificates_table.php',
+//         'database/migrations/2026_06_14_034826_create_helplessness_certificates_table.php',
+//         'database/migrations/2026_06_14_034827_create_illiteracy_certificates_table.php',
+//         'database/migrations/2026_06_14_034828_create_agriculture_certificates_table.php',
+//         'database/migrations/2026_06_14_034829_create_fisherman_certificates_table.php',
+//         'database/migrations/2026_06_14_034830_create_professional_certificates_table.php',
+//         'database/migrations/2026_06_14_034831_create_farmer_fuel_oil_card_certificates_table.php',
+//         'database/migrations/2026_06_14_034832_create_no_objection_certificates_table.php',
+//         'database/migrations/2026_06_14_034833_create_general_certificates_table.php',
+//         'database/migrations/2026_06_14_034834_create_infrastructure_construction_permission_certificates_table.php',
+//         'database/migrations/2026_06_14_034835_create_power_of_attorney_certificates_table.php',
+//         'database/migrations/2026_06_14_034837_create_ethnic_minority_certificates_table.php',
+//         'database/migrations/2026_06_14_034838_create_tribal_certificates_table.php',
+//         'database/migrations/2026_06_14_034839_create_indigenous_certificates_table.php',
+//     ];
+//     foreach ($migrations as $migration) {
+//         \Illuminate\Support\Facades\Artisan::call('migrate', ['--path' => $migration]);
+//     }
+//     return "New migrations completed successfully!";
+// });

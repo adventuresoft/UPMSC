@@ -245,7 +245,7 @@
     </div>
 
     <!-- ================= Buttons ================= -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
                 onclick="window.location.href='{{ route('guardian-acceptance.index') }}'">
             Cancel

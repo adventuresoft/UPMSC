@@ -176,7 +176,7 @@
 
     </div>
 
-    <div class="text-center mt-3 mb-4">
+    <div class="text-center d-print-none">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
                 onclick="window.location.href='{{ route('guardian-acceptance.index') }}'">বাতিল</button>
         <button id="printPageButton" class="btn btn-success btn-sm px-4 ms-2"

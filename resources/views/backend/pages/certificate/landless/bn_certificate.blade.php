@@ -159,17 +159,15 @@
 
                 <!-- ================= Title ================= -->
                 <div class="row mt-3 align-items-center">
-                    <div class="col-4 text-left">
+                    <div class="col-3 text-left" style="white-space: nowrap;">
                         <strong>নম্বরঃ</strong> <span>{{ bnValue($certificate->system_id ?? '') }}</span>
                     </div>
-
-                    <div class="col-4 text-center">
-                        <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px;; background-color: #2F318C;">
+                    <div class="col-6 text-center" style="white-space: nowrap;">
+                        <span class="badge text-light px-4 py-2" style="font-size: clamp(14px, 1.5vw, 22px); white-space: nowrap; border-radius:28px;; background-color: #2F318C;">
                             ভূমিহীন সনদ
                         </span>
                     </div>
-
-                    <div class="col-4 text-right">
+                    <div class="col-3 text-right" style="white-space: nowrap;">
                         তারিখঃ {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }} খ্রিঃ
                     </div>
                 </div>
@@ -191,7 +189,7 @@
                             উপজেলা - <span>{{ $certificate->user->institute->union->thana->bn_name ?? '' }}</span>,
                             জেলা - <span>{{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</span>।
                             তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং এই ইউনিয়নের স্থায়ী বাসিন্দা। 
-                            আমার জানা মতে তিনি আইন-শৃঙ্খলা ও রাষ্ট্র বিরোধী কোন অপরাধের সাথে জড়িত নন।
+                            তিনি একজন ভূমিহীন ব্যক্তি এবং তার নিজ নামে কোনো জমি নেই। আমার জানা মতে তিনি আইন-শৃঙ্খলা ও রাষ্ট্র বিরোধী কোন অপরাধের সাথে জড়িত নন।
                         </p>
 
                         <p style="margin-left:40px;">
@@ -202,17 +200,13 @@
 
                 <!-- Signature Area -->
                 <div class="certificate-signature">
-                     <div class="qr-code">{!! QrCode::encoding('UTF-8')->size(100)->generate(get_qr_text($certificate)) !!}</div>
-
+                    <div class="qr-code">{!! QrCode::encoding('UTF-8')->size(100)->generate(get_qr_text($certificate)) !!}</div>
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">({{ get_chairman_name_bn($certificate) }})</p>
+                        <p class="mb-1" >({{ get_chairman_name_bn($certificate) }})</p>
                         <p class="mb-0">চেয়ারম্যান</p>
                         <p class="mb-0">{{ $certificate->user->institute->union->bn_name ?? '' }}</p>
-                        <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}
-                        </p>
+                        <p class="mb-0" style="font-size:14px;">{{ $certificate->user->institute->union->thana->bn_name ?? '' }}, {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</p>
                     </div>
                 </div>
 
@@ -226,7 +220,7 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <!-- Cancel Button -->
         <button 
             id="cancelPageButton" 

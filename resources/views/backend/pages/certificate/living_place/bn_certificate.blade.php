@@ -191,7 +191,7 @@
                             উপজেলা: - {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলা: - {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
                             তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং অত্র ইউনিয়নের স্থায়ী বাসিন্দা।
-                            আমার জানা মতে তিনি আইন-শৃঙ্খলা ও রাষ্ট্রবিরোধী কোন কার্যকলাপের সাথে জড়িত নন।
+                            তিনি বর্তমানে উল্লেখিত ঠিকানায় নিয়মিতভাবে বসবাস করছেন। আমার জানা মতে তিনি আইন-শৃঙ্খলা ও রাষ্ট্রবিরোধী কোন কার্যকলাপের সাথে জড়িত নন।
                         </p>
 
                         <p style="margin-left:40px;">
@@ -226,7 +226,7 @@
     </div>
 
     <!-- ================= Buttons ================= -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
                 onclick="window.location.href='{{ route('citizen.index') }}'">
             Cancel
