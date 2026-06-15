@@ -850,8 +850,97 @@ Route::middleware('auth')->group(function () {
 //         'database/migrations/2026_06_14_034838_create_tribal_certificates_table.php',
 //         'database/migrations/2026_06_14_034839_create_indigenous_certificates_table.php',
 //     ];
-//     foreach ($migrations as $migration) {
-//         \Illuminate\Support\Facades\Artisan::call('migrate', ['--path' => $migration]);
 //     }
 //     return "New migrations completed successfully!";
 // });
+
+// Route::get('/seed-certificate-types', function () {
+//     $newCertificates = [
+//         ['table_name' => 'guardian_acceptance_certificates', 'name' => 'Guardian Acceptance Certificate', 'code' => '22'],
+//         ['table_name' => 'birth_registration_correction_certificates', 'name' => 'Birth Registration Correction Certificate', 'code' => '23'],
+//         ['table_name' => 'new_voter_recommendation_certificates', 'name' => 'New Voter Recommendation Certificate', 'code' => '24'],
+//         ['table_name' => 'voter_registration_agreement_certificates', 'name' => 'Voter Registration Agreement Certificate', 'code' => '25'],
+//         ['table_name' => 'not_rohingya_certificates', 'name' => 'Not Rohingya Certificate', 'code' => '26'],
+//         ['table_name' => 'passport_related_certificates', 'name' => 'Passport Related Certificate', 'code' => '27'],
+//         ['table_name' => 'family_certificates', 'name' => 'Family Certificate', 'code' => '28'],
+//         ['table_name' => 'alive_certificates', 'name' => 'Alive Certificate', 'code' => '29'],
+//         ['table_name' => 'missing_person_certificates', 'name' => 'Missing Person Certificate', 'code' => '30'],
+//         ['table_name' => 'abandoned_by_husband_certificates', 'name' => 'Abandoned By Husband Certificate', 'code' => '31'],
+//         ['table_name' => 'widow_certificates', 'name' => 'Widow Certificate', 'code' => '32'],
+//         ['table_name' => 'dependency_certificates', 'name' => 'Dependency Certificate', 'code' => '33'],
+//         ['table_name' => 'dowryless_certificates', 'name' => 'Dowryless Certificate', 'code' => '34'],
+//         ['table_name' => 'unemployment_certificates', 'name' => 'Unemployment Certificate', 'code' => '35'],
+//         ['table_name' => 'helplessness_certificates', 'name' => 'Helplessness Certificate', 'code' => '36'],
+//         ['table_name' => 'illiteracy_certificates', 'name' => 'Illiteracy Certificate', 'code' => '37'],
+//         ['table_name' => 'agriculture_certificates', 'name' => 'Agriculture Certificate', 'code' => '38'],
+//         ['table_name' => 'fisherman_certificates', 'name' => 'Fisherman Certificate', 'code' => '39'],
+//         ['table_name' => 'professional_certificates', 'name' => 'Professional Certificate', 'code' => '40'],
+//         ['table_name' => 'farmer_fuel_oil_card_certificates', 'name' => 'Farmer Fuel Oil Card Certificate', 'code' => '41'],
+//         ['table_name' => 'no_objection_certificates', 'name' => 'No Objection Certificate', 'code' => '42'],
+//         ['table_name' => 'general_certificates', 'name' => 'General Certificate', 'code' => '43'],
+//         ['table_name' => 'infrastructure_construction_permission_certificates', 'name' => 'Infrastructure Construction Permission', 'code' => '44'],
+//         ['table_name' => 'power_of_attorney_certificates', 'name' => 'Power Of Attorney Certificate', 'code' => '45'],
+//         ['table_name' => 'ethnic_minority_certificates', 'name' => 'Ethnic Minority Certificate', 'code' => '46'],
+//         ['table_name' => 'tribal_certificates', 'name' => 'Tribal Certificate', 'code' => '47'],
+//         ['table_name' => 'indigenous_certificates', 'name' => 'Indigenous Certificate', 'code' => '48'],
+//     ];
+
+//     foreach ($newCertificates as $cert) {
+//         \Illuminate\Support\Facades\DB::table('certificate_types')->updateOrInsert(
+//             ['table_name' => $cert['table_name']],
+//             [
+//                 'name' => $cert['name'],
+//                 'code' => $cert['code'],
+//                 'created_at' => now(),
+//                 'updated_at' => now()
+//             ]
+//         );
+//     }
+    
+//     return "All new certificate types have been seeded successfully with 2-character codes!";
+// });
+
+// Route::get('/fix-all-old-certificates', function () {
+//     $newCertificates = [
+//         ['table_name' => 'guardian_acceptance_certificates', 'code_alpha' => 'GA', 'code_num' => '22'],
+//         ['table_name' => 'birth_registration_correction_certificates', 'code_alpha' => 'BR', 'code_num' => '23'],
+//         ['table_name' => 'new_voter_recommendation_certificates', 'code_alpha' => 'NV', 'code_num' => '24'],
+//         ['table_name' => 'voter_registration_agreement_certificates', 'code_alpha' => 'VR', 'code_num' => '25'],
+//         ['table_name' => 'not_rohingya_certificates', 'code_alpha' => 'NR', 'code_num' => '26'],
+//         ['table_name' => 'passport_related_certificates', 'code_alpha' => 'PR', 'code_num' => '27'],
+//         ['table_name' => 'family_certificates', 'code_alpha' => 'FC', 'code_num' => '28'],
+//         ['table_name' => 'alive_certificates', 'code_alpha' => 'AL', 'code_num' => '29'],
+//         ['table_name' => 'missing_person_certificates', 'code_alpha' => 'MP', 'code_num' => '30'],
+//         ['table_name' => 'abandoned_by_husband_certificates', 'code_alpha' => 'AH', 'code_num' => '31'],
+//         ['table_name' => 'widow_certificates', 'code_alpha' => 'WD', 'code_num' => '32'],
+//         ['table_name' => 'dependency_certificates', 'code_alpha' => 'DP', 'code_num' => '33'],
+//         ['table_name' => 'dowryless_certificates', 'code_alpha' => 'DL', 'code_num' => '34'],
+//         ['table_name' => 'unemployment_certificates', 'code_alpha' => 'UE', 'code_num' => '35'],
+//         ['table_name' => 'helplessness_certificates', 'code_alpha' => 'HL', 'code_num' => '36'],
+//         ['table_name' => 'illiteracy_certificates', 'code_alpha' => 'IL', 'code_num' => '37'],
+//         ['table_name' => 'agriculture_certificates', 'code_alpha' => 'AG', 'code_num' => '38'],
+//         ['table_name' => 'fisherman_certificates', 'code_alpha' => 'FM', 'code_num' => '39'],
+//         ['table_name' => 'professional_certificates', 'code_alpha' => 'PF', 'code_num' => '40'],
+//         ['table_name' => 'farmer_fuel_oil_card_certificates', 'code_alpha' => 'FF', 'code_num' => '41'],
+//         ['table_name' => 'no_objection_certificates', 'code_alpha' => 'NO', 'code_num' => '42'],
+//         ['table_name' => 'general_certificates', 'code_alpha' => 'GN', 'code_num' => '43'],
+//         ['table_name' => 'infrastructure_construction_permission_certificates', 'code_alpha' => 'IC', 'code_num' => '44'],
+//         ['table_name' => 'power_of_attorney_certificates', 'code_alpha' => 'PA', 'code_num' => '45'],
+//         ['table_name' => 'ethnic_minority_certificates', 'code_alpha' => 'EM', 'code_num' => '46'],
+//         ['table_name' => 'tribal_certificates', 'code_alpha' => 'TB', 'code_num' => '47'],
+//         ['table_name' => 'indigenous_certificates', 'code_alpha' => 'IG', 'code_num' => '48'],
+//     ];
+
+//     foreach ($newCertificates as $cert) {
+//         if (\Illuminate\Support\Facades\Schema::hasTable($cert['table_name'])) {
+//             \Illuminate\Support\Facades\DB::table($cert['table_name'])
+//                 ->where('system_id', 'like', '%' . $cert['code_alpha'] . '%')
+//                 ->update([
+//                     'system_id' => \Illuminate\Support\Facades\DB::raw("REPLACE(system_id, '" . $cert['code_alpha'] . "', '" . $cert['code_num'] . "')")
+//                 ]);
+//         }
+//     }
+    
+//     return "All old generated certificates across all tables have been fixed!";
+// });
+

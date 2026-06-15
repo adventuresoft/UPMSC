@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Death'])
+﻿@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Death'])
 
 @push('style')
 <style>
@@ -138,12 +138,14 @@
                         <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -10px;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
-                        <h2 class="text-success font-weight-bold mb-0" style="font-family: 'Kalpurush-Bold', sans-serif; font-size:28px; ">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
-                        </h2>
-                        <h3 class="font-weight-bold" style="color:#2e3192;  font-size:29px; line-height: 1.1;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
-                        </h3>
+                        <div class="text-center">
+                            <h2 class="dynamic-bn-name text-success font-weight-bold mb-0" style="width: max-content; margin: 0 auto; font-family: 'Kalpurush-Bold', sans-serif; font-size:28px; white-space: nowrap;">
+                                {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            </h2>
+                            <h3 class="dynamic-en-name font-weight-bold mb-0" style="width: max-content; margin: 0 auto; color:#2e3192; font-size:22px; line-height: 1.2; white-space: nowrap;">
+                                {{ $certificate->user->institute->union->name ?? '' }}
+                            </h3>
+                        </div>
                         <p class="mb-0" style="font-size:15px; ">
                             উপজেলাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
@@ -193,15 +195,14 @@
                             @elseif($bc)
                                 জন্ম নিবন্ধন নং- {{ bnValue($bc) }},
                             @endif
-                            ঠিকানাঃ গ্রাম: - <span>{{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }}</span>,
-                            ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
-                            ডাকঘর: - 
-                            {{ optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->bn_name ?? '' }}
+                            ঠিকানাঃ গ্রাম: <span>{{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }}</span>,
+                            ওয়ার্ড: {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
+                            ডাকঘর: {{ optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->bn_name ?? '' }}
                             @if(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code)
                                 {{ bnValue(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code) }},
                             @endif
-                            উপজেলা: - <span>{{ $certificate->user->institute->union->thana->bn_name ?? '' }}</span>,
-                            জেলা: - <span>{{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</span>।
+                            উপজেলা: <span>{{ $certificate->user->institute->union->thana->bn_name ?? '' }}</span>,
+                            জেলা: <span>{{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</span>।
 
                         <span>
                             তিনি 
@@ -270,6 +271,27 @@
 
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.fonts.ready.then(function() {
+            const bnNames = document.querySelectorAll('.dynamic-bn-name');
+            const enNames = document.querySelectorAll('.dynamic-en-name');
+            for(let i = 0; i < bnNames.length; i++) {
+                let bnName = bnNames[i];
+                let enName = enNames[i];
+                if(bnName && enName) {
+                    let bnWidth = bnName.getBoundingClientRect().width;
+                    let enWidth = enName.getBoundingClientRect().width;
+                    let currentFontSize = parseFloat(window.getComputedStyle(enName).fontSize);
+                    if(enWidth > 0 && bnWidth > 0 && enWidth !== bnWidth) {
+                        let newFontSize = currentFontSize * (bnWidth / enWidth);
+                        enName.style.fontSize = newFontSize + 'px';
+                    }
+                }
+            }
+        });
+    });
+</script>
 @endsection
 
 @push('script')
@@ -279,3 +301,15 @@
     }
 </script>
 @endpush
+
+
+
+
+
+
+
+
+
+
+
+

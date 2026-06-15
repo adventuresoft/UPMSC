@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Succession'])
+﻿@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Succession'])
 
 @push('style')
 <style>
@@ -262,10 +262,8 @@
                                 জন্ম নিবন্ধন নং- {{ bnValue($bc) }},
                             @endif
                             ঠিকানাঃ গ্রাম- {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                            ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
-                            ডাকঘর: - 
-                            
-{{ optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->bn_name ?? '' }}
+                            ওয়ার্ড: {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
+                            ডাকঘর: {{ optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->bn_name ?? '' }}
 @if(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code)
     {{ bnValue(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code) }},
 @endif
@@ -383,6 +381,27 @@
 </div>
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.fonts.ready.then(function() {
+            const bnNames = document.querySelectorAll('.dynamic-bn-name');
+            const enNames = document.querySelectorAll('.dynamic-en-name');
+            for(let i = 0; i < bnNames.length; i++) {
+                let bnName = bnNames[i];
+                let enName = enNames[i];
+                if(bnName && enName) {
+                    let bnWidth = bnName.getBoundingClientRect().width;
+                    let enWidth = enName.getBoundingClientRect().width;
+                    let currentFontSize = parseFloat(window.getComputedStyle(enName).fontSize);
+                    if(enWidth > 0 && bnWidth > 0 && enWidth !== bnWidth) {
+                        let newFontSize = currentFontSize * (bnWidth / enWidth);
+                        enName.style.fontSize = newFontSize + 'px';
+                    }
+                }
+            }
+        });
+    });
+</script>
 @endsection
 
 @push('script')
@@ -392,3 +411,16 @@
     }
 </script>
 @endpush
+
+
+
+
+
+
+
+
+
+
+
+
+
