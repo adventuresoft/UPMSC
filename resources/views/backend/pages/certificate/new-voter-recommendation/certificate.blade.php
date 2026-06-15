@@ -218,7 +218,7 @@
                             Upzila:- <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,
                             District: - <span>{{ $certificate->user->institute->union->thana->district->name ?? '' }}</span>.
                            He is a Bangladeshi citizen by birth and a permanent resident of this union.
-                           He/She is recommended to be enrolled as a new voter.
+                           He/She has not been registered as a voter anywhere else before. He/She is recommended to be enrolled as a new voter in ward no {{ $certificate->user->addressInfo->permanentWard->en_ward_no ?? '' }} of this union.
 To my knowledge, he is of good character and has not been involved in any crime against law and order or the state.
                         </p>
 

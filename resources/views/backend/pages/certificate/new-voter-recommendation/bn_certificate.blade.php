@@ -1,4 +1,4 @@
-﻿@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'NewVoterRecommendation'])
+@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'NewVoterRecommendation'])
 @push('style')
 <style>
     .container {
@@ -191,8 +191,8 @@
                             উপজেলা: {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলা: {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
                             তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং অত্র ইউনিয়নের স্থায়ী বাসিন্দা।
-                            তাকে নতুন ভোটার হিসেবে তালিকাভুক্ত করার জন্য সুপারিশ করা হলো।
-                            আমার জানা মতে তিনি আইন-শৃঙ্খলা ও রাষ্ট্রবিরোধী কোন কার্যকলাপের সাথে জড়িত নন।
+                            সে ইতোপূর্বে অন্য কোথাও ভোটার হয়নি। তাকে অত্র ইউনিয়নের {{ bnValue($certificate->user->addressInfo->permanentWard->bn_ward_no ?? '') }} নং ওয়ার্ডে নতুন ভোটার হিসেবে তালিকাভুক্ত করার জন্য সুপারিশ করা হলো।
+                        
                         </p>
 
                         <p style="margin-left:40px;">
