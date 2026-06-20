@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Inheritance'])
+﻿@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Inheritance'])
 
 @push('style')
 <style>
@@ -224,18 +224,18 @@
 
                 <!-- ================= Title ================= -->
                 <div class="row mt-2 align-items-center">
-                    <div class="col-3 text-left">
+                    <div class="col-2 text-left">
                         <strong>নম্বরঃ</strong>  <span style="font-weight:bold;color:blue">{{ bnValue($certificate->system_id ?? '') }}</span>
                     </div>
 
-                    <div class="col-6 text-center">
+                    <div class="col-8 text-center">
                         <span class="badge text-light px-4 py-2" style="font-size:22px; border-radius:26px;; background-color: #2F318C;">
                             উত্তরাধিকার সনদ
                         </span>
                     </div>
 
-                    <div class="col-3 text-right">
-                        <strong>তারিখঃ</strong>
+                    <div class="col-2 text-right">
+                        তারিখঃ
                         {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }} খ্রিঃ
                     </div>
                 </div>
@@ -262,10 +262,8 @@
                                 জন্ম নিবন্ধন নং- {{ bnValue($bc) }},
                             @endif
                             ঠিকানাঃ গ্রাম- {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                            ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
-                            ডাকঘর: - 
-                            
-{{ optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->bn_name ?? '' }}
+                            ওয়ার্ড: {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
+                            ডাকঘর: {{ optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->bn_name ?? '' }}
 @if(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code)
     {{ bnValue(optional(optional(optional($certificate->user)->addressInfo)->permanentPostOffice)->postal_code) }},
 @endif
@@ -318,9 +316,7 @@
 
                 <!-- ===== Signature ===== -->
                 <div class="certificate-signature">
-                     <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
+                     <div class="qr-code">{!! QrCode::encoding('UTF-8')->size(100)->generate(get_qr_text($certificate)) !!}</div>
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
@@ -344,7 +340,7 @@
     </div>
 
     <!-- ===== Buttons ===== -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <button 
             id="cancelPageButton" 
             class="btn btn-danger btn-sm px-4"
@@ -360,17 +356,29 @@
         </button>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
 
 <script>
-
-    new QRCode(document.getElementById("qrcode"), {
-        text: "{{ url('/certificate/verify?system_id=' . $certificate->system_id) }}",
-        width: 150,
-        height: 150
+    document.addEventListener("DOMContentLoaded", function() {
+        document.fonts.ready.then(function() {
+            const bnNames = document.querySelectorAll('.dynamic-bn-name');
+            const enNames = document.querySelectorAll('.dynamic-en-name');
+            for(let i = 0; i < bnNames.length; i++) {
+                let bnName = bnNames[i];
+                let enName = enNames[i];
+                if(bnName && enName) {
+                    let bnWidth = bnName.getBoundingClientRect().width;
+                    let enWidth = enName.getBoundingClientRect().width;
+                    let currentFontSize = parseFloat(window.getComputedStyle(enName).fontSize);
+                    if(enWidth > 0 && bnWidth > 0 && enWidth !== bnWidth) {
+                        let newFontSize = currentFontSize * (bnWidth / enWidth);
+                        enName.style.fontSize = newFontSize + 'px';
+                    }
+                }
+            }
+        });
     });
 </script>
-
 @endsection
 
 @push('script')
@@ -380,3 +388,16 @@
     }
 </script>
 @endpush
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Name'])
+﻿@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Name'])
 
 @push('style')
 <style>
@@ -139,12 +139,14 @@
                         <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -10px;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
-                        <h2 class="text-success font-weight-bold mb-0" style="font-family: 'Kalpurush-Bold', sans-serif; font-size:28px; ">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
-                        </h2>
-                        <h3 class="font-weight-bold" style="color:#2e3192;  font-size:29px; line-height: 1.1;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
-                        </h3>
+                        <div class="text-center">
+                            <h2 class="dynamic-bn-name text-success font-weight-bold mb-0" style="width: max-content; margin: 0 auto; font-family: 'Kalpurush-Bold', sans-serif; font-size:28px; white-space: nowrap;">
+                                {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            </h2>
+                            <h3 class="dynamic-en-name font-weight-bold mb-0" style="width: max-content; margin: 0 auto; color:#2e3192; font-size:22px; line-height: 1.2; white-space: nowrap;">
+                                {{ $certificate->user->institute->union->name ?? '' }}
+                            </h3>
+                        </div>
                         <p class="mb-0" style="font-size:15px; ">
                             উপজেলাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
@@ -159,18 +161,16 @@
 
                 <!-- ================= Title ================= -->
                 <div class="row mt-3 align-items-center">
-                    <div class="col-4 text-left">
+                    <div class="col-3 text-left" style="white-space: nowrap;">
                         <strong>নম্বরঃ</strong> <span>{{ bnValue($certificate->system_id ?? '') }}</span>
                     </div>
-
-                    <div class="col-4 text-center">
-                        <span class="badge text-light px-4 py-2" style="font-size:24px; border-radius:28px;; background-color: #2F318C;">
+                    <div class="col-6 text-center" style="white-space: nowrap;">
+                        <span class="badge text-light px-4 py-2" style="font-size: clamp(14px, 1.5vw, 22px); white-space: nowrap; border-radius:28px;; background-color: #2F318C;">
                             নামের সনদ
                         </span>
                     </div>
-
-                    <div class="col-4 text-right">
-                        <strong>তারিখঃ</strong> {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }} খ্রিঃ
+                    <div class="col-3 text-right" style="white-space: nowrap;">
+                        তারিখঃ {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }} খ্রিঃ
                     </div>
                 </div>
 
@@ -191,17 +191,16 @@
                             পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
                             মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }},
                             ঠিকানাঃ 
-                            গ্রাম: - {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                            ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
-                            ডাকঘর: - 
-{{ optional($certificate->user->addressInfo->permanentPostOffice)->bn_name ?? '' }} -
+                            গ্রাম: {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
+                            ওয়ার্ড: {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
+                            ডাকঘর: {{ optional($certificate->user->addressInfo->permanentPostOffice)->bn_name ?? '' }} -
 @if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
 {{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }},
 @endif
-                            উপজেলা: - {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            জেলা: - {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
+                            উপজেলা: {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
+                            জেলা: {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
                             তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং এই ইউনিয়নের স্থায়ী বাসিন্দা। 
-                            আমার জানা মতে উক্ত {{ optional($certificate->user->people)->bn_name ?? '' }} 
+                            উল্লেখিত ভিন্ন ভিন্ন নামগুলো মূলত একই ব্যক্তির এবং তিনি অভিন্ন ব্যক্তি। আমার জানা মতে উক্ত {{ optional($certificate->user->people)->bn_name ?? '' }} 
                             ওরফে {{ $certificate->name_bangla }} একই ব্যক্তি।
                         </p>
 
@@ -213,19 +212,13 @@
 
                 <!-- Signature Area -->
                 <div class="certificate-signature">
-                   <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
-
+                    <div class="qr-code">{!! QrCode::encoding('UTF-8')->size(100)->generate(get_qr_text($certificate)) !!}</div>
                     <div class="chairman">
                         <div style="height:40px;"></div>
-                        <p class="mb-1">({{ get_chairman_name_bn($certificate) }})</p>
+                        <p class="mb-1" >({{ get_chairman_name_bn($certificate) }})</p>
                         <p class="mb-0">চেয়ারম্যান</p>
                         <p class="mb-0">{{ $certificate->user->institute->union->bn_name ?? '' }}</p>
-                        <p class="mb-0" style="font-size:14px;">
-                            {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}
-                        </p>
+                        <p class="mb-0" style="font-size:14px;">{{ $certificate->user->institute->union->thana->bn_name ?? '' }}, {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}</p>
                     </div>
                 </div>
 
@@ -239,7 +232,7 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <!-- Cancel Button -->
         <button 
             id="cancelPageButton" 
@@ -258,17 +251,29 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
 
 <script>
-
-    new QRCode(document.getElementById("qrcode"), {
-        text: "{{ url('/certificate/verify?system_id=' . $certificate->system_id) }}",
-        width: 150,
-        height: 150
+    document.addEventListener("DOMContentLoaded", function() {
+        document.fonts.ready.then(function() {
+            const bnNames = document.querySelectorAll('.dynamic-bn-name');
+            const enNames = document.querySelectorAll('.dynamic-en-name');
+            for(let i = 0; i < bnNames.length; i++) {
+                let bnName = bnNames[i];
+                let enName = enNames[i];
+                if(bnName && enName) {
+                    let bnWidth = bnName.getBoundingClientRect().width;
+                    let enWidth = enName.getBoundingClientRect().width;
+                    let currentFontSize = parseFloat(window.getComputedStyle(enName).fontSize);
+                    if(enWidth > 0 && bnWidth > 0 && enWidth !== bnWidth) {
+                        let newFontSize = currentFontSize * (bnWidth / enWidth);
+                        enName.style.fontSize = newFontSize + 'px';
+                    }
+                }
+            }
+        });
     });
 </script>
-
 @endsection
 
 @push('script')
@@ -279,3 +284,15 @@
     }
 </script>
 @endpush
+
+
+
+
+
+
+
+
+
+
+
+

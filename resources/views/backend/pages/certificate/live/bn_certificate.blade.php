@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Childless'])
+﻿@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'Childless'])
 @push('style')
 <style>
     .container {
@@ -132,12 +132,14 @@
                         <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -10px;">
                             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
                         </h2>
-                        <h2 class="text-success font-weight-bold mb-0" style="font-family: 'Kalpurush-Bold', sans-serif; font-size:28px; ">
-                            {{ $certificate->user->institute->union->bn_name ?? '' }}
-                        </h2>
-                        <h3 class="font-weight-bold" style="color:#2e3192;  font-size:29px; line-height: 1.1;">
-                            {{ $certificate->user->institute->union->name ?? '' }}
-                        </h3>
+                        <div class="text-center">
+                            <h2 class="dynamic-bn-name text-success font-weight-bold mb-0" style="width: max-content; margin: 0 auto; font-family: 'Kalpurush-Bold', sans-serif; font-size:28px; white-space: nowrap;">
+                                {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            </h2>
+                            <h3 class="dynamic-en-name font-weight-bold mb-0" style="width: max-content; margin: 0 auto; color:#2e3192; font-size:22px; line-height: 1.2; white-space: nowrap;">
+                                {{ $certificate->user->institute->union->name ?? '' }}
+                            </h3>
+                        </div>
                         <p class="mb-0" style="font-size:15px; ">
                             থানাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
@@ -164,7 +166,7 @@
                     </div>
 
                     <div class="col-4 text-right">
-                        <strong>তারিখঃ</strong>
+                        তারিখঃ
                         {{ bnValue(date('d/m/Y', strtotime($certificate->created_at))) }} খ্রিঃ
                     </div>
                 </div>
@@ -181,17 +183,16 @@
                             পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
                             মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }},
                             ঠিকানাঃ 
-                            গ্রাম: - {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
-                            ওয়ার্ড:- {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
-                            ডাকঘর: - 
-{{ optional($certificate->user->addressInfo->permanentPostOffice)->bn_name ?? '' }} -
+                            গ্রাম: {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
+                            ওয়ার্ড: {{ $certificate->user->addressInfo->permanentWard->bn_ward_no ?? '' }},
+                            ডাকঘর: {{ optional($certificate->user->addressInfo->permanentPostOffice)->bn_name ?? '' }} -
 @if(optional($certificate->user->addressInfo->permanentPostOffice)->postal_code)
 {{ bnValue($certificate->user->addressInfo->permanentPostOffice->postal_code) }},
 @endif
-                            উপজেলা: - {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
-                            জেলা: - {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
+                            উপজেলা: {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
+                            জেলা: {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }}।
                             তিনি জন্মসূত্রে একজন বাংলাদেশী নাগরিক এবং অত্র ইউনিয়নের স্থায়ী বাসিন্দা।
-                            আমার জানা মতে তিনি আইন-শৃঙ্খলা ও রাষ্ট্রবিরোধী কোন কার্যকলাপের সাথে জড়িত নন।
+                            তিনি বর্তমানে সশরীরে জীবিত আছেন এবং সুস্থভাবে জীবনযাপন করছেন। আমার জানা মতে তিনি আইন-শৃঙ্খলা ও রাষ্ট্রবিরোধী কোন কার্যকলাপের সাথে জড়িত নন।
                         </p>
 
                         <p style="margin-left:40px;">
@@ -202,9 +203,7 @@
 
                 <!-- ================= Signature ================= -->
                 <div class="certificate-signature">
-                     <div class="qr-code"  id="qrcode">
-                        <!--<img src="{{ asset('images/scanner.png') }}">-->
-                    </div>
+                     <div class="qr-code">{!! QrCode::encoding('UTF-8')->size(100)->generate(get_qr_text($certificate)) !!}</div>
 
                     <div class="chairman">
                         <div style="height:40px;"></div>
@@ -228,7 +227,7 @@
     </div>
 
     <!-- ================= Buttons ================= -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
                 onclick="window.location.href='{{ route('citizen.index') }}'">
             Cancel
@@ -240,15 +239,39 @@
         </button>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
 
 <script>
-
-    new QRCode(document.getElementById("qrcode"), {
-        text: "{{ url('/certificate/verify?system_id=' . $certificate->system_id) }}",
-        width: 150,
-        height: 150
+    document.addEventListener("DOMContentLoaded", function() {
+        document.fonts.ready.then(function() {
+            const bnNames = document.querySelectorAll('.dynamic-bn-name');
+            const enNames = document.querySelectorAll('.dynamic-en-name');
+            for(let i = 0; i < bnNames.length; i++) {
+                let bnName = bnNames[i];
+                let enName = enNames[i];
+                if(bnName && enName) {
+                    let bnWidth = bnName.getBoundingClientRect().width;
+                    let enWidth = enName.getBoundingClientRect().width;
+                    let currentFontSize = parseFloat(window.getComputedStyle(enName).fontSize);
+                    if(enWidth > 0 && bnWidth > 0 && enWidth !== bnWidth) {
+                        let newFontSize = currentFontSize * (bnWidth / enWidth);
+                        enName.style.fontSize = newFontSize + 'px';
+                    }
+                }
+            }
+        });
     });
 </script>
-
 @endsection
+
+
+
+
+
+
+
+
+
+
+
+

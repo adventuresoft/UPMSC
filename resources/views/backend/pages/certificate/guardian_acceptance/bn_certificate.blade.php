@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'GuardianAcceptance'])
+﻿@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'GuardianAcceptance'])
 
 @push('style')
 <style>
@@ -176,11 +176,44 @@
 
     </div>
 
-    <div class="text-center mt-3 mb-4">
+    <div class="text-center d-print-none">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
                 onclick="window.location.href='{{ route('guardian-acceptance.index') }}'">বাতিল</button>
         <button id="printPageButton" class="btn btn-success btn-sm px-4 ms-2"
                 onclick="window.print();">প্রিন্ট</button>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.fonts.ready.then(function() {
+            const bnNames = document.querySelectorAll('.dynamic-bn-name');
+            const enNames = document.querySelectorAll('.dynamic-en-name');
+            for(let i = 0; i < bnNames.length; i++) {
+                let bnName = bnNames[i];
+                let enName = enNames[i];
+                if(bnName && enName) {
+                    let bnWidth = bnName.getBoundingClientRect().width;
+                    let enWidth = enName.getBoundingClientRect().width;
+                    let currentFontSize = parseFloat(window.getComputedStyle(enName).fontSize);
+                    if(enWidth > 0 && bnWidth > 0 && enWidth !== bnWidth) {
+                        let newFontSize = currentFontSize * (bnWidth / enWidth);
+                        enName.style.fontSize = newFontSize + 'px';
+                    }
+                }
+            }
+        });
+    });
+</script>
 @endsection
+
+
+
+
+
+
+
+
+
+
+
+

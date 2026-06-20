@@ -385,7 +385,7 @@
             </a>
 
             <!-- Card: ট্রেড লাইসেন্সের আবেদন -->
-            <a href="{{ route('organization.create') }}"
+            <a href="{{ route('public.organization.create') }}"
               class="group block w-full max-w-[190px] bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div class="h-1.5 bg-gradient-to-r from-[#046307] to-[#0a8a0e]"></div>
               <div class="p-3 text-center">

@@ -32,6 +32,34 @@
                                     <option value="unmarried">অবিবাহিত সনদ (Unmarried)</option>
                                     <option value="residential">ভূমিহীন সনদ (Landless)</option>
                                     <option value="income">বার্ষিক আয় সনদ (Yearly Income)</option>
+<!-- GENERATED OPTIONS -->
+                                    <option value="birth-registration-correction">জন্ম নিবন্ধন সংশোধন প্রত্যয়ন (Birth Reg Correction)</option>
+                                    <option value="new-voter-recommendation">নতুন ভোটার সুপারিশ প্রত্যয়ন (New Voter Recommendation)</option>
+                                    <option value="voter-registration-agreement">ভোটার নিবন্ধন সংক্রান্ত অঙ্গীকারনামা (Voter Reg Agreement)</option>
+                                    <option value="not-rohingya">রোহিঙ্গা নয় মর্মে প্রত্যয়ন পত্র (Not Rohingya)</option>
+                                    <option value="passport-related">পাসপোর্ট সংক্রান্ত প্রত্যয়ন পত্র (Passport Related)</option>
+                                    <option value="family">পারিবারিক সনদ (Family)</option>
+                                    <option value="alive">জীবিত থাকার প্রত্যয়ন (Alive)</option>
+                                    <option value="missing-person">নিরুদ্দেশ সংক্রান্ত প্রত্যয়নপত্র (Missing Person)</option>
+                                    <option value="abandoned-by-husband">স্বামী পরিত্যক্তা প্রত্যয়ন পত্র (Abandoned By Husband)</option>
+                                    <option value="widow">বিধবা প্রত্যয়ন (Widow)</option>
+                                    <option value="dependency">নির্ভরশীলতার প্রত্যয়ন (Dependency)</option>
+                                    <option value="dowryless">যৌতুক বিহীন প্রত্যয়ন (Dowryless)</option>
+                                    <option value="unemployment">বেকারত্ব সনদ (Unemployment)</option>
+                                    <option value="helplessness">অসহায় সনদ (Helplessness)</option>
+                                    <option value="illiteracy">নিরক্ষর সনদ (Illiteracy)</option>
+                                    <option value="agriculture">কৃষি প্রত্যয়ন (Agriculture)</option>
+                                    <option value="fisherman">জেলে প্রত্যয়ন (Fisherman)</option>
+                                    <option value="professional">পেশাগত সনদ (Professional)</option>
+                                    <option value="farmer-fuel-oil-card">কৃষকের জ্বালানি তেল কার্ড (Farmer Fuel Card)</option>
+                                    <option value="no-objection">অনাপত্তি পত্র (No Objection)</option>
+                                    <option value="general">প্রত্যয়ন পত্র (General)</option>
+                                    <option value="infrastructure-construction-permission">অবকাঠামো নির্মানের অনুমতি পত্র (Infra Const Permission)</option>
+                                    <option value="power-of-attorney">ক্ষমতা অর্পণ প্রত্যয়ন (Power Of Attorney)</option>
+                                    <option value="ethnic-minority">ক্ষুদ্র-নৃগোষ্ঠী প্রত্যয়ন (Ethnic Minority)</option>
+                                    <option value="tribal">উপজাতি প্রত্যয়ন (Tribal)</option>
+                                    <option value="indigenous">আদিবাসী প্রত্যয়ন (Indigenous)</option>
+
                                 </select>
                             </div>
                         </div>

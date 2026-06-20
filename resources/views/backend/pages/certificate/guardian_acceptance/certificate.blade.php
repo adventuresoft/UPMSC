@@ -209,7 +209,7 @@
                     </div>
 
                     <div class="col-4 text-right">
-                        <strong>Date:</strong>
+                        Date:
                         {{ date('d/m/Y', strtotime($certificate->created_at ?? date('Y/m/d'))) }}
                     </div>
                 </div>
@@ -285,7 +285,7 @@
     </div>
 
     <!-- ================= Buttons ================= -->
-    <div class="text-center mt-2 mb-4">
+    <div class="text-center mt-2 mb-4 d-print-none">
         <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
                 onclick="window.location.href='{{ route('guardian-acceptance.index') }}'">
             Cancel
@@ -298,15 +298,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
-<script>
-    new QRCode(document.getElementById("qrcode"), {
-        text: "{{ url('/certificate/verify?system_id=' . $certificate->system_id) }}",
-        width: 150,
-        height: 150
-    });
-</script>
 
 @endsection
 

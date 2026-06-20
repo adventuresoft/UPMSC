@@ -32,7 +32,7 @@ class VillageCourtController extends Controller
             'badi_id' => 'required|exists:people,id',
             'bibadi_ids' => 'required|array',
             'bibadi_ids.*' => 'exists:people,id',
-            'case_date' => 'required|date',
+            'case_date' => 'required|date|before_or_equal:today|after_or_equal:' . date('Y-m-d', strtotime('-30 days')),
             'case_time' => 'required',
             'hajir_date' => 'required|date',
             'hajir_time' => 'required',
@@ -83,11 +83,15 @@ class VillageCourtController extends Controller
 
     public function update(Request $request, $id)
     {
+        $villageCourt = VillageCourt::findOrFail($id);
+        $caseDate = $villageCourt->case_date ? $villageCourt->case_date->format('Y-m-d') : date('Y-m-d');
+        $minDate = min(date('Y-m-d', strtotime('-30 days')), $caseDate);
+
         $request->validate([
             'badi_id' => 'required|exists:people,id',
             'bibadi_ids' => 'required|array',
             'bibadi_ids.*' => 'exists:people,id',
-            'case_date' => 'required|date',
+            'case_date' => 'required|date|before_or_equal:today|after_or_equal:' . $minDate,
             'case_time' => 'required',
             'hajir_date' => 'required|date',
             'hajir_time' => 'required',
@@ -96,7 +100,6 @@ class VillageCourtController extends Controller
             'shakkhi_ids' => 'nullable|array',
         ]);
 
-        $villageCourt = VillageCourt::findOrFail($id);
         $villageCourt->badi_id = $request->badi_id;
         $villageCourt->bibadi_ids = $request->bibadi_ids;
         $villageCourt->shakkhi_ids = $request->shakkhi_ids;

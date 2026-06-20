@@ -93,3 +93,37 @@ if (! function_exists('certificate_district_name')) {
         return certificate_location_name($certificate, 'district', $language);
     }
 }
+
+if (! function_exists('get_qr_text')) {
+    function get_qr_text($certificate) {
+        $id = $certificate->system_id;
+        $date = $certificate->created_at ? $certificate->created_at->format('d M, Y') : 'N/A';
+        $name = $certificate->user->name ?? $certificate->user->people->bn_name ?? '--';
+        $father = $certificate->user->familyInfo->father_name_bn ?? '--';
+        $mother = $certificate->user->familyInfo->mother_name_bn ?? '--';
+        $dob = $certificate->user->people->date_of_birth ?? 'N/A';
+        
+        // Build address
+        $village = $certificate->user->addressInfo->permanentVillage->bn_name ?? '';
+        $post = $certificate->user->addressInfo->permanentPostOffice->bn_name ?? '';
+        $thana = $certificate->user->addressInfo->permanentThana->bn_name ?? $certificate->user->institute->union->thana->bn_name ?? '';
+        $district = $certificate->user->addressInfo->permanentDistrict->bn_name ?? $certificate->user->institute->union->thana->district->bn_name ?? '';
+        $address = implode(', ', array_filter([$village, $post, $thana, $district]));
+        if (empty($address)) $address = '--';
+
+        $union = $certificate->user->institute->union->bn_name ?? '';
+        $chairman = get_chairman_name_bn($certificate) ?? '';
+        
+        $chairman_text = 'চেয়ারম্যান কর্তৃক';
+        if ($chairman && $chairman !== 'চেয়ারম্যান') {
+            // Check if chairman name already contains "চেয়ারম্যান"
+            if (mb_strpos($chairman, 'চেয়ারম্যান') !== false) {
+                $chairman_text = "{$chairman} কর্তৃক";
+            } else {
+                $chairman_text = "চেয়ারম্যান {$chairman} কর্তৃক";
+            }
+        }
+
+        return "সনদ নং: {$id}\nইস্যুর তারিখ: {$date}\nনাম: {$name}\nপিতা: {$father}\nমাতা: {$mother}\nঠিকানা: {$address}\nজন্ম তারিখ: {$dob}\nসনদটি {$union} এর {$chairman_text} প্রদান করা হয়েছে।";
+    }
+}

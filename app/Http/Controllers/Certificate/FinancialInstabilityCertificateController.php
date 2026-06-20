@@ -94,7 +94,8 @@ class FinancialInstabilityCertificateController extends Controller
             } catch (\Throwable $th) {
                 $data['status'] = false;
                 $data['message'] = "Something went wrong! Please try again...";
-                $data['errors'] = $th;
+                $data['errors'] = $th->getMessage() . ' in ' . $th->getFile() . ' on line ' . $th->getLine();
+                $data['code'] = 500;
                 return $data;
             }
         });

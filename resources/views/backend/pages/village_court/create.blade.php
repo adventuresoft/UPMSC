@@ -91,13 +91,13 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label>Case Date (মামলার তারিখ) <span class="text-danger">*</span></label>
-                                            <input type="date" name="case_date" class="form-control" required value="{{ date('Y-m-d') }}">
+                                            <input type="date" name="case_date" class="form-control" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d', strtotime('-30 days')) }}" max="{{ date('Y-m-d') }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label>Case Time (মামলার সময়) <span class="text-danger">*</span></label>
-                                            <input type="time" name="case_time" class="form-control" required value="{{ date('H:i') }}">
+                                            <input type="time" name="case_time" class="form-control" required value="{{ now()->timezone('Asia/Dhaka')->format('H:i') }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
