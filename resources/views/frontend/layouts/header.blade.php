@@ -612,7 +612,7 @@
 
                 {{-- Brand --}}
                 <div class="gov-brand">
-                    <img src="{{ asset('assets/images/logo/govt-bd-logo.png') }}" class="gov-emblem"
+                    <img src="{{ asset('images/govt-bd-logo.png') }}" class="gov-emblem"
                         alt="Government of Bangladesh Emblem" onerror="this.style.display='none'">
                     <div class="gov-brand-divider d-none d-md-block hidden md:block"></div>
                     <div class="gov-title-block">
