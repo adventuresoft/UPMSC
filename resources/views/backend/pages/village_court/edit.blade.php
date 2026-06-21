@@ -3,17 +3,17 @@
     <link rel="stylesheet" href="{{ asset('backend/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 @endpush
-@section('title', 'Edit Notice')
+@section('title', 'Edit Case (মামলা সংশোধন)')
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Edit Notice</h1>
+                    <h1>Edit Case (মামলা সংশোধন)</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('village-court.index') }}">Notice</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('village-court.index') }}">Case</a></li>
                         <li class="breadcrumb-item active">Edit</li>
                     </ol>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="col-md-12">
                     <div class="card card-info">
                         <div class="card-header">
-                            <h3 class="card-title">Edit Notice Form</h3>
+                            <h3 class="card-title">Edit Case Form (মামলা সংশোধন ফরম)</h3>
                         </div>
                         <form action="{{ route('village-court.update', $case->id) }}" method="POST">
                             @csrf
@@ -103,7 +103,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Case Date (মামলার তারিখ) <span class="text-danger">*</span></label>
                                             @php
@@ -113,22 +113,10 @@
                                             <input type="date" name="case_date" class="form-control" required value="{{ $caseDate }}" min="{{ $minDate }}" max="{{ date('Y-m-d') }}">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Case Time (মামলার সময়) <span class="text-danger">*</span></label>
                                             <input type="time" name="case_time" class="form-control" required value="{{ $case->case_time ? \Carbon\Carbon::parse($case->case_time)->format('H:i') : date('H:i') }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label>Appearance Date (হাজিরার তারিখ) <span class="text-danger">*</span></label>
-                                            <input type="date" name="hajir_date" class="form-control" required value="{{ $case->hajir_date ? $case->hajir_date->format('Y-m-d') : '' }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label>Appearance Time (হাজিরার সময়) <span class="text-danger">*</span></label>
-                                            <input type="time" name="hajir_time" class="form-control" required value="{{ $case->hajir_time ? \Carbon\Carbon::parse($case->hajir_time)->format('H:i') : '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +138,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-info">Update Notice</button>
+                                <button type="submit" class="btn btn-info">Update Case / মামলা হালনাগাদ করুন</button>
                                 <a href="{{ route('village-court.index') }}" class="btn btn-default float-right">Cancel</a>
                             </div>
                         </form>

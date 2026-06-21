@@ -26,6 +26,15 @@ class VillageCourt extends Model
         'status',
         'created_by',
         'updated_by',
+        'panel_head_id',
+        'badi_up_member_id',
+        'badi_citizen_id',
+        'bibadi_up_member_id',
+        'bibadi_citizen_id',
+        'sunani_date',
+        'sunani_time',
+        'verdict',
+        'verdict_date',
     ];
 
     protected $casts = [
@@ -33,6 +42,8 @@ class VillageCourt extends Model
         'shakkhi_ids' => 'array',
         'case_date' => 'date',
         'hajir_date' => 'date',
+        'sunani_date' => 'date',
+        'verdict_date' => 'date',
     ];
 
     public function badi()
@@ -56,5 +67,35 @@ class VillageCourt extends Model
             return People::whereIn('id', $this->shakkhi_ids)->get();
         }
         return collect();
+    }
+
+    public function panelHead()
+    {
+        return $this->belongsTo(User::class, 'panel_head_id', 'id');
+    }
+
+    public function badiUpMember()
+    {
+        return $this->belongsTo(User::class, 'badi_up_member_id', 'id');
+    }
+
+    public function badiCitizen()
+    {
+        return $this->belongsTo(People::class, 'badi_citizen_id', 'id');
+    }
+
+    public function bibadiUpMember()
+    {
+        return $this->belongsTo(User::class, 'bibadi_up_member_id', 'id');
+    }
+
+    public function bibadiCitizen()
+    {
+        return $this->belongsTo(People::class, 'bibadi_citizen_id', 'id');
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(VillageCourtHistory::class, 'village_court_id', 'id')->latest();
     }
 }

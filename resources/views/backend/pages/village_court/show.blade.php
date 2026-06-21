@@ -1,60 +1,90 @@
 @extends('backend.master', ['mainMenu' => 'LocalGovtJudiciary', 'subMenu' => 'VillageCourtList'])
 @push('style')
+    <link rel="stylesheet" href="{{ asset('backend/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <style>
-        .print-btn-container { margin-bottom: 20px; }
-        .page-break { page-break-after: always; }
-        .form-container {
-            width: 100%; max-width: 800px; margin: 0 auto;
-            background: #fff; padding: 40px; font-family: 'SolaimanLipi', Arial, sans-serif;
-            color: #000; border: 1px solid #ccc; margin-bottom: 30px;
+        .timeline {
+            position: relative;
+            margin: 0 0 30px 0;
+            padding: 0;
+            list-style: none;
         }
-        .form-title { text-align: center; font-weight: bold; margin-bottom: 20px; }
-        .form-title h4 { margin: 0; font-size: 18px; }
-        .form-title h5 { margin: 5px 0; font-size: 16px; }
-        .form-row { display: flex; margin-bottom: 10px; font-size: 16px; align-items: flex-end; }
-        .form-label { white-space: nowrap; margin-right: 10px; }
-        .form-value { flex-grow: 1; border-bottom: 1px dotted #000; padding-bottom: 2px; }
-        .signature-section { display: flex; justify-content: space-between; margin-top: 50px; }
-        .signature-box { text-align: center; }
-        .signature-line { border-top: 1px dotted #000; width: 200px; margin-bottom: 5px; }
-
-        @media print {
-            @page {
-                size: A4;
-                margin: 15mm;
-            }
-            body, html { background: #fff !important; margin: 0; padding: 0; }
-            .wrapper, .content-wrapper, .content, .container-fluid { 
-                margin: 0 !important; 
-                padding: 0 !important; 
-                width: 100% !important; 
-                background: #fff !important; 
-            }
-            .main-header, .main-sidebar, .main-footer, .no-print, .content-header { display: none !important; }
-            
-            .form-container { 
-                border: none !important; 
-                box-shadow: none !important; 
-            }
-            
-            .print-area { width: 100% !important; }
-            .form-row { display: flex !important; align-items: flex-end !important; }
-            .form-value { flex-grow: 1 !important; border-bottom: 1px dashed #000 !important; }
-            
-            .page-break { page-break-after: always !important; }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 31px;
+            width: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+        }
+        .timeline > li {
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 15px;
+        }
+        .timeline > li::before, .timeline > li::after {
+            content: "";
+            display: table;
+        }
+        .timeline > li::after {
+            clear: both;
+        }
+        .timeline > li > .timeline-item {
+            box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2);
+            border-radius: .25rem;
+            background-color: #fff;
+            color: #495057;
+            margin-left: 60px;
+            margin-right: 15px;
+            padding: 10px;
+            position: relative;
+        }
+        .timeline > li > .timeline-item > .time {
+            color: #999;
+            float: right;
+            padding: 10px;
+            font-size: 12px;
+        }
+        .timeline > li > .timeline-item > .timeline-header {
+            margin: 0;
+            color: #495057;
+            border-bottom: 1px solid rgba(0,0,0,.125);
+            padding: 5px 0 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .timeline > li > .timeline-item > .timeline-body {
+            padding: 10px 0 0 0;
+        }
+        .timeline > li > .fa, .timeline > li > .fas, .timeline > li > .far {
+            width: 30px;
+            height: 30px;
+            font-size: 15px;
+            line-height: 30px;
+            position: absolute;
+            color: #fff;
+            background-color: #adb5bd;
+            border-radius: 50%;
+            text-align: center;
+            left: 18px;
+            top: 0;
         }
     </style>
 @endpush
-@section('title', 'Notice Forms')
+@section('title', 'Case Dashboard')
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6"><h1>Notice Forms - {{ $case->case_no }}</h1></div>
+                <div class="col-sm-6">
+                    <h1>Case Dashboard - {{ $case->case_no }}</h1>
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('village-court.index') }}">Notice</a></li>
-                        <li class="breadcrumb-item active">Forms</li>
+                        <li class="breadcrumb-item"><a href="{{ route('village-court.index') }}">Case</a></li>
+                        <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
                 </div>
             </div>
@@ -63,202 +93,335 @@
 
     <section class="content">
         <div class="container-fluid">
-            <div class="print-btn-container text-center no-print">
-                <button onclick="window.print()" class="btn btn-primary"><i class="fas fa-print"></i> Print All Forms</button>
-            </div>
+            <div class="row">
+                <!-- Left Column: Case Information & Printing -->
+                <div class="col-md-8">
+                    <!-- Case Summary Card -->
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Case Details (মামলার বিবরণ)</h3>
+                            <div class="card-tools">
+                                <span class="badge {{ $case->status == 'pending' ? 'badge-warning' : ($case->status == 'court_formed' ? 'badge-primary' : 'badge-success') }}">
+                                    @if($case->status == 'pending')
+                                        মামলা রুজু (Pending)
+                                    @elseif($case->status == 'court_formed')
+                                        আদালত গঠিত (Court Formed)
+                                    @elseif($case->status == 'decided')
+                                        রায় ঘোষিত (Verdict Declared)
+                                    @else
+                                        {{ ucfirst($case->status) }}
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Case Number:</strong> {{ $case->case_no }}</div>
+                                <div class="col-sm-4"><strong>Filing Date:</strong> {{ $case->case_date ? $case->case_date->format('d-m-Y') : 'N/A' }}</div>
+                                <div class="col-sm-4"><strong>Filing Time:</strong> {{ $case->case_time ? \Carbon\Carbon::parse($case->case_time)->format('h:i A') : 'N/A' }}</div>
+                            </div>
+                            <hr>
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <h5><strong>Plaintiff (বাদী)</strong></h5>
+                                    @php
+                                        $badiName = $case->badi->name ?? $case->badi->user->name ?? null;
+                                        $badiBnName = $case->badi->bn_name ?? null;
+                                    @endphp
+                                    <p class="mb-1"><strong>Name:</strong> 
+                                        @if($badiName && $badiBnName)
+                                            {{ $badiName }} ({{ $badiBnName }})
+                                        @else
+                                            {{ $badiName ?? $badiBnName ?? 'N/A' }}
+                                        @endif
+                                    </p>
+                                    <p class="mb-1"><strong>NID:</strong> {{ $case->badi->nid ?? $case->badi->user->nid ?? 'N/A' }}</p>
+                                    <p class="mb-1"><strong>Mobile:</strong> {{ $case->badi->mobile ?? $case->badi->user->mobile ?? 'N/A' }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h5><strong>Defendant(s) (প্রতিবাদী)</strong></h5>
+                                    @php $bibadis = $case->bibadis(); @endphp
+                                    @foreach($bibadis as $bibadi)
+                                        @php
+                                            $bibadiName = $bibadi->name ?? $bibadi->user->name ?? null;
+                                            $bibadiBnName = $bibadi->bn_name ?? null;
+                                        @endphp
+                                        <p class="mb-1"><strong>Name:</strong> 
+                                            @if($bibadiName && $bibadiBnName)
+                                                {{ $bibadiName }} ({{ $bibadiBnName }})
+                                            @else
+                                                {{ $bibadiName ?? $bibadiBnName ?? 'N/A' }}
+                                            @endif
+                                        </p>
+                                        <p class="mb-1"><strong>NID:</strong> {{ $bibadi->nid ?? $bibadi->user->nid ?? 'N/A' }}</p>
+                                        <p class="mb-1"><strong>Mobile:</strong> {{ $bibadi->mobile ?? $bibadi->user->mobile ?? 'N/A' }}</p>
+                                        @if(!$loop->last)<hr class="my-1">@endif
+                                    @endforeach
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="mb-3">
+                                <h5><strong>Complaint Details (অভিযোগের বিবরণ)</strong></h5>
+                                <p class="bg-light p-2 rounded">{{ $case->ovijog_er_biboron ?? 'No description provided.' }}</p>
+                            </div>
+                            <div class="mb-3">
+                                <h5><strong>Incident Details (প্রার্থিত প্রতিকার)</strong></h5>
+                                <p class="bg-light p-2 rounded">{{ $case->ghotona_sombolito ?? 'No description provided.' }}</p>
+                            </div>
 
-            <div class="print-area">
-                @php
-                    $badi = $case->badi;
-                    $badiFamily = $badi->familyInfo ?? null;
-                    $badiFamily = $badi->familyInfo ?? null;
-                    $bibadis = $case->bibadis();
-                    $shakkhis = $case->shakkhis();
-                    $unionName = $badi->user->addressInfo->permanentUnion->name ?? '.......................';
-                    $upazillaName = $badi->user->addressInfo->permanentThana->name ?? '.......................';
-                    $districtName = $badi->user->addressInfo->permanentDistrict->name ?? '.......................';
-                @endphp
+                            @if($case->status != 'pending')
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5><strong>Court Panel Configuration (আদালত প্যানেল)</strong></h5>
+                                    <table class="table table-bordered table-sm mt-2">
+                                        <thead>
+                                            <tr class="bg-light">
+                                                <th>Nomination Role</th>
+                                                <th>Nominee Name</th>
+                                                <th>Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Panel Head (চেয়ারম্যান)</strong></td>
+                                                <td>{{ $case->panelHead->name ?? 'N/A' }}</td>
+                                                <td>Union Chairman</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Badi UP Member</strong></td>
+                                                <td>{{ $case->badiUpMember->name ?? 'N/A' }}</td>
+                                                <td>UP Member</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Badi Citizen Representative</strong></td>
+                                                <td>{{ $case->badiCitizen->name ?? 'N/A' }}</td>
+                                                <td>Citizen</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Bibadi UP Member</strong></td>
+                                                <td>{{ $case->bibadiUpMember->name ?? 'N/A' }}</td>
+                                                <td>UP Member</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Bibadi Citizen Representative</strong></td>
+                                                <td>{{ $case->bibadiCitizen->name ?? 'N/A' }}</td>
+                                                <td>Citizen</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-sm-6"><strong>Next Hearing Date:</strong> {{ $case->sunani_date ? $case->sunani_date->format('d-m-Y') : 'N/A' }}</div>
+                                <div class="col-sm-6"><strong>Next Hearing Time:</strong> {{ $case->sunani_time ? \Carbon\Carbon::parse($case->sunani_time)->format('h:i A') : 'N/A' }}</div>
+                            </div>
+                            @endif
 
-                <!-- Form 1 -->
-                <div class="form-container page-break">
-                    <div class="form-title">
-                        <h4>ফরম-১</h4>
-                        <h5>[ বিধি ৩ দ্রষ্টব্য ]</h5>
-                    </div>
-                    
-                    <div class="form-row"><div class="form-label">১। আবেদনকারীর নাম :</div><div class="form-value">{{ $badi->name }}</div></div>
-                    <div class="form-row"><div class="form-label">২। আবেদনকারীর পিতার নাম :</div><div class="form-value">{{ $badiFamily->father_name ?? '' }}</div></div>
-                    <div class="form-row"><div class="form-label">৩। আবেদনকারীর মাতার নাম :</div><div class="form-value">{{ $badiFamily->mother_name ?? '' }}</div></div>
-                    <div class="form-row"><div class="form-label">৪। আবেদনকারীর স্বামী/স্ত্রীর নাম :</div><div class="form-value">{{ $badiFamily->husband_name ?? ($badiFamily->wife_name ?? '') }}</div></div>
-                    <div class="form-row"><div class="form-label">৫। আবেদনকারীর জাতীয় পরিচয় পত্র নং :</div><div class="form-value">{{ $badi->nid ?? '' }}</div></div>
-                    
-                    @foreach($bibadis as $bIndex => $bibadi)
-                        @php $bibadiFamily = $bibadi->familyInfo ?? null; @endphp
-                        <div class="form-row mt-3"><div class="form-label">৬{{ $bIndex > 0 ? '('.$bIndex.')' : '' }}। প্রতিবাদীর নাম :</div><div class="form-value">{{ $bibadi->bn_name ?? $bibadi->name ?? ($bibadi->user->name ?? '') }}</div></div>
-                        <div class="form-row"><div class="form-label">৭{{ $bIndex > 0 ? '('.$bIndex.')' : '' }}। প্রতিবাদীর পিতার নাম :</div><div class="form-value">{{ $bibadiFamily->father_name ?? '' }}</div></div>
-                        <div class="form-row"><div class="form-label">৮{{ $bIndex > 0 ? '('.$bIndex.')' : '' }}। প্রতিবাদীর মাতার নাম :</div><div class="form-value">{{ $bibadiFamily->mother_name ?? '' }}</div></div>
-                    @endforeach
-                    
-                    <div class="mt-3">
-                        @foreach($shakkhis as $index => $shakkhi)
-                            <div class="form-row"><div class="form-label">{{ 9 + ($index*5) }}। সাক্ষীর নাম :</div><div class="form-value">{{ $shakkhi->name }}</div></div>
-                            <div class="form-row"><div class="form-label">{{ 10 + ($index*5) }}। সাক্ষীর পিতার নাম :</div><div class="form-value">{{ $shakkhi->familyInfo->father_name ?? '' }}</div></div>
-                            <div class="form-row"><div class="form-label">{{ 11 + ($index*5) }}। সাক্ষীর মাতার নাম :</div><div class="form-value">{{ $shakkhi->familyInfo->mother_name ?? '' }}</div></div>
-                            <div class="form-row"><div class="form-label">{{ 12 + ($index*5) }}। সাক্ষীর স্বামী/স্ত্রীর নাম :</div><div class="form-value">{{ $shakkhi->familyInfo->husband_name ?? ($shakkhi->familyInfo->wife_name ?? '') }}</div></div>
-                            <div class="form-row"><div class="form-label">{{ 13 + ($index*5) }}। সাক্ষীর জাতীয় পরিচয় পত্র নং :</div><div class="form-value">{{ $shakkhi->nid ?? '' }}</div></div>
-                        @endforeach
+                            @if($case->status == 'decided')
+                            <hr>
+                            <div class="mb-3">
+                                <h5><strong>Court Verdict / Decision (রায়ের কপি)</strong></h5>
+                                <div class="alert alert-success">
+                                    <h6><strong>Verdict Date:</strong> {{ $case->verdict_date ? $case->verdict_date->format('d-m-Y') : 'N/A' }}</h6>
+                                    <p class="mb-0" style="white-space: pre-wrap;">{{ $case->verdict }}</p>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
                     </div>
 
-                    <div class="form-row mt-3"><div class="form-label">ইউনিয়নের নাম :</div><div class="form-value">{{ $unionName }}</div></div>
-                    <div class="form-row mt-3" style="align-items: flex-start;">
-                        <div class="form-label">বিরোধীয় বিষয় :</div>
-                        <div class="form-value" style="min-height: 60px;">{{ $case->ovijog_er_biboron }}</div>
-                    </div>
-                    <div class="form-row mt-3" style="align-items: flex-start;">
-                        <div class="form-label">প্রার্থিত প্রতিকার :</div>
-                        <div class="form-value" style="min-height: 60px;">{{ $case->ghotona_sombolito }}</div>
+                    <!-- Printable Notice Table Card -->
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Notice & Forms List (নোটিশ ও ফরম তালিকা)</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Notice Type / Form</th>
+                                        <th>Description</th>
+                                        <th class="text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>ফরম-১: আবেদনপত্র</strong></td>
+                                        <td>Case filing details form.</td>
+                                        <td class="text-right">
+                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form1']) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</a>
+                                        </td>
+                                    </tr>
+                                    @foreach($bibadis as $bIndex => $bibadi)
+                                    <tr>
+                                        <td><strong>ফরম-৪: প্রতিবাদীর সমন ({{ $bibadi->name }})</strong></td>
+                                        <td>Summons issued to the defendant.</td>
+                                        <td class="text-right">
+                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form4', 'refId' => $bibadi->id]) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    @php $shakkhis = $case->shakkhis(); @endphp
+                                    @foreach($shakkhis as $sIndex => $shakkhi)
+                                    <tr>
+                                        <td><strong>ফরম-৫: সাক্ষীর সমন ({{ $shakkhi->name }})</strong></td>
+                                        <td>Summons issued to the witness.</td>
+                                        <td class="text-right">
+                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form5', 'refId' => $shakkhi->id]) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td><strong>ফরম-১১: মামলার স্লিপ</strong></td>
+                                        <td>Hearing Date and location slip.</td>
+                                        <td class="text-right">
+                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form11']) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</a>
+                                        </td>
+                                    </tr>
+                                    @if($case->status == 'decided')
+                                    <tr>
+                                        <td><strong>রায়ের অনুলিপি</strong></td>
+                                        <td>Official verdict copy of the court decision.</td>
+                                        <td class="text-right">
+                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'verdict']) }}" target="_blank" class="btn btn-sm btn-success"><i class="fas fa-print"></i> Print Verdict</a>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <div style="margin-top: 40px; text-align: right; font-size: 14px;">[ প্রয়োজনে অতিরিক্ত কাগজ সংযুক্ত করা যাইবে ]</div>
-                    
-                    <div class="signature-section">
-                        <div class="signature-box"></div>
-                        <div class="signature-box">
-                            <div class="signature-line"></div>
-                            <div>(আবেদনকারীর স্বাক্ষর বা টিপসহি)</div>
+                    <!-- Case Actions Card -->
+                    <div class="card card-primary card-outline mt-3">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-gavel mr-1"></i>
+                                Judicial Workflow Steps (মামলা পরিচালনার ধাপসমূহ)
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    @if($case->status == 'pending')
+                                        <a href="{{ route('village-court.form-court.view', $case->id) }}" class="btn btn-primary btn-block p-3">
+                                            <i class="fas fa-users-cog fa-2x d-block mb-2"></i>
+                                            <strong>১. আদালত গঠন</strong><br>
+                                            <span class="small">(Create Adalat)</span>
+                                        </a>
+                                    @else
+                                        <button class="btn btn-outline-success btn-block p-3" disabled>
+                                            <i class="fas fa-check-circle fa-2x d-block mb-2 text-success"></i>
+                                            <strong>১. আদালত গঠিত</strong><br>
+                                            <span class="small">(Adalat Created)</span>
+                                        </button>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    @if($case->status == 'pending')
+                                        <button class="btn btn-outline-secondary btn-block p-3" disabled title="প্রথমে আদালত গঠন করতে হবে">
+                                            <i class="fas fa-comments fa-2x d-block mb-2 text-muted"></i>
+                                            <strong>২. শুনানি পরিচালনা</strong><br>
+                                            <span class="small">(Manage Hearing)</span>
+                                        </button>
+                                    @elseif($case->status == 'court_formed')
+                                        <a href="{{ route('village-court.hearing.view', $case->id) }}" class="btn btn-warning btn-block p-3 text-white">
+                                            <i class="fas fa-comments fa-2x d-block mb-2"></i>
+                                            <strong>২. শুনানি পরিচালনা</strong><br>
+                                            <span class="small">(Manage Hearing)</span>
+                                        </a>
+                                    @else
+                                        <button class="btn btn-outline-success btn-block p-3" disabled>
+                                            <i class="fas fa-check-circle fa-2x d-block mb-2 text-success"></i>
+                                            <strong>২. শুনানি সম্পন্ন</strong><br>
+                                            <span class="small">(Hearing Completed)</span>
+                                        </button>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    @if($case->status == 'pending')
+                                        <button class="btn btn-outline-secondary btn-block p-3" disabled title="প্রথমে আদালত গঠন করতে হবে">
+                                            <i class="fas fa-balance-scale fa-2x d-block mb-2 text-muted"></i>
+                                            <strong>৩. রায় ঘোষণা</strong><br>
+                                            <span class="small">(Declare Verdict)</span>
+                                        </button>
+                                    @elseif($case->status == 'court_formed')
+                                        <a href="{{ route('village-court.verdict.view', $case->id) }}" class="btn btn-success btn-block p-3">
+                                            <i class="fas fa-balance-scale fa-2x d-block mb-2"></i>
+                                            <strong>৩. রায় ঘোষণা</strong><br>
+                                            <span class="small">(Declare Verdict)</span>
+                                        </a>
+                                    @else
+                                        <button class="btn btn-outline-success btn-block p-3" disabled>
+                                            <i class="fas fa-check-circle fa-2x d-block mb-2 text-success"></i>
+                                            <strong>৩. রায় ঘোষিত</strong><br>
+                                            <span class="small">(Verdict Declared)</span>
+                                        </button>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Form 4 -->
-                @foreach($bibadis as $bibadi)
-                <div class="form-container page-break">
-                    <div class="form-title">
-                        <h4>ফরম-৪</h4>
-                        <h5>[ বিধি ৮ (১) দ্রষ্টব্য ]</h5>
-                        <h4>প্রতিবাদীর প্রতি সমন</h4>
-                    </div>
-                    
-                    <p class="text-center">...................................................... ইউনিয়ন পরিষদ</p>
-                    <div class="d-flex justify-content-between">
-                        <div style="width: 48%">উপজেলা: <strong>{{ $upazillaName }}</strong></div>
-                        <div style="width: 48%">জেলা: <strong>{{ $districtName }}</strong></div>
-                    </div>
-                    
-                    <div class="mt-4">
-                        <p>বরাবর</p>
-                        <div style="border-bottom: 1px dotted #000; height: 25px; margin-bottom: 10px;">{{ $bibadi->bn_name ?? $bibadi->name ?? ($bibadi->user->name ?? '') }}</div>
-                        <div style="border-bottom: 1px dotted #000; height: 25px; margin-bottom: 10px;"></div>
-                        <div style="border-bottom: 1px dotted #000; height: 25px; margin-bottom: 10px;"></div>
-                    </div>
-
-                    <div class="mt-4" style="line-height: 2;">
-                        যেহেতু <strong>{{ $badi->bn_name ?? $badi->name ?? ($badi->user->name ?? '') }}</strong> এর <strong>{{ $case->ovijog_er_biboron }}</strong> সংক্রান্ত অভিযোগ/দাবী সম্পর্কে তাহার আবেদনপত্রের জবাব দেওয়ার জন্য আপনার উপস্থিতি প্রয়োজন; সেইহেতু, এতদ্বারা আপনাকে <strong>{{ \Carbon\Carbon::parse($case->hajir_date)->format('Y') }}</strong> সালের <strong>{{ \Carbon\Carbon::parse($case->hajir_date)->format('F') }}</strong> মাসের <strong>{{ \Carbon\Carbon::parse($case->hajir_date)->format('d') }}</strong> তারিখে <strong>{{ \Carbon\Carbon::parse($case->hajir_time)->format('h:i A') }}</strong> টার সময় আমার নিকট হাজির হইতে নির্দেশ দেওয়া গেল।
-                    </div>
-
-                    <div class="signature-section" style="margin-top: 100px;">
-                        <div class="signature-box" style="text-align: left;">
-                            <div style="margin-bottom: 10px;">তাং ....................................</div>
-                            <div>সীলমোহর ..........................</div>
+                <!-- Right Column: History Log -->
+                <div class="col-md-4">
+                    <!-- Case Timeline History Card -->
+                    <div class="card card-secondary">
+                        <div class="card-header">
+                            <h3 class="card-title">Case History Logs (মামলার ইতিহাস)</h3>
                         </div>
-                        <div class="signature-box">
-                            <div class="signature-line"></div>
-                            <div>গ্রাম আদালত/ইউনিয়ন পরিষদ এর<br>চেয়ারম্যানের স্বাক্ষর</div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-
-                <!-- Form 5 -->
-                <div class="form-container page-break">
-                    <div class="form-title">
-                        <h4>ফরম-৫</h4>
-                        <h5>[ বিধি ১৫ (১) দ্রষ্টব্য ]</h5>
-                        <h4>সাক্ষীর প্রতি সমন</h4>
-                    </div>
-                    
-                    <p>....................................... ইউনিয়ন পরিষদ এর গ্রাম আদালতের ........................ নং</p>
-                    <div class="d-flex mb-3">
-                        <div style="width: 15%">মামলায়</div>
-                        <div style="width: 85%; border-bottom: 1px dotted #000;">{{ $badi->name }}</div>
-                    </div>
-                    <div class="text-center mb-4">আবেদনকারী বনাম<br>প্রতিবাদী ।</div>
-                    
-                    <div>
-                        <p>বরাবর</p>
-                        @foreach($shakkhis as $shakkhi)
-                            <div style="border-bottom: 1px dotted #000; height: 25px; margin-bottom: 10px;">{{ $shakkhi->name }}</div>
-                        @endforeach
-                        @if($shakkhis->count() == 0)
-                            <div style="border-bottom: 1px dotted #000; height: 25px; margin-bottom: 10px;"></div>
-                            <div style="border-bottom: 1px dotted #000; height: 25px; margin-bottom: 10px;"></div>
-                        @endif
-                    </div>
-
-                    <div class="mt-4" style="line-height: 2;">
-                        যেহেতু উপরি-উল্লিখিত মামলার আবেদনকারী/প্রতিবাদীর পক্ষে কতিপয় বিষয়ে সাক্ষ্য দেওয়া এবং/অথবা নিম্নেবর্ণিত দলিলপত্র পেশ করিবার জন্য আপনার উপস্থিতি আবশ্যক; সেইহেতু এতদ্বারা আপনাকে <strong>{{ \Carbon\Carbon::parse($case->hajir_date)->format('Y') }}</strong> সালের <strong>{{ \Carbon\Carbon::parse($case->hajir_date)->format('F') }}</strong> মাসের <strong>{{ \Carbon\Carbon::parse($case->hajir_date)->format('d') }}</strong> তারিখে <strong>{{ \Carbon\Carbon::parse($case->hajir_time)->format('h:i A') }}</strong> ঘটিকায় ব্যক্তিগতভাবে নিম্নলিখিত দলিলপত্রসহ এই আদালত সমক্ষে হাজির হইবার জন্য নির্দেশ দেওয়া গেল।
-                    </div>
-
-                    <div class="mt-4" style="line-height: 2;">
-                        ১। ................................................................................................................<br>
-                        ২। ................................................................................................................<br>
-                        ৩। ................................................................................................................
-                    </div>
-
-                    <div class="mt-4">
-                        আইন সংগত কারণ ব্যতিরেকে আপনি যদি এই আদেশ পালনে ব্যর্থ হন, তাহা হইলে গ্রাম আদালত আইন ২০০৬ এবং গ্রাম আদালত (সংশোধন) আইন ২০১৩ এর বিধানাবলী মোতাবেক আপনি অর্থ দণ্ডে দণ্ডনীয় হইবেন।
-                    </div>
-
-                    <div class="signature-section" style="margin-top: 80px;">
-                        <div class="signature-box" style="text-align: left;">
-                            <div style="margin-bottom: 10px;">তারিখ....................................</div>
-                            <div>সীলমোহর ..........................</div>
-                        </div>
-                        <div class="signature-box">
-                            <div class="signature-line"></div>
-                            <div>গ্রাম আদালতের<br>চেয়ারম্যানের স্বাক্ষর</div>
+                        <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                            @if($case->histories->count() > 0)
+                            <ul class="timeline">
+                                @foreach($case->histories as $history)
+                                <li>
+                                    @if($history->action == 'filed')
+                                        <i class="fas fa-file-invoice bg-warning"></i>
+                                    @elseif($history->action == 'court_formed')
+                                        <i class="fas fa-gavel bg-primary"></i>
+                                    @elseif($history->action == 'verdict_declared')
+                                        <i class="fas fa-check-circle bg-success"></i>
+                                    @else
+                                        <i class="fas fa-history bg-secondary"></i>
+                                    @endif
+                                    <div class="timeline-item">
+                                        <span class="time"><i class="fas fa-clock"></i> {{ $history->created_at->format('d-m-Y h:i A') }}</span>
+                                        <h3 class="timeline-header">
+                                            @if($history->action == 'filed')
+                                                মামলা রুজু (Case Filed)
+                                            @elseif($history->action == 'court_formed')
+                                                আদালত গঠিত (Court Formed)
+                                            @elseif($history->action == 'verdict_declared')
+                                                রায় ঘোষণা (Verdict Declared)
+                                            @else
+                                                {{ ucfirst($history->action) }}
+                                            @endif
+                                        </h3>
+                                        <div class="timeline-body">
+                                            {{ $history->description }}
+                                            <div class="text-right mt-1"><small class="text-muted">By: {{ $history->creator->name ?? 'System' }}</small></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
+                            @else
+                            <p class="text-muted text-center py-3">No history logged for this case.</p>
+                            @endif
                         </div>
                     </div>
                 </div>
-
-                <!-- Form 11 -->
-                <div class="form-container">
-                    <div class="form-title">
-                        <h4>ফরম-১১</h4>
-                        <h5>[ বিধি ১৪ (৩) দ্রষ্টব্য ]</h5>
-                        <h4>মামলার স্লিপ</h4>
-                    </div>
-                    
-                    <div class="form-row"><div class="form-value text-center" style="font-weight: bold; font-size: 18px;">{{ $unionName }}</div><div class="form-label ml-2">ইউনিয়ন/গ্রাম আদালত</div></div>
-                    
-                    <div class="d-flex justify-content-between mt-3">
-                        <div class="form-row" style="width: 48%"><div class="form-label">মামলা নং-</div><div class="form-value">{{ $case->case_no }}</div></div>
-                        <div class="form-row" style="width: 48%"><div class="form-label">দায়েরের তারিখ :</div><div class="form-value">{{ $case->case_date ? $case->case_date->format('d/m/Y') : '' }}</div></div>
-                    </div>
-                    
-                    <div class="form-row mt-2"><div class="form-label">আবেদনকারী</div><div class="form-value">{{ $badi->bn_name ?? $badi->name ?? ($badi->user->name ?? '') }}</div></div>
-                    <div class="form-row mt-2"><div class="form-label">প্রতিবাদী</div><div class="form-value">{{ $bibadis->pluck('bn_name')->implode(', ') ?: $bibadis->pluck('name')->implode(', ') }}</div></div>
-                    
-                    <div class="mt-4" style="line-height: 2;">
-                        মামলার আগামী তারিখ (প্রতিবাদীর জবাব প্রদানের জন্য/সাক্ষ্য গ্রহণের জন্য/আপোষ-নিষ্পত্তির জন্য/শুনানীর জন্য/সিদ্ধান্ত ঘোষণার জন্য/ ........................................................)
-                    </div>
-
-                    <div class="d-flex justify-content-between mt-3">
-                        <div class="form-row" style="width: 48%"><div class="form-label">বার</div><div class="form-value">{{ $case->hajir_date ? $case->hajir_date->format('l') : '' }}</div></div>
-                        <div class="form-row" style="width: 48%"><div class="form-label">সময়</div><div class="form-value">{{ $case->hajir_time ? \Carbon\Carbon::parse($case->hajir_time)->format('h:i A') : '' }}</div></div>
-                    </div>
-                    <div class="form-row mt-2"><div class="form-label">স্থান</div><div class="form-value">{{ $unionName }} ইউনিয়ন পরিষদ</div></div>
-                    
-                    <div class="signature-section" style="margin-top: 60px;">
-                        <div class="signature-box"></div>
-                        <div class="signature-box">
-                            <div class="signature-line" style="width: 150px;"></div>
-                            <div>আদালত সহকারী/সচিব<br>ইউনিয়ন পরিষদ</div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </section>
 @endsection
+@push('script')
+    <script src="{{ asset('backend/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('.select2').select2({ theme: 'bootstrap4' });
+        });
+    </script>
+@endpush

@@ -606,6 +606,13 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
     
     Route::resource('institute', InstituteController::class);
     Route::resource('village-court', VillageCourtController::class);
+    Route::get('village-court/{id}/form-court', [VillageCourtController::class, 'formCourtView'])->name('village-court.form-court.view');
+    Route::post('village-court/{id}/form-court', [VillageCourtController::class, 'formCourt'])->name('village-court.form-court');
+    Route::get('village-court/{id}/hearing', [VillageCourtController::class, 'hearingView'])->name('village-court.hearing.view');
+    Route::post('village-court/{id}/hearing', [VillageCourtController::class, 'hearing'])->name('village-court.hearing');
+    Route::get('village-court/{id}/verdict', [VillageCourtController::class, 'verdictView'])->name('village-court.verdict.view');
+    Route::post('village-court/{id}/declare-verdict', [VillageCourtController::class, 'declareVerdict'])->name('village-court.declare-verdict');
+    Route::get('village-court/{id}/print-notice/{type}/{refId?}', [VillageCourtController::class, 'printNotice'])->name('village-court.print-notice');
 
     Route::prefix('institutes')->name('instituteA.')->group(function () {
 

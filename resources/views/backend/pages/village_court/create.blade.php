@@ -3,17 +3,17 @@
     <link rel="stylesheet" href="{{ asset('backend/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 @endpush
-@section('title', 'Create Notice')
+@section('title', 'Create Case (মামলা রুজু)')
 @section('content')
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Create Notice</h1>
+                    <h1>Create Case (মামলা রুজু)</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('village-court.index') }}">Notice</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('village-court.index') }}">Case</a></li>
                         <li class="breadcrumb-item active">Create</li>
                     </ol>
                 </div>
@@ -27,7 +27,7 @@
                 <div class="col-md-12">
                     <div class="card card-info">
                         <div class="card-header">
-                            <h3 class="card-title">Create Notice Form</h3>
+                            <h3 class="card-title">Create Case Form (মামলা রুজু ফরম)</h3>
                         </div>
                         <form action="{{ route('village-court.store') }}" method="POST">
                             @csrf
@@ -88,28 +88,16 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Case Date (মামলার তারিখ) <span class="text-danger">*</span></label>
                                             <input type="date" name="case_date" class="form-control" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d', strtotime('-30 days')) }}" max="{{ date('Y-m-d') }}">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Case Time (মামলার সময়) <span class="text-danger">*</span></label>
                                             <input type="time" name="case_time" class="form-control" required value="{{ now()->timezone('Asia/Dhaka')->format('H:i') }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label>Appearance Date (হাজিরার তারিখ) <span class="text-danger">*</span></label>
-                                            <input type="date" name="hajir_date" class="form-control" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label>Appearance Time (হাজিরার সময়) <span class="text-danger">*</span></label>
-                                            <input type="time" name="hajir_time" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>
@@ -131,7 +119,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-info">Create Notice</button>
+                                <button type="submit" class="btn btn-info">Create Case / মামলা দায়ের করুন</button>
                                 <a href="{{ route('village-court.index') }}" class="btn btn-default float-right">Cancel</a>
                             </div>
                         </form>

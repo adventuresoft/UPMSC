@@ -1392,13 +1392,13 @@
         <li class="nav-item">
           <a href="{{ route('village-court.create') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtCreate') active @endif">
             <i class="far fa-circle nav-icon"></i>
-            <p>Create Notice</p>
+            <p>Create Case / মামলা তৈরি</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="{{ route('village-court.index') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtList') active @endif">
             <i class="far fa-circle nav-icon"></i>
-            <p>Notice List</p>
+            <p>Case List / মামলার তালিকা</p>
           </a>
         </li>
       </ul>

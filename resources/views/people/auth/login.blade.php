@@ -27,7 +27,7 @@
         <!-- Left Side: Branding/Info -->
         <div class="md:w-[260px] flex-shrink-0 bg-gradient-to-br from-[#046307] to-[#0a8a0e] p-6 text-white flex flex-col justify-between">
           <div>
-            <h2 class="text-3xl font-black mb-2 uppercase tracking-tighter">CSMCRS</h2>
+            <h2 class="text-3xl font-black mb-2 uppercase tracking-tighter">CLMS</h2>
             <h3 class="text-xl font-bold text-green-200">নাগরিক পোর্টাল</h3>
             <div class="h-1 w-12 bg-white mt-4 rounded-full"></div>
           </div>
@@ -58,7 +58,7 @@
         <!-- Right Side: Login Form -->
         <div class="flex-grow p-6 md:p-8 bg-[#f8f9fb]">
           <div class="text-center mb-6">
-            <img src="{{ asset('assets/images/logo/govt-bd-logo.png') }}" class="h-10 w-10 mx-auto mb-3" alt="Govt Logo">
+            <img src="{{ asset('images/govt-bd-logo.png') }}" class="h-10 w-10 mx-auto mb-3" alt="Govt Logo">
             <h4 class="text-[10px] font-bold text-[#1a9f5c] uppercase tracking-wider mb-0.5">নাগরিক প্যানেল</h4>
             <h5 class="text-base font-bold text-[#1a3a7d]">লগইন করুন</h5>
           </div>
