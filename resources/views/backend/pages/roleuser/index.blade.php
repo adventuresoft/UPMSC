@@ -129,7 +129,7 @@
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            @if(edit_permission())
+                                            @if(edit_permission('role'))
 <a href="{{route('roleuser.edit',['role_id'=>$value->role_id,'user_id'=>$value->model_id])}}" class="btn btn-sm btn-outline-primary" style="border-radius: 50px 0 0 50px;"> 
                                                 <i class="fa fa-edit"></i> 
                                             </a>

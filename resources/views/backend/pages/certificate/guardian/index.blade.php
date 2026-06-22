@@ -54,7 +54,7 @@
                             </div>
 
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('certificate'))
                                 <a href="{{ route('guardian-income.create') }}" class="btn btn-primary">Create</a>
                                 <a href="{{ route('guardian-income.index') }}" class="btn btn-primary">List</a>
                                 @endif
@@ -215,7 +215,7 @@
                                             <i class="fas fa-folder-open"></i>
                                             <h5>No certificates found</h5>
                                             <p class="text-muted">Get started by creating a new certificate.</p>
-                                            @if (create_permission())
+                                            @if (create_permission('certificate'))
                                             <a href="{{ route('guardian-income.create') }}" class="btn btn-primary mt-2">
                                                 <i class="fas fa-plus-circle mr-1"></i> Create New
                                             </a>

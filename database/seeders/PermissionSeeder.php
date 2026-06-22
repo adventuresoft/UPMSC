@@ -5,14 +5,11 @@ namespace Database\Seeders;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class PermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
@@ -21,13 +18,51 @@ class PermissionSeeder extends Seeder
 
         // Comprehensive module list from sidebar/web.php
         $modules = [
+            // System & Access
             'basic-settings',
-            'institutional-admin',
-            'certificate',
-            'bridge',
-            'market',
-            'people',
             'dashboard',
+            'user',
+            'role',
+            'permission',
+            'institute',
+            'institute_category',
+            'institute_type',
+            'institutional-admin',
+
+            // People
+            'people',
+            'people_credentials',
+
+            // Certificate (all types share this module)
+            'certificate',
+
+            // Organization & Trade
+            'organization',
+            'organization_transfer',
+            'trade_license',
+
+            // Physical assets
+            'house',
+            'land',
+            'vehicle',
+            'road',
+            'market',
+            'bridge',
+
+            // Tax
+            'tax',
+
+            // Civil registry
+            'marriage',
+            'divorce',
+
+            // Local governance
+            'chairman',
+            'councilor',
+            'village_court',
+            'relief_card',
+
+            // Basic Settings sub-modules
             'city_corporation',
             'city_corporation_ward',
             'family_category',
@@ -37,6 +72,7 @@ class PermissionSeeder extends Seeder
             'house_type',
             'house_category',
             'house_class',
+            'house_owner_type',
             'land_type',
             'land_class',
             'land_ownership_type',
@@ -60,49 +96,13 @@ class PermissionSeeder extends Seeder
             'vehicle_subcategory',
             'vehicle_type',
             'union_ward',
+            'union',
             'village',
             'village_area',
-            'union',
-            'institute',
-            'institute_category',
-            'institute_type',
-            'age_certificate',
-            'character_certificate',
-            'childless_certificate',
-            'citizen_certificate',
-            'disability_certificate',
-            'financial_instability_certificate',
-            'guardian_certificate',
-            'landless_certificate',
-            'married_certificate',
-            'name_certificate',
-            'nid_correction_certificate',
-            'orphan_certificate',
-            'permanent_citizen_certificate',
-            'remarried_certificate',
-            'residential_certificate',
-            'unmarried_certificate',
-            'voter_area_certificate',
-            'voter_list_certificate',
-            'yearly_income_certificate',
-            'organization',
-            'trade_license',
-            'tax',
-            'house',
-            'land',
-            'vehicle',
-            'road',
-            'marriage',
-            'divorce',
-            'chairman',
-            'councilor',
-            'role',
-            'permission',
-            'user',
             'country',
             'market_type',
             'market_category',
-            'market_ownership_type'
+            'market_ownership_type',
         ];
 
         foreach ($modules as $module) {
@@ -118,14 +118,14 @@ class PermissionSeeder extends Seeder
         // Assign all permissions to Superadmin (Role 1) and Developer (Role 4)
         $superAdminRole = Role::find(1);
         $developerRole = Role::find(4);
-        
+
+        $allPermissions = Permission::all();
+
         if ($superAdminRole) {
-            $allPermissions = Permission::all();
             $superAdminRole->syncPermissions($allPermissions);
         }
 
         if ($developerRole) {
-            $allPermissions = Permission::all();
             $developerRole->syncPermissions($allPermissions);
         }
     }

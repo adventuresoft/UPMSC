@@ -72,7 +72,7 @@
                                       </td>
                                       <td>
                                         <div class="table-action">
-                                          @if(edit_permission())
+                                          @if(edit_permission('basic-settings'))
 <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.organization-subcategory.edit', $subcategory->id)}}"><i class="fa fa-edit"></i></a>
 @endif
                                           <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('basic-settings.organization-subcategory.show', $subcategory->id)}}"><i class="fa fa-eye"></i></a>

@@ -73,7 +73,7 @@
                             </div>
 
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('people'))
                                 <a href="{{ route('people.create') }}" class="btn btn-primary">Create</a>
                                 <a href="{{ route('people.index') }}" class="btn btn-primary">List</a>
                                 @endif
@@ -250,7 +250,7 @@ Permanent Address:</strong>
 
                                         <td>
                                             <div class="table-action">
-                                                @if ((is_superadmin() || Auth::user()->institute_id) && create_permission())
+                                                @if ((is_superadmin() || Auth::user()->institute_id) && create_permission('people'))
                                                 <a href="{{ route('people.edit', $user->id) }}" 
                                                     class="btn btn-primary btn-sm btn-action" title="Edit">
                                                     <i class="fa fa-edit"></i>
@@ -270,7 +270,7 @@ Permanent Address:</strong>
                                             <i class="fas fa-folder-open"></i>
                                             <h5>No people found</h5>
                                             <p class="text-muted">Get started by creating a new person.</p>
-                                            @if (create_permission())
+                                            @if (create_permission('people'))
                                             <a href="{{ route('people.create') }}" class="btn btn-primary mt-2">
                                                 <i class="fas fa-plus-circle mr-1"></i> Create New
                                             </a>

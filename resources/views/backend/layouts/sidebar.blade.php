@@ -1201,7 +1201,7 @@
 @endcan
 
 {{-- Relief Card --}}
-@if(is_institutional_admin() || Auth::user()->can('dashboard.read'))
+@if(is_superadmin() || Auth::user()->can('relief_card.read'))
 <li class="nav-item {{ $isReliefCard ? 'menu-open' : '' }}">
   <a href="{{ route('relief-card.index') }}" class="nav-link {{ $isReliefCard ? 'active' : '' }}">
     <i class="nav-icon fas fa-hand-holding-heart"></i>
@@ -1379,7 +1379,7 @@
     @endcan
 
     {{-- Local Govt. Judiciary --}}
-    @if(is_institutional_admin() || Auth::user()->can('dashboard.read'))
+    @if(is_superadmin() || Auth::user()->can('village_court.read'))
     <li class="nav-item {{ (isset($subMenu) && in_array($subMenu, ['VillageCourtCreate', 'VillageCourtList', 'VillageCourtAdalotGothon', 'VillageCourtShunani', 'VillageCourtRayGhoshona'])) ? 'menu-open' : '' }}">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-balance-scale"></i>

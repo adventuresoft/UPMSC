@@ -70,7 +70,7 @@
 
                                               <td style="width:10%">
                                                   <div class="table-action">
-                                                      @if(edit_permission())
+                                                      @if(edit_permission('basic-settings'))
 <a class="btn btn-sm btn-primary"
                                                           title="Edit"
                                                           data-toggle="tooltip"

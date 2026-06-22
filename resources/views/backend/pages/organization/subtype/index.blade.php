@@ -65,7 +65,7 @@
                                     <td>{{date('d M, Y', strtotime($item->updated_at))}}</td>
                                     <td>
                                       <div style="display: inline-block">
-                                          @if(edit_permission())
+                                          @if(edit_permission('organization'))
 <a class="btn btn-primary" href="{{route('basic-settings.organization-subtype.edit', $item->id)}}">Edit</a>
 @endif
                                           <form class="deleteType" method="post">

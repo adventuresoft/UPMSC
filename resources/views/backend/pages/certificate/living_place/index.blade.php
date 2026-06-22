@@ -68,7 +68,7 @@
                                 <h3 class="card-title" style="font-size:24px;">Certificate List</h3>
                             </div>
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('certificate'))
                                     <a href="{{route('living-place.create')}}" class="btn btn-primary">Create</a>
                                     <a href="{{route('living-place.index')}}" class="btn btn-primary">List</a>
                                 @endif

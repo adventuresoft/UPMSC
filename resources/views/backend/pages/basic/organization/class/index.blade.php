@@ -70,7 +70,7 @@
                                     </td>
                                     <td>
                                       <div style="display: inline-block">
-                                        @if(edit_permission())
+                                        @if(edit_permission('basic-settings'))
 <a class="btn btn-primary" href="{{route('basic-settings.organization-class.edit', $class->id)}}">Edit</a>
 @endif
                                         @if(delete_permission('organization_class'))

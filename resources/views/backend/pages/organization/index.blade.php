@@ -21,7 +21,7 @@
                             </div>
 
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('organization'))
                                 <a href="{{ route('organization.create') }}" class="btn btn-primary">Create</a>
                                 <a href="{{ route('organization.index') }}" class="btn btn-primary">List</a>
                                 @endif

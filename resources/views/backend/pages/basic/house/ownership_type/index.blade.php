@@ -67,7 +67,7 @@
                                       <td>{{date('d M, Y', strtotime($item->updated_at))}}</td>
                                       <td>
                                         <div class="table-action">
-                                            @if(edit_permission())
+                                            @if(edit_permission('basic-settings'))
 <a class="btn btn-sm btn-primary" title="Edit" href="{{route('basic-settings.house-ownership-type.edit', $item->id)}}"><i class="fa fa-edit"></i></a>
 @endif
                                             <a class="btn btn-sm btn-info" title="Edit" href="{{route('basic-settings.house-ownership-type.show', $item->id)}}"><i class="fa fa-eye"></i></a>

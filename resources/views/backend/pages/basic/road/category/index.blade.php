@@ -65,7 +65,7 @@
                                       <td>{{date('d M, Y', strtotime($item->updated_at))}}</td>
                                       <td style="width:10%">
                                         <div class="table-action">
-                                            @if(edit_permission())
+                                            @if(edit_permission('basic-settings'))
 <a class="btn btn-sm btn-primary" title="Edit" data-toggle="tooltip" href="{{route('basic-settings.road-category.edit', $item->id)}}"><i class="fa fa-edit"></i></a>
 @endif
                                             <a class="btn btn-sm btn-info" title="Show" data-toggle="tooltip" href="{{route('basic-settings.road-category.show', $item->id)}}"><i class="fa fa-eye"></i></a>

@@ -54,7 +54,7 @@
                             </div>
 
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('certificate'))
                                 <a href="{{ route('permanent-citizen.create') }}" class="btn btn-primary">Create</a>
                                 <a href="{{ route('permanent-citizen.index') }}" class="btn btn-primary">List</a>
                                 @endif

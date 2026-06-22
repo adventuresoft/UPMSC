@@ -54,7 +54,7 @@
                             </div>
 
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('certificate'))
                                 <a href="{{ route('new-voter-recommendation.create') }}" class="btn btn-primary">Create</a>
                                 <a href="{{ route('new-voter-recommendation.index') }}" class="btn btn-primary">List</a>
                                 @endif

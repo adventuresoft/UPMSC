@@ -117,7 +117,7 @@
                                             </td>
                                             <td>
                                                 <div class="table-action">
-                                                    @if(edit_permission())
+                                                    @if(edit_permission('vehicle'))
 <a class="btn btn-sm btn-primary" href="{{ route('vehicle.edit', $vehicle->id) }}" title="Edit">
                                                         <i class="fa fa-edit"></i>
                                                     </a>

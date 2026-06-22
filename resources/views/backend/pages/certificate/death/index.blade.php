@@ -44,7 +44,7 @@
                             </div>
 
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('certificate'))
                                 <a href="{{ route('death.create') }}" class="btn btn-primary">Create</a>
                                 <a href="{{ route('death.index') }}" class="btn btn-primary">List</a>
                                 @endif
@@ -175,7 +175,7 @@
                                                 <i class="fa fa-file-pdf"></i> BN
                                             </a>
 
-                                            @if(edit_permission())
+                                            @if(edit_permission('certificate'))
                                             <a href="{{ route('death.edit', $certificate->id) }}" class="btn btn-warning btn-sm">
                                                 <i class="fa fa-edit"></i>
                                             </a>

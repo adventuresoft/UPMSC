@@ -64,7 +64,7 @@
                                     <td>{{date('d M, Y', strtotime($item->updated_at))}}</td>
                                     <td>
                                       <div style="display: inline-block">
-                                          @if(edit_permission())
+                                          @if(edit_permission('basic-settings'))
 <a class="btn btn-primary" href="{{route('basic-settings.house-class.edit', $item->id)}}">Edit</a>
 @endif
                                           @if(delete_permission('house_class'))

@@ -593,7 +593,7 @@
                                             <i class="fas fa-folder-open"></i>
                                             <h5>No people found</h5>
                                             <p class="text-muted">Get started by creating a new person.</p>
-                                            @if (create_permission())
+                                            @if (create_permission('people'))
                                             <a href="{{ route('people.create') }}" class="btn btn-primary mt-2">
                                                 <i class="fas fa-plus-circle mr-1"></i> Create New
                                             </a>

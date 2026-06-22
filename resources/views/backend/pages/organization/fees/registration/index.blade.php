@@ -123,10 +123,10 @@
                                       <td>
                                         <div class="d-flex">
                                           @if ( basic_settings_permissions() )
-                                              @if(edit_permission())
+                                              @if(edit_permission('organization'))
 <a href="{{ route('organizationA.registration-fees.edit', $fee->id) }}" title="Edit" class="btn btn-primary mx-2"><i class="fa fa-edit"></i></a>
 @endif
-                                              @if(delete_permission())
+                                              @if(delete_permission('organization'))
                                               <form class="deleteOrganzationFee" method="post">
                                                 @csrf
                                                 @method('Delete')

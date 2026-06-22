@@ -29,7 +29,7 @@
                                 <h3 class="card-title" style="font-size:24px;">Birth Certificate</h3>
                             </div>
                             <div class="col-md-6 text-right">
-                                @if (create_permission())
+                                @if (create_permission('certificate'))
                                     <a href="{{ route('certificate/birth.create') }}" class="btn btn-primary">Create</a>
                                     <a href="{{ route('certificate/birth.index') }}" class="btn btn-primary">List</a>
                                 @endif
@@ -122,7 +122,7 @@
                                            class="btn btn-info btn-sm">
                                             <i class="fa fa-file-pdf"></i> BN
                                         </a>
-                                        @if(delete_permission())
+                                        @if(delete_permission('certificate'))
                                         <button class="btn btn-danger btn-sm btn-delete-cert"
                                                 data-id="{{ $certificate->id }}"
                                                 title="Delete">
