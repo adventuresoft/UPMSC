@@ -5,86 +5,54 @@
     <title>Print Notice - {{ $case->case_no }}</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;700&display=swap');
+        /* Base styles */
         body {
             font-family: 'Noto Serif Bengali', 'SolaimanLipi', Arial, sans-serif;
             color: #000;
             background: #fff;
             margin: 0;
-            padding: 20px;
-            font-size: 16px;
-            line-height: 1.6;
+            padding: 0;
+            font-size: 15px;
+            line-height: 1.5;
         }
         .form-container {
             width: 100%;
-            max-width: 800px;
             margin: 0 auto;
             background: #fff;
-            padding: 20px;
+            padding: 20mm;
+            box-sizing: border-box;
         }
-        .form-title {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
-        .form-title h4 {
-            margin: 0;
-            font-size: 20px;
-        }
-        .form-title h5 {
-            margin: 5px 0;
-            font-size: 16px;
-            font-weight: normal;
-        }
-        .form-row {
-            display: flex;
-            margin-bottom: 12px;
-            align-items: flex-end;
-        }
-        .form-label {
-            white-space: nowrap;
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        .form-value {
-            flex-grow: 1;
-            border-bottom: 1px dotted #000;
-            padding-bottom: 2px;
-        }
-        .signature-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 60px;
-        }
-        .signature-box {
-            text-align: center;
-        }
-        .signature-line {
-            border-top: 1px dotted #000;
-            width: 220px;
-            margin-bottom: 5px;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .d-flex {
-            display: flex;
-        }
-        .justify-content-between {
-            justify-content: space-between;
-        }
-        .mt-3 { margin-top: 15px; }
-        .mt-4 { margin-top: 20px; }
-        .mb-3 { margin-bottom: 15px; }
-        .mb-4 { margin-bottom: 20px; }
+        /* ... existing utility classes ... */
+        .form-title { text-align: center; font-weight: bold; margin-bottom: 15px; }
+        .form-title h4 { margin: 0; font-size: 18px; }
+        .form-title h5 { margin: 5px 0; font-size: 15px; font-weight: normal; }
+        .form-row { display: flex; margin-bottom: 8px; align-items: flex-end; }
+        .form-label { white-space: nowrap; margin-right: 10px; font-weight: bold; }
+        .form-value { flex-grow: 1; border-bottom: 1px dotted #000; padding-bottom: 2px; }
+        .signature-section { display: flex; justify-content: space-between; margin-top: 30px; }
+        .signature-box { text-align: center; }
+        .signature-line { border-top: 1px dotted #000; width: 220px; margin-bottom: 5px; }
+        .text-center { text-align: center; }
+        .d-flex { display: flex; }
+        .justify-content-between { justify-content: space-between; }
+        .mt-3 { margin-top: 15px; } .mt-4 { margin-top: 20px; }
+        .mb-3 { margin-bottom: 15px; } .mb-4 { margin-bottom: 20px; }
         .ml-2 { margin-left: 10px; }
+
+        @media screen {
+            body { background: #525659; display: flex; justify-content: center; padding: 20px 0; }
+            .form-container { width: 210mm; min-height: 297mm; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        }
+
         @media print {
-            body { padding: 0; }
+            @page { size: A4; margin: 0; }
+            body { display: block; margin: 0; padding: 0; background: #fff; }
+            .form-container { width: 210mm; padding: 20mm; margin: 0; box-shadow: none; border: none; }
             .no-print { display: none; }
-            .form-container { border: none; box-shadow: none; padding: 0; }
         }
     </style>
 </head>
-<body onload="window.print()">
+<body onload="{{ request('preview') ? '' : 'window.print()' }}">
 
     <div class="form-container">
         @php
@@ -129,18 +97,18 @@
             </div>
 
             <div class="form-row mt-3"><div class="form-label">ইউনিয়নের নাম :</div><div class="form-value">{{ $unionName }}</div></div>
-            <div class="form-row mt-3" style="align-items: flex-start;">
+            <div class="form-row mt-2" style="align-items: flex-start;">
                 <div class="form-label">বিরোধীয় বিষয় :</div>
-                <div class="form-value" style="min-height: 60px;">{{ $case->ovijog_er_biboron }}</div>
+                <div class="form-value" style="min-height: 30px;">{{ $case->ovijog_er_biboron }}</div>
             </div>
-            <div class="form-row mt-3" style="align-items: flex-start;">
+            <div class="form-row mt-2" style="align-items: flex-start;">
                 <div class="form-label">প্রার্থিত প্রতিকার :</div>
-                <div class="form-value" style="min-height: 60px;">{{ $case->ghotona_sombolito }}</div>
+                <div class="form-value" style="min-height: 30px;">{{ $case->ghotona_sombolito }}</div>
             </div>
 
-            <div style="margin-top: 40px; text-align: right; font-size: 14px;">[ প্রয়োজনে অতিরিক্ত কাগজ সংযুক্ত করা যাইবে ]</div>
+            <div style="margin-top: 20px; text-align: right; font-size: 14px;">[ প্রয়োজনে অতিরিক্ত কাগজ সংযুক্ত করা যাইবে ]</div>
             
-            <div class="signature-section">
+            <div class="signature-section" style="margin-top: 30px;">
                 <div class="signature-box"></div>
                 <div class="signature-box">
                     <div class="signature-line"></div>

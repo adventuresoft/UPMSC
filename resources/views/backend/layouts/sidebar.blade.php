@@ -1380,7 +1380,7 @@
 
     {{-- Local Govt. Judiciary --}}
     @if(is_institutional_admin() || Auth::user()->can('dashboard.read'))
-    <li class="nav-item {{ (isset($subMenu) && in_array($subMenu, ['VillageCourtCreate', 'VillageCourtList'])) ? 'menu-open' : '' }}">
+    <li class="nav-item {{ (isset($subMenu) && in_array($subMenu, ['VillageCourtCreate', 'VillageCourtList', 'VillageCourtAdalotGothon', 'VillageCourtShunani', 'VillageCourtRayGhoshona'])) ? 'menu-open' : '' }}">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-balance-scale"></i>
         <p>
@@ -1399,6 +1399,24 @@
           <a href="{{ route('village-court.index') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtList') active @endif">
             <i class="far fa-circle nav-icon"></i>
             <p>Case List / মামলার তালিকা</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('village-court.court_formed_list') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtAdalotGothon') active @endif">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Court Formed List / আদালত গঠন তালিকা</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('village-court.hearing_list') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtShunani') active @endif">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Hearing List / শুনানীর তালিকা</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('village-court.verdict_list') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtRayGhoshona') active @endif">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Verdict List / রায় ঘোষণার তালিকা</p>
           </a>
         </li>
       </ul>

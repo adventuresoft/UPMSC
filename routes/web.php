@@ -605,6 +605,9 @@ Route::post('/save-new-ownership', [OrganizationOwnershipController::class, 'sav
     ->name('savenewownership');
     
     Route::resource('institute', InstituteController::class);
+    Route::get('village-court/court-formed-list', [VillageCourtController::class, 'courtFormedList'])->name('village-court.court_formed_list');
+    Route::get('village-court/hearing-list', [VillageCourtController::class, 'hearingList'])->name('village-court.hearing_list');
+    Route::get('village-court/verdict-list', [VillageCourtController::class, 'verdictList'])->name('village-court.verdict_list');
     Route::resource('village-court', VillageCourtController::class);
     Route::get('village-court/{id}/form-court', [VillageCourtController::class, 'formCourtView'])->name('village-court.form-court.view');
     Route::post('village-court/{id}/form-court', [VillageCourtController::class, 'formCourt'])->name('village-court.form-court');

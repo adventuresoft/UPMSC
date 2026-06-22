@@ -120,6 +120,10 @@
                                 <div class="col-sm-4"><strong>Filing Date:</strong> {{ $case->case_date ? $case->case_date->format('d-m-Y') : 'N/A' }}</div>
                                 <div class="col-sm-4"><strong>Filing Time:</strong> {{ $case->case_time ? \Carbon\Carbon::parse($case->case_time)->format('h:i A') : 'N/A' }}</div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-4"><strong>Case Category (অংশ):</strong> {{ $case->case_category ?? 'N/A' }}</div>
+                                <div class="col-sm-8"><strong>Case Type (তফসিল):</strong> {{ $case->case_type_details ?? 'N/A' }}</div>
+                            </div>
                             <hr>
                             <div class="row mb-3">
                                 <div class="col-sm-6">
@@ -163,10 +167,6 @@
                             <div class="mb-3">
                                 <h5><strong>Complaint Details (অভিযোগের বিবরণ)</strong></h5>
                                 <p class="bg-light p-2 rounded">{{ $case->ovijog_er_biboron ?? 'No description provided.' }}</p>
-                            </div>
-                            <div class="mb-3">
-                                <h5><strong>Incident Details (প্রার্থিত প্রতিকার)</strong></h5>
-                                <p class="bg-light p-2 rounded">{{ $case->ghotona_sombolito ?? 'No description provided.' }}</p>
                             </div>
 
                             @if($case->status != 'pending')
@@ -213,8 +213,12 @@
                                 </div>
                             </div>
                             <div class="row mt-2">
-                                <div class="col-sm-6"><strong>Next Hearing Date:</strong> {{ $case->sunani_date ? $case->sunani_date->format('d-m-Y') : 'N/A' }}</div>
-                                <div class="col-sm-6"><strong>Next Hearing Time:</strong> {{ $case->sunani_time ? \Carbon\Carbon::parse($case->sunani_time)->format('h:i A') : 'N/A' }}</div>
+                                <div class="col-sm-6"><strong>Appearance Date (হাজিরার তারিখ):</strong> {{ $case->hajir_date ? $case->hajir_date->format('d-m-Y') : 'N/A' }}</div>
+                                <div class="col-sm-6"><strong>Appearance Time (হাজিরার সময়):</strong> {{ $case->hajir_time ? \Carbon\Carbon::parse($case->hajir_time)->format('h:i A') : 'N/A' }}</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-sm-6"><strong>Hearing Date (শুনানির তারিখ):</strong> {{ $case->sunani_date ? $case->sunani_date->format('d-m-Y') : 'N/A' }}</div>
+                                <div class="col-sm-6"><strong>Hearing Time (শুনানির সময়):</strong> {{ $case->sunani_time ? \Carbon\Carbon::parse($case->sunani_time)->format('h:i A') : 'N/A' }}</div>
                             </div>
                             @endif
 
@@ -250,7 +254,7 @@
                                         <td><strong>ফরম-১: আবেদনপত্র</strong></td>
                                         <td>Case filing details form.</td>
                                         <td class="text-right">
-                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form1']) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</a>
+                                            <button type="button" onclick="openPrintPreview('{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form1']) }}')" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</button>
                                         </td>
                                     </tr>
                                     @foreach($bibadis as $bIndex => $bibadi)
@@ -258,7 +262,7 @@
                                         <td><strong>ফরম-৪: প্রতিবাদীর সমন ({{ $bibadi->name }})</strong></td>
                                         <td>Summons issued to the defendant.</td>
                                         <td class="text-right">
-                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form4', 'refId' => $bibadi->id]) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</a>
+                                            <button type="button" onclick="openPrintPreview('{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form4', 'refId' => $bibadi->id]) }}')" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -268,7 +272,7 @@
                                         <td><strong>ফরম-৫: সাক্ষীর সমন ({{ $shakkhi->name }})</strong></td>
                                         <td>Summons issued to the witness.</td>
                                         <td class="text-right">
-                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form5', 'refId' => $shakkhi->id]) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</a>
+                                            <button type="button" onclick="openPrintPreview('{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form5', 'refId' => $shakkhi->id]) }}')" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -276,7 +280,7 @@
                                         <td><strong>ফরম-১১: মামলার স্লিপ</strong></td>
                                         <td>Hearing Date and location slip.</td>
                                         <td class="text-right">
-                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form11']) }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</a>
+                                            <button type="button" onclick="openPrintPreview('{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'form11']) }}')" class="btn btn-sm btn-outline-primary"><i class="fas fa-print"></i> Print</button>
                                         </td>
                                     </tr>
                                     @if($case->status == 'decided')
@@ -284,7 +288,7 @@
                                         <td><strong>রায়ের অনুলিপি</strong></td>
                                         <td>Official verdict copy of the court decision.</td>
                                         <td class="text-right">
-                                            <a href="{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'verdict']) }}" target="_blank" class="btn btn-sm btn-success"><i class="fas fa-print"></i> Print Verdict</a>
+                                            <button type="button" onclick="openPrintPreview('{{ route('village-court.print-notice', ['id' => $case->id, 'type' => 'verdict']) }}')" class="btn btn-sm btn-success"><i class="fas fa-print"></i> Print Verdict</button>
                                         </td>
                                     </tr>
                                     @endif
@@ -331,7 +335,7 @@
                                             <strong>২. শুনানি পরিচালনা</strong><br>
                                             <span class="small">(Manage Hearing)</span>
                                         </a>
-                                    @else
+                                    @elseif($case->status == 'hearing' || $case->status == 'decided')
                                         <button class="btn btn-outline-success btn-block p-3" disabled>
                                             <i class="fas fa-check-circle fa-2x d-block mb-2 text-success"></i>
                                             <strong>২. শুনানি সম্পন্ন</strong><br>
@@ -346,13 +350,13 @@
                                             <strong>৩. রায় ঘোষণা</strong><br>
                                             <span class="small">(Declare Verdict)</span>
                                         </button>
-                                    @elseif($case->status == 'court_formed')
+                                    @elseif($case->status == 'court_formed' || $case->status == 'hearing')
                                         <a href="{{ route('village-court.verdict.view', $case->id) }}" class="btn btn-success btn-block p-3">
                                             <i class="fas fa-balance-scale fa-2x d-block mb-2"></i>
                                             <strong>৩. রায় ঘোষণা</strong><br>
                                             <span class="small">(Declare Verdict)</span>
                                         </a>
-                                    @else
+                                    @elseif($case->status == 'decided')
                                         <button class="btn btn-outline-success btn-block p-3" disabled>
                                             <i class="fas fa-check-circle fa-2x d-block mb-2 text-success"></i>
                                             <strong>৩. রায় ঘোষিত</strong><br>
@@ -416,6 +420,28 @@
             </div>
         </div>
     </section>
+
+    <!-- Print Preview Modal -->
+    <div class="modal fade" id="printPreviewModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Print Preview (A4 Paper Size)</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="background: #525659; padding: 0; height: 75vh;">
+              <iframe id="printIframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('printIframe').contentWindow.print()"><i class="fas fa-print"></i> Print Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 @endsection
 @push('script')
     <script src="{{ asset('backend/plugins/select2/js/select2.full.min.js') }}"></script>
@@ -423,5 +449,11 @@
         $(function () {
             $('.select2').select2({ theme: 'bootstrap4' });
         });
+
+        function openPrintPreview(url) {
+            var fullUrl = url + (url.indexOf('?') !== -1 ? '&' : '?') + 'preview=true';
+            $('#printIframe').attr('src', fullUrl);
+            $('#printPreviewModal').modal('show');
+        }
     </script>
 @endpush
