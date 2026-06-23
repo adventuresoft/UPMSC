@@ -1,0 +1,1131 @@
+﻿
+  GET|HEAD        / ...................................................................... home ΓÇ║ HomeController@index
+  POST            _ignition/execute-solution ignition.executeSolution ΓÇ║ Spatie\LaravelIgnition ΓÇ║ ExecuteSolutionContrΓÇª
+  GET|HEAD        _ignition/health-check ....... ignition.healthCheck ΓÇ║ Spatie\LaravelIgnition ΓÇ║ HealthCheckController
+  POST            _ignition/update-config .... ignition.updateConfig ΓÇ║ Spatie\LaravelIgnition ΓÇ║ UpdateConfigController
+  POST            api/application-store .................................................. ApplicationController@store
+  GET|HEAD        api/get-districts-by-division/{divisionID} .................. DistrictController@districtsByDivision
+  GET|HEAD        api/get-thanas-by-district/{districtID} ........................ UpazillaController@thanasByDistrict
+  GET|HEAD        api/get-unions-by-thana/{thanaID} .................................... UnionController@unionsByThana
+  GET|HEAD        api/get-villages-by-union/{unionID} ................ BasicSettings\VillageController@villagesByUnion
+  GET|HEAD        api/house-options/{id} ..................................................... HouseController@options
+  GET|HEAD        api/user ........................................................................................... 
+  GET|HEAD        application ...................................... application.create ΓÇ║ ApplicationController@create
+  POST            application/store .................................. application.store ΓÇ║ ApplicationController@store
+  GET|HEAD        application/success/{system_id} ................ application.success ΓÇ║ ApplicationController@success
+  POST            backend/load-project-type-content backendProjectTypeContent ΓÇ║ ProjectTypeController@backendProjectTΓÇª
+  GET|HEAD        certificate/verify .......................... certificate.verify ΓÇ║ CertificateVerifyController@index
+  POST            certificate/verify/search ........... certificate.verify.search ΓÇ║ CertificateVerifyController@search
+  GET|HEAD        changeMember/{councilor_member_id} ......... chairman.changeMember ΓÇ║ ChairmanController@changeMember
+  POST            citizen-certificate-approve ..... citizen.approve ΓÇ║ Certificate\CitizenCertificateController@approve
+  GET|HEAD        clear-cache ............................................................................ clear-cache
+  POST            councilorUpdate ...................... chairman.councilorUpdate ΓÇ║ ChairmanController@councilorUpdate
+  GET|HEAD        dashboard .................................................... dashboard ΓÇ║ DashboardController@index
+  GET|HEAD        dashboard/admin ................................................ admin.index ΓÇ║ AdminController@index
+  POST            dashboard/admin ................................................ admin.store ΓÇ║ AdminController@store
+  GET|HEAD        dashboard/admin/create ....................................... admin.create ΓÇ║ AdminController@create
+  GET|HEAD        dashboard/admin/{admin} .......................................... admin.show ΓÇ║ AdminController@show
+  PUT|PATCH       dashboard/admin/{admin} ...................................... admin.update ΓÇ║ AdminController@update
+  DELETE          dashboard/admin/{admin} .................................... admin.destroy ΓÇ║ AdminController@destroy
+  GET|HEAD        dashboard/admin/{admin}/edit ..................................... admin.edit ΓÇ║ AdminController@edit
+  GET|HEAD        dashboard/basic-settings/city-corporation basic-settings.city-corporation.index ΓÇ║ CityCorporationCoΓÇª
+  POST            dashboard/basic-settings/city-corporation basic-settings.city-corporation.store ΓÇ║ CityCorporationCoΓÇª
+  GET|HEAD        dashboard/basic-settings/city-corporation-ward basic-settings.city-corporation-ward.index ΓÇ║ BasicSeΓÇª
+  POST            dashboard/basic-settings/city-corporation-ward basic-settings.city-corporation-ward.store ΓÇ║ BasicSeΓÇª
+  GET|HEAD        dashboard/basic-settings/city-corporation-ward/create basic-settings.city-corporation-ward.create  ΓÇª
+  GET|HEAD        dashboard/basic-settings/city-corporation-ward/{city_corporation_ward} basic-settings.city-corporatΓÇª
+  PUT|PATCH       dashboard/basic-settings/city-corporation-ward/{city_corporation_ward} basic-settings.city-corporatΓÇª
+  DELETE          dashboard/basic-settings/city-corporation-ward/{city_corporation_ward} basic-settings.city-corporatΓÇª
+  GET|HEAD        dashboard/basic-settings/city-corporation-ward/{city_corporation_ward}/edit basic-settings.city-corΓÇª
+  GET|HEAD        dashboard/basic-settings/city-corporation/create basic-settings.city-corporation.create ΓÇ║ CityCorpoΓÇª
+  GET|HEAD        dashboard/basic-settings/city-corporation/{city_corporation} basic-settings.city-corporation.show  ΓÇª
+  PUT|PATCH       dashboard/basic-settings/city-corporation/{city_corporation} basic-settings.city-corporation.updateΓÇª
+  DELETE          dashboard/basic-settings/city-corporation/{city_corporation} basic-settings.city-corporation.destroΓÇª
+  GET|HEAD        dashboard/basic-settings/city-corporation/{city_corporation}/edit basic-settings.city-corporation.eΓÇª
+  GET|HEAD        dashboard/basic-settings/country basic-settings.country.index ΓÇ║ BasicSettings\CountryController@indΓÇª
+  POST            dashboard/basic-settings/country basic-settings.country.store ΓÇ║ BasicSettings\CountryController@stoΓÇª
+  GET|HEAD        dashboard/basic-settings/country/create basic-settings.country.create ΓÇ║ BasicSettings\CountryControΓÇª
+  GET|HEAD        dashboard/basic-settings/country/{country} basic-settings.country.show ΓÇ║ BasicSettings\CountryContrΓÇª
+  PUT|PATCH       dashboard/basic-settings/country/{country} basic-settings.country.update ΓÇ║ BasicSettings\CountryConΓÇª
+  DELETE          dashboard/basic-settings/country/{country} basic-settings.country.destroy ΓÇ║ BasicSettings\CountryCoΓÇª
+  GET|HEAD        dashboard/basic-settings/country/{country}/edit basic-settings.country.edit ΓÇ║ BasicSettings\CountryΓÇª
+  GET|HEAD        dashboard/basic-settings/family-category basic-settings.family-category.index ΓÇ║ BasicSettings\FamilΓÇª
+  POST            dashboard/basic-settings/family-category basic-settings.family-category.store ΓÇ║ BasicSettings\FamilΓÇª
+  GET|HEAD        dashboard/basic-settings/family-category/create basic-settings.family-category.create ΓÇ║ BasicSettinΓÇª
+  GET|HEAD        dashboard/basic-settings/family-category/{family_category} basic-settings.family-category.show ΓÇ║ BaΓÇª
+  PUT|PATCH       dashboard/basic-settings/family-category/{family_category} basic-settings.family-category.update ΓÇ║ ΓÇª
+  DELETE          dashboard/basic-settings/family-category/{family_category} basic-settings.family-category.destroy  ΓÇª
+  GET|HEAD        dashboard/basic-settings/family-category/{family_category}/edit basic-settings.family-category.editΓÇª
+  GET|HEAD        dashboard/basic-settings/family-subcategory basic-settings.family-subcategory.index ΓÇ║ BasicSettingsΓÇª
+  POST            dashboard/basic-settings/family-subcategory basic-settings.family-subcategory.store ΓÇ║ BasicSettingsΓÇª
+  GET|HEAD        dashboard/basic-settings/family-subcategory/create basic-settings.family-subcategory.create ΓÇ║ BasicΓÇª
+  GET|HEAD        dashboard/basic-settings/family-subcategory/{family_subcategory} basic-settings.family-subcategory.ΓÇª
+  PUT|PATCH       dashboard/basic-settings/family-subcategory/{family_subcategory} basic-settings.family-subcategory.ΓÇª
+  DELETE          dashboard/basic-settings/family-subcategory/{family_subcategory} basic-settings.family-subcategory.ΓÇª
+  GET|HEAD        dashboard/basic-settings/family-subcategory/{family_subcategory}/edit basic-settings.family-subcateΓÇª
+  GET|HEAD        dashboard/basic-settings/family-type basic-settings.family-type.index ΓÇ║ BasicSettings\FamilyTypeConΓÇª
+  POST            dashboard/basic-settings/family-type basic-settings.family-type.store ΓÇ║ BasicSettings\FamilyTypeConΓÇª
+  GET|HEAD        dashboard/basic-settings/family-type/create basic-settings.family-type.create ΓÇ║ BasicSettings\FamilΓÇª
+  GET|HEAD        dashboard/basic-settings/family-type/{family_type} basic-settings.family-type.show ΓÇ║ BasicSettings\ΓÇª
+  PUT|PATCH       dashboard/basic-settings/family-type/{family_type} basic-settings.family-type.update ΓÇ║ BasicSettingΓÇª
+  DELETE          dashboard/basic-settings/family-type/{family_type} basic-settings.family-type.destroy ΓÇ║ BasicSettinΓÇª
+  GET|HEAD        dashboard/basic-settings/family-type/{family_type}/edit basic-settings.family-type.edit ΓÇ║ BasicSettΓÇª
+  GET|HEAD        dashboard/basic-settings/house-category basic-settings.house-category.index ΓÇ║ BasicSettings\HouseCaΓÇª
+  POST            dashboard/basic-settings/house-category basic-settings.house-category.store ΓÇ║ BasicSettings\HouseCaΓÇª
+  GET|HEAD        dashboard/basic-settings/house-category/create basic-settings.house-category.create ΓÇ║ BasicSettingsΓÇª
+  GET|HEAD        dashboard/basic-settings/house-category/{house_category} basic-settings.house-category.show ΓÇ║ BasicΓÇª
+  PUT|PATCH       dashboard/basic-settings/house-category/{house_category} basic-settings.house-category.update ΓÇ║ BasΓÇª
+  DELETE          dashboard/basic-settings/house-category/{house_category} basic-settings.house-category.destroy ΓÇ║ BaΓÇª
+  GET|HEAD        dashboard/basic-settings/house-category/{house_category}/edit basic-settings.house-category.edit ΓÇ║ ΓÇª
+  GET|HEAD        dashboard/basic-settings/house-class basic-settings.house-class.index ΓÇ║ BasicSettings\HouseClassConΓÇª
+  POST            dashboard/basic-settings/house-class basic-settings.house-class.store ΓÇ║ BasicSettings\HouseClassConΓÇª
+  GET|HEAD        dashboard/basic-settings/house-class/create basic-settings.house-class.create ΓÇ║ BasicSettings\HouseΓÇª
+  GET|HEAD        dashboard/basic-settings/house-class/{house_class} basic-settings.house-class.show ΓÇ║ BasicSettings\ΓÇª
+  PUT|PATCH       dashboard/basic-settings/house-class/{house_class} basic-settings.house-class.update ΓÇ║ BasicSettingΓÇª
+  DELETE          dashboard/basic-settings/house-class/{house_class} basic-settings.house-class.destroy ΓÇ║ BasicSettinΓÇª
+  GET|HEAD        dashboard/basic-settings/house-class/{house_class}/edit basic-settings.house-class.edit ΓÇ║ BasicSettΓÇª
+  GET|HEAD        dashboard/basic-settings/house-ownership-type basic-settings.house-ownership-type.index ΓÇ║ BasicSettΓÇª
+  POST            dashboard/basic-settings/house-ownership-type basic-settings.house-ownership-type.store ΓÇ║ BasicSettΓÇª
+  GET|HEAD        dashboard/basic-settings/house-ownership-type/create basic-settings.house-ownership-type.create ΓÇ║ BΓÇª
+  GET|HEAD        dashboard/basic-settings/house-ownership-type/{house_ownership_type} basic-settings.house-ownershipΓÇª
+  PUT|PATCH       dashboard/basic-settings/house-ownership-type/{house_ownership_type} basic-settings.house-ownershipΓÇª
+  DELETE          dashboard/basic-settings/house-ownership-type/{house_ownership_type} basic-settings.house-ownershipΓÇª
+  GET|HEAD        dashboard/basic-settings/house-ownership-type/{house_ownership_type}/edit basic-settings.house-owneΓÇª
+  GET|HEAD        dashboard/basic-settings/house-type basic-settings.house-type.index ΓÇ║ BasicSettings\HouseTypeControΓÇª
+  POST            dashboard/basic-settings/house-type basic-settings.house-type.store ΓÇ║ BasicSettings\HouseTypeControΓÇª
+  GET|HEAD        dashboard/basic-settings/house-type/create basic-settings.house-type.create ΓÇ║ BasicSettings\HouseTyΓÇª
+  GET|HEAD        dashboard/basic-settings/house-type/{house_type} basic-settings.house-type.show ΓÇ║ BasicSettings\HouΓÇª
+  PUT|PATCH       dashboard/basic-settings/house-type/{house_type} basic-settings.house-type.update ΓÇ║ BasicSettings\HΓÇª
+  DELETE          dashboard/basic-settings/house-type/{house_type} basic-settings.house-type.destroy ΓÇ║ BasicSettings\ΓÇª
+  GET|HEAD        dashboard/basic-settings/house-type/{house_type}/edit basic-settings.house-type.edit ΓÇ║ BasicSettingΓÇª
+  GET|HEAD        dashboard/basic-settings/land-class basic-settings.land-class.index ΓÇ║ BasicSettings\LandClassControΓÇª
+  POST            dashboard/basic-settings/land-class basic-settings.land-class.store ΓÇ║ BasicSettings\LandClassControΓÇª
+  GET|HEAD        dashboard/basic-settings/land-class/create basic-settings.land-class.create ΓÇ║ BasicSettings\LandClaΓÇª
+  GET|HEAD        dashboard/basic-settings/land-class/{land_class} basic-settings.land-class.show ΓÇ║ BasicSettings\LanΓÇª
+  PUT|PATCH       dashboard/basic-settings/land-class/{land_class} basic-settings.land-class.update ΓÇ║ BasicSettings\LΓÇª
+  DELETE          dashboard/basic-settings/land-class/{land_class} basic-settings.land-class.destroy ΓÇ║ BasicSettings\ΓÇª
+  GET|HEAD        dashboard/basic-settings/land-class/{land_class}/edit basic-settings.land-class.edit ΓÇ║ BasicSettingΓÇª
+  GET|HEAD        dashboard/basic-settings/land-ownership-type basic-settings.land-ownership-type.index ΓÇ║ BasicSettinΓÇª
+  POST            dashboard/basic-settings/land-ownership-type basic-settings.land-ownership-type.store ΓÇ║ BasicSettinΓÇª
+  GET|HEAD        dashboard/basic-settings/land-ownership-type/create basic-settings.land-ownership-type.create ΓÇ║ BasΓÇª
+  GET|HEAD        dashboard/basic-settings/land-ownership-type/{land_ownership_type} basic-settings.land-ownership-tyΓÇª
+  PUT|PATCH       dashboard/basic-settings/land-ownership-type/{land_ownership_type} basic-settings.land-ownership-tyΓÇª
+  DELETE          dashboard/basic-settings/land-ownership-type/{land_ownership_type} basic-settings.land-ownership-tyΓÇª
+  GET|HEAD        dashboard/basic-settings/land-ownership-type/{land_ownership_type}/edit basic-settings.land-ownershΓÇª
+  GET|HEAD        dashboard/basic-settings/land-type basic-settings.land-type.index ΓÇ║ BasicSettings\LandTypeControlleΓÇª
+  POST            dashboard/basic-settings/land-type basic-settings.land-type.store ΓÇ║ BasicSettings\LandTypeControlleΓÇª
+  GET|HEAD        dashboard/basic-settings/land-type/create basic-settings.land-type.create ΓÇ║ BasicSettings\LandTypeCΓÇª
+  GET|HEAD        dashboard/basic-settings/land-type/{land_type} basic-settings.land-type.show ΓÇ║ BasicSettings\LandTyΓÇª
+  PUT|PATCH       dashboard/basic-settings/land-type/{land_type} basic-settings.land-type.update ΓÇ║ BasicSettings\LandΓÇª
+  DELETE          dashboard/basic-settings/land-type/{land_type} basic-settings.land-type.destroy ΓÇ║ BasicSettings\LanΓÇª
+  GET|HEAD        dashboard/basic-settings/land-type/{land_type}/edit basic-settings.land-type.edit ΓÇ║ BasicSettings\LΓÇª
+  GET|HEAD        dashboard/basic-settings/market-category basic-settings.market-category.index ΓÇ║ BasicSettings\MarkeΓÇª
+  POST            dashboard/basic-settings/market-category basic-settings.market-category.store ΓÇ║ BasicSettings\MarkeΓÇª
+  GET|HEAD        dashboard/basic-settings/market-category/create basic-settings.market-category.create ΓÇ║ BasicSettinΓÇª
+  GET|HEAD        dashboard/basic-settings/market-category/{market_category} basic-settings.market-category.show ΓÇ║ BaΓÇª
+  PUT|PATCH       dashboard/basic-settings/market-category/{market_category} basic-settings.market-category.update ΓÇ║ ΓÇª
+  DELETE          dashboard/basic-settings/market-category/{market_category} basic-settings.market-category.destroy  ΓÇª
+  GET|HEAD        dashboard/basic-settings/market-category/{market_category}/edit basic-settings.market-category.editΓÇª
+  GET|HEAD        dashboard/basic-settings/market-ownership-type basic-settings.market-ownership-type.index ΓÇ║ BasicSeΓÇª
+  POST            dashboard/basic-settings/market-ownership-type basic-settings.market-ownership-type.store ΓÇ║ BasicSeΓÇª
+  GET|HEAD        dashboard/basic-settings/market-ownership-type/create basic-settings.market-ownership-type.create  ΓÇª
+  GET|HEAD        dashboard/basic-settings/market-ownership-type/{market_ownership_type} basic-settings.market-ownersΓÇª
+  PUT|PATCH       dashboard/basic-settings/market-ownership-type/{market_ownership_type} basic-settings.market-ownersΓÇª
+  DELETE          dashboard/basic-settings/market-ownership-type/{market_ownership_type} basic-settings.market-ownersΓÇª
+  GET|HEAD        dashboard/basic-settings/market-ownership-type/{market_ownership_type}/edit basic-settings.market-oΓÇª
+  GET|HEAD        dashboard/basic-settings/market-type basic-settings.market-type.index ΓÇ║ BasicSettings\MarketTypeConΓÇª
+  POST            dashboard/basic-settings/market-type basic-settings.market-type.store ΓÇ║ BasicSettings\MarketTypeConΓÇª
+  GET|HEAD        dashboard/basic-settings/market-type/create basic-settings.market-type.create ΓÇ║ BasicSettings\MarkeΓÇª
+  GET|HEAD        dashboard/basic-settings/market-type/{market_type} basic-settings.market-type.show ΓÇ║ BasicSettings\ΓÇª
+  PUT|PATCH       dashboard/basic-settings/market-type/{market_type} basic-settings.market-type.update ΓÇ║ BasicSettingΓÇª
+  DELETE          dashboard/basic-settings/market-type/{market_type} basic-settings.market-type.destroy ΓÇ║ BasicSettinΓÇª
+  GET|HEAD        dashboard/basic-settings/market-type/{market_type}/edit basic-settings.market-type.edit ΓÇ║ BasicSettΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-category basic-settings.organization-category.index ΓÇ║ BasicSeΓÇª
+  POST            dashboard/basic-settings/organization-category basic-settings.organization-category.store ΓÇ║ BasicSeΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-category/create basic-settings.organization-category.create  ΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-category/{organization_category} basic-settings.organization-ΓÇª
+  PUT|PATCH       dashboard/basic-settings/organization-category/{organization_category} basic-settings.organization-ΓÇª
+  DELETE          dashboard/basic-settings/organization-category/{organization_category} basic-settings.organization-ΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-category/{organization_category}/edit basic-settings.organizaΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-class basic-settings.organization-class.index ΓÇ║ BasicSettingsΓÇª
+  POST            dashboard/basic-settings/organization-class basic-settings.organization-class.store ΓÇ║ BasicSettingsΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-class/create basic-settings.organization-class.create ΓÇ║ BasicΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-class/{organization_class} basic-settings.organization-class.ΓÇª
+  PUT|PATCH       dashboard/basic-settings/organization-class/{organization_class} basic-settings.organization-class.ΓÇª
+  DELETE          dashboard/basic-settings/organization-class/{organization_class} basic-settings.organization-class.ΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-class/{organization_class}/edit basic-settings.organization-cΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-ownership-type basic-settings.organization-ownership-type.indΓÇª
+  POST            dashboard/basic-settings/organization-ownership-type basic-settings.organization-ownership-type.stoΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-ownership-type/create basic-settings.organization-ownership-tΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-ownership-type/{organization_ownership_type} basic-settings.oΓÇª
+  PUT|PATCH       dashboard/basic-settings/organization-ownership-type/{organization_ownership_type} basic-settings.oΓÇª
+  DELETE          dashboard/basic-settings/organization-ownership-type/{organization_ownership_type} basic-settings.oΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-ownership-type/{organization_ownership_type}/edit basic-settiΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-subcategory basic-settings.organization-subcategory.index ΓÇ║ BΓÇª
+  POST            dashboard/basic-settings/organization-subcategory basic-settings.organization-subcategory.store ΓÇ║ BΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-subcategory/create basic-settings.organization-subcategory.crΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-subcategory/{organization_subcategory} basic-settings.organizΓÇª
+  PUT|PATCH       dashboard/basic-settings/organization-subcategory/{organization_subcategory} basic-settings.organizΓÇª
+  DELETE          dashboard/basic-settings/organization-subcategory/{organization_subcategory} basic-settings.organizΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-subcategory/{organization_subcategory}/edit basic-settings.orΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-subtype basic-settings.organization-subtype.index ΓÇ║ BasicSettΓÇª
+  POST            dashboard/basic-settings/organization-subtype basic-settings.organization-subtype.store ΓÇ║ BasicSettΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-subtype/create basic-settings.organization-subtype.create ΓÇ║ BΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-subtype/{organization_subtype} basic-settings.organization-suΓÇª
+  PUT|PATCH       dashboard/basic-settings/organization-subtype/{organization_subtype} basic-settings.organization-suΓÇª
+  DELETE          dashboard/basic-settings/organization-subtype/{organization_subtype} basic-settings.organization-suΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-subtype/{organization_subtype}/edit basic-settings.organizatiΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-type basic-settings.organization-type.index ΓÇ║ BasicSettings\OΓÇª
+  POST            dashboard/basic-settings/organization-type basic-settings.organization-type.store ΓÇ║ BasicSettings\OΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-type/create basic-settings.organization-type.create ΓÇ║ BasicSeΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-type/{organization_type} basic-settings.organization-type.shoΓÇª
+  PUT|PATCH       dashboard/basic-settings/organization-type/{organization_type} basic-settings.organization-type.updΓÇª
+  DELETE          dashboard/basic-settings/organization-type/{organization_type} basic-settings.organization-type.desΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-type/{organization_type}/edit basic-settings.organization-typΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-work-area basic-settings.organization-work-area.index ΓÇ║ BasicΓÇª
+  POST            dashboard/basic-settings/organization-work-area basic-settings.organization-work-area.store ΓÇ║ BasicΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-work-area/create basic-settings.organization-work-area.createΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-work-area/{organization_work_area} basic-settings.organizatioΓÇª
+  PUT|PATCH       dashboard/basic-settings/organization-work-area/{organization_work_area} basic-settings.organizatioΓÇª
+  DELETE          dashboard/basic-settings/organization-work-area/{organization_work_area} basic-settings.organizatioΓÇª
+  GET|HEAD        dashboard/basic-settings/organization-work-area/{organization_work_area}/edit basic-settings.organiΓÇª
+  GET|HEAD        dashboard/basic-settings/post-office . basic-settings.post-office.index ΓÇ║ PostOfficeController@index
+  POST            dashboard/basic-settings/post-office . basic-settings.post-office.store ΓÇ║ PostOfficeController@store
+  GET|HEAD        dashboard/basic-settings/post-office/create basic-settings.post-office.create ΓÇ║ PostOfficeControlleΓÇª
+  GET|HEAD        dashboard/basic-settings/post-office/{post_office} basic-settings.post-office.show ΓÇ║ PostOfficeContΓÇª
+  PUT|PATCH       dashboard/basic-settings/post-office/{post_office} basic-settings.post-office.update ΓÇ║ PostOfficeCoΓÇª
+  DELETE          dashboard/basic-settings/post-office/{post_office} basic-settings.post-office.destroy ΓÇ║ PostOfficeCΓÇª
+  GET|HEAD        dashboard/basic-settings/post-office/{post_office}/edit basic-settings.post-office.edit ΓÇ║ PostOfficΓÇª
+  GET|HEAD        dashboard/basic-settings/profession basic-settings.profession.index ΓÇ║ BasicSettings\ProfessionContrΓÇª
+  POST            dashboard/basic-settings/profession basic-settings.profession.store ΓÇ║ BasicSettings\ProfessionContrΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-category basic-settings.profession-category.index ΓÇ║ BasicSettinΓÇª
+  POST            dashboard/basic-settings/profession-category basic-settings.profession-category.store ΓÇ║ BasicSettinΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-category/create basic-settings.profession-category.create ΓÇ║ BasΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-category/{profession_category} basic-settings.profession-categoΓÇª
+  PUT|PATCH       dashboard/basic-settings/profession-category/{profession_category} basic-settings.profession-categoΓÇª
+  DELETE          dashboard/basic-settings/profession-category/{profession_category} basic-settings.profession-categoΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-category/{profession_category}/edit basic-settings.profession-cΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-subcategory basic-settings.profession-subcategory.index ΓÇ║ BasicΓÇª
+  POST            dashboard/basic-settings/profession-subcategory basic-settings.profession-subcategory.store ΓÇ║ BasicΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-subcategory/create basic-settings.profession-subcategory.createΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-subcategory/{profession_subcategory} basic-settings.profession-ΓÇª
+  PUT|PATCH       dashboard/basic-settings/profession-subcategory/{profession_subcategory} basic-settings.profession-ΓÇª
+  DELETE          dashboard/basic-settings/profession-subcategory/{profession_subcategory} basic-settings.profession-ΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-subcategory/{profession_subcategory}/edit basic-settings.profesΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-type basic-settings.profession-type.index ΓÇ║ BasicSettings\ProfeΓÇª
+  POST            dashboard/basic-settings/profession-type basic-settings.profession-type.store ΓÇ║ BasicSettings\ProfeΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-type/create basic-settings.profession-type.create ΓÇ║ BasicSettinΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-type/{profession_type} basic-settings.profession-type.show ΓÇ║ BaΓÇª
+  PUT|PATCH       dashboard/basic-settings/profession-type/{profession_type} basic-settings.profession-type.update ΓÇ║ ΓÇª
+  DELETE          dashboard/basic-settings/profession-type/{profession_type} basic-settings.profession-type.destroy  ΓÇª
+  GET|HEAD        dashboard/basic-settings/profession-type/{profession_type}/edit basic-settings.profession-type.editΓÇª
+  GET|HEAD        dashboard/basic-settings/profession/create basic-settings.profession.create ΓÇ║ BasicSettings\ProfessΓÇª
+  GET|HEAD        dashboard/basic-settings/profession/{profession} basic-settings.profession.show ΓÇ║ BasicSettings\ProΓÇª
+  PUT|PATCH       dashboard/basic-settings/profession/{profession} basic-settings.profession.update ΓÇ║ BasicSettings\PΓÇª
+  DELETE          dashboard/basic-settings/profession/{profession} basic-settings.profession.destroy ΓÇ║ BasicSettings\ΓÇª
+  GET|HEAD        dashboard/basic-settings/profession/{profession}/edit basic-settings.profession.edit ΓÇ║ BasicSettingΓÇª
+  GET|HEAD        dashboard/basic-settings/reserve-ward basic-settings.reserve-ward.index ΓÇ║ BasicSettings\ReserveWardΓÇª
+  POST            dashboard/basic-settings/reserve-ward basic-settings.reserve-ward.store ΓÇ║ BasicSettings\ReserveWardΓÇª
+  GET|HEAD        dashboard/basic-settings/reserve-ward/create basic-settings.reserve-ward.create ΓÇ║ BasicSettings\ResΓÇª
+  GET|HEAD        dashboard/basic-settings/reserve-ward/{reserve_ward} basic-settings.reserve-ward.show ΓÇ║ BasicSettinΓÇª
+  PUT|PATCH       dashboard/basic-settings/reserve-ward/{reserve_ward} basic-settings.reserve-ward.update ΓÇ║ BasicSettΓÇª
+  DELETE          dashboard/basic-settings/reserve-ward/{reserve_ward} basic-settings.reserve-ward.destroy ΓÇ║ BasicSetΓÇª
+  GET|HEAD        dashboard/basic-settings/reserve-ward/{reserve_ward}/edit basic-settings.reserve-ward.edit ΓÇ║ BasicSΓÇª
+  GET|HEAD        dashboard/basic-settings/road-category basic-settings.road-category.index ΓÇ║ BasicSettings\RoadCategΓÇª
+  POST            dashboard/basic-settings/road-category basic-settings.road-category.store ΓÇ║ BasicSettings\RoadCategΓÇª
+  GET|HEAD        dashboard/basic-settings/road-category/create basic-settings.road-category.create ΓÇ║ BasicSettings\RΓÇª
+  GET|HEAD        dashboard/basic-settings/road-category/{road_category} basic-settings.road-category.show ΓÇ║ BasicSetΓÇª
+  PUT|PATCH       dashboard/basic-settings/road-category/{road_category} basic-settings.road-category.update ΓÇ║ BasicSΓÇª
+  DELETE          dashboard/basic-settings/road-category/{road_category} basic-settings.road-category.destroy ΓÇ║ BasicΓÇª
+  GET|HEAD        dashboard/basic-settings/road-category/{road_category}/edit basic-settings.road-category.edit ΓÇ║ BasΓÇª
+  GET|HEAD        dashboard/basic-settings/road-owner basic-settings.road-owner.index ΓÇ║ BasicSettings\RoadOwnerControΓÇª
+  POST            dashboard/basic-settings/road-owner basic-settings.road-owner.store ΓÇ║ BasicSettings\RoadOwnerControΓÇª
+  GET|HEAD        dashboard/basic-settings/road-owner/create basic-settings.road-owner.create ΓÇ║ BasicSettings\RoadOwnΓÇª
+  GET|HEAD        dashboard/basic-settings/road-owner/{road_owner} basic-settings.road-owner.show ΓÇ║ BasicSettings\RoaΓÇª
+  PUT|PATCH       dashboard/basic-settings/road-owner/{road_owner} basic-settings.road-owner.update ΓÇ║ BasicSettings\RΓÇª
+  DELETE          dashboard/basic-settings/road-owner/{road_owner} basic-settings.road-owner.destroy ΓÇ║ BasicSettings\ΓÇª
+  GET|HEAD        dashboard/basic-settings/road-owner/{road_owner}/edit basic-settings.road-owner.edit ΓÇ║ BasicSettingΓÇª
+  GET|HEAD        dashboard/basic-settings/road-type basic-settings.road-type.index ΓÇ║ BasicSettings\RoadTypeControlleΓÇª
+  POST            dashboard/basic-settings/road-type basic-settings.road-type.store ΓÇ║ BasicSettings\RoadTypeControlleΓÇª
+  GET|HEAD        dashboard/basic-settings/road-type/create basic-settings.road-type.create ΓÇ║ BasicSettings\RoadTypeCΓÇª
+  GET|HEAD        dashboard/basic-settings/road-type/{road_type} basic-settings.road-type.show ΓÇ║ BasicSettings\RoadTyΓÇª
+  PUT|PATCH       dashboard/basic-settings/road-type/{road_type} basic-settings.road-type.update ΓÇ║ BasicSettings\RoadΓÇª
+  DELETE          dashboard/basic-settings/road-type/{road_type} basic-settings.road-type.destroy ΓÇ║ BasicSettings\RoaΓÇª
+  GET|HEAD        dashboard/basic-settings/road-type/{road_type}/edit basic-settings.road-type.edit ΓÇ║ BasicSettings\RΓÇª
+  GET|HEAD        dashboard/basic-settings/union .................. basic-settings.union.index ΓÇ║ UnionController@index
+  POST            dashboard/basic-settings/union .................. basic-settings.union.store ΓÇ║ UnionController@store
+  GET|HEAD        dashboard/basic-settings/union-ward basic-settings.union-ward.index ΓÇ║ BasicSettings\UnionWardControΓÇª
+  POST            dashboard/basic-settings/union-ward basic-settings.union-ward.store ΓÇ║ BasicSettings\UnionWardControΓÇª
+  GET|HEAD        dashboard/basic-settings/union-ward/create basic-settings.union-ward.create ΓÇ║ BasicSettings\UnionWaΓÇª
+  GET|HEAD        dashboard/basic-settings/union-ward/{union_ward} basic-settings.union-ward.show ΓÇ║ BasicSettings\UniΓÇª
+  PUT|PATCH       dashboard/basic-settings/union-ward/{union_ward} basic-settings.union-ward.update ΓÇ║ BasicSettings\UΓÇª
+  DELETE          dashboard/basic-settings/union-ward/{union_ward} basic-settings.union-ward.destroy ΓÇ║ BasicSettings\ΓÇª
+  GET|HEAD        dashboard/basic-settings/union-ward/{union_ward}/edit basic-settings.union-ward.edit ΓÇ║ BasicSettingΓÇª
+  GET|HEAD        dashboard/basic-settings/union/create ......... basic-settings.union.create ΓÇ║ UnionController@create
+  GET|HEAD        dashboard/basic-settings/union/{union} ............ basic-settings.union.show ΓÇ║ UnionController@show
+  PUT|PATCH       dashboard/basic-settings/union/{union} ........ basic-settings.union.update ΓÇ║ UnionController@update
+  DELETE          dashboard/basic-settings/union/{union} ...... basic-settings.union.destroy ΓÇ║ UnionController@destroy
+  GET|HEAD        dashboard/basic-settings/union/{union}/edit ....... basic-settings.union.edit ΓÇ║ UnionController@edit
+  GET|HEAD        dashboard/basic-settings/vehicle-category basic-settings.vehicle-category.index ΓÇ║ BasicSettings\VehΓÇª
+  POST            dashboard/basic-settings/vehicle-category basic-settings.vehicle-category.store ΓÇ║ BasicSettings\VehΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-category/create basic-settings.vehicle-category.create ΓÇ║ BasicSettΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-category/{vehicle_category} basic-settings.vehicle-category.show  ΓÇª
+  PUT|PATCH       dashboard/basic-settings/vehicle-category/{vehicle_category} basic-settings.vehicle-category.updateΓÇª
+  DELETE          dashboard/basic-settings/vehicle-category/{vehicle_category} basic-settings.vehicle-category.destroΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-category/{vehicle_category}/edit basic-settings.vehicle-category.eΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-subcategory basic-settings.vehicle-subcategory.index ΓÇ║ BasicSettinΓÇª
+  POST            dashboard/basic-settings/vehicle-subcategory basic-settings.vehicle-subcategory.store ΓÇ║ BasicSettinΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-subcategory/create basic-settings.vehicle-subcategory.create ΓÇ║ BasΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-subcategory/{vehicle_subcategory} basic-settings.vehicle-subcategoΓÇª
+  PUT|PATCH       dashboard/basic-settings/vehicle-subcategory/{vehicle_subcategory} basic-settings.vehicle-subcategoΓÇª
+  DELETE          dashboard/basic-settings/vehicle-subcategory/{vehicle_subcategory} basic-settings.vehicle-subcategoΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-subcategory/{vehicle_subcategory}/edit basic-settings.vehicle-subcΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-type basic-settings.vehicle-type.index ΓÇ║ BasicSettings\VehicleTypeΓÇª
+  POST            dashboard/basic-settings/vehicle-type basic-settings.vehicle-type.store ΓÇ║ BasicSettings\VehicleTypeΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-type/create basic-settings.vehicle-type.create ΓÇ║ BasicSettings\VehΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-type/{vehicle_type} basic-settings.vehicle-type.show ΓÇ║ BasicSettinΓÇª
+  PUT|PATCH       dashboard/basic-settings/vehicle-type/{vehicle_type} basic-settings.vehicle-type.update ΓÇ║ BasicSettΓÇª
+  DELETE          dashboard/basic-settings/vehicle-type/{vehicle_type} basic-settings.vehicle-type.destroy ΓÇ║ BasicSetΓÇª
+  GET|HEAD        dashboard/basic-settings/vehicle-type/{vehicle_type}/edit basic-settings.vehicle-type.edit ΓÇ║ BasicSΓÇª
+  GET|HEAD        dashboard/basic-settings/village basic-settings.village.index ΓÇ║ BasicSettings\VillageController@indΓÇª
+  POST            dashboard/basic-settings/village basic-settings.village.store ΓÇ║ BasicSettings\VillageController@stoΓÇª
+  GET|HEAD        dashboard/basic-settings/village-area basic-settings.village-area.index ΓÇ║ BasicSettings\VillageAreaΓÇª
+  POST            dashboard/basic-settings/village-area basic-settings.village-area.store ΓÇ║ BasicSettings\VillageAreaΓÇª
+  GET|HEAD        dashboard/basic-settings/village-area/create basic-settings.village-area.create ΓÇ║ BasicSettings\VilΓÇª
+  GET|HEAD        dashboard/basic-settings/village-area/{village_area} basic-settings.village-area.show ΓÇ║ BasicSettinΓÇª
+  PUT|PATCH       dashboard/basic-settings/village-area/{village_area} basic-settings.village-area.update ΓÇ║ BasicSettΓÇª
+  DELETE          dashboard/basic-settings/village-area/{village_area} basic-settings.village-area.destroy ΓÇ║ BasicSetΓÇª
+  GET|HEAD        dashboard/basic-settings/village-area/{village_area}/edit basic-settings.village-area.edit ΓÇ║ BasicSΓÇª
+  GET|HEAD        dashboard/basic-settings/village/create basic-settings.village.create ΓÇ║ BasicSettings\VillageControΓÇª
+  GET|HEAD        dashboard/basic-settings/village/{village} basic-settings.village.show ΓÇ║ BasicSettings\VillageContrΓÇª
+  PUT|PATCH       dashboard/basic-settings/village/{village} basic-settings.village.update ΓÇ║ BasicSettings\VillageConΓÇª
+  DELETE          dashboard/basic-settings/village/{village} basic-settings.village.destroy ΓÇ║ BasicSettings\VillageCoΓÇª
+  GET|HEAD        dashboard/basic-settings/village/{village}/edit basic-settings.village.edit ΓÇ║ BasicSettings\VillageΓÇª
+  GET|HEAD        dashboard/bridge ............................................. bridge.index ΓÇ║ BridgeController@index
+  POST            dashboard/bridge ............................................. bridge.store ΓÇ║ BridgeController@store
+  GET|HEAD        dashboard/bridge/create .................................... bridge.create ΓÇ║ BridgeController@create
+  GET|HEAD        dashboard/bridge/{bridge} ...................................... bridge.show ΓÇ║ BridgeController@show
+  PUT|PATCH       dashboard/bridge/{bridge} .................................. bridge.update ΓÇ║ BridgeController@update
+  DELETE          dashboard/bridge/{bridge} ................................ bridge.destroy ΓÇ║ BridgeController@destroy
+  GET|HEAD        dashboard/bridge/{bridge}/edit ................................. bridge.edit ΓÇ║ BridgeController@edit
+  GET|HEAD        dashboard/certificate/abandoned-by-husband abandoned-by-husband.index ΓÇ║ Certificate\AbandonedByHusbΓÇª
+  POST            dashboard/certificate/abandoned-by-husband abandoned-by-husband.store ΓÇ║ Certificate\AbandonedByHusbΓÇª
+  GET|HEAD        dashboard/certificate/abandoned-by-husband/bn/{id} abandoned-by-husband.bn_certificate ΓÇ║ CertificatΓÇª
+  GET|HEAD        dashboard/certificate/abandoned-by-husband/create abandoned-by-husband.create ΓÇ║ Certificate\AbandonΓÇª
+  GET|HEAD        dashboard/certificate/abandoned-by-husband/{abandoned_by_husband} abandoned-by-husband.show ΓÇ║ CertiΓÇª
+  PUT|PATCH       dashboard/certificate/abandoned-by-husband/{abandoned_by_husband} abandoned-by-husband.update ΓÇ║ CerΓÇª
+  DELETE          dashboard/certificate/abandoned-by-husband/{abandoned_by_husband} abandoned-by-husband.destroy ΓÇ║ CeΓÇª
+  GET|HEAD        dashboard/certificate/abandoned-by-husband/{abandoned_by_husband}/edit abandoned-by-husband.edit ΓÇ║ ΓÇª
+  GET|HEAD        dashboard/certificate/age ................... age.index ΓÇ║ Certificate\AgeCertificateController@index
+  POST            dashboard/certificate/age ................... age.store ΓÇ║ Certificate\AgeCertificateController@store
+  GET|HEAD        dashboard/certificate/age/bn/{id} age.bn_certificate ΓÇ║ Certificate\AgeCertificateController@bn_certΓÇª
+  GET|HEAD        dashboard/certificate/age/create .......... age.create ΓÇ║ Certificate\AgeCertificateController@create
+  GET|HEAD        dashboard/certificate/age/{age} ............... age.show ΓÇ║ Certificate\AgeCertificateController@show
+  PUT|PATCH       dashboard/certificate/age/{age} ........... age.update ΓÇ║ Certificate\AgeCertificateController@update
+  DELETE          dashboard/certificate/age/{age} ......... age.destroy ΓÇ║ Certificate\AgeCertificateController@destroy
+  GET|HEAD        dashboard/certificate/age/{age}/edit .......... age.edit ΓÇ║ Certificate\AgeCertificateController@edit
+  GET|HEAD        dashboard/certificate/agriculture agriculture.index ΓÇ║ Certificate\AgricultureCertificateController@ΓÇª
+  POST            dashboard/certificate/agriculture agriculture.store ΓÇ║ Certificate\AgricultureCertificateController@ΓÇª
+  GET|HEAD        dashboard/certificate/agriculture/bn/{id} agriculture.bn_certificate ΓÇ║ Certificate\AgricultureCertiΓÇª
+  GET|HEAD        dashboard/certificate/agriculture/create agriculture.create ΓÇ║ Certificate\AgricultureCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/agriculture/{agriculture} agriculture.show ΓÇ║ Certificate\AgricultureCertificaΓÇª
+  PUT|PATCH       dashboard/certificate/agriculture/{agriculture} agriculture.update ΓÇ║ Certificate\AgricultureCertifiΓÇª
+  DELETE          dashboard/certificate/agriculture/{agriculture} agriculture.destroy ΓÇ║ Certificate\AgricultureCertifΓÇª
+  GET|HEAD        dashboard/certificate/agriculture/{agriculture}/edit agriculture.edit ΓÇ║ Certificate\AgricultureCertΓÇª
+  GET|HEAD        dashboard/certificate/alive ............. alive.index ΓÇ║ Certificate\AliveCertificateController@index
+  POST            dashboard/certificate/alive ............. alive.store ΓÇ║ Certificate\AliveCertificateController@store
+  GET|HEAD        dashboard/certificate/alive/bn/{id} alive.bn_certificate ΓÇ║ Certificate\AliveCertificateController@bΓÇª
+  GET|HEAD        dashboard/certificate/alive/create .... alive.create ΓÇ║ Certificate\AliveCertificateController@create
+  GET|HEAD        dashboard/certificate/alive/{alive} ....... alive.show ΓÇ║ Certificate\AliveCertificateController@show
+  PUT|PATCH       dashboard/certificate/alive/{alive} ... alive.update ΓÇ║ Certificate\AliveCertificateController@update
+  DELETE          dashboard/certificate/alive/{alive} . alive.destroy ΓÇ║ Certificate\AliveCertificateController@destroy
+  GET|HEAD        dashboard/certificate/alive/{alive}/edit .. alive.edit ΓÇ║ Certificate\AliveCertificateController@edit
+  GET|HEAD        dashboard/certificate/birth ............. birth.index ΓÇ║ Certificate\BirthCertificateController@index
+  POST            dashboard/certificate/birth ............. birth.store ΓÇ║ Certificate\BirthCertificateController@store
+  GET|HEAD        dashboard/certificate/birth-registration-correction birth-registration-correction.index ΓÇ║ CertificaΓÇª
+  POST            dashboard/certificate/birth-registration-correction birth-registration-correction.store ΓÇ║ CertificaΓÇª
+  GET|HEAD        dashboard/certificate/birth-registration-correction/bn/{id} birth-registration-correction.bn_certifΓÇª
+  GET|HEAD        dashboard/certificate/birth-registration-correction/create birth-registration-correction.create ΓÇ║ CΓÇª
+  GET|HEAD        dashboard/certificate/birth-registration-correction/{birth_registration_correction} birth-registratΓÇª
+  PUT|PATCH       dashboard/certificate/birth-registration-correction/{birth_registration_correction} birth-registratΓÇª
+  DELETE          dashboard/certificate/birth-registration-correction/{birth_registration_correction} birth-registratΓÇª
+  GET|HEAD        dashboard/certificate/birth-registration-correction/{birth_registration_correction}/edit birth-regiΓÇª
+  GET|HEAD        dashboard/certificate/birth/bn/{id} birth.bn_certificate ΓÇ║ Certificate\BirthCertificateController@bΓÇª
+  GET|HEAD        dashboard/certificate/birth/create .... birth.create ΓÇ║ Certificate\BirthCertificateController@create
+  GET|HEAD        dashboard/certificate/birth/{birth} ....... birth.show ΓÇ║ Certificate\BirthCertificateController@show
+  PUT|PATCH       dashboard/certificate/birth/{birth} ... birth.update ΓÇ║ Certificate\BirthCertificateController@update
+  DELETE          dashboard/certificate/birth/{birth} . birth.destroy ΓÇ║ Certificate\BirthCertificateController@destroy
+  GET|HEAD        dashboard/certificate/birth/{birth}/edit .. birth.edit ΓÇ║ Certificate\BirthCertificateController@edit
+  GET|HEAD        dashboard/certificate/character . character.index ΓÇ║ Certificate\CharacterCertificateController@index
+  POST            dashboard/certificate/character . character.store ΓÇ║ Certificate\CharacterCertificateController@store
+  GET|HEAD        dashboard/certificate/character/bn/{id} character.bn_certificate ΓÇ║ Certificate\CharacterCertificateΓÇª
+  GET|HEAD        dashboard/certificate/character/create character.create ΓÇ║ Certificate\CharacterCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/character/{character} character.show ΓÇ║ Certificate\CharacterCertificateControΓÇª
+  PUT|PATCH       dashboard/certificate/character/{character} character.update ΓÇ║ Certificate\CharacterCertificateContΓÇª
+  DELETE          dashboard/certificate/character/{character} character.destroy ΓÇ║ Certificate\CharacterCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/character/{character}/edit character.edit ΓÇ║ Certificate\CharacterCertificateCΓÇª
+  GET|HEAD        dashboard/certificate/childless . childless.index ΓÇ║ Certificate\ChildlessCertificateController@index
+  POST            dashboard/certificate/childless . childless.store ΓÇ║ Certificate\ChildlessCertificateController@store
+  GET|HEAD        dashboard/certificate/childless/bn/{id} childless.bn_certificate ΓÇ║ Certificate\ChildlessCertificateΓÇª
+  GET|HEAD        dashboard/certificate/childless/create childless.create ΓÇ║ Certificate\ChildlessCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/childless/{childless} childless.show ΓÇ║ Certificate\ChildlessCertificateControΓÇª
+  PUT|PATCH       dashboard/certificate/childless/{childless} childless.update ΓÇ║ Certificate\ChildlessCertificateContΓÇª
+  DELETE          dashboard/certificate/childless/{childless} childless.destroy ΓÇ║ Certificate\ChildlessCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/childless/{childless}/edit childless.edit ΓÇ║ Certificate\ChildlessCertificateCΓÇª
+  GET|HEAD        dashboard/certificate/citizen ....... citizen.index ΓÇ║ Certificate\CitizenCertificateController@index
+  POST            dashboard/certificate/citizen ....... citizen.store ΓÇ║ Certificate\CitizenCertificateController@store
+  GET|HEAD        dashboard/certificate/citizen/bn/{id} citizen.bn_certificate ΓÇ║ Certificate\CitizenCertificateControΓÇª
+  GET|HEAD        dashboard/certificate/citizen/create citizen.create ΓÇ║ Certificate\CitizenCertificateController@creaΓÇª
+  GET|HEAD        dashboard/certificate/citizen/{citizen} citizen.show ΓÇ║ Certificate\CitizenCertificateController@show
+  PUT|PATCH       dashboard/certificate/citizen/{citizen} citizen.update ΓÇ║ Certificate\CitizenCertificateController@uΓÇª
+  DELETE          dashboard/certificate/citizen/{citizen} citizen.destroy ΓÇ║ Certificate\CitizenCertificateController@ΓÇª
+  GET|HEAD        dashboard/certificate/citizen/{citizen}/edit citizen.edit ΓÇ║ Certificate\CitizenCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/death ............. death.index ΓÇ║ Certificate\DeathCertificateController@index
+  POST            dashboard/certificate/death ............. death.store ΓÇ║ Certificate\DeathCertificateController@store
+  GET|HEAD        dashboard/certificate/death/bn/{id} death.bn_certificate ΓÇ║ Certificate\DeathCertificateController@bΓÇª
+  GET|HEAD        dashboard/certificate/death/create .... death.create ΓÇ║ Certificate\DeathCertificateController@create
+  GET|HEAD        dashboard/certificate/death/{death} ....... death.show ΓÇ║ Certificate\DeathCertificateController@show
+  PUT|PATCH       dashboard/certificate/death/{death} ... death.update ΓÇ║ Certificate\DeathCertificateController@update
+  DELETE          dashboard/certificate/death/{death} . death.destroy ΓÇ║ Certificate\DeathCertificateController@destroy
+  GET|HEAD        dashboard/certificate/death/{death}/edit .. death.edit ΓÇ║ Certificate\DeathCertificateController@edit
+  GET|HEAD        dashboard/certificate/dependency dependency.index ΓÇ║ Certificate\DependencyCertificateController@indΓÇª
+  POST            dashboard/certificate/dependency dependency.store ΓÇ║ Certificate\DependencyCertificateController@stoΓÇª
+  GET|HEAD        dashboard/certificate/dependency/bn/{id} dependency.bn_certificate ΓÇ║ Certificate\DependencyCertificΓÇª
+  GET|HEAD        dashboard/certificate/dependency/create dependency.create ΓÇ║ Certificate\DependencyCertificateControΓÇª
+  GET|HEAD        dashboard/certificate/dependency/{dependency} dependency.show ΓÇ║ Certificate\DependencyCertificateCoΓÇª
+  PUT|PATCH       dashboard/certificate/dependency/{dependency} dependency.update ΓÇ║ Certificate\DependencyCertificateΓÇª
+  DELETE          dashboard/certificate/dependency/{dependency} dependency.destroy ΓÇ║ Certificate\DependencyCertificatΓÇª
+  GET|HEAD        dashboard/certificate/dependency/{dependency}/edit dependency.edit ΓÇ║ Certificate\DependencyCertificΓÇª
+  GET|HEAD        dashboard/certificate/disability-certificate disability-certificate.index ΓÇ║ Certificate\DisabilityCΓÇª
+  POST            dashboard/certificate/disability-certificate disability-certificate.store ΓÇ║ Certificate\DisabilityCΓÇª
+  GET|HEAD        dashboard/certificate/disability-certificate/create disability-certificate.create ΓÇ║ Certificate\DisΓÇª
+  GET|HEAD        dashboard/certificate/disability-certificate/{disability_certificate} disability-certificate.show  ΓÇª
+  PUT|PATCH       dashboard/certificate/disability-certificate/{disability_certificate} disability-certificate.updateΓÇª
+  DELETE          dashboard/certificate/disability-certificate/{disability_certificate} disability-certificate.destroΓÇª
+  GET|HEAD        dashboard/certificate/disability-certificate/{disability_certificate}/edit disability-certificate.eΓÇª
+  GET|HEAD        dashboard/certificate/disability/bn/{id} disability.bn_certificate ΓÇ║ Certificate\DisabilityCertificΓÇª
+  GET|HEAD        dashboard/certificate/dowryless . dowryless.index ΓÇ║ Certificate\DowrylessCertificateController@index
+  POST            dashboard/certificate/dowryless . dowryless.store ΓÇ║ Certificate\DowrylessCertificateController@store
+  GET|HEAD        dashboard/certificate/dowryless/bn/{id} dowryless.bn_certificate ΓÇ║ Certificate\DowrylessCertificateΓÇª
+  GET|HEAD        dashboard/certificate/dowryless/create dowryless.create ΓÇ║ Certificate\DowrylessCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/dowryless/{dowryless} dowryless.show ΓÇ║ Certificate\DowrylessCertificateControΓÇª
+  PUT|PATCH       dashboard/certificate/dowryless/{dowryless} dowryless.update ΓÇ║ Certificate\DowrylessCertificateContΓÇª
+  DELETE          dashboard/certificate/dowryless/{dowryless} dowryless.destroy ΓÇ║ Certificate\DowrylessCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/dowryless/{dowryless}/edit dowryless.edit ΓÇ║ Certificate\DowrylessCertificateCΓÇª
+  GET|HEAD        dashboard/certificate/ethnic-minority ethnic-minority.index ΓÇ║ Certificate\EthnicMinorityCertificateΓÇª
+  POST            dashboard/certificate/ethnic-minority ethnic-minority.store ΓÇ║ Certificate\EthnicMinorityCertificateΓÇª
+  GET|HEAD        dashboard/certificate/ethnic-minority/bn/{id} ethnic-minority.bn_certificate ΓÇ║ Certificate\EthnicMiΓÇª
+  GET|HEAD        dashboard/certificate/ethnic-minority/create ethnic-minority.create ΓÇ║ Certificate\EthnicMinorityCerΓÇª
+  GET|HEAD        dashboard/certificate/ethnic-minority/{ethnic_minority} ethnic-minority.show ΓÇ║ Certificate\EthnicMiΓÇª
+  PUT|PATCH       dashboard/certificate/ethnic-minority/{ethnic_minority} ethnic-minority.update ΓÇ║ Certificate\EthnicΓÇª
+  DELETE          dashboard/certificate/ethnic-minority/{ethnic_minority} ethnic-minority.destroy ΓÇ║ Certificate\EthniΓÇª
+  GET|HEAD        dashboard/certificate/ethnic-minority/{ethnic_minority}/edit ethnic-minority.edit ΓÇ║ Certificate\EthΓÇª
+  GET|HEAD        dashboard/certificate/family .......... family.index ΓÇ║ Certificate\FamilyCertificateController@index
+  POST            dashboard/certificate/family .......... family.store ΓÇ║ Certificate\FamilyCertificateController@store
+  GET|HEAD        dashboard/certificate/family/bn/{id} family.bn_certificate ΓÇ║ Certificate\FamilyCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/family/create . family.create ΓÇ║ Certificate\FamilyCertificateController@create
+  GET|HEAD        dashboard/certificate/family/{family} ... family.show ΓÇ║ Certificate\FamilyCertificateController@show
+  PUT|PATCH       dashboard/certificate/family/{family} family.update ΓÇ║ Certificate\FamilyCertificateController@update
+  DELETE          dashboard/certificate/family/{family} family.destroy ΓÇ║ Certificate\FamilyCertificateController@destΓÇª
+  GET|HEAD        dashboard/certificate/family/{family}/edit family.edit ΓÇ║ Certificate\FamilyCertificateController@edΓÇª
+  GET|HEAD        dashboard/certificate/farmer-fuel-oil-card farmer-fuel-oil-card.index ΓÇ║ Certificate\FarmerFuelOilCaΓÇª
+  POST            dashboard/certificate/farmer-fuel-oil-card farmer-fuel-oil-card.store ΓÇ║ Certificate\FarmerFuelOilCaΓÇª
+  GET|HEAD        dashboard/certificate/farmer-fuel-oil-card/bn/{id} farmer-fuel-oil-card.bn_certificate ΓÇ║ CertificatΓÇª
+  GET|HEAD        dashboard/certificate/farmer-fuel-oil-card/create farmer-fuel-oil-card.create ΓÇ║ Certificate\FarmerFΓÇª
+  GET|HEAD        dashboard/certificate/farmer-fuel-oil-card/{farmer_fuel_oil_card} farmer-fuel-oil-card.show ΓÇ║ CertiΓÇª
+  PUT|PATCH       dashboard/certificate/farmer-fuel-oil-card/{farmer_fuel_oil_card} farmer-fuel-oil-card.update ΓÇ║ CerΓÇª
+  DELETE          dashboard/certificate/farmer-fuel-oil-card/{farmer_fuel_oil_card} farmer-fuel-oil-card.destroy ΓÇ║ CeΓÇª
+  GET|HEAD        dashboard/certificate/farmer-fuel-oil-card/{farmer_fuel_oil_card}/edit farmer-fuel-oil-card.edit ΓÇ║ ΓÇª
+  GET|HEAD        dashboard/certificate/financial-instability financial-instability.index ΓÇ║ Certificate\FinancialInstΓÇª
+  POST            dashboard/certificate/financial-instability financial-instability.store ΓÇ║ Certificate\FinancialInstΓÇª
+  GET|HEAD        dashboard/certificate/financial-instability/bn/{id} financial-instability.bn_certificate ΓÇ║ CertificΓÇª
+  GET|HEAD        dashboard/certificate/financial-instability/create financial-instability.create ΓÇ║ Certificate\FinanΓÇª
+  GET|HEAD        dashboard/certificate/financial-instability/{financial_instability} financial-instability.show ΓÇ║ CeΓÇª
+  PUT|PATCH       dashboard/certificate/financial-instability/{financial_instability} financial-instability.update ΓÇ║ ΓÇª
+  DELETE          dashboard/certificate/financial-instability/{financial_instability} financial-instability.destroy  ΓÇª
+  GET|HEAD        dashboard/certificate/financial-instability/{financial_instability}/edit financial-instability.editΓÇª
+  GET|HEAD        dashboard/certificate/fisherman . fisherman.index ΓÇ║ Certificate\FishermanCertificateController@index
+  POST            dashboard/certificate/fisherman . fisherman.store ΓÇ║ Certificate\FishermanCertificateController@store
+  GET|HEAD        dashboard/certificate/fisherman/bn/{id} fisherman.bn_certificate ΓÇ║ Certificate\FishermanCertificateΓÇª
+  GET|HEAD        dashboard/certificate/fisherman/create fisherman.create ΓÇ║ Certificate\FishermanCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/fisherman/{fisherman} fisherman.show ΓÇ║ Certificate\FishermanCertificateControΓÇª
+  PUT|PATCH       dashboard/certificate/fisherman/{fisherman} fisherman.update ΓÇ║ Certificate\FishermanCertificateContΓÇª
+  DELETE          dashboard/certificate/fisherman/{fisherman} fisherman.destroy ΓÇ║ Certificate\FishermanCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/fisherman/{fisherman}/edit fisherman.edit ΓÇ║ Certificate\FishermanCertificateCΓÇª
+  GET|HEAD        dashboard/certificate/general ....... general.index ΓÇ║ Certificate\GeneralCertificateController@index
+  POST            dashboard/certificate/general ....... general.store ΓÇ║ Certificate\GeneralCertificateController@store
+  GET|HEAD        dashboard/certificate/general/bn/{id} general.bn_certificate ΓÇ║ Certificate\GeneralCertificateControΓÇª
+  GET|HEAD        dashboard/certificate/general/create general.create ΓÇ║ Certificate\GeneralCertificateController@creaΓÇª
+  GET|HEAD        dashboard/certificate/general/{general} general.show ΓÇ║ Certificate\GeneralCertificateController@show
+  PUT|PATCH       dashboard/certificate/general/{general} general.update ΓÇ║ Certificate\GeneralCertificateController@uΓÇª
+  DELETE          dashboard/certificate/general/{general} general.destroy ΓÇ║ Certificate\GeneralCertificateController@ΓÇª
+  GET|HEAD        dashboard/certificate/general/{general}/edit general.edit ΓÇ║ Certificate\GeneralCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/guardian-acceptance guardian-acceptance.index ΓÇ║ Certificate\GuardianAcceptancΓÇª
+  POST            dashboard/certificate/guardian-acceptance guardian-acceptance.store ΓÇ║ Certificate\GuardianAcceptancΓÇª
+  GET|HEAD        dashboard/certificate/guardian-acceptance/bn/{id} guardian-acceptance.bn_certificate ΓÇ║ Certificate\ΓÇª
+  GET|HEAD        dashboard/certificate/guardian-acceptance/create guardian-acceptance.create ΓÇ║ Certificate\GuardianAΓÇª
+  GET|HEAD        dashboard/certificate/guardian-acceptance/{guardian_acceptance} guardian-acceptance.show ΓÇ║ CertificΓÇª
+  PUT|PATCH       dashboard/certificate/guardian-acceptance/{guardian_acceptance} guardian-acceptance.update ΓÇ║ CertifΓÇª
+  DELETE          dashboard/certificate/guardian-acceptance/{guardian_acceptance} guardian-acceptance.destroy ΓÇ║ CertiΓÇª
+  GET|HEAD        dashboard/certificate/guardian-acceptance/{guardian_acceptance}/edit guardian-acceptance.edit ΓÇ║ CerΓÇª
+  GET|HEAD        dashboard/certificate/guardian-income guardian-income.index ΓÇ║ Certificate\GuardianCertificateControΓÇª
+  POST            dashboard/certificate/guardian-income guardian-income.store ΓÇ║ Certificate\GuardianCertificateControΓÇª
+  GET|HEAD        dashboard/certificate/guardian-income/bn/{id} guardian-income.bn_certificate ΓÇ║ Certificate\GuardianΓÇª
+  GET|HEAD        dashboard/certificate/guardian-income/create guardian-income.create ΓÇ║ Certificate\GuardianCertificaΓÇª
+  GET|HEAD        dashboard/certificate/guardian-income/{guardian_income} guardian-income.show ΓÇ║ Certificate\GuardianΓÇª
+  PUT|PATCH       dashboard/certificate/guardian-income/{guardian_income} guardian-income.update ΓÇ║ Certificate\GuardiΓÇª
+  DELETE          dashboard/certificate/guardian-income/{guardian_income} guardian-income.destroy ΓÇ║ Certificate\GuardΓÇª
+  GET|HEAD        dashboard/certificate/guardian-income/{guardian_income}/edit guardian-income.edit ΓÇ║ Certificate\GuaΓÇª
+  GET|HEAD        dashboard/certificate/helplessness helplessness.index ΓÇ║ Certificate\HelplessnessCertificateControllΓÇª
+  POST            dashboard/certificate/helplessness helplessness.store ΓÇ║ Certificate\HelplessnessCertificateControllΓÇª
+  GET|HEAD        dashboard/certificate/helplessness/bn/{id} helplessness.bn_certificate ΓÇ║ Certificate\HelplessnessCeΓÇª
+  GET|HEAD        dashboard/certificate/helplessness/create helplessness.create ΓÇ║ Certificate\HelplessnessCertificateΓÇª
+  GET|HEAD        dashboard/certificate/helplessness/{helplessness} helplessness.show ΓÇ║ Certificate\HelplessnessCertiΓÇª
+  PUT|PATCH       dashboard/certificate/helplessness/{helplessness} helplessness.update ΓÇ║ Certificate\HelplessnessCerΓÇª
+  DELETE          dashboard/certificate/helplessness/{helplessness} helplessness.destroy ΓÇ║ Certificate\HelplessnessCeΓÇª
+  GET|HEAD        dashboard/certificate/helplessness/{helplessness}/edit helplessness.edit ΓÇ║ Certificate\HelplessnessΓÇª
+  GET|HEAD        dashboard/certificate/illiteracy illiteracy.index ΓÇ║ Certificate\IlliteracyCertificateController@indΓÇª
+  POST            dashboard/certificate/illiteracy illiteracy.store ΓÇ║ Certificate\IlliteracyCertificateController@stoΓÇª
+  GET|HEAD        dashboard/certificate/illiteracy/bn/{id} illiteracy.bn_certificate ΓÇ║ Certificate\IlliteracyCertificΓÇª
+  GET|HEAD        dashboard/certificate/illiteracy/create illiteracy.create ΓÇ║ Certificate\IlliteracyCertificateControΓÇª
+  GET|HEAD        dashboard/certificate/illiteracy/{illiteracy} illiteracy.show ΓÇ║ Certificate\IlliteracyCertificateCoΓÇª
+  PUT|PATCH       dashboard/certificate/illiteracy/{illiteracy} illiteracy.update ΓÇ║ Certificate\IlliteracyCertificateΓÇª
+  DELETE          dashboard/certificate/illiteracy/{illiteracy} illiteracy.destroy ΓÇ║ Certificate\IlliteracyCertificatΓÇª
+  GET|HEAD        dashboard/certificate/illiteracy/{illiteracy}/edit illiteracy.edit ΓÇ║ Certificate\IlliteracyCertificΓÇª
+  GET|HEAD        dashboard/certificate/income .... income.index ΓÇ║ Certificate\YearlyIncomeCertificateController@index
+  POST            dashboard/certificate/income .... income.store ΓÇ║ Certificate\YearlyIncomeCertificateController@store
+  GET|HEAD        dashboard/certificate/income/bn/{id} income.bn_certificate ΓÇ║ Certificate\YearlyIncomeCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/income/create income.create ΓÇ║ Certificate\YearlyIncomeCertificateController@cΓÇª
+  GET|HEAD        dashboard/certificate/income/{income} income.show ΓÇ║ Certificate\YearlyIncomeCertificateController@sΓÇª
+  PUT|PATCH       dashboard/certificate/income/{income} income.update ΓÇ║ Certificate\YearlyIncomeCertificateControllerΓÇª
+  DELETE          dashboard/certificate/income/{income} income.destroy ΓÇ║ Certificate\YearlyIncomeCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/income/{income}/edit income.edit ΓÇ║ Certificate\YearlyIncomeCertificateControlΓÇª
+  GET|HEAD        dashboard/certificate/indigenous indigenous.index ΓÇ║ Certificate\IndigenousCertificateController@indΓÇª
+  POST            dashboard/certificate/indigenous indigenous.store ΓÇ║ Certificate\IndigenousCertificateController@stoΓÇª
+  GET|HEAD        dashboard/certificate/indigenous/bn/{id} indigenous.bn_certificate ΓÇ║ Certificate\IndigenousCertificΓÇª
+  GET|HEAD        dashboard/certificate/indigenous/create indigenous.create ΓÇ║ Certificate\IndigenousCertificateControΓÇª
+  GET|HEAD        dashboard/certificate/indigenous/{indigenou} indigenous.show ΓÇ║ Certificate\IndigenousCertificateConΓÇª
+  PUT|PATCH       dashboard/certificate/indigenous/{indigenou} indigenous.update ΓÇ║ Certificate\IndigenousCertificateCΓÇª
+  DELETE          dashboard/certificate/indigenous/{indigenou} indigenous.destroy ΓÇ║ Certificate\IndigenousCertificateΓÇª
+  GET|HEAD        dashboard/certificate/indigenous/{indigenou}/edit indigenous.edit ΓÇ║ Certificate\IndigenousCertificaΓÇª
+  GET|HEAD        dashboard/certificate/infrastructure-construction-permission infrastructure-construction-permissionΓÇª
+  POST            dashboard/certificate/infrastructure-construction-permission infrastructure-construction-permissionΓÇª
+  GET|HEAD        dashboard/certificate/infrastructure-construction-permission/bn/{id} infrastructure-construction-peΓÇª
+  GET|HEAD        dashboard/certificate/infrastructure-construction-permission/create infrastructure-construction-perΓÇª
+  GET|HEAD        dashboard/certificate/infrastructure-construction-permission/{icp_cert} infrastructure-constructionΓÇª
+  PUT|PATCH       dashboard/certificate/infrastructure-construction-permission/{icp_cert} infrastructure-constructionΓÇª
+  DELETE          dashboard/certificate/infrastructure-construction-permission/{icp_cert} infrastructure-constructionΓÇª
+  GET|HEAD        dashboard/certificate/infrastructure-construction-permission/{icp_cert}/edit infrastructure-construΓÇª
+  GET|HEAD        dashboard/certificate/inheritance .................. inheritance.index ΓÇ║ InheritanceController@index
+  POST            dashboard/certificate/inheritance .................. inheritance.store ΓÇ║ InheritanceController@store
+  GET|HEAD        dashboard/certificate/inheritance/bn/{id} inheritance.bn_certificate ΓÇ║ InheritanceController@bn_cerΓÇª
+  GET|HEAD        dashboard/certificate/inheritance/create ......... inheritance.create ΓÇ║ InheritanceController@create
+  GET|HEAD        dashboard/certificate/inheritance/{inheritance} ...... inheritance.show ΓÇ║ InheritanceController@show
+  PUT|PATCH       dashboard/certificate/inheritance/{inheritance} .. inheritance.update ΓÇ║ InheritanceController@update
+  DELETE          dashboard/certificate/inheritance/{inheritance} inheritance.destroy ΓÇ║ InheritanceController@destroy
+  GET|HEAD        dashboard/certificate/inheritance/{inheritance}/edit . inheritance.edit ΓÇ║ InheritanceController@edit
+  GET|HEAD        dashboard/certificate/landless .... landless.index ΓÇ║ Certificate\LandlessCertificateController@index
+  POST            dashboard/certificate/landless .... landless.store ΓÇ║ Certificate\LandlessCertificateController@store
+  GET|HEAD        dashboard/certificate/landless/bn/{id} landless.bn_certificate ΓÇ║ Certificate\LandlessCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/landless/create landless.create ΓÇ║ Certificate\LandlessCertificateController@cΓÇª
+  GET|HEAD        dashboard/certificate/landless/{landless} landless.show ΓÇ║ Certificate\LandlessCertificateControllerΓÇª
+  PUT|PATCH       dashboard/certificate/landless/{landless} landless.update ΓÇ║ Certificate\LandlessCertificateControllΓÇª
+  DELETE          dashboard/certificate/landless/{landless} landless.destroy ΓÇ║ Certificate\LandlessCertificateControlΓÇª
+  GET|HEAD        dashboard/certificate/landless/{landless}/edit landless.edit ΓÇ║ Certificate\LandlessCertificateContrΓÇª
+  GET|HEAD        dashboard/certificate/married ....... married.index ΓÇ║ Certificate\MarriedCertificateController@index
+  POST            dashboard/certificate/married ....... married.store ΓÇ║ Certificate\MarriedCertificateController@store
+  GET|HEAD        dashboard/certificate/married/bn/{id} married.bn_certificate ΓÇ║ Certificate\MarriedCertificateControΓÇª
+  GET|HEAD        dashboard/certificate/married/create married.create ΓÇ║ Certificate\MarriedCertificateController@creaΓÇª
+  GET|HEAD        dashboard/certificate/married/{married} married.show ΓÇ║ Certificate\MarriedCertificateController@show
+  PUT|PATCH       dashboard/certificate/married/{married} married.update ΓÇ║ Certificate\MarriedCertificateController@uΓÇª
+  DELETE          dashboard/certificate/married/{married} married.destroy ΓÇ║ Certificate\MarriedCertificateController@ΓÇª
+  GET|HEAD        dashboard/certificate/married/{married}/edit married.edit ΓÇ║ Certificate\MarriedCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/missing-person missing-person.index ΓÇ║ Certificate\MissingPersonCertificateConΓÇª
+  POST            dashboard/certificate/missing-person missing-person.store ΓÇ║ Certificate\MissingPersonCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/missing-person/bn/{id} missing-person.bn_certificate ΓÇ║ Certificate\MissingPerΓÇª
+  GET|HEAD        dashboard/certificate/missing-person/create missing-person.create ΓÇ║ Certificate\MissingPersonCertifΓÇª
+  GET|HEAD        dashboard/certificate/missing-person/{missing_person} missing-person.show ΓÇ║ Certificate\MissingPersΓÇª
+  PUT|PATCH       dashboard/certificate/missing-person/{missing_person} missing-person.update ΓÇ║ Certificate\MissingPeΓÇª
+  DELETE          dashboard/certificate/missing-person/{missing_person} missing-person.destroy ΓÇ║ Certificate\MissingPΓÇª
+  GET|HEAD        dashboard/certificate/missing-person/{missing_person}/edit missing-person.edit ΓÇ║ Certificate\MissinΓÇª
+  GET|HEAD        dashboard/certificate/name ................ name.index ΓÇ║ Certificate\NameCertificateController@index
+  POST            dashboard/certificate/name ................ name.store ΓÇ║ Certificate\NameCertificateController@store
+  GET|HEAD        dashboard/certificate/name/bn/{id} name.bn_certificate ΓÇ║ Certificate\NameCertificateController@bn_cΓÇª
+  GET|HEAD        dashboard/certificate/name/create ....... name.create ΓÇ║ Certificate\NameCertificateController@create
+  GET|HEAD        dashboard/certificate/name/{name} ........... name.show ΓÇ║ Certificate\NameCertificateController@show
+  PUT|PATCH       dashboard/certificate/name/{name} ....... name.update ΓÇ║ Certificate\NameCertificateController@update
+  DELETE          dashboard/certificate/name/{name} ..... name.destroy ΓÇ║ Certificate\NameCertificateController@destroy
+  GET|HEAD        dashboard/certificate/name/{name}/edit ...... name.edit ΓÇ║ Certificate\NameCertificateController@edit
+  GET|HEAD        dashboard/certificate/new-voter-recommendation new-voter-recommendation.index ΓÇ║ Certificate\NewVoteΓÇª
+  POST            dashboard/certificate/new-voter-recommendation new-voter-recommendation.store ΓÇ║ Certificate\NewVoteΓÇª
+  GET|HEAD        dashboard/certificate/new-voter-recommendation/bn/{id} new-voter-recommendation.bn_certificate ΓÇ║ CeΓÇª
+  GET|HEAD        dashboard/certificate/new-voter-recommendation/create new-voter-recommendation.create ΓÇ║ CertificateΓÇª
+  GET|HEAD        dashboard/certificate/new-voter-recommendation/{new_voter_recommendation} new-voter-recommendation.ΓÇª
+  PUT|PATCH       dashboard/certificate/new-voter-recommendation/{new_voter_recommendation} new-voter-recommendation.ΓÇª
+  DELETE          dashboard/certificate/new-voter-recommendation/{new_voter_recommendation} new-voter-recommendation.ΓÇª
+  GET|HEAD        dashboard/certificate/new-voter-recommendation/{new_voter_recommendation}/edit new-voter-recommendaΓÇª
+  GET|HEAD        dashboard/certificate/nid-correction nid-correction.index ΓÇ║ Certificate\NidCorrectionCertificateConΓÇª
+  POST            dashboard/certificate/nid-correction nid-correction.store ΓÇ║ Certificate\NidCorrectionCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/nid-correction/bn/{id} nid-correction.bn_certificate ΓÇ║ Certificate\NidCorrectΓÇª
+  GET|HEAD        dashboard/certificate/nid-correction/create nid-correction.create ΓÇ║ Certificate\NidCorrectionCertifΓÇª
+  GET|HEAD        dashboard/certificate/nid-correction/{nid_correction} nid-correction.show ΓÇ║ Certificate\NidCorrectiΓÇª
+  PUT|PATCH       dashboard/certificate/nid-correction/{nid_correction} nid-correction.update ΓÇ║ Certificate\NidCorrecΓÇª
+  DELETE          dashboard/certificate/nid-correction/{nid_correction} nid-correction.destroy ΓÇ║ Certificate\NidCorreΓÇª
+  GET|HEAD        dashboard/certificate/nid-correction/{nid_correction}/edit nid-correction.edit ΓÇ║ Certificate\NidCorΓÇª
+  GET|HEAD        dashboard/certificate/no-objection no-objection.index ΓÇ║ Certificate\NoObjectionCertificateControlleΓÇª
+  POST            dashboard/certificate/no-objection no-objection.store ΓÇ║ Certificate\NoObjectionCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/no-objection/bn/{id} no-objection.bn_certificate ΓÇ║ Certificate\NoObjectionCerΓÇª
+  GET|HEAD        dashboard/certificate/no-objection/create no-objection.create ΓÇ║ Certificate\NoObjectionCertificateCΓÇª
+  GET|HEAD        dashboard/certificate/no-objection/{no_objection} no-objection.show ΓÇ║ Certificate\NoObjectionCertifΓÇª
+  PUT|PATCH       dashboard/certificate/no-objection/{no_objection} no-objection.update ΓÇ║ Certificate\NoObjectionCertΓÇª
+  DELETE          dashboard/certificate/no-objection/{no_objection} no-objection.destroy ΓÇ║ Certificate\NoObjectionCerΓÇª
+  GET|HEAD        dashboard/certificate/no-objection/{no_objection}/edit no-objection.edit ΓÇ║ Certificate\NoObjectionCΓÇª
+  GET|HEAD        dashboard/certificate/not-rohingya not-rohingya.index ΓÇ║ Certificate\NotRohingyaCertificateControlleΓÇª
+  POST            dashboard/certificate/not-rohingya not-rohingya.store ΓÇ║ Certificate\NotRohingyaCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/not-rohingya/bn/{id} not-rohingya.bn_certificate ΓÇ║ Certificate\NotRohingyaCerΓÇª
+  GET|HEAD        dashboard/certificate/not-rohingya/create not-rohingya.create ΓÇ║ Certificate\NotRohingyaCertificateCΓÇª
+  GET|HEAD        dashboard/certificate/not-rohingya/{not_rohingya} not-rohingya.show ΓÇ║ Certificate\NotRohingyaCertifΓÇª
+  PUT|PATCH       dashboard/certificate/not-rohingya/{not_rohingya} not-rohingya.update ΓÇ║ Certificate\NotRohingyaCertΓÇª
+  DELETE          dashboard/certificate/not-rohingya/{not_rohingya} not-rohingya.destroy ΓÇ║ Certificate\NotRohingyaCerΓÇª
+  GET|HEAD        dashboard/certificate/not-rohingya/{not_rohingya}/edit not-rohingya.edit ΓÇ║ Certificate\NotRohingyaCΓÇª
+  GET|HEAD        dashboard/certificate/orphan .......... orphan.index ΓÇ║ Certificate\OrphanCertificateController@index
+  POST            dashboard/certificate/orphan .......... orphan.store ΓÇ║ Certificate\OrphanCertificateController@store
+  GET|HEAD        dashboard/certificate/orphan/bn/{id} orphan.bn_certificate ΓÇ║ Certificate\OrphanCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/orphan/create . orphan.create ΓÇ║ Certificate\OrphanCertificateController@create
+  GET|HEAD        dashboard/certificate/orphan/{orphan} ... orphan.show ΓÇ║ Certificate\OrphanCertificateController@show
+  PUT|PATCH       dashboard/certificate/orphan/{orphan} orphan.update ΓÇ║ Certificate\OrphanCertificateController@update
+  DELETE          dashboard/certificate/orphan/{orphan} orphan.destroy ΓÇ║ Certificate\OrphanCertificateController@destΓÇª
+  GET|HEAD        dashboard/certificate/orphan/{orphan}/edit orphan.edit ΓÇ║ Certificate\OrphanCertificateController@edΓÇª
+  GET|HEAD        dashboard/certificate/passport-related passport-related.index ΓÇ║ Certificate\PassportRelatedCertificΓÇª
+  POST            dashboard/certificate/passport-related passport-related.store ΓÇ║ Certificate\PassportRelatedCertificΓÇª
+  GET|HEAD        dashboard/certificate/passport-related/bn/{id} passport-related.bn_certificate ΓÇ║ Certificate\PasspoΓÇª
+  GET|HEAD        dashboard/certificate/passport-related/create passport-related.create ΓÇ║ Certificate\PassportRelatedΓÇª
+  GET|HEAD        dashboard/certificate/passport-related/{passport_related} passport-related.show ΓÇ║ Certificate\PasspΓÇª
+  PUT|PATCH       dashboard/certificate/passport-related/{passport_related} passport-related.update ΓÇ║ Certificate\PasΓÇª
+  DELETE          dashboard/certificate/passport-related/{passport_related} passport-related.destroy ΓÇ║ Certificate\PaΓÇª
+  GET|HEAD        dashboard/certificate/passport-related/{passport_related}/edit passport-related.edit ΓÇ║ Certificate\ΓÇª
+  GET|HEAD        dashboard/certificate/permanent-citizen permanent-citizen.index ΓÇ║ Certificate\PermanentCitizenCertiΓÇª
+  POST            dashboard/certificate/permanent-citizen permanent-citizen.store ΓÇ║ Certificate\PermanentCitizenCertiΓÇª
+  GET|HEAD        dashboard/certificate/permanent-citizen/bn/{id} permanent-citizen.bn_certificate ΓÇ║ Certificate\PermΓÇª
+  GET|HEAD        dashboard/certificate/permanent-citizen/create permanent-citizen.create ΓÇ║ Certificate\PermanentCitiΓÇª
+  GET|HEAD        dashboard/certificate/permanent-citizen/{permanent_citizen} permanent-citizen.show ΓÇ║ Certificate\PeΓÇª
+  PUT|PATCH       dashboard/certificate/permanent-citizen/{permanent_citizen} permanent-citizen.update ΓÇ║ Certificate\ΓÇª
+  DELETE          dashboard/certificate/permanent-citizen/{permanent_citizen} permanent-citizen.destroy ΓÇ║ CertificateΓÇª
+  GET|HEAD        dashboard/certificate/permanent-citizen/{permanent_citizen}/edit permanent-citizen.edit ΓÇ║ CertificaΓÇª
+  GET|HEAD        dashboard/certificate/power-of-attorney power-of-attorney.index ΓÇ║ Certificate\PowerOfAttorneyCertifΓÇª
+  POST            dashboard/certificate/power-of-attorney power-of-attorney.store ΓÇ║ Certificate\PowerOfAttorneyCertifΓÇª
+  GET|HEAD        dashboard/certificate/power-of-attorney/bn/{id} power-of-attorney.bn_certificate ΓÇ║ Certificate\PoweΓÇª
+  GET|HEAD        dashboard/certificate/power-of-attorney/create power-of-attorney.create ΓÇ║ Certificate\PowerOfAttornΓÇª
+  GET|HEAD        dashboard/certificate/power-of-attorney/{power_of_attorney} power-of-attorney.show ΓÇ║ Certificate\PoΓÇª
+  PUT|PATCH       dashboard/certificate/power-of-attorney/{power_of_attorney} power-of-attorney.update ΓÇ║ Certificate\ΓÇª
+  DELETE          dashboard/certificate/power-of-attorney/{power_of_attorney} power-of-attorney.destroy ΓÇ║ CertificateΓÇª
+  GET|HEAD        dashboard/certificate/power-of-attorney/{power_of_attorney}/edit power-of-attorney.edit ΓÇ║ CertificaΓÇª
+  GET|HEAD        dashboard/certificate/professional professional.index ΓÇ║ Certificate\ProfessionalCertificateControllΓÇª
+  POST            dashboard/certificate/professional professional.store ΓÇ║ Certificate\ProfessionalCertificateControllΓÇª
+  GET|HEAD        dashboard/certificate/professional/bn/{id} professional.bn_certificate ΓÇ║ Certificate\ProfessionalCeΓÇª
+  GET|HEAD        dashboard/certificate/professional/create professional.create ΓÇ║ Certificate\ProfessionalCertificateΓÇª
+  GET|HEAD        dashboard/certificate/professional/{professional} professional.show ΓÇ║ Certificate\ProfessionalCertiΓÇª
+  PUT|PATCH       dashboard/certificate/professional/{professional} professional.update ΓÇ║ Certificate\ProfessionalCerΓÇª
+  DELETE          dashboard/certificate/professional/{professional} professional.destroy ΓÇ║ Certificate\ProfessionalCeΓÇª
+  GET|HEAD        dashboard/certificate/professional/{professional}/edit professional.edit ΓÇ║ Certificate\ProfessionalΓÇª
+  GET|HEAD        dashboard/certificate/remarried . remarried.index ΓÇ║ Certificate\RemarriedCertificateController@index
+  POST            dashboard/certificate/remarried . remarried.store ΓÇ║ Certificate\RemarriedCertificateController@store
+  GET|HEAD        dashboard/certificate/remarried/bn/{id} remarried.bn_certificate ΓÇ║ Certificate\RemarriedCertificateΓÇª
+  GET|HEAD        dashboard/certificate/remarried/create remarried.create ΓÇ║ Certificate\RemarriedCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/remarried/{remarried} remarried.show ΓÇ║ Certificate\RemarriedCertificateControΓÇª
+  PUT|PATCH       dashboard/certificate/remarried/{remarried} remarried.update ΓÇ║ Certificate\RemarriedCertificateContΓÇª
+  DELETE          dashboard/certificate/remarried/{remarried} remarried.destroy ΓÇ║ Certificate\RemarriedCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/remarried/{remarried}/edit remarried.edit ΓÇ║ Certificate\RemarriedCertificateCΓÇª
+  GET|HEAD        dashboard/certificate/residential residential.index ΓÇ║ Certificate\ResidentialCertificateController@ΓÇª
+  POST            dashboard/certificate/residential residential.store ΓÇ║ Certificate\ResidentialCertificateController@ΓÇª
+  GET|HEAD        dashboard/certificate/residential/bn/{id} residential.bn_certificate ΓÇ║ Certificate\ResidentialCertiΓÇª
+  GET|HEAD        dashboard/certificate/residential/create residential.create ΓÇ║ Certificate\ResidentialCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/residential/{residential} residential.show ΓÇ║ Certificate\ResidentialCertificaΓÇª
+  PUT|PATCH       dashboard/certificate/residential/{residential} residential.update ΓÇ║ Certificate\ResidentialCertifiΓÇª
+  DELETE          dashboard/certificate/residential/{residential} residential.destroy ΓÇ║ Certificate\ResidentialCertifΓÇª
+  GET|HEAD        dashboard/certificate/residential/{residential}/edit residential.edit ΓÇ║ Certificate\ResidentialCertΓÇª
+  GET|HEAD        dashboard/certificate/succession ..................... succession.index ΓÇ║ SuccessionController@index
+  POST            dashboard/certificate/succession ..................... succession.store ΓÇ║ SuccessionController@store
+  GET|HEAD        dashboard/certificate/succession/bn/{id} succession.bn_certificate ΓÇ║ SuccessionController@bn_certifΓÇª
+  GET|HEAD        dashboard/certificate/succession/create ............ succession.create ΓÇ║ SuccessionController@create
+  GET|HEAD        dashboard/certificate/succession/{succession} .......... succession.show ΓÇ║ SuccessionController@show
+  PUT|PATCH       dashboard/certificate/succession/{succession} ...... succession.update ΓÇ║ SuccessionController@update
+  DELETE          dashboard/certificate/succession/{succession} .... succession.destroy ΓÇ║ SuccessionController@destroy
+  GET|HEAD        dashboard/certificate/succession/{succession}/edit ..... succession.edit ΓÇ║ SuccessionController@edit
+  GET|HEAD        dashboard/certificate/tribal .......... tribal.index ΓÇ║ Certificate\TribalCertificateController@index
+  POST            dashboard/certificate/tribal .......... tribal.store ΓÇ║ Certificate\TribalCertificateController@store
+  GET|HEAD        dashboard/certificate/tribal/bn/{id} tribal.bn_certificate ΓÇ║ Certificate\TribalCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/tribal/create . tribal.create ΓÇ║ Certificate\TribalCertificateController@create
+  GET|HEAD        dashboard/certificate/tribal/{tribal} ... tribal.show ΓÇ║ Certificate\TribalCertificateController@show
+  PUT|PATCH       dashboard/certificate/tribal/{tribal} tribal.update ΓÇ║ Certificate\TribalCertificateController@update
+  DELETE          dashboard/certificate/tribal/{tribal} tribal.destroy ΓÇ║ Certificate\TribalCertificateController@destΓÇª
+  GET|HEAD        dashboard/certificate/tribal/{tribal}/edit tribal.edit ΓÇ║ Certificate\TribalCertificateController@edΓÇª
+  GET|HEAD        dashboard/certificate/unemployment unemployment.index ΓÇ║ Certificate\UnemploymentCertificateControllΓÇª
+  POST            dashboard/certificate/unemployment unemployment.store ΓÇ║ Certificate\UnemploymentCertificateControllΓÇª
+  GET|HEAD        dashboard/certificate/unemployment/bn/{id} unemployment.bn_certificate ΓÇ║ Certificate\UnemploymentCeΓÇª
+  GET|HEAD        dashboard/certificate/unemployment/create unemployment.create ΓÇ║ Certificate\UnemploymentCertificateΓÇª
+  GET|HEAD        dashboard/certificate/unemployment/{unemployment} unemployment.show ΓÇ║ Certificate\UnemploymentCertiΓÇª
+  PUT|PATCH       dashboard/certificate/unemployment/{unemployment} unemployment.update ΓÇ║ Certificate\UnemploymentCerΓÇª
+  DELETE          dashboard/certificate/unemployment/{unemployment} unemployment.destroy ΓÇ║ Certificate\UnemploymentCeΓÇª
+  GET|HEAD        dashboard/certificate/unemployment/{unemployment}/edit unemployment.edit ΓÇ║ Certificate\UnemploymentΓÇª
+  GET|HEAD        dashboard/certificate/unmarried . unmarried.index ΓÇ║ Certificate\UnmarriedCertificateController@index
+  POST            dashboard/certificate/unmarried . unmarried.store ΓÇ║ Certificate\UnmarriedCertificateController@store
+  GET|HEAD        dashboard/certificate/unmarried/bn/{id} unmarried.bn_certificate ΓÇ║ Certificate\UnmarriedCertificateΓÇª
+  GET|HEAD        dashboard/certificate/unmarried/create unmarried.create ΓÇ║ Certificate\UnmarriedCertificateControlleΓÇª
+  GET|HEAD        dashboard/certificate/unmarried/{unmarried} unmarried.show ΓÇ║ Certificate\UnmarriedCertificateControΓÇª
+  PUT|PATCH       dashboard/certificate/unmarried/{unmarried} unmarried.update ΓÇ║ Certificate\UnmarriedCertificateContΓÇª
+  DELETE          dashboard/certificate/unmarried/{unmarried} unmarried.destroy ΓÇ║ Certificate\UnmarriedCertificateConΓÇª
+  GET|HEAD        dashboard/certificate/unmarried/{unmarried}/edit unmarried.edit ΓÇ║ Certificate\UnmarriedCertificateCΓÇª
+  GET|HEAD        dashboard/certificate/voter-area voter-area.index ΓÇ║ Certificate\VoterAreaCertificateController@index
+  POST            dashboard/certificate/voter-area voter-area.store ΓÇ║ Certificate\VoterAreaCertificateController@store
+  GET|HEAD        dashboard/certificate/voter-area/bn/{id} voter-area.bn_certificate ΓÇ║ Certificate\VoterAreaCertificaΓÇª
+  GET|HEAD        dashboard/certificate/voter-area/create voter-area.create ΓÇ║ Certificate\VoterAreaCertificateControlΓÇª
+  GET|HEAD        dashboard/certificate/voter-area/{voter_area} voter-area.show ΓÇ║ Certificate\VoterAreaCertificateConΓÇª
+  PUT|PATCH       dashboard/certificate/voter-area/{voter_area} voter-area.update ΓÇ║ Certificate\VoterAreaCertificateCΓÇª
+  DELETE          dashboard/certificate/voter-area/{voter_area} voter-area.destroy ΓÇ║ Certificate\VoterAreaCertificateΓÇª
+  GET|HEAD        dashboard/certificate/voter-area/{voter_area}/edit voter-area.edit ΓÇ║ Certificate\VoterAreaCertificaΓÇª
+  GET|HEAD        dashboard/certificate/voter-list voter-list.index ΓÇ║ Certificate\VoterListCertificateController@index
+  POST            dashboard/certificate/voter-list voter-list.store ΓÇ║ Certificate\VoterListCertificateController@store
+  GET|HEAD        dashboard/certificate/voter-list/bn/{id} voter-list.bn_certificate ΓÇ║ Certificate\VoterListCertificaΓÇª
+  GET|HEAD        dashboard/certificate/voter-list/create voter-list.create ΓÇ║ Certificate\VoterListCertificateControlΓÇª
+  GET|HEAD        dashboard/certificate/voter-list/{voter_list} voter-list.show ΓÇ║ Certificate\VoterListCertificateConΓÇª
+  PUT|PATCH       dashboard/certificate/voter-list/{voter_list} voter-list.update ΓÇ║ Certificate\VoterListCertificateCΓÇª
+  DELETE          dashboard/certificate/voter-list/{voter_list} voter-list.destroy ΓÇ║ Certificate\VoterListCertificateΓÇª
+  GET|HEAD        dashboard/certificate/voter-list/{voter_list}/edit voter-list.edit ΓÇ║ Certificate\VoterListCertificaΓÇª
+  GET|HEAD        dashboard/certificate/voter-registration-agreement voter-registration-agreement.index ΓÇ║ CertificateΓÇª
+  POST            dashboard/certificate/voter-registration-agreement voter-registration-agreement.store ΓÇ║ CertificateΓÇª
+  GET|HEAD        dashboard/certificate/voter-registration-agreement/bn/{id} voter-registration-agreement.bn_certificΓÇª
+  GET|HEAD        dashboard/certificate/voter-registration-agreement/create voter-registration-agreement.create ΓÇ║ CerΓÇª
+  GET|HEAD        dashboard/certificate/voter-registration-agreement/{voter_registration_agreement} voter-registratioΓÇª
+  PUT|PATCH       dashboard/certificate/voter-registration-agreement/{voter_registration_agreement} voter-registratioΓÇª
+  DELETE          dashboard/certificate/voter-registration-agreement/{voter_registration_agreement} voter-registratioΓÇª
+  GET|HEAD        dashboard/certificate/voter-registration-agreement/{voter_registration_agreement}/edit voter-registΓÇª
+  GET|HEAD        dashboard/certificate/widow ............. widow.index ΓÇ║ Certificate\WidowCertificateController@index
+  POST            dashboard/certificate/widow ............. widow.store ΓÇ║ Certificate\WidowCertificateController@store
+  GET|HEAD        dashboard/certificate/widow/bn/{id} widow.bn_certificate ΓÇ║ Certificate\WidowCertificateController@bΓÇª
+  GET|HEAD        dashboard/certificate/widow/create .... widow.create ΓÇ║ Certificate\WidowCertificateController@create
+  GET|HEAD        dashboard/certificate/widow/{widow} ....... widow.show ΓÇ║ Certificate\WidowCertificateController@show
+  PUT|PATCH       dashboard/certificate/widow/{widow} ... widow.update ΓÇ║ Certificate\WidowCertificateController@update
+  DELETE          dashboard/certificate/widow/{widow} . widow.destroy ΓÇ║ Certificate\WidowCertificateController@destroy
+  GET|HEAD        dashboard/certificate/widow/{widow}/edit .. widow.edit ΓÇ║ Certificate\WidowCertificateController@edit
+  GET|HEAD        dashboard/chairman ....................................... chairman.index ΓÇ║ ChairmanController@index
+  POST            dashboard/chairman ....................................... chairman.store ΓÇ║ ChairmanController@store
+  POST            dashboard/chairman/autocomplete/fetch .................... chairman.fetch ΓÇ║ ChairmanController@fetch
+  GET|HEAD        dashboard/chairman/create .............................. chairman.create ΓÇ║ ChairmanController@create
+  GET|HEAD        dashboard/chairman/list/chairman ........... chairman.chairmanList ΓÇ║ ChairmanController@chairmanList
+  GET|HEAD        dashboard/chairman/list/member ................. chairman.memberList ΓÇ║ ChairmanController@memberList
+  GET|HEAD        dashboard/chairman/list/panel .................... chairman.panelList ΓÇ║ ChairmanController@panelList
+  GET|HEAD        dashboard/chairman/list/reserve-member chairman.reserveMemberList ΓÇ║ ChairmanController@reserveMembeΓÇª
+  POST            dashboard/chairman/personalstore ......... chairman.personalstore ΓÇ║ ChairmanController@personalstore
+  GET|HEAD        dashboard/chairman/{chairman} .............................. chairman.show ΓÇ║ ChairmanController@show
+  PUT|PATCH       dashboard/chairman/{chairman} .......................... chairman.update ΓÇ║ ChairmanController@update
+  DELETE          dashboard/chairman/{chairman} ........................ chairman.destroy ΓÇ║ ChairmanController@destroy
+  GET|HEAD        dashboard/chairman/{chairman}/edit ......................... chairman.edit ΓÇ║ ChairmanController@edit
+  GET|HEAD        dashboard/councilor .................................... councilor.index ΓÇ║ CounsilorController@index
+  POST            dashboard/councilor .................................... councilor.store ΓÇ║ CounsilorController@store
+  GET|HEAD        dashboard/councilor/address/{user_id} .............. councilor.address ΓÇ║ CounsilorController@address
+  POST            dashboard/councilor/addressStore ......... councilor.addressStore ΓÇ║ CounsilorController@addressStore
+  GET|HEAD        dashboard/councilor/area/{user_id} ....................... councilor.area ΓÇ║ CounsilorController@area
+  POST            dashboard/councilor/areaStore .................. councilor.areaStore ΓÇ║ CounsilorController@areaStore
+  GET|HEAD        dashboard/councilor/create ........................... councilor.create ΓÇ║ CounsilorController@create
+  GET|HEAD        dashboard/councilor/disability/{user_id} ..... councilor.disability ΓÇ║ CounsilorController@disability
+  POST            dashboard/councilor/disabilityStore councilor.disabilityStore ΓÇ║ CounsilorController@disabilityStore
+  GET|HEAD        dashboard/councilor/education/{user_id} ........ councilor.education ΓÇ║ CounsilorController@education
+  POST            dashboard/councilor/educationStore ... councilor.educationStore ΓÇ║ CounsilorController@educationStore
+  GET|HEAD        dashboard/councilor/family/{user_id} ................. councilor.family ΓÇ║ CounsilorController@family
+  POST            dashboard/councilor/familyStore ............ councilor.familyStore ΓÇ║ CounsilorController@familyStore
+  GET|HEAD        dashboard/councilor/financial/{user_id} ........ councilor.financial ΓÇ║ CounsilorController@financial
+  POST            dashboard/councilor/financialStore ... councilor.financialStore ΓÇ║ CounsilorController@financialStore
+  GET|HEAD        dashboard/councilor/freedom/{user_id} .............. councilor.freedom ΓÇ║ CounsilorController@freedom
+  POST            dashboard/councilor/freedomStore ......... councilor.freedomStore ΓÇ║ CounsilorController@freedomStore
+  POST            dashboard/councilor/july-fighter-store councilor.julyFighterStore ΓÇ║ CounsilorController@storeJulyFiΓÇª
+  GET|HEAD        dashboard/councilor/july-fighter/{user_id} councilor.july_fighter ΓÇ║ CounsilorController@july_fighter
+  POST            dashboard/councilor/personalstore ...... councilor.personalstore ΓÇ║ CounsilorController@personalstore
+  GET|HEAD        dashboard/councilor/professional/{user_id} councilor.professional ΓÇ║ CounsilorController@professional
+  POST            dashboard/councilor/professionalStore councilor.professionalStore ΓÇ║ CounsilorController@professionaΓÇª
+  GET|HEAD        dashboard/councilor/property/{user_id} ........... councilor.property ΓÇ║ CounsilorController@property
+  POST            dashboard/councilor/propertyStore ...... councilor.propertyStore ΓÇ║ CounsilorController@propertyStore
+  GET|HEAD        dashboard/councilor/{councilor} .......................... councilor.show ΓÇ║ CounsilorController@show
+  PUT|PATCH       dashboard/councilor/{councilor} ...................... councilor.update ΓÇ║ CounsilorController@update
+  DELETE          dashboard/councilor/{councilor} .................... councilor.destroy ΓÇ║ CounsilorController@destroy
+  GET|HEAD        dashboard/councilor/{councilor}/edit ..................... councilor.edit ΓÇ║ CounsilorController@edit
+  GET|HEAD        dashboard/divorce .......................................... divorce.index ΓÇ║ DivorceController@index
+  POST            dashboard/divorce .......................................... divorce.store ΓÇ║ DivorceController@store
+  GET|HEAD        dashboard/divorce/create ................................. divorce.create ΓÇ║ DivorceController@create
+  GET|HEAD        dashboard/divorce/{divorce} .................................. divorce.show ΓÇ║ DivorceController@show
+  PUT|PATCH       dashboard/divorce/{divorce} .............................. divorce.update ΓÇ║ DivorceController@update
+  DELETE          dashboard/divorce/{divorce} ............................ divorce.destroy ΓÇ║ DivorceController@destroy
+  GET|HEAD        dashboard/divorce/{divorce}/edit ............................. divorce.edit ΓÇ║ DivorceController@edit
+  POST            dashboard/fromupdate ........................... chairman.fromupdate ΓÇ║ ChairmanController@fromupdate
+  GET|HEAD        dashboard/house ................................................ house.index ΓÇ║ HouseController@index
+  POST            dashboard/house ................................................ house.store ΓÇ║ HouseController@store
+  GET|HEAD        dashboard/house-ownership ................... house-ownership.index ΓÇ║ HouseOwnershipController@index
+  POST            dashboard/house-ownership ................... house-ownership.store ΓÇ║ HouseOwnershipController@store
+  GET|HEAD        dashboard/house-ownership/create .......... house-ownership.create ΓÇ║ HouseOwnershipController@create
+  GET|HEAD        dashboard/house-ownership/{house_ownership} ... house-ownership.show ΓÇ║ HouseOwnershipController@show
+  PUT|PATCH       dashboard/house-ownership/{house_ownership} house-ownership.update ΓÇ║ HouseOwnershipController@update
+  DELETE          dashboard/house-ownership/{house_ownership} house-ownership.destroy ΓÇ║ HouseOwnershipController@destΓÇª
+  GET|HEAD        dashboard/house-ownership/{house_ownership}/edit house-ownership.edit ΓÇ║ HouseOwnershipController@edΓÇª
+  GET|HEAD        dashboard/house/create ....................................... house.create ΓÇ║ HouseController@create
+  GET|HEAD        dashboard/house/{house} .......................................... house.show ΓÇ║ HouseController@show
+  PUT|PATCH       dashboard/house/{house} ...................................... house.update ΓÇ║ HouseController@update
+  DELETE          dashboard/house/{house} .................................... house.destroy ΓÇ║ HouseController@destroy
+  GET|HEAD        dashboard/house/{house}/edit ..................................... house.edit ΓÇ║ HouseController@edit
+  GET|HEAD        dashboard/institute .................................... institute.index ΓÇ║ InstituteController@index
+  POST            dashboard/institute .................................... institute.store ΓÇ║ InstituteController@store
+  GET|HEAD        dashboard/institute-category .......... institute-category.index ΓÇ║ InstituteCategoryController@index
+  POST            dashboard/institute-category .......... institute-category.store ΓÇ║ InstituteCategoryController@store
+  GET|HEAD        dashboard/institute-category/create . institute-category.create ΓÇ║ InstituteCategoryController@create
+  GET|HEAD        dashboard/institute-category/{institute_category} institute-category.show ΓÇ║ InstituteCategoryControΓÇª
+  PUT|PATCH       dashboard/institute-category/{institute_category} institute-category.update ΓÇ║ InstituteCategoryContΓÇª
+  DELETE          dashboard/institute-category/{institute_category} institute-category.destroy ΓÇ║ InstituteCategoryConΓÇª
+  GET|HEAD        dashboard/institute-category/{institute_category}/edit institute-category.edit ΓÇ║ InstituteCategoryCΓÇª
+  GET|HEAD        dashboard/institute-type ...................... institute-type.index ΓÇ║ InstituteTypeController@index
+  POST            dashboard/institute-type ...................... institute-type.store ΓÇ║ InstituteTypeController@store
+  GET|HEAD        dashboard/institute-type/create ............. institute-type.create ΓÇ║ InstituteTypeController@create
+  GET|HEAD        dashboard/institute-type/{institute_type} ....... institute-type.show ΓÇ║ InstituteTypeController@show
+  PUT|PATCH       dashboard/institute-type/{institute_type} ... institute-type.update ΓÇ║ InstituteTypeController@update
+  DELETE          dashboard/institute-type/{institute_type} . institute-type.destroy ΓÇ║ InstituteTypeController@destroy
+  GET|HEAD        dashboard/institute-type/{institute_type}/edit .. institute-type.edit ΓÇ║ InstituteTypeController@edit
+  GET|HEAD        dashboard/institute/create ........................... institute.create ΓÇ║ InstituteController@create
+  GET|HEAD        dashboard/institute/{institute} .......................... institute.show ΓÇ║ InstituteController@show
+  PUT|PATCH       dashboard/institute/{institute} ...................... institute.update ΓÇ║ InstituteController@update
+  DELETE          dashboard/institute/{institute} .................... institute.destroy ΓÇ║ InstituteController@destroy
+  GET|HEAD        dashboard/institute/{institute}/edit ..................... institute.edit ΓÇ║ InstituteController@edit
+  POST            dashboard/institutes/admin-store ............ instituteA.adminStore ΓÇ║ InstituteController@adminStore
+  GET|HEAD        dashboard/institutes/admin/{id} ................. instituteA.adminCreate ΓÇ║ InstituteController@admin
+  POST            dashboard/institutes/images-store ......... instituteA.imagesStore ΓÇ║ InstituteController@imagesStore
+  GET|HEAD        dashboard/institutes/images/{id} .............. instituteA.imagesCreate ΓÇ║ InstituteController@images
+  GET|HEAD        dashboard/institutional-admin ....... institutional-admin.index ΓÇ║ InstitutionalAdminController@index
+  POST            dashboard/institutional-admin ....... institutional-admin.store ΓÇ║ InstitutionalAdminController@store
+  GET|HEAD        dashboard/institutional-admin/create institutional-admin.create ΓÇ║ InstitutionalAdminController@creaΓÇª
+  GET|HEAD        dashboard/institutional-admin/{institutional_admin} institutional-admin.show ΓÇ║ InstitutionalAdminCoΓÇª
+  PUT|PATCH       dashboard/institutional-admin/{institutional_admin} institutional-admin.update ΓÇ║ InstitutionalAdminΓÇª
+  DELETE          dashboard/institutional-admin/{institutional_admin} institutional-admin.destroy ΓÇ║ InstitutionalAdmiΓÇª
+  GET|HEAD        dashboard/institutional-admin/{institutional_admin}/edit institutional-admin.edit ΓÇ║ InstitutionalAdΓÇª
+  GET|HEAD        dashboard/land ................................................... land.index ΓÇ║ LandController@index
+  POST            dashboard/land ................................................... land.store ΓÇ║ LandController@store
+  GET|HEAD        dashboard/land/create .......................................... land.create ΓÇ║ LandController@create
+  GET|HEAD        dashboard/land/{land} .............................................. land.show ΓÇ║ LandController@show
+  PUT|PATCH       dashboard/land/{land} .......................................... land.update ΓÇ║ LandController@update
+  DELETE          dashboard/land/{land} ........................................ land.destroy ΓÇ║ LandController@destroy
+  GET|HEAD        dashboard/land/{land}/edit ......................................... land.edit ΓÇ║ LandController@edit
+  POST            dashboard/logout ................................................... logout ΓÇ║ LoginController@logout
+  GET|HEAD        dashboard/market ............................................. market.index ΓÇ║ MarketController@index
+  POST            dashboard/market ............................................. market.store ΓÇ║ MarketController@store
+  GET|HEAD        dashboard/market/create .................................... market.create ΓÇ║ MarketController@create
+  GET|HEAD        dashboard/market/{market} ...................................... market.show ΓÇ║ MarketController@show
+  PUT|PATCH       dashboard/market/{market} .................................. market.update ΓÇ║ MarketController@update
+  DELETE          dashboard/market/{market} ................................ market.destroy ΓÇ║ MarketController@destroy
+  GET|HEAD        dashboard/market/{market}/edit ................................. market.edit ΓÇ║ MarketController@edit
+  GET|HEAD        dashboard/marriage ....................................... marriage.index ΓÇ║ MarriageController@index
+  POST            dashboard/marriage ....................................... marriage.store ΓÇ║ MarriageController@store
+  GET|HEAD        dashboard/marriage/create .............................. marriage.create ΓÇ║ MarriageController@create
+  GET|HEAD        dashboard/marriage/{marriage} .............................. marriage.show ΓÇ║ MarriageController@show
+  PUT|PATCH       dashboard/marriage/{marriage} .......................... marriage.update ΓÇ║ MarriageController@update
+  DELETE          dashboard/marriage/{marriage} ........................ marriage.destroy ΓÇ║ MarriageController@destroy
+  GET|HEAD        dashboard/marriage/{marriage}/edit ......................... marriage.edit ΓÇ║ MarriageController@edit
+  GET|HEAD        dashboard/organization .............. organization.index ΓÇ║ Organization\OrganizationController@index
+  POST            dashboard/organization .............. organization.store ΓÇ║ Organization\OrganizationController@store
+  GET|HEAD        dashboard/organization-ownership organization-ownership.index ΓÇ║ Organization\OrganizationOwnershipCΓÇª
+  POST            dashboard/organization-ownership organization-ownership.store ΓÇ║ Organization\OrganizationOwnershipCΓÇª
+  GET|HEAD        dashboard/organization-ownership/create organization-ownership.create ΓÇ║ Organization\OrganizationOwΓÇª
+  GET|HEAD        dashboard/organization-ownership/{organization_ownership} organization-ownership.show ΓÇ║ OrganizatioΓÇª
+  PUT|PATCH       dashboard/organization-ownership/{organization_ownership} organization-ownership.update ΓÇ║ OrganizatΓÇª
+  DELETE          dashboard/organization-ownership/{organization_ownership} organization-ownership.destroy ΓÇ║ OrganizaΓÇª
+  GET|HEAD        dashboard/organization-ownership/{organization_ownership}/edit organization-ownership.edit ΓÇ║ OrganiΓÇª
+  GET|HEAD        dashboard/organization-transfer organization.transfer.index ΓÇ║ Organization\OrganizationTransferContΓÇª
+  GET|HEAD        dashboard/organization-transfer/incoming organization.transfer.incoming ΓÇ║ Organization\OrganizationΓÇª
+  POST            dashboard/organization-transfer/request organization.transfer.store ΓÇ║ Organization\OrganizationTranΓÇª
+  POST            dashboard/organization-transfer/{transfer}/approve organization.transfer.approve ΓÇ║ Organization\OrgΓÇª
+  POST            dashboard/organization-transfer/{transfer}/reject organization.transfer.reject ΓÇ║ Organization\OrganΓÇª
+  GET|HEAD        dashboard/organization/create ..... organization.create ΓÇ║ Organization\OrganizationController@create
+  POST            dashboard/organization/trade-license/{id}/manual-payment/store organizationA.trade-license.manual-pΓÇª
+  GET|HEAD        dashboard/organization/trade-license/{id}/online-payment organizationA.trade-license.online-paymentΓÇª
+  GET|HEAD        dashboard/organization/trade-license/{id}/payment/success organizationA.trade-license.payment.succeΓÇª
+  GET|HEAD        dashboard/organization/{organization} . organization.show ΓÇ║ Organization\OrganizationController@show
+  PUT|PATCH       dashboard/organization/{organization} organization.update ΓÇ║ Organization\OrganizationController@updΓÇª
+  DELETE          dashboard/organization/{organization} organization.destroy ΓÇ║ Organization\OrganizationController@deΓÇª
+  GET|HEAD        dashboard/organization/{organization}/edit organization.edit ΓÇ║ Organization\OrganizationController@ΓÇª
+  GET|HEAD        dashboard/organizations ............................................................................ 
+  GET|HEAD        dashboard/organizations/get-trade-license organizationA.trade-license.getTradeLicense ΓÇ║ OrganizatioΓÇª
+  GET|HEAD        dashboard/organizations/registration-fees organizationA.registration-fees.index ΓÇ║ Organization\OrgaΓÇª
+  POST            dashboard/organizations/registration-fees organizationA.registration-fees.store ΓÇ║ Organization\OrgaΓÇª
+  GET|HEAD        dashboard/organizations/registration-fees/create organizationA.registration-fees.create ΓÇ║ OrganizatΓÇª
+  GET|HEAD        dashboard/organizations/registration-fees/{registration_fee} organizationA.registration-fees.show  ΓÇª
+  PUT|PATCH       dashboard/organizations/registration-fees/{registration_fee} organizationA.registration-fees.updateΓÇª
+  DELETE          dashboard/organizations/registration-fees/{registration_fee} organizationA.registration-fees.destroΓÇª
+  GET|HEAD        dashboard/organizations/registration-fees/{registration_fee}/edit organizationA.registration-fees.eΓÇª
+  GET|HEAD        dashboard/organizations/renew-fees organizationA.renew-fees.index ΓÇ║ Organization\OrganizationRenewCΓÇª
+  POST            dashboard/organizations/renew-fees organizationA.renew-fees.store ΓÇ║ Organization\OrganizationRenewCΓÇª
+  GET|HEAD        dashboard/organizations/renew-fees/create organizationA.renew-fees.create ΓÇ║ Organization\OrganizatiΓÇª
+  GET|HEAD        dashboard/organizations/renew-fees/{renew_fee} organizationA.renew-fees.show ΓÇ║ Organization\OrganizΓÇª
+  PUT|PATCH       dashboard/organizations/renew-fees/{renew_fee} organizationA.renew-fees.update ΓÇ║ Organization\OrganΓÇª
+  DELETE          dashboard/organizations/renew-fees/{renew_fee} organizationA.renew-fees.destroy ΓÇ║ Organization\OrgaΓÇª
+  GET|HEAD        dashboard/organizations/renew-fees/{renew_fee}/edit organizationA.renew-fees.edit ΓÇ║ Organization\OrΓÇª
+  GET|HEAD        dashboard/organizations/trade-license organizationA.trade-license.index ΓÇ║ Organization\TradeLicenseΓÇª
+  POST            dashboard/organizations/trade-license organizationA.trade-license.store ΓÇ║ Organization\TradeLicenseΓÇª
+  POST            dashboard/organizations/trade-license/confirmation/{id} organizationA.trade-license.confirmation ΓÇ║ ΓÇª
+  GET|HEAD        dashboard/organizations/trade-license/confirmed/{id} organizationA.trade-license.confirmed ΓÇ║ OrganiΓÇª
+  GET|HEAD        dashboard/organizations/trade-license/create organizationA.trade-license.create ΓÇ║ Organization\TradΓÇª
+  GET|HEAD        dashboard/organizations/trade-license/invoice/{id} organizationA.trade-license.invoice ΓÇ║ OrganizatiΓÇª
+  GET|HEAD        dashboard/organizations/trade-license/preview/{id} organizationA.trade-license.preview ΓÇ║ OrganizatiΓÇª
+  GET|HEAD        dashboard/organizations/trade-license/{trade_license} organizationA.trade-license.show ΓÇ║ OrganizatiΓÇª
+  PUT|PATCH       dashboard/organizations/trade-license/{trade_license} organizationA.trade-license.update ΓÇ║ OrganizaΓÇª
+  DELETE          dashboard/organizations/trade-license/{trade_license} organizationA.trade-license.destroy ΓÇ║ OrganizΓÇª
+  GET|HEAD        dashboard/organizations/trade-license/{trade_license}/edit organizationA.trade-license.edit ΓÇ║ OrganΓÇª
+  GET|HEAD        dashboard/orgapproved_index . orgapproved_index ΓÇ║ Organization\OrganizationController@approved_index
+  GET|HEAD        dashboard/people ............................................. people.index ΓÇ║ PeopleController@index
+  POST            dashboard/people ............................................. people.store ΓÇ║ PeopleController@store
+  POST            dashboard/people/address-store ................... people.addressStore ΓÇ║ AddressInfoController@store
+  GET|HEAD        dashboard/people/address/{userID} .................... people.address ΓÇ║ AddressInfoController@create
+  POST            dashboard/people/approve/{id} ............................ people.approve ΓÇ║ PeopleController@approve
+  GET|HEAD        dashboard/people/create .................................... people.create ΓÇ║ PeopleController@create
+  GET|HEAD        dashboard/people/credentials ................ peoples.credentials ΓÇ║ PeopleCredentialController@index
+  POST            dashboard/people/credentials/{id}/reset peoples.credentials.reset ΓÇ║ PeopleCredentialController@reset
+  GET|HEAD        dashboard/people/credentials/{id}/reveal peoples.credentials.reveal ΓÇ║ PeopleCredentialController@reΓÇª
+  POST            dashboard/people/credentials/{id}/toggle-status peoples.credentials.toggle ΓÇ║ PeopleCredentialControΓÇª
+  POST            dashboard/people/disability-store .......... people.disabilityStore ΓÇ║ DisabilityInfoController@store
+  GET|HEAD        dashboard/people/disability/{userID} ........... people.disability ΓÇ║ DisabilityInfoController@create
+  GET|HEAD        dashboard/people/education-delete/{eduID} people.educationDelete ΓÇ║ EducationalInfoController@destroy
+  POST            dashboard/people/education-store ........... people.educationStore ΓÇ║ EducationalInfoController@store
+  GET|HEAD        dashboard/people/education/{userID} ............ people.education ΓÇ║ EducationalInfoController@create
+  POST            dashboard/people/family-store ...................... people.familyStore ΓÇ║ FamilyInfoController@store
+  GET|HEAD        dashboard/people/family/{userID} ....................... people.family ΓÇ║ FamilyInfoController@create
+  GET|HEAD        dashboard/people/financial-delete/{proID} . people.financialDelete ΓÇ║ FinancialInfoController@destroy
+  POST            dashboard/people/financial-store ............. people.financialStore ΓÇ║ FinancialInfoController@store
+  GET|HEAD        dashboard/people/financial/{userID} .............. people.financial ΓÇ║ FinancialInfoController@create
+  POST            dashboard/people/freedom-store ............ people.freedomStore ΓÇ║ FreedomFighterInfoController@store
+  GET|HEAD        dashboard/people/freedom/{userID} ............. people.freedom ΓÇ║ FreedomFighterInfoController@create
+  POST            dashboard/people/health-store ...................... people.healthStore ΓÇ║ HealthInfoController@store
+  GET|HEAD        dashboard/people/health/{userID} ....................... people.health ΓÇ║ HealthInfoController@create
+  POST            dashboard/people/july-fighter-store ...... people.julyFighterStore ΓÇ║ JulyFighterInfoController@store
+  GET|HEAD        dashboard/people/july-fighter/{userID} ...... people.july_fighter ΓÇ║ JulyFighterInfoController@create
+  GET|HEAD        dashboard/people/professional-delete/{proID} people.professionalDelete ΓÇ║ ProfessionalInfoControllerΓÇª
+  POST            dashboard/people/professional-store .... people.professionalStore ΓÇ║ ProfessionalInfoController@store
+  GET|HEAD        dashboard/people/professional/{userID} ..... people.professional ΓÇ║ ProfessionalInfoController@create
+  GET|HEAD        dashboard/people/property-delete/{proID} .... people.propertyDelete ΓÇ║ PropertyInfoController@destroy
+  POST            dashboard/people/property-store ................ people.propertyStore ΓÇ║ PropertyInfoController@store
+  GET|HEAD        dashboard/people/property/{userID} ................. people.property ΓÇ║ PropertyInfoController@create
+  GET|HEAD        dashboard/people/{person} ...................................... people.show ΓÇ║ PeopleController@show
+  PUT|PATCH       dashboard/people/{person} .................................. people.update ΓÇ║ PeopleController@update
+  DELETE          dashboard/people/{person} ................................ people.destroy ΓÇ║ PeopleController@destroy
+  GET|HEAD        dashboard/people/{person}/edit ................................. people.edit ΓÇ║ PeopleController@edit
+  GET|HEAD        dashboard/peopleapprovedlist .................... peopleapprovedlist ΓÇ║ PeopleController@approvedlist
+  GET|HEAD        dashboard/peoplesearch ............................ peoplesearch ΓÇ║ PeopleController@searchPeoplePage
+  GET|HEAD        dashboard/relief-card ............................... relief-card.index ΓÇ║ ReliefCardController@index
+  POST            dashboard/relief-card ............................... relief-card.store ΓÇ║ ReliefCardController@store
+  POST            dashboard/relief-card/approve ................... relief-card.approve ΓÇ║ ReliefCardController@approve
+  GET|HEAD        dashboard/relief-card/create ...................... relief-card.create ΓÇ║ ReliefCardController@create
+  POST            dashboard/relief-card/delete-ward ........ relief-card.delete-ward ΓÇ║ ReliefCardController@deleteWard
+  POST            dashboard/relief-card/reject ...................... relief-card.reject ΓÇ║ ReliefCardController@reject
+  POST            dashboard/relief-card/update-status .. relief-card.update-status ΓÇ║ ReliefCardController@updateStatus
+  PUT             dashboard/relief-card/{id} ........................ relief-card.update ΓÇ║ ReliefCardController@update
+  DELETE          dashboard/relief-card/{id} ...................... relief-card.destroy ΓÇ║ ReliefCardController@destroy
+  GET|HEAD        dashboard/relief-card/{id}/edit ....................... relief-card.edit ΓÇ║ ReliefCardController@edit
+  GET|HEAD        dashboard/road ................................................... road.index ΓÇ║ RoadController@index
+  POST            dashboard/road ................................................... road.store ΓÇ║ RoadController@store
+  GET|HEAD        dashboard/road/create .......................................... road.create ΓÇ║ RoadController@create
+  GET|HEAD        dashboard/road/{road} .............................................. road.show ΓÇ║ RoadController@show
+  PUT|PATCH       dashboard/road/{road} .......................................... road.update ΓÇ║ RoadController@update
+  DELETE          dashboard/road/{road} ........................................ road.destroy ΓÇ║ RoadController@destroy
+  GET|HEAD        dashboard/road/{road}/edit ......................................... road.edit ΓÇ║ RoadController@edit
+  POST            dashboard/save-new-ownership savenewownership ΓÇ║ Organization\OrganizationOwnershipController@saveNeΓÇª
+  GET|HEAD        dashboard/tax .................................................. tax.index ΓÇ║ Tax\TaxController@index
+  POST            dashboard/tax .................................................. tax.store ΓÇ║ Tax\TaxController@store
+  POST            dashboard/tax-status ...................................... tax.status ΓÇ║ Tax\TaxController@taxStatus
+  GET|HEAD        dashboard/tax/create ......................................... tax.create ΓÇ║ Tax\TaxController@create
+  POST            dashboard/tax/{id}/manual-payment .. tax.manual-payment.store ΓÇ║ Tax\TaxController@storeManualPayment
+  GET|HEAD        dashboard/tax/{tax} .............................................. tax.show ΓÇ║ Tax\TaxController@show
+  PUT|PATCH       dashboard/tax/{tax} .......................................... tax.update ΓÇ║ Tax\TaxController@update
+  DELETE          dashboard/tax/{tax} ........................................ tax.destroy ΓÇ║ Tax\TaxController@destroy
+  GET|HEAD        dashboard/tax/{tax}/edit ......................................... tax.edit ΓÇ║ Tax\TaxController@edit
+  GET|HEAD        dashboard/taxes .................................................................................... 
+  GET|HEAD        dashboard/taxes/confirmed/{id} .................... taxes.confirmed ΓÇ║ Tax\TaxController@taxConfirmed
+  GET|HEAD        dashboard/taxes/receipt/{id} .......................... taxes.receipt ΓÇ║ Tax\TaxController@taxReceipt
+  GET|HEAD        dashboard/taxes/received ........................ taxes.tax.received ΓÇ║ Tax\TaxController@taxReceived
+  GET|HEAD        dashboard/taxes/tax-rate ........................ taxes.tax-rate.index ΓÇ║ Tax\TaxRateController@index
+  POST            dashboard/taxes/tax-rate ........................ taxes.tax-rate.store ΓÇ║ Tax\TaxRateController@store
+  GET|HEAD        dashboard/taxes/tax-rate/create ............... taxes.tax-rate.create ΓÇ║ Tax\TaxRateController@create
+  GET|HEAD        dashboard/taxes/tax-rate/{tax_rate} ............... taxes.tax-rate.show ΓÇ║ Tax\TaxRateController@show
+  PUT|PATCH       dashboard/taxes/tax-rate/{tax_rate} ........... taxes.tax-rate.update ΓÇ║ Tax\TaxRateController@update
+  DELETE          dashboard/taxes/tax-rate/{tax_rate} ......... taxes.tax-rate.destroy ΓÇ║ Tax\TaxRateController@destroy
+  GET|HEAD        dashboard/taxes/tax-rate/{tax_rate}/edit .......... taxes.tax-rate.edit ΓÇ║ Tax\TaxRateController@edit
+  GET|HEAD        dashboard/taxes/tax-year ........................ taxes.tax-year.index ΓÇ║ Tax\TaxYearController@index
+  POST            dashboard/taxes/tax-year ........................ taxes.tax-year.store ΓÇ║ Tax\TaxYearController@store
+  GET|HEAD        dashboard/taxes/tax-year/create ............... taxes.tax-year.create ΓÇ║ Tax\TaxYearController@create
+  GET|HEAD        dashboard/taxes/tax-year/{tax_year} ............... taxes.tax-year.show ΓÇ║ Tax\TaxYearController@show
+  PUT|PATCH       dashboard/taxes/tax-year/{tax_year} ........... taxes.tax-year.update ΓÇ║ Tax\TaxYearController@update
+  DELETE          dashboard/taxes/tax-year/{tax_year} ......... taxes.tax-year.destroy ΓÇ║ Tax\TaxYearController@destroy
+  GET|HEAD        dashboard/taxes/tax-year/{tax_year}/edit .......... taxes.tax-year.edit ΓÇ║ Tax\TaxYearController@edit
+  GET|HEAD        dashboard/vehicle .......................................... vehicle.index ΓÇ║ VehicleController@index
+  POST            dashboard/vehicle .......................................... vehicle.store ΓÇ║ VehicleController@store
+  GET|HEAD        dashboard/vehicle/approval-list ............. vehicle.approval.list ΓÇ║ VehicleController@approvalList
+  POST            dashboard/vehicle/approve .............................. vehicle.approve ΓÇ║ VehicleController@approve
+  GET|HEAD        dashboard/vehicle/create ................................. vehicle.create ΓÇ║ VehicleController@create
+  GET|HEAD        dashboard/vehicle/fees ................................ vehicle.fees.hub ΓÇ║ VehicleController@feesHub
+  GET|HEAD        dashboard/vehicle/fees/setup .................. vehicle.fees.vehicle ΓÇ║ VehicleController@vehicleFees
+  POST            dashboard/vehicle/fees/setup ....... vehicle.fees.vehicle.store ΓÇ║ VehicleController@storeVehicleFees
+  GET|HEAD        dashboard/vehicle/fees/setup-list ............ vehicle.fees.list ΓÇ║ VehicleController@vehicleFeesList
+  GET|HEAD        dashboard/vehicle/fees/setup/{id}/edit ....... vehicle.fees.edit ΓÇ║ VehicleController@vehicleFeesEdit
+  POST            dashboard/vehicle/fees/setup/{id}/update . vehicle.fees.update ΓÇ║ VehicleController@updateVehicleFees
+  GET|HEAD        dashboard/vehicle/fees/setup/{id}/view ....... vehicle.fees.show ΓÇ║ VehicleController@vehicleFeesShow
+  GET|HEAD        dashboard/vehicle/generate-invoice ............ vehicle.invoice.list ΓÇ║ VehicleController@invoiceList
+  GET|HEAD        dashboard/vehicle/generate-invoice/{id}/print vehicle.invoice.print ΓÇ║ VehicleController@invoicePrint
+  GET|HEAD        dashboard/vehicle/generate-invoice/{id}/view .. vehicle.invoice.show ΓÇ║ VehicleController@invoiceShow
+  GET|HEAD        dashboard/vehicle/get-fees/{id} ....................... vehicle.get.fees ΓÇ║ VehicleController@getFees
+  GET|HEAD        dashboard/vehicle/license ..................... vehicle.license.list ΓÇ║ VehicleController@licenseList
+  GET|HEAD        dashboard/vehicle/license/{id}/print ........ vehicle.license.print ΓÇ║ VehicleController@licensePrint
+  GET|HEAD        dashboard/vehicle/license/{id}/view ........... vehicle.license.show ΓÇ║ VehicleController@licenseShow
+  POST            dashboard/vehicle/{id}/manual-payment/store vehicle.manual-payment.store ΓÇ║ VehicleController@storeMΓÇª
+  GET|HEAD        dashboard/vehicle/{id}/online-payment ..... vehicle.online-payment ΓÇ║ VehicleController@onlinePayment
+  GET|HEAD        dashboard/vehicle/{id}/payment/success .. vehicle.payment.success ΓÇ║ VehicleController@paymentSuccess
+  GET|HEAD        dashboard/vehicle/{vehicle} .................................. vehicle.show ΓÇ║ VehicleController@show
+  PUT|PATCH       dashboard/vehicle/{vehicle} .............................. vehicle.update ΓÇ║ VehicleController@update
+  DELETE          dashboard/vehicle/{vehicle} ............................ vehicle.destroy ΓÇ║ VehicleController@destroy
+  GET|HEAD        dashboard/vehicle/{vehicle}/edit ............................. vehicle.edit ΓÇ║ VehicleController@edit
+  GET|HEAD        dashboard/village-court ......................... village-court.index ΓÇ║ VillageCourtController@index
+  POST            dashboard/village-court ......................... village-court.store ΓÇ║ VillageCourtController@store
+  GET|HEAD        dashboard/village-court/court-formed-list village-court.court_formed_list ΓÇ║ VillageCourtController@ΓÇª
+  GET|HEAD        dashboard/village-court/create ................ village-court.create ΓÇ║ VillageCourtController@create
+  GET|HEAD        dashboard/village-court/hearing-list village-court.hearing_list ΓÇ║ VillageCourtController@hearingList
+  GET|HEAD        dashboard/village-court/verdict-list village-court.verdict_list ΓÇ║ VillageCourtController@verdictList
+  POST            dashboard/village-court/{id}/declare-verdict village-court.declare-verdict ΓÇ║ VillageCourtControllerΓÇª
+  GET|HEAD        dashboard/village-court/{id}/form-court village-court.form-court.view ΓÇ║ VillageCourtController@formΓÇª
+  POST            dashboard/village-court/{id}/form-court village-court.form-court ΓÇ║ VillageCourtController@formCourt
+  GET|HEAD        dashboard/village-court/{id}/hearing village-court.hearing.view ΓÇ║ VillageCourtController@hearingView
+  POST            dashboard/village-court/{id}/hearing ........ village-court.hearing ΓÇ║ VillageCourtController@hearing
+  GET|HEAD        dashboard/village-court/{id}/print-notice/{type}/{refId?} village-court.print-notice ΓÇ║ VillageCourtΓÇª
+  GET|HEAD        dashboard/village-court/{id}/verdict village-court.verdict.view ΓÇ║ VillageCourtController@verdictView
+  GET|HEAD        dashboard/village-court/{village_court} ........... village-court.show ΓÇ║ VillageCourtController@show
+  PUT|PATCH       dashboard/village-court/{village_court} ....... village-court.update ΓÇ║ VillageCourtController@update
+  DELETE          dashboard/village-court/{village_court} ..... village-court.destroy ΓÇ║ VillageCourtController@destroy
+  GET|HEAD        dashboard/village-court/{village_court}/edit ...... village-court.edit ΓÇ║ VillageCourtController@edit
+  GET|HEAD        get-areas-by-village/{villageID} ................ BasicSettings\VillageAreaController@areasByVillage
+  GET|HEAD        get-blocks-by-village-ward/{villageID}/{wardID} ............. HouseController@getBlocksByVillageWard
+  GET|HEAD        get-citi-corporation-by-district/{districtID} .. CityCorporationController@cityCorporationByDistrict
+  GET|HEAD        get-districts-by-division/{divisionID} ...................... DistrictController@districtsByDivision
+  GET|HEAD        get-houses-by-block/{villageID}/{wardID}/{block} .................. HouseController@getHousesByBlock
+  GET|HEAD        get-houses-by-village-area/{areaID} ................................. HouseController@getHouseByArea
+  GET|HEAD        get-mouzas-by-upazilla/{upazillaID} ............................... MouzaController@mouzasByUpazilla
+  GET|HEAD        get-organization-info-by-system-id/{systemID} getOrganizationBySystemId ΓÇ║ Organization\OrganizationΓÇª
+  POST            get-organization-registration-fees organization.registration.fees ΓÇ║ Organization\OrganizationFeeConΓÇª
+  GET|HEAD        get-owner-by-house/{houseID} ....................................... HouseController@getOwnerByHouse
+  GET|HEAD        get-people-by-union/{union_id} ................................. ChairmanController@getPeopleByUnion
+  GET|HEAD        get-post-offices-by-thana/{thanaID} ..................... PostOfficeController@postOfficesByUpazilla
+  GET|HEAD        get-post-offices-by-upazilla/{upazillaID} ............... PostOfficeController@postOfficesByUpazilla
+  GET|HEAD        get-thanas-by-district/{districtID} ............................ UpazillaController@thanasByDistrict
+  GET|HEAD        get-unions-by-thana/{thanaID} ........................................ UnionController@unionsByThana
+  GET|HEAD        get-unions-by-upazilla/{upazillaID} ............................... UnionController@unionsByUpazilla
+  GET|HEAD        get-upazillas-by-district/{districtID} ...................... UpazillaController@upazillasByDistrict
+  GET|HEAD        get-villages-by-union/{unionID} .................... BasicSettings\VillageController@villagesByUnion
+  GET|HEAD        get-word-by-union/{unionID} .......................... BasicSettings\UnionWardController@wordByUnion
+  GET|HEAD        house-category-options-by-type-id/{type_id} BasicSettings\HouseCategoryController@getCategoryOptions
+  GET|HEAD        house-options/{id} ......................................................... HouseController@options
+  GET|HEAD        house-ownership-remove/{id} ....................................... HouseOwnershipController@destroy
+  GET|HEAD        house-single-ownership-form ............................. HouseOwnershipController@loadOwnershipForm
+  POST            load-project-type-content ............ projectTypeContent ΓÇ║ ProjectTypeController@projectTypeContent
+  GET|HEAD        login ................................................................ login ΓÇ║ LoginController@login
+  POST            login-check ............................................... login.check ΓÇ║ LoginController@loginCheck
+  POST            nid-correction-approve nid-correction.approve ΓÇ║ Certificate\NidCorrectionCertificateController@apprΓÇª
+  POST            organization-approve ............ organization.approve ΓÇ║ Organization\OrganizationController@approve
+  GET|HEAD        organization-ownership-remove/{id} ............ Organization\OrganizationOwnershipController@destroy
+  GET|HEAD        organization-single-ownership-form ...... Organization\OrganizationOwnershipController@ownershipForm
+  GET|HEAD        organization-subcategory-options/{id} ...... BasicSettings\OrganizationSubCategoryController@options
+  GET|HEAD        organization-type-options/{id} .................... BasicSettings\OrganizationTypeController@options
+  GET|HEAD        organization-work-area-options/{id} ........... BasicSettings\OrganizationWorkAreaController@options
+  GET|HEAD        people-portal/applications .... people.applications.index ΓÇ║ People\PeopleApplicationController@index
+  GET|HEAD        people-portal/applications/certificate people.applications.certificate.create ΓÇ║ People\PeopleApplicΓÇª
+  POST            people-portal/applications/certificate people.applications.certificate.store ΓÇ║ People\PeopleApplicaΓÇª
+  GET|HEAD        people-portal/applications/grant .................................. people.applications.grant.create
+  POST            people-portal/applications/registration/address-store people.applications.registration.address.storΓÇª
+  GET|HEAD        people-portal/applications/registration/address/{id} people.applications.registration.address ΓÇ║ PeoΓÇª
+  GET|HEAD        people-portal/applications/registration/create people.applications.registration.create ΓÇ║ People\PeoΓÇª
+  POST            people-portal/applications/registration/disability-store people.applications.registration.disabilitΓÇª
+  GET|HEAD        people-portal/applications/registration/disability/{id} people.applications.registration.disabilityΓÇª
+  POST            people-portal/applications/registration/education-store people.applications.registration.educationSΓÇª
+  GET|HEAD        people-portal/applications/registration/education/{id} people.applications.registration.education  ΓÇª
+  POST            people-portal/applications/registration/family-store people.applications.registration.family.store ΓÇª
+  GET|HEAD        people-portal/applications/registration/family/{id} people.applications.registration.family ΓÇ║ PeoplΓÇª
+  POST            people-portal/applications/registration/financial-store people.applications.registration.financialSΓÇª
+  GET|HEAD        people-portal/applications/registration/financial/{id} people.applications.registration.financial  ΓÇª
+  POST            people-portal/applications/registration/freedom-store people.applications.registration.freedomStoreΓÇª
+  GET|HEAD        people-portal/applications/registration/freedom/{id} people.applications.registration.freedom ΓÇ║ PeoΓÇª
+  POST            people-portal/applications/registration/july-fighter-store people.applications.registration.julyFigΓÇª
+  GET|HEAD        people-portal/applications/registration/july-fighter/{id} people.applications.registration.july_figΓÇª
+  POST            people-portal/applications/registration/professional-store people.applications.registration.professΓÇª
+  GET|HEAD        people-portal/applications/registration/professional/{id} people.applications.registration.professiΓÇª
+  POST            people-portal/applications/registration/property-store people.applications.registration.propertyStoΓÇª
+  GET|HEAD        people-portal/applications/registration/property/{id} people.applications.registration.property ΓÇ║ PΓÇª
+  POST            people-portal/applications/registration/store people.applications.registration.store ΓÇ║ People\PeoplΓÇª
+  GET|HEAD        people-portal/applications/relief-card people.applications.relief-card.create ΓÇ║ People\PeopleApplicΓÇª
+  POST            people-portal/applications/relief-card people.applications.relief-card.store ΓÇ║ People\PeopleApplicaΓÇª
+  GET|HEAD        people-portal/applications/tax people.applications.tax.create ΓÇ║ People\PeopleApplicationController@ΓÇª
+  GET|HEAD        people-portal/applications/trade-license people.applications.trade-license.create ΓÇ║ People\PeopleApΓÇª
+  GET|HEAD        people-portal/applications/vehicle people.applications.vehicle.create ΓÇ║ People\PeopleApplicationConΓÇª
+  GET|HEAD        people-portal/change-password people.password.change ΓÇ║ People\PeopleDashboardController@showChangePΓÇª
+  POST            people-portal/check-status ......... people.status.check ΓÇ║ People\PeopleStatusController@checkStatus
+  GET|HEAD        people-portal/dashboard .................. people.dashboard ΓÇ║ People\PeopleDashboardController@index
+  GET|HEAD        people-portal/login ........................... people.login ΓÇ║ People\PeopleAuthController@showLogin
+  POST            people-portal/login .......................... people.login.post ΓÇ║ People\PeopleAuthController@login
+  POST            people-portal/logout ............................ people.logout ΓÇ║ People\PeopleAuthController@logout
+  GET|HEAD        people-portal/profile .................... people.profile ΓÇ║ People\PeopleDashboardController@profile
+  POST            people-portal/profile/update-image people.profile.image.update ΓÇ║ People\PeopleDashboardController@uΓÇª
+  POST            people-portal/update-password people.password.update ΓÇ║ People\PeopleDashboardController@updatePasswΓÇª
+  GET|HEAD        permission ........................................... permission.index ΓÇ║ PermissionController@index
+  POST            permission ........................................... permission.store ΓÇ║ PermissionController@store
+  PATCH           permission/{id} .................................... permission.update ΓÇ║ PermissionController@update
+  DELETE          permission/{id} .................................. permission.destroy ΓÇ║ PermissionController@destroy
+  GET|HEAD        permission/{id}/edit ................................... permission.edit ΓÇ║ PermissionController@edit
+  GET|HEAD        profession-category-options-by-profession-type/{professionTypeID} BasicSettings\ProfessionCategoryCΓÇª
+  GET|HEAD        profession-subcategory-options-by-profession-category/{professionCategoryID} BasicSettings\ProfessiΓÇª
+  GET|HEAD        profession-type-options-by-profession/{professionID} BasicSettings\ProfessionTypeController@professΓÇª
+  GET|HEAD        profile .......................................................... profile ΓÇ║ LoginController@profile
+  GET|HEAD        register ....................................................... register ΓÇ║ LoginController@register
+  POST            register/store ...................................... register.store ΓÇ║ LoginController@registerStore
+  GET|HEAD        role ............................................................. role.index ΓÇ║ RoleController@index
+  POST            role ............................................................. role.store ΓÇ║ RoleController@store
+  PATCH           role/{id} ...................................................... role.update ΓÇ║ RoleController@update
+  DELETE          role/{id} .................................................... role.destroy ΓÇ║ RoleController@destroy
+  GET|HEAD        role/{id}/edit ..................................................... role.edit ΓÇ║ RoleController@edit
+  GET|HEAD        rolepermission ............................... rolepermission.index ΓÇ║ RolePermissionController@index
+  POST            rolepermission ............................... rolepermission.store ΓÇ║ RolePermissionController@store
+  POST            rolepermission/destroy ................... rolepermission.destroy ΓÇ║ RolePermissionController@destroy
+  PATCH           rolepermission/{id} ........................ rolepermission.update ΓÇ║ RolePermissionController@update
+  GET|HEAD        rolepermission/{role_id}/edit/{permission_id} .. rolepermission.edit ΓÇ║ RolePermissionController@edit
+  GET|HEAD        roleuser ................................................. roleuser.index ΓÇ║ RoleUserController@index
+  POST            roleuser ................................................. roleuser.store ΓÇ║ RoleUserController@store
+  GET|HEAD        roleuser/create ........................................ roleuser.create ΓÇ║ RoleUserController@create
+  POST            roleuser/roleusersoft ...................... roleuser.roleusersoft ΓÇ║ RoleUserController@roleusersoft
+  PATCH           roleuser/{id} .......................................... roleuser.update ΓÇ║ RoleUserController@update
+  GET|HEAD        roleuser/{role_id}/edit/{user_id} .......................... roleuser.edit ΓÇ║ RoleUserController@edit
+  GET|HEAD        sanctum/csrf-cookie .............. sanctum.csrf-cookie ΓÇ║ Laravel\Sanctum ΓÇ║ CsrfCookieController@show
+  GET|HEAD        search-people ........................................ people.search ΓÇ║ PeopleController@searchPeople
+  GET|HEAD        search-user-by-system-id/{systemID} ............ user.searchBySystemID ΓÇ║ PeopleController@searchUser
+  GET|HEAD        sms ................................................................................................ 
+  GET|HEAD        test-api ............................................................ HomeController@testHttpRequest
+  GET|HEAD        test-sms-api .......................................................................... test-sms-api
+  GET|HEAD        tl/{id} ............ trade-license.public-verify ΓÇ║ Organization\TradeLicenseController@publicPreview
+  GET|HEAD        trade-license-application .. public.organization.create ΓÇ║ Organization\OrganizationController@create
+  POST            trade-license-application/store public.organization.store ΓÇ║ Organization\OrganizationController@stoΓÇª
+  GET|HEAD        upload/{path} ...................................................................................... 
+  GET|HEAD        uploads/{path} ..................................................................................... 
+  GET|HEAD        user ............................................................. user.index ΓÇ║ UserController@index
+  POST            user ............................................................. user.store ΓÇ║ UserController@store
+  GET|HEAD        user/create .................................................... user.create ΓÇ║ UserController@create
+  GET|HEAD        user/{id}/change-password .............................. user.changePass ΓÇ║ UserController@changePass
+  PATCH           user/{id}/update-password .............................. user.updatePass ΓÇ║ UserController@updatePass
+  GET|HEAD        user/{user} ........................................................ user.show ΓÇ║ UserController@show
+  PUT|PATCH       user/{user} .................................................... user.update ΓÇ║ UserController@update
+  DELETE          user/{user} .................................................. user.destroy ΓÇ║ UserController@destroy
+  GET|HEAD        user/{user}/edit ................................................... user.edit ΓÇ║ UserController@edit
+  GET|HEAD        userper ............................................. userper.index ΓÇ║ UserPermissionController@index
+  POST            userper ............................................. userper.store ΓÇ║ UserPermissionController@store
+  GET|HEAD        userper/create .................................... userper.create ΓÇ║ UserPermissionController@create
+  POST            userper/delete .................................. userper.destroy ΓÇ║ UserPermissionController@destroy
+  PATCH           userper/{id} ...................................... userper.update ΓÇ║ UserPermissionController@update
+  GET|HEAD        userper/{model_id}/edit/{permission_id} ............... userper.edit ΓÇ║ UserPermissionController@edit
+  POST            voter-area-approve ......... voter-area.approve ΓÇ║ Certificate\VoterAreaCertificateController@approve
+
+                                                                                                 Showing [1127] routes
+

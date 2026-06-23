@@ -167,6 +167,12 @@ Route::prefix('trade-license-application')->name('public.organization.')->group(
     Route::post('store', [App\Http\Controllers\Organization\OrganizationController::class, 'store'])->name('store');
 });
 
+// Public Village Court
+Route::prefix('village-court/apply')->name('public.village-court.')->group(function () {
+    Route::get('/', [App\Http\Controllers\VillageCourtPublicController::class, 'create'])->name('create');
+    Route::post('/', [App\Http\Controllers\VillageCourtPublicController::class, 'store'])->name('store');
+});
+
 
 /* permisison */
 // Role route start
