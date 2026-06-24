@@ -38,9 +38,9 @@
                             <input type="hidden" name="user_id" value="{{$user->id}}">
 
                             <div class="card-body">
-                                <!-- Row 1: Family Member Type & Family Category -->
+                                <!-- Row 1: Family Member Type -->
                                 <div class="form-group row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <label for="family_type_id">Family Member Type</label>
                                         <select name="family_type_id" class="form-control" id="family_type_id">
                                             <option value="">Select Member Type</option>
@@ -51,18 +51,6 @@
                                             @endif
                                         </select>
                                         <small class="text-danger error family_type_id_error"></small>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label for="family_category_id">Family Category</label>
-                                        <select name="family_category_id" class="form-control" id="family_category_id">
-                                            <option value="">Select Family Category</option>
-                                            @if (count($familyCategories))
-                                                @foreach ($familyCategories as $familyCategory)
-                                                    <option value="{{$familyCategory->id}}" {{$user->familyInfo ? ($user->familyInfo->family_category_id == $familyCategory->id ? 'selected' : '') : ''}}>{{$familyCategory->en_name}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <small class="text-danger error family_category_id_error"></small>
                                     </div>
                                 </div>
 
@@ -131,6 +119,7 @@
                                     <div class="col-sm-12">
                                         <label for="maritalStatus">Marital Status</label>
                                         <select name="marital_status" class="form-control" id="maritalStatus">
+                                            <option value="">Select Marital Status</option>
                                             @foreach (family_constant_option('marital_status') as $key => $marital_status)
                                                 <option value="{{$key}}" {{$user->familyInfo ? (($user->familyInfo->marital_status == $key) ? 'selected' : '') : ''}}>{{$marital_status}}</option>
                                             @endforeach
@@ -140,16 +129,21 @@
                                 </div>
 
                                 <!-- Spouse Information (conditional) -->
-                                <div class="marital_status_content {{$user->familyInfo ? ( ($user->familyInfo->marital_status == 1) ? 'd-none' : 'block') : 'd-none'}}">
-                                    <!-- Row 6: Spouse Name & Spouse ID -->
+                                <div class="marital_status_content {{$user->familyInfo ? ( ($user->familyInfo->marital_status == 1 || empty($user->familyInfo->marital_status)) ? 'd-none' : 'block') : 'd-none'}}">
+                                    <!-- Row 6: Spouse Name, Spouse Name (Bangla), & Spouse ID -->
                                     <div class="form-group row">
-                                        <div class="col-sm-6">
-                                            <label for="spouseName">Spouse Name</label>
+                                        <div class="col-sm-4">
+                                            <label for="spouseName">Spouse Name (English)</label>
                                             <input type="text" name="spouse_name" class="form-control" id="spouseName" value="{{$user->familyInfo->spouse_name ?? ''}}" placeholder="Spouse Name" />
                                             <small class="text-danger error spouse_name_error"></small>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <label for="spouseNID">Spouse's ID</label>
+                                        <div class="col-sm-4">
+                                            <label for="spouseNameBn">Spouse Name (Bangla)</label>
+                                            <input type="text" name="spouse_name_bn" class="form-control" id="spouseNameBn" value="{{$user->familyInfo->spouse_name_bn ?? ''}}" placeholder="Spouse Name in Bangla" />
+                                            <small class="text-danger error spouse_name_bn_error"></small>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label for="spouseNID">Spouse's NID</label>
                                             <input type="text" name="spouse_nid" class="form-control" value="{{$user->familyInfo->spouse_nid ?? ''}}" id="spouseNID" placeholder="Spouse's NID" />
                                             <small class="text-danger error spouse_nid_error"></small>
                                         </div>
@@ -189,6 +183,9 @@
                                                 <small class="text-danger error girls_error"></small>
                                             </div>
                                         </div>
+                                        
+                                        <!-- Container for dynamically generated children inputs -->
+                                        <div id="dynamic-children-container"></div>
                                     </div>
                                 </div>
                             </div>
@@ -265,7 +262,7 @@
             // Marital status change handler
             $('#maritalStatus').on('change', function(e) {
                 let maritalStatus = $(this).val();
-                if (maritalStatus == 1) {
+                if (maritalStatus == 1 || maritalStatus === "") {
                     $('.marital_status_content').addClass('d-none');
                 } else {
                     $('.marital_status_content').removeClass('d-none');
@@ -281,6 +278,84 @@
                     $('.have_children_content').addClass('d-none');
                 }
             });
+
+            // Generate Children Inputs
+            const generateChildren = () => {
+                let boysCount = parseInt($('#boys').val()) || 0;
+                let girlsCount = parseInt($('#girls').val()) || 0;
+                let container = $('#dynamic-children-container');
+                
+                // Save existing input values before re-rendering to prevent data loss
+                let currentData = {};
+                container.find('input').each(function() {
+                    currentData[$(this).attr('name')] = $(this).val();
+                });
+
+                container.empty();
+
+                let existingDetailsStr = '{!! addslashes(json_encode($user->familyInfo->children_details ?? new \stdClass())) !!}';
+                let existingDetails = {};
+                try {
+                    existingDetails = JSON.parse(existingDetailsStr);
+                } catch(e) {}
+
+                let createChildHTML = (type, index, label) => {
+                    let namePrefix = `children_details[${type}][${index}]`;
+                    let data = existingDetails && existingDetails[type] && existingDetails[type][index] ? existingDetails[type][index] : {};
+                    
+                    // Priority: Current typed data > Existing DB Data > Empty
+                    let getVal = (field) => {
+                        let fName = `${namePrefix}[${field}]`;
+                        return currentData[fName] !== undefined ? currentData[fName] : (data[field] || '');
+                    };
+
+                    return `
+                        <div class="card bg-light mt-3">
+                            <div class="card-header py-2"><strong>${label} ${index + 1}</strong></div>
+                            <div class="card-body py-2">
+                                <div class="form-group row mb-2">
+                                    <div class="col-sm-6">
+                                        <label>Name (English)</label>
+                                        <input type="text" name="${namePrefix}[name_en]" class="form-control" value="${getVal('name_en')}">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Name (Bangla)</label>
+                                        <input type="text" name="${namePrefix}[name_bn]" class="form-control" value="${getVal('name_bn')}">
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-2">
+                                    <div class="col-sm-4">
+                                        <label>Date of Birth</label>
+                                        <input type="date" name="${namePrefix}[dob]" class="form-control" value="${getVal('dob')}">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Birth Reg. No.</label>
+                                        <input type="text" name="${namePrefix}[birth_reg]" class="form-control" value="${getVal('birth_reg')}" maxlength="17" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>NID No.</label>
+                                        <input type="text" name="${namePrefix}[nid]" class="form-control" value="${getVal('nid')}" minlength="10" maxlength="17" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                };
+
+                for(let i=0; i<boysCount; i++) {
+                    container.append(createChildHTML('boys', i, 'Boy'));
+                }
+                for(let i=0; i<girlsCount; i++) {
+                    container.append(createChildHTML('girls', i, 'Girl'));
+                }
+            };
+
+            $('#boys, #girls').on('input change', function() {
+                generateChildren();
+            });
+
+            // Initial render on page load
+            generateChildren();
         });
     </script>
 @endpush

@@ -73,11 +73,11 @@ class ProfessionalInfoController extends Controller
                         foreach ($profession as $key => $pro) {
                             $prof = new ProfessionalInfo();
                             $prof->profession_subcategory_id = $pro;
-                            $prof->profession_start = $profession_start[$key];
-                            $prof->profession_end = $profession_end[$key];
-                            $prof->organization = $organization[$key];
-                            $prof->designation = $designation[$key];
-                            $prof->address = $address[$key];
+                            $prof->profession_start = $profession_start[$key] ?? null;
+                            $prof->profession_end = $profession_end[$key] ?? null;
+                            $prof->organization = $organization[$key] ?? null;
+                            $prof->designation = $designation[$key] ?? null;
+                            $prof->address = $address[$key] ?? null;
                             $prof->user_id = $user_id;
                             $prof->save();
                         }
@@ -87,11 +87,11 @@ class ProfessionalInfoController extends Controller
                         foreach ($professionU as $key => $pr) {
                             $profs = ProfessionalInfo::find($key);
                             $profs->profession_subcategory_id = $pr;
-                            $profs->profession_start = $profession_startU[$key];
-                            $profs->profession_end = $profession_endU[$key];
-                            $profs->organization = $organizationU[$key];
-                            $profs->designation = $designationU[$key];
-                            $profs->address = $addressU[$key];
+                            $profs->profession_start = $profession_startU[$key] ?? null;
+                            $profs->profession_end = $profession_endU[$key] ?? null;
+                            $profs->organization = $organizationU[$key] ?? null;
+                            $profs->designation = $designationU[$key] ?? null;
+                            $profs->address = $addressU[$key] ?? null;
                             $profs->save();
                         }
                     }

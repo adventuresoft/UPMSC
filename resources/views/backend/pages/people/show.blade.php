@@ -512,22 +512,87 @@
                 <div class="info-row"><span class="info-label">Mother's Name :</span><span class="info-value">{{ $user->familyInfo->mother_name ?? '' }} </span></div>
                 <div class="info-row"><span class="info-label">Mother's NID :</span><span class="info-value">{{ $user->familyInfo->mother_nid ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Marital Status :</span><span class="info-value">{{ family_constant_option('marital_status')[$user->familyInfo->marital_status ?? ''] ?? '' }}</span></div>
+                @if(isset($user->familyInfo->marital_status) && $user->familyInfo->marital_status != 1)
                 <div class="info-row"><span class="info-label">Spouse Name :</span><span class="info-value">{{ $user->familyInfo->spouse_name ?? '' }}</span></div>
+                @endif
             </div>
             <div class="col">
                 <div class="info-row"><span class="info-label">Father's Name :</span><span class="info-value">{{ $user->familyInfo->father_name_bn ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Father's Live Status :</span><span class="info-value">{{ family_constant_option('live_status')[$user->familyInfo->father_live_status ?? ''] ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Mother's Name :</span><span class="info-value"> {{ $user->familyInfo->mother_name_bn ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Mother's Live Status :</span><span class="info-value">{{ family_constant_option('live_status')[$user->familyInfo->mother_live_status ?? ''] ?? '' }}</span></div>
+                @if(isset($user->familyInfo->marital_status) && $user->familyInfo->marital_status != 1)
                 <div class="info-row"><span class="info-label">Married Date :</span><span class="info-value">{{ $user->familyInfo->married_date ?? '' }}</span></div>
+                @endif
                 @if(isset($user->familyInfo->marital_status) && $user->familyInfo->marital_status != 1)
                 <div class="info-row"><span class="info-label">Spouse NID :</span><span class="info-value">{{ $user->familyInfo->spouse_nid ?? '' }}</span></div>
                 @endif
-                @if($user->familyInfo->have_children ?? false)
+                @if((isset($user->familyInfo->marital_status) && $user->familyInfo->marital_status != 1) && ($user->familyInfo->have_children ?? false))
                 <div class="info-row"><span class="info-label">Children :</span><span class="info-value">Boys: {{ $user->familyInfo->boys ?? 0 }}, Girls: {{ $user->familyInfo->girls ?? 0 }}</span></div>
                 @endif
             </div>
         </div>
+
+        @php
+            $childrenDetails = [];
+            if (!empty($user->familyInfo->children_details)) {
+                $childrenDetails = is_string($user->familyInfo->children_details) ? json_decode($user->familyInfo->children_details, true) : $user->familyInfo->children_details;
+            }
+
+            $boysCount = $user->familyInfo->boys ?? 0;
+            $girlsCount = $user->familyInfo->girls ?? 0;
+            
+            // Extract boy and girl details from the structured array
+            $boyDetails = isset($childrenDetails['boys']) && is_array($childrenDetails['boys']) ? array_values($childrenDetails['boys']) : [];
+            $girlDetails = isset($childrenDetails['girls']) && is_array($childrenDetails['girls']) ? array_values($childrenDetails['girls']) : [];
+        @endphp
+
+        @if((isset($user->familyInfo->marital_status) && $user->familyInfo->marital_status != 1) && ($boysCount > 0 || $girlsCount > 0))
+        <div style="margin-top: 15px;">
+            <h6 class="mb-2" style="color: #006600; font-weight: bold;">সন্তানদের তথ্য / Children Information</h6>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                
+                {{-- Loop for Boys --}}
+                @for($i = 0; $i < $boysCount; $i++)
+                @php
+                    $child = $boyDetails[$i] ?? [];
+                @endphp
+                <div style="border: 1px solid #dee2e6; border-radius: 8px; padding: 10px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); page-break-inside: avoid; break-inside: avoid;">
+                    <div style="font-size: 13px; font-weight: bold; border-bottom: 1px dashed #dee2e6; padding-bottom: 5px; margin-bottom: 8px; color: #2e3192;">
+                        Boy {{ $i + 1 }}
+                    </div>
+                    <div style="font-size: 13px; line-height: 1.6; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px;">
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Name (EN)</span><strong>{{ $child['name_en'] ?? 'N/A' }}</strong></div>
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Name (BN)</span><strong>{{ $child['name_bn'] ?? 'N/A' }}</strong></div>
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Date of Birth</span><strong>{{ $child['dob'] ?? 'N/A' }}</strong></div>
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">NID No.</span><strong>{{ $child['nid'] ?? 'N/A' }}</strong></div>
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Birth Reg. No.</span><strong>{{ $child['birth_reg'] ?? 'N/A' }}</strong></div>
+                    </div>
+                </div>
+                @endfor
+
+                {{-- Loop for Girls --}}
+                @for($i = 0; $i < $girlsCount; $i++)
+                @php
+                    $child = $girlDetails[$i] ?? [];
+                @endphp
+                <div style="border: 1px solid #dee2e6; border-radius: 8px; padding: 10px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); page-break-inside: avoid; break-inside: avoid;">
+                    <div style="font-size: 13px; font-weight: bold; border-bottom: 1px dashed #dee2e6; padding-bottom: 5px; margin-bottom: 8px; color: #2e3192;">
+                        Girl {{ $i + 1 }}
+                    </div>
+                    <div style="font-size: 13px; line-height: 1.6; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px;">
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Name (EN)</span><strong>{{ $child['name_en'] ?? 'N/A' }}</strong></div>
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Name (BN)</span><strong>{{ $child['name_bn'] ?? 'N/A' }}</strong></div>
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Date of Birth</span><strong>{{ $child['dob'] ?? 'N/A' }}</strong></div>
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">NID No.</span><strong>{{ $child['nid'] ?? 'N/A' }}</strong></div>
+                        <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Birth Reg. No.</span><strong>{{ $child['birth_reg'] ?? 'N/A' }}</strong></div>
+                    </div>
+                </div>
+                @endfor
+
+            </div>
+        </div>
+        @endif
 
 @php
 //dd($user->addressInfo);

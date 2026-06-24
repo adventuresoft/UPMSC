@@ -29,5 +29,11 @@ class FamilyInfo extends Model
     'have_children',
     'boys',
     'girls',
+    'spouse_name_bn',
+    'children_details',
+    ];
+
+    protected $casts = [
+        'children_details' => 'array',
     ];
 }

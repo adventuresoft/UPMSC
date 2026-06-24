@@ -54,7 +54,6 @@ class FamilyInfoController extends Controller
     {
             $validate = Validator::make($request->all(), [
                 'family_type_id' => 'nullable',
-                'family_category_id' => 'nullable',
                 'father_name' => 'nullable|max:190',
                 'father_live_status' => 'nullable|max:190',
                 'father_nid' => 'nullable|max:190',
@@ -63,11 +62,13 @@ class FamilyInfoController extends Controller
                 'mother_nid' => 'nullable|max:190',
                 'marital_status' => 'nullable|max:190',
                 'spouse_name' => 'nullable|max:190',
+                'spouse_name_bn' => 'nullable|max:190',
                 'spouse_nid' => 'nullable|max:190',
                 'married_date' => 'nullable|max:190',
                 'have_children' => 'nullable|max:190',
                 'boys' => 'nullable|max:190',
                 'girls' => 'nullable|max:190',
+                'children_details' => 'nullable|array',
             ]);
 
             if ($validate->fails()) {
@@ -83,7 +84,6 @@ class FamilyInfoController extends Controller
                     'user_id' => $request->user_id
                 ], [
                     'family_type_id' => $request->filled('family_type_id') ? $request->family_type_id : null,
-                    'family_category_id' => $request->filled('family_category_id') ? $request->family_category_id : null,
                     'father_name' => $request->father_name,
 
                     'father_name_bn' => $request->father_name_bn,
@@ -96,11 +96,13 @@ class FamilyInfoController extends Controller
                     'mother_nid' => $request->mother_nid,
                     'marital_status' => $request->marital_status,
                     'spouse_name' => $request->spouse_name,
+                    'spouse_name_bn' => $request->spouse_name_bn,
                     'spouse_nid' => $request->spouse_nid,
                     'married_date' => $request->married_date,
                     'have_children' => $request->have_children ?? 0 ,
                     'boys' => $request->boys,
                     'girls' => $request->girls,
+                    'children_details' => $request->children_details,
                 ]);
 
 
