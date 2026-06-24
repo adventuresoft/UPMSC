@@ -129,7 +129,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Case Date (মামলার তারিখ) <span class="text-danger">*</span></label>
+                                            <label>Case Date (মামলা সংঘটনের তারিখ) <span class="text-danger">*</span></label>
                                             @php
                                                 $caseDate = $case->case_date ? $case->case_date->format('Y-m-d') : date('Y-m-d');
                                                 $minDate = min(date('Y-m-d', strtotime('-30 days')), $caseDate);
@@ -139,7 +139,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Case Time (মামলার সময়) <span class="text-danger">*</span></label>
+                                            <label>Case Time (মামলা সংঘটনের সময়) <span class="text-danger">*</span></label>
                                             <input type="time" name="case_time" class="form-control" required value="{{ $case->case_time ? \Carbon\Carbon::parse($case->case_time)->format('H:i') : date('H:i') }}">
                                         </div>
                                     </div>
@@ -245,7 +245,7 @@
                     // Do not reset automatically on edit page load unless strictly necessary, 
                     // or just show an alert. But for strictness:
                     // dateInput.val('');
-                    // alert('নির্বাচিত মামলার ধরনের জন্য মামলার তারিখ ' + minDate + ' এর পূর্বে হতে পারবে না।');
+                    // alert('নির্বাচিত মামলার ধরনের জন্য মামলা সংঘটনের তারিখ ' + minDate + ' এর পূর্বে হতে পারবে না।');
                 }
             }
 

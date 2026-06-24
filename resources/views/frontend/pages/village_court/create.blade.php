@@ -141,11 +141,11 @@
                     </select>
                 </div>
                 <div>
-                    <label class="form-label">মামলার তারিখ <span class="text-red-500">*</span></label>
+                    <label class="form-label">মামলা সংঘটনের তারিখ <span class="text-red-500">*</span></label>
                     <input type="date" name="case_date" class="form-input" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d', strtotime('-30 days')) }}" max="{{ date('Y-m-d') }}">
                 </div>
                 <div>
-                    <label class="form-label">মামলার সময় <span class="text-red-500">*</span></label>
+                    <label class="form-label">মামলা সংঘটনের সময় <span class="text-red-500">*</span></label>
                     <input type="time" name="case_time" class="form-input" required value="{{ now()->timezone('Asia/Dhaka')->format('H:i') }}">
                 </div>
             </div>
@@ -349,7 +349,7 @@
                 // If current selected date is before new min date, reset it
                 if (dateInput.val() && dateInput.val() < minDate) {
                     dateInput.val('');
-                    alert('নির্বাচিত মামলার ধরনের জন্য মামলার তারিখ ' + minDate + ' এর পূর্বে হতে পারবে না।');
+                    alert('নির্বাচিত মামলার ধরনের জন্য মামলা সংঘটনের তারিখ ' + minDate + ' এর পূর্বে হতে পারবে না।');
                 }
             }
 
