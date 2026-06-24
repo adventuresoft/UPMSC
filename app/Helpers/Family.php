@@ -13,16 +13,12 @@ if(! function_exists('family_constant_option')){
                 2 => 'Married',
                 3 => 'Widowed',
                 4 => 'Divorced',
-                5 => 'Separated',
-                6 => 'Engaged',
             ],
             'marital_status_bn' => [
                 1 => 'অবিবাহিত',
                 2 => 'বিবাহিত',
                 3 => 'বিধবা/বিপত্নীক',
                 4 => 'তালাকপ্রাপ্ত',
-                5 => 'বিচ্ছিন্ন',
-                6 => 'সংগৃহীত',
             ],
         ];
         if ($option_name) {
@@ -42,16 +38,12 @@ if(! function_exists('family_marital_status_label')){
                 2 => 'Married',
                 3 => 'Widowed',
                 4 => 'Divorced',
-                5 => 'Separated',
-                6 => 'Engaged',
             ],
             'bn' => [
                 1 => 'অবিবাহিত',
                 2 => 'বিবাহিত',
                 3 => 'বিধবা/বিপত্নীক',
                 4 => 'তালাকপ্রাপ্ত',
-                5 => 'বিচ্ছিন্ন',
-                6 => 'সংগৃহীত',
             ],
         ];
 
@@ -60,23 +52,17 @@ if(! function_exists('family_marital_status_label')){
             '2' => 2,
             '3' => 3,
             '4' => 4,
-            '5' => 5,
-            '6' => 6,
             'single' => 1,
             'unmarried' => 1,
             'married' => 2,
             'widowed' => 3,
             'widower' => 3,
             'divorced' => 4,
-            'separated' => 5,
-            'engaged' => 6,
             'অবিবাহিত' => 1,
             'বিবাহিত' => 2,
             'বিধবা' => 3,
             'বিপত্নীক' => 3,
             'তালাকপ্রাপ্ত' => 4,
-            'বিচ্ছিন্ন' => 5,
-            'সংগৃহীত' => 6,
         ];
 
         if (is_string($status)) {

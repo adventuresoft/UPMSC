@@ -354,6 +354,50 @@
                 </div>
             </div>
 
+            <!-- Spouse Information (conditional) -->
+            <div class="marital_status_content hidden">
+                <div class="section-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a5.97 5.97 0 0 0-.94 3.197m0 0a5.995 5.995 0 0 0 5.058 2.771ZM12 11.25a3.375 3.375 0 1 0 0-6.75 3.375 3.375 0 0 0 0 6.75ZM9.75 8.625a2.625 2.625 0 1 1 5.25 0 2.625 2.625 0 0 1-5.25 0Z" />
+                    </svg>
+                    স্বামী/স্ত্রীর তথ্য
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="form-label" for="spouse_name">Spouse Name (English)</label>
+                        <input type="text" name="spouse_name" id="spouse_name" class="form-input" placeholder="Spouse Name">
+                    </div>
+                    <div>
+                        <label class="form-label" for="spouse_name_bn">Spouse Name (Bangla)</label>
+                        <input type="text" name="spouse_name_bn" id="spouse_name_bn" class="form-input" placeholder="Spouse Name in Bangla">
+                    </div>
+                    <div>
+                        <label class="form-label" for="spouse_nid">Spouse's NID</label>
+                        <input type="text" name="spouse_nid" id="spouse_nid" class="form-input" placeholder="Spouse's NID">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 mb-4 bg-gray-100 p-2 rounded w-fit border border-gray-200">
+                    <input type="checkbox" id="haveChildren" class="w-4 h-4 accent-[#046307]">
+                    <label for="haveChildren" class="cursor-pointer text-sm font-bold text-gray-800">Have any children?</label>
+                </div>
+
+                <div class="have_children_content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="form-label" for="boys">Number of boys</label>
+                            <input type="number" name="boys" id="boys" class="form-input" placeholder="Number of Boys" min="0">
+                        </div>
+                        <div>
+                            <label class="form-label" for="girls">Number of Girls</label>
+                            <input type="number" name="girls" id="girls" class="form-input" placeholder="Number of Girls" min="0">
+                        </div>
+                    </div>
+                    
+                    <div id="dynamic-children-container"></div>
+                </div>
+            </div>
+
             <!-- Parent Info -->
             <div class="section-title">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
@@ -640,6 +684,88 @@
             initAllSelect2();
             
             console.log('All select2 initialized!');
+
+            // Marital status change handler
+            $('#marital_status').on('change', function(e) {
+                let maritalStatus = $(this).val();
+                if (maritalStatus == 1 || maritalStatus === "") {
+                    $('.marital_status_content').addClass('hidden');
+                } else {
+                    $('.marital_status_content').removeClass('hidden');
+                }
+            });
+
+            // Have children checkbox handler
+            $('#haveChildren').on('change', function(e) {
+                if (this.checked) {
+                    $('.have_children_content').removeClass('hidden');
+                } else {
+                    $('.have_children_content').addClass('hidden');
+                }
+            });
+
+            // Generate Children Inputs
+            const generateChildren = () => {
+                let boysCount = parseInt($('#boys').val()) || 0;
+                let girlsCount = parseInt($('#girls').val()) || 0;
+                let container = $('#dynamic-children-container');
+                
+                let currentData = {};
+                container.find('input').each(function() {
+                    currentData[$(this).attr('name')] = $(this).val();
+                });
+
+                container.empty();
+
+                let createChildHTML = (type, index, label) => {
+                    let namePrefix = `children_details[${type}][${index}]`;
+                    let getVal = (field) => {
+                        let fName = `${namePrefix}[${field}]`;
+                        return currentData[fName] !== undefined ? currentData[fName] : '';
+                    };
+
+                    return `
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4 shadow-sm">
+                            <h4 class="text-sm font-bold text-[#046307] mb-3 border-b border-gray-200 pb-2">${label} ${index + 1}</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                <div>
+                                    <label class="form-label">Name (English)</label>
+                                    <input type="text" name="${namePrefix}[name_en]" class="form-input" value="${getVal('name_en')}">
+                                </div>
+                                <div>
+                                    <label class="form-label">Name (Bangla)</label>
+                                    <input type="text" name="${namePrefix}[name_bn]" class="form-input" value="${getVal('name_bn')}">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" name="${namePrefix}[dob]" class="form-input" value="${getVal('dob')}">
+                                </div>
+                                <div>
+                                    <label class="form-label">Birth Reg. No.</label>
+                                    <input type="text" name="${namePrefix}[birth_reg]" class="form-input" value="${getVal('birth_reg')}" maxlength="17" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                </div>
+                                <div>
+                                    <label class="form-label">NID No.</label>
+                                    <input type="text" name="${namePrefix}[nid]" class="form-input" value="${getVal('nid')}" minlength="10" maxlength="17" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                };
+
+                for(let i=0; i<boysCount; i++) {
+                    container.append(createChildHTML('boys', i, 'Boy'));
+                }
+                for(let i=0; i<girlsCount; i++) {
+                    container.append(createChildHTML('girls', i, 'Girl'));
+                }
+            };
+
+            $('#boys, #girls').on('input change', function() {
+                generateChildren();
+            });
 
             function calculateAge(dob) {
                 if (!dob) return '';

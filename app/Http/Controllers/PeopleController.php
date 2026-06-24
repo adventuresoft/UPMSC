@@ -444,10 +444,10 @@ class PeopleController extends Controller
             'gender' => 'nullable|max:190',
             'religion' => 'nullable|max:190',
             'blood_group' => 'nullable|max:190',
-            'mobile' => 'nullable|max:190',
-            'email' => 'nullable|max:190',
-            'birth_certificate' => 'nullable|max:190',
-            'nid' => 'nullable|max:190',
+            'mobile' => 'nullable|string|regex:/^[0-9]{1,11}$/',
+            'email' => 'nullable|email|max:190',
+            'birth_certificate' => 'nullable|string|regex:/^[0-9]{1,17}$/',
+            'nid' => 'nullable|string|regex:/^[0-9]{10,17}$/',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ]);
 
@@ -668,10 +668,10 @@ class PeopleController extends Controller
             'gender' => 'nullable|max:190',
             'religion' => 'nullable|max:190',
             'blood_group' => 'nullable|max:190',
-            'mobile' => 'nullable|max:190',
+            'mobile' => 'nullable|string|regex:/^[0-9]{1,11}$/',
             'email' => 'nullable|max:190|email',
-            'birth_certificate' => 'nullable|max:190',
-            'nid' => 'nullable|max:190',
+            'birth_certificate' => 'nullable|string|regex:/^[0-9]{1,17}$/',
+            'nid' => 'nullable|string|regex:/^[0-9]{10,17}$/',
             'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ]);
 

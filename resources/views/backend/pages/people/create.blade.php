@@ -76,7 +76,35 @@
                                     </div>
                                 </div>
 
-                                <!-- Row 3: Gender, Religion, Blood Group -->
+                                <!-- Row 3: Birth Reg. No., NID No. -->
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label for="birth_certificate">Birth Reg. No.</label>
+                                        <input type="text" value="" name="birth_certificate" placeholder="Birth Reg. No." class="form-control" id="birth_certificate" maxlength="17" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                        <small class="error birth_certificate-error text-danger"></small>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="nid">NID No.</label>
+                                        <input type="text" value="" name="nid" placeholder="NID No." class="form-control" id="nid" minlength="10" maxlength="17" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                        <span class="error nid-error text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Row 4: Mobile No., Email -->
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label for="mobile">Mobile No.</label>
+                                        <input type="tel" value="" name="mobile" placeholder="Mobile" class="form-control" id="mobile" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                        <small class="error mobile-error text-danger"></small>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="email">Email</label>
+                                        <input type="email" value="" name="email" placeholder="Email" class="form-control" id="email">
+                                        <small class="error email-error text-danger"></small>
+                                    </div>
+                                </div>
+
+                                <!-- Row 5: Gender, Religion, Blood Group -->
                                 <div class="form-group row">
                                     <div class="col-sm-4">
                                         <label for="gender">Gender</label>
@@ -113,34 +141,6 @@
                                             @endif
                                         </select>
                                         <small class="error blood_group-error text-danger"></small>
-                                    </div>
-                                </div>
-
-                                <!-- Row 4: Birth Reg. No., NID No. -->
-                                <div class="form-group row">
-                                    <div class="col-sm-6">
-                                        <label for="birth_certificate">Birth Reg. No.</label>
-                                        <input type="text" value="" name="birth_certificate" placeholder="Birth Reg. No." class="form-control" id="birth_certificate">
-                                        <small class="error birth_certificate-error text-danger"></small>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label for="nid">NID No.</label>
-                                        <input type="text" value="" name="nid" placeholder="NID No." class="form-control" id="nid">
-                                        <span class="error nid-error text-danger"></span>
-                                    </div>
-                                </div>
-
-                                <!-- Row 5: Mobile No., Email -->
-                                <div class="form-group row">
-                                    <div class="col-sm-6">
-                                        <label for="mobile">Mobile No.</label>
-                                        <input type="tel" value="" name="mobile" placeholder="Mobile" class="form-control" id="mobile">
-                                        <small class="error mobile-error text-danger"></small>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label for="email">Email</label>
-                                        <input type="email" value="" name="email" placeholder="Email" class="form-control" id="email">
-                                        <small class="error email-error text-danger"></small>
                                     </div>
                                 </div>
 

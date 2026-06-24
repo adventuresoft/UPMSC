@@ -46,220 +46,121 @@
 
                                 @if (count($user->professionalInfos))
                                     @foreach ($user->professionalInfos as $professionalInfo)
-                                        <div class="single-profession">
-
-                                            <div class="form-group row">
-                                                <label for="profession" class="col-sm-2 col-form-label">Profession</label>
-                                                <div class="col-sm-9">
-                                                    <select name="professionU[{{ $professionalInfo->id }}]"
-                                                        class="form-control select2 profession">
+                                        <div class="single-profession p-3 mb-3 border rounded bg-light">
+                                            <div class="row">
+                                                <div class="col-sm-4 form-group">
+                                                    <label for="profession">Profession</label>
+                                                    <select name="professionU[{{ $professionalInfo->id }}]" class="form-control select2 profession">
                                                         <option value="">Select Profession</option>
                                                         @if (count($professions))
                                                             @foreach ($professions as $profession)
-                                                                <option value="{{ $profession->id }}"
-                                                                    {{ isset($professionalInfo->subcategory->category->type->profession_id) ? ($professionalInfo->subcategory->category->type->profession_id == $profession->id ? 'selected' : '') : '' }}>
-                                                                    {{ $profession->en_name }}</option>
+                                                                <option value="{{ $profession->id }}" {{ isset($professionalInfo->subcategory->category->type->profession_id) ? ($professionalInfo->subcategory->category->type->profession_id == $profession->id ? 'selected' : '') : '' }}>{{ $profession->en_name }}</option>
                                                             @endforeach
                                                         @endif
                                                     </select>
                                                 </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label for="profession_type" class="col-sm-2 col-form-label">Type</label>
-                                                <div class="col-sm-9">
-                                                    <select name="profession_typeU[{{ $professionalInfo->id }}]"
-                                                        class="form-control select2 profession_type">
-                                                        <option
-                                                            value="{{ $professionalInfo->subcategory->category->type->id ?? '' }}">
-                                                            {{ $professionalInfo->subcategory->category->type->en_name ?? 'Select Profession Type' }}
-                                                        </option>
+                                                <div class="col-sm-4 form-group">
+                                                    <label for="profession_type">Type</label>
+                                                    <select name="profession_typeU[{{ $professionalInfo->id }}]" class="form-control select2 profession_type">
+                                                        <option value="{{ $professionalInfo->subcategory->category->type->id ?? '' }}">{{ $professionalInfo->subcategory->category->type->en_name ?? 'Select Profession Type' }}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4 form-group">
+                                                    <label for="profession_category">Category</label>
+                                                    <select name="profession_categoryU[{{ $professionalInfo->id }}]" class="form-control select2 profession_category">
+                                                        <option value="{{ $professionalInfo->subcategory->category->id ?? '' }}">{{ $professionalInfo->subcategory->category->en_name ?? 'Select Profession Category' }}</option>
                                                     </select>
                                                 </div>
                                             </div>
 
-                                            <div class="form-group row">
-                                                <label for="profession_category"
-                                                    class="col-sm-2  col-form-label">Category</label>
-                                                <div class="col-sm-9">
-                                                    <select name="profession_categoryU[{{ $professionalInfo->id }}]"
-                                                        class="form-control select2 profession_category">
-                                                        <option
-                                                            value="{{ $professionalInfo->subcategory->category->id ?? '' }}">
-                                                            {{ $professionalInfo->subcategory->category->en_name ?? 'Select Profession Category' }}
-                                                        </option>
+                                            <div class="row">
+                                                <div class="col-sm-4 form-group">
+                                                    <label for="profession_subcategory">Subcategory</label>
+                                                    <select required name="profession_subcategoryU[{{ $professionalInfo->id }}]" class="form-control select2 profession_subcategory">
+                                                        <option value="{{ $professionalInfo->subcategory->id ?? '' }}">{{ $professionalInfo->subcategory->en_name ?? 'Select Profession Subcategory' }}</option>
                                                     </select>
                                                 </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label for="profession_subcategory"
-                                                    class="col-sm-2 col-form-label">Subcategory</label>
-                                                <div class="col-sm-9">
-                                                    <select required
-                                                        name="profession_subcategoryU[{{ $professionalInfo->id }}]"
-                                                        class="form-control select2 profession_subcategory">
-                                                        <option value="{{ $professionalInfo->subcategory->id ?? '' }}">
-                                                            {{ $professionalInfo->subcategory->en_name ?? 'Select Profession Subcategory' }}
-                                                        </option>
-                                                    </select>
+                                                <div class="col-sm-4 form-group">
+                                                    <label for="profession_start">Start Date</label>
+                                                    <input type="date" name="profession_startU[{{ $professionalInfo->id }}]" value="{{ $professionalInfo->profession_start ?? '' }}" placeholder="Profession Start Date" class="form-control" id="profession_start">
+                                                </div>
+                                                <div class="col-sm-4 form-group">
+                                                    <label for="profession_end">End Date</label>
+                                                    <input type="date" name="profession_endU[{{ $professionalInfo->id }}]" value="{{ $professionalInfo->profession_end ?? '' }}" placeholder="Profession End Date" class="form-control" id="profession_end">
                                                 </div>
                                             </div>
 
-
-                                            <div class="form-group row">
-                                                <label for="profession_start" class="col-sm-2 col-form-label">Start
-                                                    Date</label>
-                                                <div class="col-sm-9">
-                                                    <input type="date"
-                                                        name="profession_startU[{{ $professionalInfo->id }}]"
-                                                        value="{{ $professionalInfo->profession_start ?? '' }}"
-                                                        placeholder="Profession Start Date" class="form-control"
-                                                        id="profession_start">
+                                            <div class="row">
+                                                <div class="col-sm-5 form-group">
+                                                    <label for="designation">Designation</label>
+                                                    <input type="text" name="designationU[{{ $professionalInfo->id }}]" placeholder="Enter name of professional designation" value="{{ $professionalInfo->designation ?? '' }}" class="form-control designation">
                                                 </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label for="profession_end" class="col-sm-2 col-form-label">End Date</label>
-                                                <div class="col-sm-9">
-                                                    <input type="date"
-                                                        name="profession_endU[{{ $professionalInfo->id }}]"
-                                                        value="{{ $professionalInfo->profession_end ?? '' }}"
-                                                        placeholder="Profession End Date" class="form-control"
-                                                        id="profession_end">
+                                                <div class="col-sm-5 form-group">
+                                                    <label for="organization">Organization</label>
+                                                    <input type="text" name="organizationU[{{ $professionalInfo->id }}]" placeholder="Enter name of professional organization" value="{{ $professionalInfo->organization ?? '' }}" class="form-control organization">
                                                 </div>
-                                            </div>
-
-
-                                            <div class="form-group row">
-                                                <label for="organization"
-                                                    class="col-sm-2 col-form-label">Organization</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" name="organizationU[{{ $professionalInfo->id }}]"
-                                                        placeholder="Enter name of professional organization"
-                                                        value="{{ $professionalInfo->organization ?? '' }}"
-                                                        class="form-control organization">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label for="designation" class="col-sm-2 col-form-label">Designation</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" name="designationU[{{ $professionalInfo->id }}]"
-                                                        placeholder="Enter name of professional designation"
-                                                        value="{{ $professionalInfo->designation ?? '' }}"
-                                                        class="form-control designation">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label for="address" class="col-sm-2 col-form-label">Address</label>
-                                                <div class="col-sm-9">
-                                                    <textarea name="addressU[{{ $professionalInfo->id }}]" class="form-control address"
-                                                        placeholder="Enter name of professional address" cols="30" rows="3">{{ $professionalInfo->address ?? '' }}</textarea>
-                                                </div>
-                                                <div class="col-sm-1 mt-1">
-                                                    <button type="button" data-id="{{ $professionalInfo->id }}"
-                                                        class="btn btn-danger deleteBtn">X</button>
+                                                <div class="col-sm-2 form-group d-flex align-items-end">
+                                                    <button type="button" data-id="{{ $professionalInfo->id }}" class="btn btn-danger deleteBtn w-100"><i class="fas fa-trash-alt"></i> Remove</button>
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
                                 @else
-                                    <div class="single-profession">
-                                        <div class="form-group row">
-                                            <label for="profession" class="col-sm-2 col-form-label">Profession</label>
-                                            <div class="col-sm-9">
+                                    <div class="single-profession p-3 mb-3 border rounded bg-light">
+                                        <div class="row">
+                                            <div class="col-sm-4 form-group">
+                                                <label for="profession">Profession</label>
                                                 <select name="profession[]" class="form-control select2 profession">
                                                     <option value="">Select Profession</option>
                                                     @if (count($professions))
                                                         @foreach ($professions as $profession)
-                                                            <option value="{{ $profession->id }}">
-                                                                {{ $profession->en_name }}</option>
+                                                            <option value="{{ $profession->id }}">{{ $profession->en_name }}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
                                             </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="profession_type" class="col-sm-2 col-form-label">Type</label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-4 form-group">
+                                                <label for="profession_type">Type</label>
                                                 <select name="profession_type[]" class="form-control select2 profession_type">
                                                     <option value="">Select Profession Type</option>
                                                 </select>
                                             </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="profession_category"
-                                                class="col-sm-2  col-form-label">Category</label>
-                                            <div class="col-sm-9">
-                                                <select name="profession_category[]"
-                                                    class="form-control select2 profession_category">
+                                            <div class="col-sm-4 form-group">
+                                                <label for="profession_category">Category</label>
+                                                <select name="profession_category[]" class="form-control select2 profession_category">
                                                     <option value="">Select Profession Category</option>
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
-                                            <label for="profession_subcategory"
-                                                class="col-sm-2 col-form-label">Subcategory</label>
-                                            <div class="col-sm-9">
-                                                <select required name="profession_subcategory[]"
-                                                    class="form-control select2 profession_subcategory">
+                                        <div class="row">
+                                            <div class="col-sm-4 form-group">
+                                                <label for="profession_subcategory">Subcategory</label>
+                                                <select required name="profession_subcategory[]" class="form-control select2 profession_subcategory">
                                                     <option value="">Select Profession Subcategory</option>
                                                 </select>
                                             </div>
-                                        </div>
-
-
-                                        <div class="form-group row">
-                                            <label for="profession_start" class="col-sm-2 col-form-label">Start
-                                                Date</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" name="profession_start[]" value=""
-                                                    placeholder="Profession Start Date" class="form-control"
-                                                    id="profession_start">
+                                            <div class="col-sm-4 form-group">
+                                                <label for="profession_start">Start Date</label>
+                                                <input type="date" name="profession_start[]" value="" placeholder="Profession Start Date" class="form-control" id="profession_start">
+                                            </div>
+                                            <div class="col-sm-4 form-group">
+                                                <label for="profession_end">End Date</label>
+                                                <input type="date" name="profession_end[]" value="" placeholder="Profession End Date" class="form-control" id="profession_end">
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
-                                            <label for="profession_end" class="col-sm-2 col-form-label">End Date</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" name="profession_end[]" value=""
-                                                    placeholder="Profession End Date" class="form-control"
-                                                    id="profession_end">
+                                        <div class="row">
+                                            <div class="col-sm-5 form-group">
+                                                <label for="designation">Designation</label>
+                                                <input type="text" name="designation[]" placeholder="Enter name of professional designation" value="" class="form-control designation">
                                             </div>
-                                        </div>
-
-
-                                        <div class="form-group row">
-                                            <label for="organization" class="col-sm-2 col-form-label">Organization</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" name="organization[]"
-                                                    placeholder="Enter name of professional organization" value=""
-                                                    class="form-control organization">
+                                            <div class="col-sm-5 form-group">
+                                                <label for="organization">Organization</label>
+                                                <input type="text" name="organization[]" placeholder="Enter name of professional organization" value="" class="form-control organization">
                                             </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="designation" class="col-sm-2 col-form-label">Designation</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" name="designation[]"
-                                                    placeholder="Enter name of professional designation" value=""
-                                                    class="form-control designation">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="address" class="col-sm-2 col-form-label">Address</label>
-                                            <div class="col-sm-9">
-                                                <textarea name="address[]" class="form-control address" placeholder="Enter name of professional address"
-                                                    cols="30" rows="3"></textarea>
-                                            </div>
-                                            <div class="col-sm-1 mt-1">
-                                                <button type="button" class="btn btn-danger removeBtn">X</button>
+                                            <div class="col-sm-2 form-group d-flex align-items-end">
+                                                <button type="button" class="btn btn-danger removeBtn w-100"><i class="fas fa-trash-alt"></i> Remove</button>
                                             </div>
                                         </div>
                                     </div>
@@ -350,11 +251,11 @@
 
             let addNewProfession = '';
 
-            addNewProfession += '<div class="single-profession">';
+            addNewProfession += '<div class="single-profession p-3 mb-3 border rounded bg-light">';
 
-                addNewProfession += '<div class="form-group row">';
-                    addNewProfession += '<label for="profession" class="col-sm-2 col-form-label">Profession</label>';
-                    addNewProfession += '<div class="col-sm-9">';
+                addNewProfession += '<div class="row">';
+                    addNewProfession += '<div class="col-sm-4 form-group">';
+                        addNewProfession += '<label for="profession">Profession</label>';
                         addNewProfession += '<select name="profession[]" class="form-control select2 profession">';
                             addNewProfession += '<option value="">Select Profession</option>';
                                 @if (count($professions))
@@ -364,73 +265,56 @@
                                 @endif
                         addNewProfession += '</select>';
                     addNewProfession += '</div>';
-                addNewProfession += '</div>';
 
-                addNewProfession += '<div class="form-group row">';
-                    addNewProfession += '<label for="profession_type" class="col-sm-2 col-form-label">Type</label>';
-                    addNewProfession += '<div class="col-sm-9">';
+                    addNewProfession += '<div class="col-sm-4 form-group">';
+                        addNewProfession += '<label for="profession_type">Type</label>';
                         addNewProfession += '<select name="profession_type[]" class="form-control select2 profession_type">';
                             addNewProfession += '<option value="">Select Profession Type</option>';
                         addNewProfession += '</select>';
                     addNewProfession += '</div>';
-                addNewProfession += '</div>';
 
-                addNewProfession += '<div class="form-group row">';
-                    addNewProfession += '<label for="profession_category" class="col-sm-2  col-form-label">Category</label>';
-                        addNewProfession += '<div class="col-sm-9">';
-                            addNewProfession += '<select name="profession_category[]" class="form-control select2 profession_category">';
-                                addNewProfession += '<option value="">Select Profession Category</option>';
-                            addNewProfession += '</select>';
-                        addNewProfession += '</div>';
-                addNewProfession += '</div>';
-
-                addNewProfession += '<div class="form-group row">';
-                    addNewProfession += '<label for="profession_subcategory" class="col-sm-2 col-form-label">Subcategory</label>';
-                    addNewProfession += '<div class="col-sm-9">';
-                        addNewProfession += '<select required name="profession_subcategory[]" class="form-control select2 profession_subcategory">';
-                            addNewProfession += '<option value="">Select Profession Subcategory</option>';
+                    addNewProfession += '<div class="col-sm-4 form-group">';
+                        addNewProfession += '<label for="profession_category">Category</label>';
+                        addNewProfession += '<select name="profession_category[]" class="form-control select2 profession_category">';
+                            addNewProfession += '<option value="">Select Profession Category</option>';
                         addNewProfession += '</select>';
                     addNewProfession += '</div>';
                 addNewProfession += '</div>';
 
-                addNewProfession += '<div class="form-group row">';
-                    addNewProfession += '<label for="profession_start" class="col-sm-2 col-form-label">Start Date</label>';
-                    addNewProfession += '<div class="col-sm-9">';
+                addNewProfession += '<div class="row">';
+                    addNewProfession += '<div class="col-sm-4 form-group">';
+                        addNewProfession += '<label for="profession_subcategory">Subcategory</label>';
+                        addNewProfession += '<select required name="profession_subcategory[]" class="form-control select2 profession_subcategory">';
+                            addNewProfession += '<option value="">Select Profession Subcategory</option>';
+                        addNewProfession += '</select>';
+                    addNewProfession += '</div>';
+
+                    addNewProfession += '<div class="col-sm-4 form-group">';
+                        addNewProfession += '<label for="profession_start">Start Date</label>';
                         addNewProfession += '<input type="date" name="profession_start[]" value="" placeholder="Profession Start Date" class="form-control" id="profession_start">';
                     addNewProfession += '</div>';
-                addNewProfession += '</div>';
 
-                addNewProfession += '<div class="form-group row">';
-                    addNewProfession += '<label for="profession_end" class="col-sm-2 col-form-label">End Date</label>';
-                    addNewProfession += '<div class="col-sm-9">';
+                    addNewProfession += '<div class="col-sm-4 form-group">';
+                        addNewProfession += '<label for="profession_end">End Date</label>';
                         addNewProfession += '<input type="date" name="profession_end[]" value="" placeholder="Profession End Date" class="form-control" id="profession_end">';
                     addNewProfession += '</div>';
                 addNewProfession += '</div>';
 
-                addNewProfession += '<div class="form-group row">';
-                    addNewProfession += '<label for="organization" class="col-sm-2 col-form-label">Organization</label>';
-                    addNewProfession += '<div class="col-sm-9">';
-                        addNewProfession += '<input type="text" name="organization[]" placeholder="Enter name of professional organization" value="" class="form-control organization">';
-                    addNewProfession += '</div>';
-                addNewProfession += '</div>';
-
-                addNewProfession += '<div class="form-group row">';
-                    addNewProfession += '<label for="designation" class="col-sm-2 col-form-label">Designation</label>';
-                    addNewProfession += '<div class="col-sm-9">';
+                addNewProfession += '<div class="row">';
+                    addNewProfession += '<div class="col-sm-5 form-group">';
+                        addNewProfession += '<label for="designation">Designation</label>';
                         addNewProfession += '<input type="text" name="designation[]" placeholder="Enter name of professional designation" value="" class="form-control designation">';
                     addNewProfession += '</div>';
-                addNewProfession += '</div>';
 
-                addNewProfession += '<div class="form-group row">';
-                    addNewProfession += '<label for="address" class="col-sm-2 col-form-label">Address</label>';
-                    addNewProfession += '<div class="col-sm-9">';
-                        addNewProfession += '<textarea name="address[]" class="form-control address" placeholder="Enter name of professional address" cols="30" rows="3"></textarea>';
+                    addNewProfession += '<div class="col-sm-5 form-group">';
+                        addNewProfession += '<label for="organization">Organization</label>';
+                        addNewProfession += '<input type="text" name="organization[]" placeholder="Enter name of professional organization" value="" class="form-control organization">';
                     addNewProfession += '</div>';
-                    addNewProfession += '<div class="col-sm-1 mt-1">';
-                        addNewProfession += '<button type="button" class="btn btn-danger removeBtn">X</button>';
+
+                    addNewProfession += '<div class="col-sm-2 form-group d-flex align-items-end">';
+                        addNewProfession += '<button type="button" class="btn btn-danger removeBtn w-100"><i class="fas fa-trash-alt"></i> Remove</button>';
                     addNewProfession += '</div>';
                 addNewProfession += '</div>';
-
 
             addNewProfession += '</div>';
           

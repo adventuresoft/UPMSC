@@ -145,6 +145,14 @@ class ApplicationController extends Controller
 
             $family = new FamilyInfo();
             $family->user_id = $user->id;
+            $family->marital_status = $request->marital_status ?? 1;
+            $family->spouse_name = $request->spouse_name;
+            $family->spouse_name_bn = $request->spouse_name_bn;
+            $family->spouse_nid = $request->spouse_nid;
+            $family->boys = $request->boys;
+            $family->girls = $request->girls;
+            $family->children_details = $request->children_details ?? [];
+
             $family->father_name = $request->father_name;
             $family->father_name_bn = $request->father_name_bn;
             $family->mother_name = $request->mother_name;
