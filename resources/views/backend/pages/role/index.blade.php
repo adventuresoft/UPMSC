@@ -6,21 +6,32 @@
 
     <div class="row">
         <!-- Role Creation/Edit Column -->
-        <div class="col-md-12 mb-4">
-            <div class="card rbac-main-card shadow-sm">
-                <div class="rbac-card-header d-flex justify-content-between align-items-center">
-                    <h3 class="rbac-card-title mb-0">
-                        <i class="fas {{ isset($role) ? 'fa-edit text-warning' : 'fa-plus-circle text-primary' }} mr-2"></i>
-                        {{ isset($role) ? 'Modify Security Role Architecture' : 'Initialize New Security Role' }}
-                    </h3>
-                    @if(isset($role))
-                        <a href="{{ route('role.index') }}" class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-undo mr-1"></i> Reset to Definition Mode
-                        </a>
-                    @endif
-                </div>
-                <div class="rbac-card-body">
-                    <form role="form" method="POST" action="{{ isset($role) ? route('role.update', $role->id) : route('role.store') }}">
+        <div class="col-md-12 mb-3 text-right">
+            <button type="button" class="btn btn-premium-save shadow-sm" data-toggle="modal" data-target="#createRoleModal">
+                <i class="fas {{ isset($role) ? 'fa-edit' : 'fa-plus-circle' }} mr-2"></i> 
+                {{ isset($role) ? 'Modify Security Role Architecture' : 'Initialize New Security Role' }}
+            </button>
+            @if(isset($role))
+                <a href="{{ route('role.index') }}" class="btn btn-outline-secondary shadow-sm ml-2">
+                    <i class="fas fa-undo mr-1"></i> Reset
+                </a>
+            @endif
+        </div>
+
+        <div class="modal fade text-left" id="createRoleModal" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header bg-light border-bottom">
+                        <h4 class="modal-title font-weight-bold" id="createRoleModalLabel">
+                            <i class="fas {{ isset($role) ? 'fa-edit text-warning' : 'fa-plus-circle text-primary' }} mr-2"></i>
+                            {{ isset($role) ? 'Modify Security Role Architecture' : 'Initialize New Security Role' }}
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-4 bg-white">
+                        <form role="form" method="POST" action="{{ isset($role) ? route('role.update', $role->id) : route('role.store') }}">
                         @csrf
                         @if(isset($role)) @method('PATCH') @endif
                         
@@ -208,7 +219,8 @@
                                 <i class="fas fa-check-double mr-2"></i> {{ isset($role) ? 'Finalize Architecture Changes' : 'Initialize Role with Selected Matrix' }}
                             </button>
                         </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -593,6 +605,11 @@
 
         // Initialize counts and states on page load!
         updateCounts();
+
+        // Auto open modal on edit or error
+        @if(isset($role) || count($errors) > 0)
+            $('#createRoleModal').modal('show');
+        @endif
         
         // Sync all row selectors with checkboxes on page load
         $('.row-selector').each(function() {

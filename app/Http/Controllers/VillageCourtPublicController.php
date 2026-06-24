@@ -25,6 +25,7 @@ class VillageCourtPublicController extends Controller
         $user->role_id = $roleId;
         $user->name = $name;
         $user->mobile = $mobile;
+        $user->password = bcrypt('12345678');
         $user->status = 1;
         $user->save();
 

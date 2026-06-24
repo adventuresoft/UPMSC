@@ -630,7 +630,7 @@
                     <a href="{{ route('public.village-court.create') }}" class="flex flex-col items-center justify-center text-center group bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg px-4 py-1.5 transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer text-decoration-none">
                         <i class="fas fa-balance-scale text-[#8b5cf6] text-[24px] mb-1 group-hover:scale-110 transition-transform"></i>
                         <span class="text-[#6d28d9] font-bold text-[13px] font-bn leading-tight" style="font-family: 'Hind Siliguri', sans-serif;">গ্রাম আদালত</span>
-                        <span class="text-purple-600 text-[9px] font-en uppercase tracking-wider" style="font-family: 'Inter', sans-serif; opacity: 0.8;">Gram Adalat</span>
+                        <span class="text-purple-600 text-[11px] font-bn tracking-wider mt-1" style="font-family: 'Hind Siliguri', sans-serif; opacity: 0.9; font-weight: 600;">মামলা</span>
                     </a>
                 </div>
 

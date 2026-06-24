@@ -94,7 +94,7 @@
                                     </td>
                                     {{-- Roles Column --}}
                                     <td>
-                                        @forelse($user->roles as $role)
+                                        @forelse($user->roles->unique('id') as $role)
                                             <span class="badge badge-info mr-1 mb-1"
                                                 style="font-size: 0.72rem; padding: 4px 8px; border-radius: 6px;">
                                                 <i class="fas fa-user-shield mr-1"></i>{{ $role->name }}
@@ -116,7 +116,7 @@
                                             <span class="text-muted small">No permissions</span>
                                         @else
                                             <div class="d-flex flex-wrap" style="gap: 4px;">
-                                                @foreach($permGroups as $group => $perms)
+                                                @foreach($permGroups->take(5) as $group => $perms)
                                                     <span class="badge border text-dark mr-1 mb-1"
                                                         style="font-size: 0.68rem; padding: 3px 7px; border-radius: 5px; background: #f1f5f9;"
                                                         title="{{ $perms->pluck('name')->implode(', ') }}">
@@ -127,7 +127,59 @@
                                                         </span>
                                                     </span>
                                                 @endforeach
+                                                @if($permGroups->count() > 5)
+                                                    <span class="badge border text-primary mr-1 mb-1"
+                                                        style="font-size: 0.68rem; padding: 3px 7px; border-radius: 5px; background: #e2e8f0; cursor: pointer;"
+                                                        data-toggle="modal" data-target="#permissionsModal{{ $user->id }}">
+                                                        +{{ $permGroups->count() - 5 }} More
+                                                    </span>
+                                                @endif
                                             </div>
+
+                                            @if($permGroups->count() > 5)
+                                            <div class="modal fade text-left" id="permissionsModal{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="permissionsModalLabel{{ $user->id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-light">
+                                                            <h5 class="modal-title" id="permissionsModalLabel{{ $user->id }}">
+                                                                <i class="fas fa-shield-alt text-primary mr-2"></i> Permissions for {{ $user->name }}
+                                                            </h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                            @foreach($permGroups as $group => $perms)
+                                                                <div class="col-md-4 mb-3">
+                                                                    <div class="card shadow-sm h-100 border p-2 bg-white">
+                                                                        <h6 class="font-weight-bold text-dark border-bottom pb-2 mb-2" style="font-size: 0.85rem;">
+                                                                            {{ ucfirst($group) }} 
+                                                                            <span class="badge badge-primary float-right">{{ $perms->count() }}</span>
+                                                                        </h6>
+                                                                        <div class="d-flex flex-wrap" style="gap: 4px;">
+                                                                            @foreach($perms as $p)
+                                                                                @php
+                                                                                    $pName = explode('.', $p->name);
+                                                                                    $pLabel = count($pName) > 1 ? $pName[1] : $p->name;
+                                                                                @endphp
+                                                                                <span class="badge badge-light border text-muted" style="font-size: 0.65rem;">
+                                                                                    {{ ucfirst(str_replace('_', ' ', $pLabel)) }}
+                                                                                </span>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer border-top-0 pt-0">
+                                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
                                         @endif
                                     </td>
                                     <td class="text-center">

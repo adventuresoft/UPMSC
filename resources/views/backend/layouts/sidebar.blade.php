@@ -145,7 +145,7 @@
           <a href="#" class="nav-link">
             <i class="nav-icon fas fa-file-alt"></i>
             <p>
-              à¦†à¦¬à§‡à¦¦à¦¨à¦¸à¦®à§‚à¦¹ (Applications)
+              আবেদনসমূহ (Applications)
               <i class="right fas fa-angle-left"></i>
             </p>
           </a>
@@ -171,7 +171,7 @@
             <li class="nav-item">
               <a href="{{ route('people.applications.vehicle.create') }}" class="nav-link {{ request()->routeIs('people.applications.vehicle.create') ? 'active' : '' }}">
                 <i class="far fa-circle nav-icon"></i>
-                <p>à¦¯à¦¾à¦¨à¦¬à¦¾à¦¹à¦¨ à¦†à¦¬à§‡à¦¦à¦¨</p>
+                <p>যানবাহন আবেদন</p>
               </a>
             </li>
             <li class="nav-item">
@@ -1526,31 +1526,31 @@
         <li class="nav-item">
           <a href="{{ route('village-court.create') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtCreate') active @endif">
             <i class="far fa-circle nav-icon"></i>
-            <p>Create Case / à¦®à¦¾à¦®à¦²à¦¾ à¦¤à§ˆà¦°à¦¿</p>
+            <p>Create Case / মামলা তৈরি</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="{{ route('village-court.index') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtList') active @endif">
             <i class="far fa-circle nav-icon"></i>
-            <p>Case List / à¦®à¦¾à¦®à¦²à¦¾à¦° à¦¤à¦¾à¦²à¦¿à¦•à¦¾</p>
+            <p>Case List / মামলার তালিকা</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="{{ route('village-court.court_formed_list') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtAdalotGothon') active @endif">
             <i class="far fa-circle nav-icon"></i>
-            <p>Court Formed List / à¦†à¦¦à¦¾à¦²à¦¤ à¦—à¦ à¦¨ à¦¤à¦¾à¦²à¦¿à¦•à¦¾</p>
+            <p>Court Formed List / আদালত গঠন তালিকা</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="{{ route('village-court.hearing_list') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtShunani') active @endif">
             <i class="far fa-circle nav-icon"></i>
-            <p>Hearing List / à¦¶à§à¦¨à¦¾à¦¨à§€à¦° à¦¤à¦¾à¦²à¦¿à¦•à¦¾</p>
+            <p>Hearing List / শুনানির তালিকা</p>
           </a>
         </li>
         <li class="nav-item">
           <a href="{{ route('village-court.verdict_list') }}" class="nav-link @if(isset($subMenu) && $subMenu == 'VillageCourtRayGhoshona') active @endif">
             <i class="far fa-circle nav-icon"></i>
-            <p>Verdict List / à¦°à¦¾à§Ÿ à¦˜à§‹à¦·à¦£à¦¾à¦° à¦¤à¦¾à¦²à¦¿à¦•à¦¾</p>
+            <p>Verdict List / রায় ঘোষণার তালিকা</p>
           </a>
         </li>
       </ul>
