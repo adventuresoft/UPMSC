@@ -57,7 +57,7 @@ class PropertyInfoController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
-        foreach (['cash_amount', 'house_price', 'flat_price', 'diamond_price', 'gold_price', 'silver_price'] as $field) {
+        foreach (['cash_amount', 'house_price', 'land_price', 'flat_price', 'diamond_price', 'gold_price', 'silver_price'] as $field) {
             if ($request->has($field) && is_string($request->$field)) {
                 $inputs[$field] = str_replace(',', '', $request->$field);
             }
@@ -116,7 +116,13 @@ class PropertyInfoController extends Controller
                 'silver_type' => 'nullable',
                 'silver_quantity' => 'nullable',
                 'silver_price' => 'nullable',
-                'silver_ownership_status' => 'nullable'
+                'silver_ownership_status' => 'nullable',
+                'land_price' => 'nullable',
+                'house_information' => 'nullable',
+                'land_information' => 'nullable',
+                'diamond_information' => 'nullable',
+                'gold_information' => 'nullable',
+                'silver_information' => 'nullable'
             ]);
 
             if ($validate->fails()) {
@@ -156,8 +162,7 @@ class PropertyInfoController extends Controller
                     'land_quantity' => $request->land_quantity,
                     'land_type' => $request->land_type,
                     'land_ownership_status' => $request->land_ownership_status,
-                    'land_type' => $request->land_type,
-                    'land_ownership_status' => $request->land_ownership_status,
+                    'land_price' => $request->land_price ?? 0.00,
                     'flat' => $request->flat ?? 0,
                     'flat_district_id' => $request->flat_district_id,
                     'flat_thana_id' => $request->flat_thana_id,
@@ -183,7 +188,12 @@ class PropertyInfoController extends Controller
                     'silver_type' => $request->silver_type,
                     'silver_quantity' => $request->silver_quantity,
                     'silver_price' => $request->silver_price ?? 0.00,
-                    'silver_ownership_status' => $request->silver_ownership_status
+                    'silver_ownership_status' => $request->silver_ownership_status,
+                    'house_information' => $request->house_information,
+                    'land_information' => $request->land_information,
+                    'diamond_information' => $request->diamond_information,
+                    'gold_information' => $request->gold_information,
+                    'silver_information' => $request->silver_information
                 ]);
 
 
