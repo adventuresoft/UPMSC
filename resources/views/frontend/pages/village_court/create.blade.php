@@ -141,11 +141,11 @@
                     </select>
                 </div>
                 <div>
-                    <label class="form-label">মামলা সংঘটনের তারিখ <span class="text-red-500">*</span></label>
+                    <label class="form-label">ঘটনা সংঘটনের তারিখ <span class="text-red-500">*</span></label>
                     <input type="date" name="case_date" class="form-input" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d', strtotime('-30 days')) }}" max="{{ date('Y-m-d') }}">
                 </div>
                 <div>
-                    <label class="form-label">মামলা সংঘটনের সময় <span class="text-red-500">*</span></label>
+                    <label class="form-label">ঘটনা সংঘটনের সময় <span class="text-red-500">*</span></label>
                     <input type="time" name="case_time" class="form-input" required value="{{ now()->timezone('Asia/Dhaka')->format('H:i') }}">
                 </div>
             </div>
@@ -210,8 +210,6 @@
             <!-- Submit Section -->
             <div class="mt-8 text-center bg-gray-50 p-4 rounded-lg border border-gray-100">
                 <div class="flex flex-col md:flex-row items-center justify-center gap-3 mb-4">
-                    <a href="{{ url('/') }}" class="w-full md:w-24 text-center py-2 px-3 bg-gray-500 text-white font-bold rounded hover:bg-gray-600 transition text-[11px] shadow-sm uppercase">বাতিল</a>
-                    <button type="reset" class="w-full md:w-24 py-2 px-3 bg-red-500 text-white font-bold rounded hover:bg-red-600 transition text-[11px] shadow-sm uppercase">পুনরায় শুরু</button>
                     <button type="submit" class="w-full md:w-40 py-2 px-5 bg-purple-700 text-white font-bold rounded hover:bg-purple-800 transition text-[11px] shadow-md transform active:scale-95 uppercase">মামলা দায়ের করুন</button>
                 </div>
                 
@@ -226,12 +224,6 @@
       </div>
     </main>
 
-    <footer class="bg-gray-800 py-8 px-4 text-white">
-      <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm">
-        <p class="mb-4 md:mb-0">© 2024 All rights reserved by <span class="font-bold text-green-400">UPMS</span></p>
-        <p>Design & Maintained by <a href="https://adventuresoft.com.bd" class="text-green-400 hover:underline">Adventure Soft</a></p>
-      </div>
-    </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
@@ -349,7 +341,7 @@
                 // If current selected date is before new min date, reset it
                 if (dateInput.val() && dateInput.val() < minDate) {
                     dateInput.val('');
-                    alert('নির্বাচিত মামলার ধরনের জন্য মামলা সংঘটনের তারিখ ' + minDate + ' এর পূর্বে হতে পারবে না।');
+                    alert('নির্বাচিত মামলার ধরনের জন্য ঘটনা সংঘটনের তারিখ ' + minDate + ' এর পূর্বে হতে পারবে না।');
                 }
             }
 

@@ -616,8 +616,6 @@
             <div class="mt-8 text-center bg-gray-50 p-4 rounded-lg border border-gray-100">
                 <div class="flex flex-col md:flex-row items-center justify-center gap-3 mb-4">
                     <input type="hidden" name="union_id" value="3503">
-                    <a href="{{ url('/') }}" class="w-full md:w-24 text-center py-2 px-3 bg-gray-500 text-white font-bold rounded hover:bg-gray-600 transition text-[11px] shadow-sm uppercase">বাতিল</a>
-                    <button type="reset" class="w-full md:w-24 py-2 px-3 bg-red-500 text-white font-bold rounded hover:bg-red-600 transition text-[11px] shadow-sm uppercase">পুনরায় শুরু</button>
                     <button type="submit" class="w-full md:w-40 py-2 px-5 bg-[#046307] text-white font-bold rounded hover:bg-[#0a8a0e] transition text-[11px] shadow-md transform active:scale-95 uppercase">আবেদন জমা দিন</button>
                 </div>
                 
@@ -632,12 +630,6 @@
       </div>
     </main>
 
-    <footer class="bg-gray-800 py-8 px-4 text-white">
-      <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm">
-        <p class="mb-4 md:mb-0">© 2024 All rights reserved by <span class="font-bold text-green-400">UPMS</span></p>
-        <p>Design & Maintained by <a href="https://adventuresoft.com.bd" class="text-green-400 hover:underline">Adventure Soft</a></p>
-      </div>
-    </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
