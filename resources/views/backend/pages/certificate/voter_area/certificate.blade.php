@@ -205,18 +205,18 @@
                             This is to certify that 
                             {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Ms.' }}
                             <strong>{{ $certificate->applicant_name ?? $certificate->user->name ?? '' }}</strong>,
-                            ID No: <strong>{{ $certificate->user->people->approved_id ?? '' }}</strong>,
+                            ID No: {{ $certificate->user->people->approved_id ?? '' }},
                             @php 
                                 $nid = $certificate->applicant_nid ?? $certificate->user->nid ?? $certificate->user->people->nid ?? '';
                             @endphp
                             @if($nid && $nid != '1111111114')
                                 National ID No: <strong>{{ $nid }}</strong>,
                             @endif
-                            Father/Husband: <strong>{{ $certificate->user->familyInfo->husband_name ?? $certificate->user->familyInfo->father_name ?? '' }}</strong>,
-                            Village: <strong>{{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }}</strong>,
-                            Post Office: <strong>{{ $certificate->user->addressInfo->permanentPostOffice->en_name ?? '' }}</strong>,
-                            Upazila: <strong>{{ $certificate->user->addressInfo->permanentThana->en_name ?? '' }}</strong>,
-                            District: <strong>{{ $certificate->user->addressInfo->permanentDistrict->en_name ?? '' }}</strong>.
+                            Father/Husband: {{ $certificate->user->familyInfo->husband_name ?? $certificate->user->familyInfo->father_name ?? '' }},
+                            Village: {{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }},
+                            Post Office: {{ $certificate->user->addressInfo->permanentPostOffice->en_name ?? '' }},
+                            Upazila: {{ $certificate->user->addressInfo->permanentThana->en_name ?? '' }},
+                            District: {{ $certificate->user->addressInfo->permanentDistrict->en_name ?? '' }}.
                         </p>
                         @php
                             $currentVoterAreaCore = getCoreUnionName($certificate->current_voter_area_name);
@@ -228,10 +228,10 @@
                             }
                         @endphp
                         <p style="margin-top: 15px;">
-                            He/She is currently enlisted as a voter in Ward No. <strong>{{ $currentVoterAreaNo }}</strong> of <strong>{{ $currentVoterAreaCore }}</strong> Union Parishad, Upazila: <strong>{{ $certificate->current_upazila_thana }}</strong>, District: <strong>{{ $certificate->current_district }}</strong>. He/She wishes to change his/her voter area and intends to become a voter in Ward No. <strong>{{ $certificate->transfer_ward_no }}</strong> of this Union.
+                            He/She is currently enlisted as a voter in Ward No. {{ $currentVoterAreaNo }} of {{ $currentVoterAreaCore }} Union Parishad, Upazila: {{ $certificate->current_upazila_thana }}, District: {{ $certificate->current_district }}. He/She wishes to change his/her voter area and intends to become a voter in Ward No. {{ $certificate->transfer_ward_no }} of this Union.
                         </p>
                         <p style="margin-top: 15px;">
-                            In this regard, I strongly recommend including him/her in the voter list of Ward No. <strong>{{ $certificate->transfer_ward_no }}</strong> of this Union.
+                            In this regard, I strongly recommend including him/her in the voter list of Ward No. {{ $certificate->transfer_ward_no }} of this Union.
                         </p>
                         <p style="margin-top: 15px; margin-left:40px;">
                             I wish him/her all the best and every success in life.

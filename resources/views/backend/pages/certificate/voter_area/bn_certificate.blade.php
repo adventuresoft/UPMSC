@@ -184,11 +184,11 @@
                             @if($nid && $nid != '1111111114')
                                 জাতীয় পরিচয়পত্র নং- <strong>{{ bnValue($nid) }}</strong>,
                             @endif
-                            পিতা- <strong>{{ $certificate->user->familyInfo->husband_name_bn ?? $certificate->user->familyInfo->father_name_bn ?? '' }}</strong>,
-                            গ্রাম- <strong>{{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }}</strong>,
-                            ডাকঘর- <strong>{{ $certificate->user->addressInfo->permanentPostOffice->bn_name ?? '' }}</strong>,
-                            উপজেলা- <strong>{{ $certificate->user->addressInfo->permanentThana->bn_name ?? '' }}</strong>,
-                            জেলা- <strong>{{ $certificate->user->addressInfo->permanentDistrict->bn_name ?? '' }}</strong>।
+                            পিতা- {{ $certificate->user->familyInfo->husband_name_bn ?? $certificate->user->familyInfo->father_name_bn ?? '' }},
+                            গ্রাম- {{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }},
+                            ডাকঘর- {{ $certificate->user->addressInfo->permanentPostOffice->bn_name ?? '' }},
+                            উপজেলা- {{ $certificate->user->addressInfo->permanentThana->bn_name ?? '' }},
+                            জেলা- {{ $certificate->user->addressInfo->permanentDistrict->bn_name ?? '' }}।
                             @php
                                 $currentVoterAreaCore = getCoreUnionName($certificate->current_voter_area_name);
                                 $currentVoterAreaNo = $certificate->current_voter_area_no;
@@ -198,8 +198,8 @@
                                     }
                                 }
                             @endphp
-                            তিনি ভোটার হিসেবে <strong>{{ $certificate->current_district }}</strong> জেলার <strong>{{ $certificate->current_upazila_thana }}</strong> উপজেলাধীন <strong>{{ $currentVoterAreaCore }}</strong> ইউনিয়ন পরিষদের <strong>{{ bnValue($currentVoterAreaNo) }}</strong> নং ওয়ার্ডের তালিকাভুক্ত আছেন। তিনি উক্ত এলাকা পরিবর্তন করে অত্র ইউনিয়নের <strong>{{ bnValue($certificate->transfer_ward_no) }}</strong> নং ওয়ার্ডের ভোটার হতে ইচ্ছুক।
-                            এপ্রেক্ষিতে অত্র ইউনিয়নের <strong>{{ bnValue($certificate->transfer_ward_no) }}</strong> নং ওয়ার্ডের ভোটার তালিকায় তাকে অন্তর্ভুক্ত করার সুপারিশ করিতেছি।
+                            তিনি ভোটার হিসেবে {{ $certificate->current_district }} জেলার {{ $certificate->current_upazila_thana }} উপজেলাধীন {{ $currentVoterAreaCore }} ইউনিয়ন পরিষদের {{ bnValue($currentVoterAreaNo) }} নং ওয়ার্ডে তালিকাভুক্ত আছেন। তিনি উক্ত এলাকা পরিবর্তন করে অত্র ইউনিয়নের {{ bnValue($certificate->transfer_ward_no) }} নং ওয়ার্ডের ভোটার হতে ইচ্ছুক।
+                            এপ্রেক্ষিতে অত্র ইউনিয়নের {{ bnValue($certificate->transfer_ward_no) }} নং ওয়ার্ডের ভোটার তালিকায় তাকে অন্তর্ভুক্ত করার সুপারিশ করিতেছি।
                         </p>
                         <p style="margin-top: 15px; margin-left:40px;">
                             আমি তার সর্বাঙ্গীন কল্যাণ কামনা করি।
