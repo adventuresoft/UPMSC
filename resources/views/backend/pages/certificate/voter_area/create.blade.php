@@ -266,8 +266,8 @@
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
-
+@endsection
+@push('script')
     <script>
         $(document).ready(function() {
             $('.select2').select2();
@@ -447,11 +447,7 @@
             });
         });
     </script>
-@endsection
-@push('script')
-
     <script>
-
           $(document).ready(function() {
              
              $("#user_id_select").select2({
