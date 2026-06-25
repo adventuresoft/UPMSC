@@ -3,10 +3,10 @@
 @push('style')
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;700&display=swap" rel="stylesheet">
 <style>
-    @font-face {
+    /* @font-face {
         font-family: 'Nikosh';
         src: url('https://cdn.jsdelivr.net/gh/atulkumar-ak/Nikosh@master/Nikosh.ttf') format('truetype');
-    }
+    } */
 
     .certificate-canvas {
         background: #f4f6f9;
@@ -336,9 +336,9 @@
                 <div class="dot-line-container"></div>
             </div>
             <div style="margin-left: 150px; margin-top: 10px;">
-                <div class="flex-row">নাম :<div class="dot-line-container"><span class="data-span">{{ $certificate->identifier_name }}</span></div></div>
-                <div class="flex-row">জাতীয় পরিচয়পত্র নম্বর :<div class="dot-line-container"><span class="data-span">{{ bnValue($certificate->identifier_nid) }}</span></div></div>
-                <div class="flex-row">ঠিকানা :<div class="dot-line-container"><span class="data-span">{{ $certificate->identifier_address }}</span></div></div>
+                <div class="flex-row"><span>নাম :</span><div class="dot-line-container"><span class="data-span">{{ $certificate->identifier_name }}</span></div></div>
+                <div class="flex-row"><span>জাতীয় পরিচয়পত্র নম্বর :</span><div class="dot-line-container"><span class="data-span">{{ bnValue($certificate->identifier_nid) }}</span></div></div>
+                <div class="flex-row"><span>ঠিকানা :</span><div class="dot-line-container"><span class="data-span">{{ $certificate->identifier_address }}</span></div></div>
             </div>
         </div>
 
@@ -348,16 +348,16 @@
 
         <div style="line-height: 2.5; text-align: justify; font-size: 17px; margin-bottom: 40px;">
             <div class="flex-row">
-                দাখিলকৃত দলিলাদি পরীক্ষান্তে
+                <span>দাখিলকৃত দলিলাদি পরীক্ষান্তে</span>
                 <div class="dot-line-container" style="min-width: 250px;">
                 </div>
-                ভোটার এলাকার জন্য প্রণীত ভোটার তালিকা হইতে নাম
+                <span>ভোটার এলাকার জন্য প্রণীত ভোটার তালিকা হইতে নাম</span>
             </div>
             <div class="flex-row">
-                কর্তন এবং
+                <span>কর্তন এবং</span>
                 <div class="dot-line-container" style="max-width: 350px;">
                 </div>
-                ভোটার এলাকায় নাম অন্তর্ভুক্ত করা হইল।
+                <span>ভোটার এলাকায় নাম অন্তর্ভুক্ত করা হইল।</span>
             </div>
         </div>
 
