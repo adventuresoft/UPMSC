@@ -123,7 +123,7 @@
         <div class="container-fluid">
             <div class="row mb-3">
                 <div class="col-12 text-left">
-                    <h1 class="m-0 font-weight-bold" style="color: #1a237e; font-size: 1.75rem; letter-spacing: 0.5px;">
+                    <h1 class="m-0" style="color: #1a237e; font-size: 1.45rem; font-weight: 500; letter-spacing: 0.3px;">
                         Welcome to <span style="color: #046307;">Certificate and License Management Solution</span>
                     </h1>
                     
