@@ -175,29 +175,34 @@
                     <div class="col-12" style="font-size:18px; line-height:1.9; text-align:justify;">
                         <p>
                             <span style="margin-left:40px;"></span>
-                            এই মর্মে প্রত্যয়ন করা যাচ্ছে যে,
+                            এই মর্মে প্রত্যয়ন করা যাইতেছে যে,
                             {{ $certificate->user->people->gender == 1 ? 'জনাব' : 'জনাবা' }}
                             <strong>{{ $certificate->applicant_name ?? $certificate->user->people->bn_name ?? '' }}</strong>,
-                            আইডি নং <strong>{{ bnValue($certificate->user->people->approved_id ?? '') }}</strong>,
-                            পিতাঃ {{ $certificate->user->familyInfo->father_name_bn ?? '' }},
-                            মাতাঃ {{ $certificate->user->familyInfo->mother_name_bn ?? '' }},
                             @php 
                                 $nid = $certificate->applicant_nid ?? $certificate->user->nid ?? $certificate->user->people->nid ?? '';
-                                $bc = $certificate->user->birth_certificate ?? $certificate->user->people->birth_certificate ?? '';
                             @endphp
                             @if($nid && $nid != '1111111114')
-                                এনআইডিঃ {{ bnValue($nid) }},
-                            @elseif($bc)
-                                জন্ম নিবন্ধন নং- {{ bnValue($bc) }},
+                                জাতীয় পরিচয়পত্র নং- <strong>{{ bnValue($nid) }}</strong>,
                             @endif
-                            জন্ম তারিখ: {{ $certificate->applicant_dob ? bnValue(date('d/m/Y', strtotime($certificate->applicant_dob))) : ($certificate->user->people->date_of_birth ? bnValue(date('d/m/Y', strtotime($certificate->user->people->date_of_birth))) : '') }}।
-                        </p>
-                        <p style="margin-top: 15px;">
-                            তিনি ভোটার হিসেবে জেলা: <strong>{{ $certificate->current_district }}</strong>, উপজেলা: <strong>{{ $certificate->current_upazila_thana }}</strong>, ইউনিয়ন: <strong>{{ $certificate->current_voter_area_name }}</strong> এর <strong>{{ bnValue($certificate->current_voter_area_no) }}</strong> নং ওয়ার্ডে তালিকাভুক্ত আছেন।
-                            তিনি উক্ত এলাকা পরিবর্তন করে অত্র ইউনিয়নের <strong>{{ bnValue($certificate->transfer_ward_no) }}</strong> নং ওয়ার্ডের ভোটার হতে ইচ্ছুক। এই প্রেক্ষিতে অত্র ইউনিয়নের <strong>{{ bnValue($certificate->transfer_ward_no) }}</strong> নং ওয়ার্ডে ভোটার তালিকায় অন্তর্ভুক্ত করার সুপারিশ করছি।
+                            পিতা- <strong>{{ $certificate->user->familyInfo->husband_name_bn ?? $certificate->user->familyInfo->father_name_bn ?? '' }}</strong>,
+                            গ্রাম- <strong>{{ $certificate->user->addressInfo->permanentVillage->bn_name ?? '' }}</strong>,
+                            ডাকঘর- <strong>{{ $certificate->user->addressInfo->permanentPostOffice->bn_name ?? '' }}</strong>,
+                            উপজেলা- <strong>{{ $certificate->user->addressInfo->permanentThana->bn_name ?? '' }}</strong>,
+                            জেলা- <strong>{{ $certificate->user->addressInfo->permanentDistrict->bn_name ?? '' }}</strong>।
+                            @php
+                                $currentVoterAreaCore = getCoreUnionName($certificate->current_voter_area_name);
+                                $currentVoterAreaNo = $certificate->current_voter_area_no;
+                                if (empty($currentVoterAreaNo)) {
+                                    if (preg_match('/(\d+|[০-৯]+)\s*নং\s*ওয়ার্ড/u', normalizeBanglaVowels($certificate->current_voter_area_name), $matches)) {
+                                        $currentVoterAreaNo = $matches[1];
+                                    }
+                                }
+                            @endphp
+                            তিনি ভোটার হিসেবে <strong>{{ $certificate->current_district }}</strong> জেলার <strong>{{ $certificate->current_upazila_thana }}</strong> উপজেলাধীন <strong>{{ $currentVoterAreaCore }}</strong> ইউনিয়ন পরিষদের <strong>{{ bnValue($currentVoterAreaNo) }}</strong> নং ওয়ার্ডের তালিকাভুক্ত আছেন। তিনি উক্ত এলাকা পরিবর্তন করে অত্র ইউনিয়নের <strong>{{ bnValue($certificate->transfer_ward_no) }}</strong> নং ওয়ার্ডের ভোটার হতে ইচ্ছুক।
+                            এপ্রেক্ষিতে অত্র ইউনিয়নের <strong>{{ bnValue($certificate->transfer_ward_no) }}</strong> নং ওয়ার্ডের ভোটার তালিকায় তাকে অন্তর্ভুক্ত করার সুপারিশ করিতেছি।
                         </p>
                         <p style="margin-top: 15px; margin-left:40px;">
-                            আমি তার সার্বিক কল্যাণ ও মঙ্গলময় উন্নত জীবন কামনা করি।
+                            আমি তার সর্বাঙ্গীন কল্যাণ কামনা করি।
                         </p>
                     </div>
                 </div>

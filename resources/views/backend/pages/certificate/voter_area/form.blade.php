@@ -225,14 +225,23 @@
                     <span class="data-span">{{ $certificate->current_voter_no }}</span>
                 </div>
             </div>
+            @php
+                $currentVoterAreaCore = getCoreUnionName($certificate->current_voter_area_name);
+                $currentVoterAreaNo = $certificate->current_voter_area_no;
+                if (empty($currentVoterAreaNo)) {
+                    if (preg_match('/(\d+|[০-৯]+)\s*নং\s*ওয়ার্ড/u', normalizeBanglaVowels($certificate->current_voter_area_name), $matches)) {
+                        $currentVoterAreaNo = $matches[1];
+                    }
+                }
+            @endphp
             <div class="flex-row">
                 <span>Voter Area Name :</span>
                 <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->current_voter_area_name }}</span>
+                    <span class="data-span">{{ $currentVoterAreaCore }}</span>
                 </div>
                 <span style="margin-left: 15px;">Ward No. :</span>
                 <div class="dot-line-container" style="max-width: 150px;">
-                    <span class="data-span">{{ $certificate->current_voter_area_no }}</span>
+                    <span class="data-span">{{ $currentVoterAreaNo }}</span>
                 </div>
             </div>
             <div class="flex-row">

@@ -154,3 +154,58 @@ if (!function_exists('get_chairman_name_bn')) {
         return $chairmanName;
     }
 }
+
+if (!function_exists('normalizeBanglaVowels')) {
+    function normalizeBanglaVowels($str) {
+        if (empty($str)) {
+            return $str;
+        }
+        $split_o = hex2bin('e0a787e0a6be'); // e-kar + aa-kar
+        $unified_o = hex2bin('e0a78b');     // o-kar
+        $split_au = hex2bin('e0a787e0a797'); // e-kar + au-kar sign
+        $unified_au = hex2bin('e0a78c');    // au-kar
+        
+        $str = str_replace($split_o, $unified_o, $str);
+        $str = str_replace($split_au, $unified_au, $str);
+        return $str;
+    }
+}
+
+if (!function_exists('toSplitBanglaVowels')) {
+    function toSplitBanglaVowels($str) {
+        if (empty($str)) {
+            return $str;
+        }
+        $split_o = hex2bin('e0a787e0a6be'); // e-kar + aa-kar
+        $unified_o = hex2bin('e0a78b');     // o-kar
+        $split_au = hex2bin('e0a787e0a797'); // e-kar + au-kar sign
+        $unified_au = hex2bin('e0a78c');    // au-kar
+        
+        $str = str_replace($unified_o, $split_o, $str);
+        $str = str_replace($unified_au, $split_au, $str);
+        return $str;
+    }
+}
+
+if (!function_exists('getBanglaVowelVariations')) {
+    function getBanglaVowelVariations($str) {
+        if (empty($str)) {
+            return [];
+        }
+        $v1 = normalizeBanglaVowels($str);
+        $v2 = toSplitBanglaVowels($str);
+        return array_unique([$str, $v1, $v2]);
+    }
+}
+
+if (!function_exists('getCoreUnionName')) {
+    function getCoreUnionName($unionName) {
+        $unionName = normalizeBanglaVowels($unionName);
+        $unionName = preg_replace('/^(\d+|[০-৯]+)\s*নং\s*/u', '', $unionName);
+        $unionName = preg_replace('/\s*ইউনিয়ন\s*পরিষদ\s*$/u', '', $unionName);
+        $unionName = preg_replace('/\s*ইউনিয়ন\s*$/u', '', $unionName);
+        return trim($unionName);
+    }
+}
+
+

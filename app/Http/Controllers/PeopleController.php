@@ -95,13 +95,13 @@ class PeopleController extends Controller
 
     public function searchPeople(Request $request)
     {
-        $q = trim($request->q);
+        $q = normalizeBanglaVowels(trim($request->q));
         if (empty($q)) {
             return response()->json(['results' => []]);
         }
 
         $users = User::with(['people', 'addressInfo' => function($query) {
-            $query->with(['permanentVillage', 'permanentWard', 'permanentThana', 'permanentDistrict', 'permanentPostOffice']);
+            $query->with(['permanentVillage', 'permanentWard', 'permanentThana', 'permanentDistrict', 'permanentPostOffice', 'permanentUnion']);
         }])
         ->whereNotIn('role_id', [1, 2, 3, 4]);
 
@@ -139,9 +139,11 @@ class PeopleController extends Controller
                 'nid' => $nid,
                 'dob' => $people->date_of_birth ?? '',
                 'voter_area' => $areaName,
+                'union' => $address->permanentUnion->bn_name ?? '',
                 'thana' => $address->permanentThana->bn_name ?? '',
                 'district' => $address->permanentDistrict->bn_name ?? '',
-                'address' => $fullAddress
+                'address' => $fullAddress,
+                'ward_no' => $address->permanentWard->bn_ward_no ?? ''
             ];
         }
 
