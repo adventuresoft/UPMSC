@@ -491,6 +491,41 @@ width:100%!important;
                 localStorage.setItem(storageKey, osInstance.scroll().position.y);
             }
         });
+
+        // Auto-close mobile sidebar on page scroll or tapping outside
+        var closeMobileSidebar = function() {
+            if (window.innerWidth <= 992) {
+                if ($('body').hasClass('sidebar-open') || !$('body').hasClass('sidebar-collapse')) {
+                    if (typeof $('[data-widget="pushmenu"]').PushMenu === 'function') {
+                        $('[data-widget="pushmenu"]').PushMenu('collapse');
+                    }
+                    $('body').removeClass('sidebar-open').addClass('sidebar-collapse');
+                    $('#sidebar-overlay').remove();
+                }
+            }
+        };
+
+        // Capture-phase scroll listener catches scrolls on any container
+        window.addEventListener('scroll', function(e) {
+            if (window.innerWidth <= 992 && ($('body').hasClass('sidebar-open') || !$('body').hasClass('sidebar-collapse'))) {
+                if ($(e.target).closest('.main-sidebar').length > 0 || (e.target.classList && e.target.classList.contains('main-sidebar'))) {
+                    return;
+                }
+                closeMobileSidebar();
+            }
+        }, true);
+
+        // Capture-phase touch and click listeners for outside taps
+        var handleOutsideTap = function(e) {
+            if (window.innerWidth <= 992 && ($('body').hasClass('sidebar-open') || !$('body').hasClass('sidebar-collapse'))) {
+                if ($(e.target).closest('.main-sidebar, [data-widget="pushmenu"]').length === 0) {
+                    closeMobileSidebar();
+                }
+            }
+        };
+
+        document.addEventListener('touchstart', handleOutsideTap, true);
+        document.addEventListener('click', handleOutsideTap, true);
     });
 </script>
 

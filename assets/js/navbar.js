@@ -5,11 +5,41 @@
   const dropdownBtn = document.getElementById("dropdownBtn");
   const dropdownMenu = document.getElementById("dropdownMenu");
 
-  menuBtn.addEventListener("click", () => {
-    mobileMenu.classList.toggle("-translate-x-full");
-    hamburgerIcon.classList.toggle("hidden");
-    closeIcon.classList.toggle("hidden");
-  });
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("-translate-x-full");
+      if (hamburgerIcon) hamburgerIcon.classList.toggle("hidden");
+      if (closeIcon) closeIcon.classList.toggle("hidden");
+    });
+
+    const closeFrontendMobileMenu = () => {
+      if (!mobileMenu.classList.contains("-translate-x-full")) {
+        mobileMenu.classList.add("-translate-x-full");
+        if (hamburgerIcon) hamburgerIcon.classList.remove("hidden");
+        if (closeIcon) closeIcon.classList.add("hidden");
+      }
+    };
+
+    window.addEventListener("scroll", (e) => {
+      if (!mobileMenu.classList.contains("-translate-x-full")) {
+        if (e.target && (mobileMenu.contains(e.target) || e.target === mobileMenu)) {
+          return;
+        }
+        closeFrontendMobileMenu();
+      }
+    }, true);
+
+    const handleFrontendOutsideTap = (e) => {
+      if (!mobileMenu.classList.contains("-translate-x-full")) {
+        if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+          closeFrontendMobileMenu();
+        }
+      }
+    };
+
+    document.addEventListener("touchstart", handleFrontendOutsideTap, true);
+    document.addEventListener("click", handleFrontendOutsideTap, true);
+  }
 
   dropdownBtn.addEventListener("click", () => {
     dropdownMenu.classList.toggle("hidden");
