@@ -98,7 +98,7 @@
     <!-- Mobile Navbar Menu -->
     <nav class="md:hidden relative z-[70]">
       <div id="mobile-menu"
-        class="fixed top-[60px] left-0 h-[calc(100vh-60px)] w-72 bg-slate-50 text-gray-900 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl border-r border-gray-200 overflow-y-auto z-[70]">
+        class="fixed top-0 left-0 h-full w-72 bg-slate-50 text-gray-900 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl border-r border-gray-200 overflow-y-auto z-[70]">
         <div class="p-5 flex flex-col space-y-5">
           
           <!-- Navigation Links -->
