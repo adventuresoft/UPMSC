@@ -5,7 +5,7 @@
 <style>
     .dashboard-card-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(4, 1fr);
         gap: 16px;
         width: 100%;
     }
@@ -101,6 +101,13 @@
         color: var(--card-accent, #046307);
     }
 
+    @media (max-width: 991.98px) {
+        .dashboard-card-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+    }
+
     @media (max-width: 575.98px) {
         .dashboard-card-grid {
             grid-template-columns: 1fr;
@@ -112,14 +119,18 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-    <div class="content-header">
+    <div class="content-header pt-4 pb-3">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Welcome to Dashboard...</h1>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+            <div class="row mb-3">
+                <div class="col-12 text-left">
+                    <h1 class="m-0 font-weight-bold" style="color: #1a237e; font-size: 1.75rem; letter-spacing: 0.5px;">
+                        Welcome to <span style="color: #046307;">Certificate and License Management Solution</span>
+                    </h1>
+                    
+                    <hr style="width: 80px; border-top: 3px solid #f59e0b; margin: 12px 0 0;">
+                </div>
+            </div>
+        </div>
     </div>
     <!-- /.content-header ---->
 

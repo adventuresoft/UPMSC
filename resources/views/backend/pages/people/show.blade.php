@@ -608,7 +608,6 @@
                 <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo?->permanentPostOffice?->name ?? $user->addressInfo?->permanentPostoffice?->name ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo?->permanentVillage?->en_name ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo?->permanentWard?->en_ward_no ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo?->permanent_area ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo?->permanentRoad?->name ?? $user->addressInfo?->permanent_road ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo?->permanentHouse?->house ?? $user->addressInfo?->permanent_house ?? '' }}</span></div>
             </div>
@@ -620,7 +619,6 @@
                 <div class="info-row"><span class="info-label">Post Office :</span><span class="info-value">{{ $user->addressInfo?->presentPostoffice?->name ?? $user->addressInfo?->presentPostOffice?->name ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Village :</span><span class="info-value">{{ $user->addressInfo?->presentVillage?->en_name ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Ward :</span><span class="info-value">{{ $user->addressInfo?->presentWard?->en_ward_no ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Area :</span><span class="info-value">{{ $user->addressInfo?->present_area ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Road :</span><span class="info-value">{{ $user->addressInfo?->presentRoad?->name ?? $user->addressInfo?->present_road ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">House :</span><span class="info-value">{{ $user->addressInfo?->presentHouse?->house ?? $user->addressInfo?->present_house ?? '' }}</span></div>
             </div>
@@ -690,7 +688,6 @@
                 <div class="info-row"><span class="info-label">Type :</span><span class="info-value">{{ $prof->subcategory->category->type->en_name ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Subcategory :</span><span class="info-value">{{ $prof->subcategory->en_name ?? '' }}</span></div>
                 <div class="info-row"><span class="info-label">Designation :</span><span class="info-value">{{ $prof->designation ?? '' }}</span></div>
-                <div class="info-row"><span class="info-label">Address :</span><span class="info-value">{{ $prof->address ?? '' }}</span></div>
             </div>
         </div>
         @if(!$loop->last)<hr>@endif
@@ -717,7 +714,7 @@
                 <div style="font-size: 13px; font-weight: bold; border-bottom: 1px dashed #dee2e6; padding-bottom: 5px; margin-bottom: 8px; color: #2e3192;">
                     General Property Info
                 </div>
-                <div style="font-size: 13px; line-height: 1.6; display: grid; grid-template-columns: 1fr; gap: 8px 10px;">
+                <div style="font-size: 13px; line-height: 1.6; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px;">
                     @if($propertyInfo->cash_amount ?? false)
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Cash Amount</span><strong>{{ number_format($propertyInfo->cash_amount, 2) }} BDT</strong></div>
                     @endif
@@ -738,7 +735,7 @@
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Land Quantity</span><strong>{{ number_format((float)$propertyInfo->house_land_quantity, 4) }} Acre</strong></div>
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Price</span><strong>{{ number_format((float)$propertyInfo->house_price, 2) }} BDT</strong></div>
                     @if($propertyInfo->house_information)
-                    <div style="grid-column: span 2;"><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->house_information }}</strong></div>
+                    <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->house_information }}</strong></div>
                     @endif
                 </div>
             </div>
@@ -754,7 +751,7 @@
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Quantity</span><strong>{{ number_format((float)$propertyInfo->land_quantity, 4) }} Acre</strong></div>
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Price</span><strong>{{ number_format((float)$propertyInfo->land_price, 2) }} BDT</strong></div>
                     @if($propertyInfo->land_information)
-                    <div style="grid-column: span 2;"><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->land_information }}</strong></div>
+                    <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->land_information }}</strong></div>
                     @endif
                 </div>
             </div>
@@ -769,7 +766,7 @@
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Quantity</span><strong>{{ number_format((float)$propertyInfo->diamond_quantity, 2) }} gm</strong></div>
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Price</span><strong>{{ number_format((float)$propertyInfo->diamond_price, 2) }} BDT</strong></div>
                     @if($propertyInfo->diamond_information)
-                    <div style="grid-column: span 2;"><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->diamond_information }}</strong></div>
+                    <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->diamond_information }}</strong></div>
                     @endif
                 </div>
             </div>
@@ -784,7 +781,7 @@
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Quantity</span><strong>{{ number_format((float)$propertyInfo->gold_quantity, 2) }} gm</strong></div>
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Price</span><strong>{{ number_format((float)$propertyInfo->gold_price, 2) }} BDT</strong></div>
                     @if($propertyInfo->gold_information)
-                    <div style="grid-column: span 2;"><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->gold_information }}</strong></div>
+                    <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->gold_information }}</strong></div>
                     @endif
                 </div>
             </div>
@@ -799,7 +796,7 @@
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Quantity</span><strong>{{ number_format((float)$propertyInfo->silver_quantity, 2) }} gm</strong></div>
                     <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Price</span><strong>{{ number_format((float)$propertyInfo->silver_price, 2) }} BDT</strong></div>
                     @if($propertyInfo->silver_information)
-                    <div style="grid-column: span 2;"><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->silver_information }}</strong></div>
+                    <div><span class="info-label" style="display:block; font-size: 11px; color: #666; margin-bottom: 2px;">Information</span><strong>{{ $propertyInfo->silver_information }}</strong></div>
                     @endif
                 </div>
             </div>

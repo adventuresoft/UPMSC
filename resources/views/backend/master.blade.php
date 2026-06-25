@@ -80,18 +80,19 @@
     .brand-link {
         display: flex;
         align-items: center;
-        min-height: 70px;
-        background: linear-gradient(to bottom, #d6e0df, #eaf0f0) !important;
+        min-height: 58px;
+        background: #e0f2fe !important;
         border-bottom: 0 !important;
-        color: var(--upms-text) !important;
+        border-right: 1px solid #7dd3fc !important;
+        color: #0f172a !important;
         font-weight: 700;
         box-shadow: none !important;
     }
 
     .brand-link .brand-text {
-        color: #071b08 !important;
-        font-weight: 700 !important;
-        letter-spacing: .2px;
+        color: #046307 !important;
+        font-weight: 800 !important;
+        letter-spacing: .5px;
     }
 
     .brand-link .brand-image {
@@ -113,7 +114,7 @@
         }
     }
     .sidebar {
-        max-height: calc(100vh - 70px);
+        max-height: calc(100vh - 58px);
         overflow-y: auto !important;
         /* Hide scrollbars but keep functionality */
         scrollbar-width: none; /* Firefox */
