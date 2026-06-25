@@ -81,7 +81,7 @@
         display: flex;
         align-items: center;
         min-height: 58px;
-        background: #e0f2fe !important;
+        background: #ffffffff !important;
         border-bottom: 0 !important;
         border-right: 1px solid #7dd3fc !important;
         color: #0f172a !important;
