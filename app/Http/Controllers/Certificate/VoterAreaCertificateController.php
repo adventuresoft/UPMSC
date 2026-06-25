@@ -136,6 +136,9 @@ class VoterAreaCertificateController extends Controller
             }));
         }))->findOrFail($id);
 
+        if (request()->query('type') === 'form') {
+            return view('backend.pages.certificate.voter_area.form', $data);
+        }
         return view('backend.pages.certificate.voter_area.certificate', $data);
     }
     public function bn_certificate($id){
@@ -151,6 +154,9 @@ class VoterAreaCertificateController extends Controller
             }));
         }))->findOrFail($id);
 
+        if (request()->query('type') === 'form') {
+            return view('backend.pages.certificate.voter_area.bn_form', $data);
+        }
         return view('backend.pages.certificate.voter_area.bn_certificate', $data);
     }
 

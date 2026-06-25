@@ -236,11 +236,19 @@
                                                     @endif
                                                     <a target="_blank" href="{{ route('voter-area.show', $certificate->id) }}" 
                                                         class="btn btn-primary btn-sm" title="English Certificate">
-                                                        <i class="fa fa-file-pdf"></i> EN
+                                                        <i class="fa fa-file-pdf"></i> EN (Cert)
                                                     </a>
                                                     <a target="_blank" href="{{ route('voter-area.bn_certificate', $certificate->id) }}" 
                                                         class="btn btn-info btn-sm" title="Bengali Certificate">
-                                                        <i class="fa fa-file-pdf"></i> BN
+                                                        <i class="fa fa-file-pdf"></i> BN (Cert)
+                                                    </a>
+                                                    <a target="_blank" href="{{ route('voter-area.show', $certificate->id) }}?type=form" 
+                                                        class="btn btn-secondary btn-sm" title="English Form-13">
+                                                        <i class="fa fa-file-pdf"></i> EN (Form)
+                                                    </a>
+                                                    <a target="_blank" href="{{ route('voter-area.bn_certificate', $certificate->id) }}?type=form" 
+                                                        class="btn btn-dark btn-sm" title="Bengali Form-13">
+                                                        <i class="fa fa-file-pdf"></i> BN (Form)
                                                     </a>
                                                 @endif
                                             </div>

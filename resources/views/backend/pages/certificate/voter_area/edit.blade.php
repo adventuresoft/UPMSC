@@ -91,7 +91,7 @@
                                     <div class="col-sm-4">
                                         <input type="text" name="current_voter_area_name" id="current_voter_area_name" class="form-control" value="{{ $certificate->current_voter_area_name }}">
                                     </div>
-                                    <label class="col-sm-2 col-form-label text-right">ভোটার এলাকার নম্বর</label>
+                                    <label class="col-sm-2 col-form-label text-right">ওয়ার্ড নং</label>
                                     <div class="col-sm-3">
                                         <input type="text" name="current_voter_area_no" id="current_voter_area_no" class="form-control" value="{{ $certificate->current_voter_area_no }}">
                                     </div>
