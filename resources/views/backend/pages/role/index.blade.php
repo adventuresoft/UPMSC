@@ -176,7 +176,7 @@
                                                                                     <input type="checkbox" name="permissions[]" value="{{ $perm->name }}" 
                                                                                         id="perm_{{ $perm->id }}" class="custom-control-input perm-checkbox perm-{{ $action }} group-{{ $rowId }} cat-{{ $categoryId }}"
                                                                                         data-column="{{ $action }}" data-row="{{ $rowId }}" data-category="{{ $categoryId }}"
-                                                                                        {{ (isset($role) && $role->hasPermissionTo($perm->name)) ? 'checked' : '' }}>
+                                                                                        {{ (isset($role) && $role->permissions->contains('id', $perm->id)) ? 'checked' : '' }}>
                                                                                     <label class="custom-control-label" for="perm_{{ $perm->id }}"></label>
                                                                                 </div>
                                                                             @else
@@ -194,7 +194,7 @@
                                                                                     <input type="checkbox" name="permissions[]" value="{{ $p->name }}" 
                                                                                         id="perm_{{ $p->id }}" class="custom-control-input perm-checkbox perm-other group-{{ $rowId }} cat-{{ $categoryId }}"
                                                                                         data-column="other" data-row="{{ $rowId }}" data-category="{{ $categoryId }}"
-                                                                                        {{ (isset($role) && $role->hasPermissionTo($p->name)) ? 'checked' : '' }}>
+                                                                                        {{ (isset($role) && $role->permissions->contains('id', $p->id)) ? 'checked' : '' }}>
                                                                                     <label class="custom-control-label mr-1" for="perm_{{ $p->id }}"></label>
                                                                                     <span class="small font-weight-500 text-dark">{{ str_replace($moduleName.'.', '', $p->name) }}</span>
                                                                                 </div>
