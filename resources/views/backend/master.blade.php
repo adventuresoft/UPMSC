@@ -80,18 +80,19 @@
     .brand-link {
         display: flex;
         align-items: center;
-        min-height: 70px;
-        background: linear-gradient(to bottom, #d6e0df, #eaf0f0) !important;
+        min-height: 58px;
+        background: #ffffffff !important;
         border-bottom: 0 !important;
-        color: var(--upms-text) !important;
+        border-right: 1px solid #7dd3fc !important;
+        color: #0f172a !important;
         font-weight: 700;
         box-shadow: none !important;
     }
 
     .brand-link .brand-text {
-        color: #071b08 !important;
-        font-weight: 700 !important;
-        letter-spacing: .2px;
+        color: #046307 !important;
+        font-weight: 800 !important;
+        letter-spacing: .5px;
     }
 
     .brand-link .brand-image {
@@ -113,7 +114,7 @@
         }
     }
     .sidebar {
-        max-height: calc(100vh - 70px);
+        max-height: calc(100vh - 58px);
         overflow-y: auto !important;
         /* Hide scrollbars but keep functionality */
         scrollbar-width: none; /* Firefox */
@@ -490,6 +491,41 @@ width:100%!important;
                 localStorage.setItem(storageKey, osInstance.scroll().position.y);
             }
         });
+
+        // Auto-close mobile sidebar on page scroll or tapping outside
+        var closeMobileSidebar = function() {
+            if (window.innerWidth <= 992) {
+                if ($('body').hasClass('sidebar-open') || !$('body').hasClass('sidebar-collapse')) {
+                    if (typeof $('[data-widget="pushmenu"]').PushMenu === 'function') {
+                        $('[data-widget="pushmenu"]').PushMenu('collapse');
+                    }
+                    $('body').removeClass('sidebar-open').addClass('sidebar-collapse');
+                    $('#sidebar-overlay').remove();
+                }
+            }
+        };
+
+        // Capture-phase scroll listener catches scrolls on any container
+        window.addEventListener('scroll', function(e) {
+            if (window.innerWidth <= 992 && ($('body').hasClass('sidebar-open') || !$('body').hasClass('sidebar-collapse'))) {
+                if ($(e.target).closest('.main-sidebar').length > 0 || (e.target.classList && e.target.classList.contains('main-sidebar'))) {
+                    return;
+                }
+                closeMobileSidebar();
+            }
+        }, true);
+
+        // Capture-phase touch and click listeners for outside taps
+        var handleOutsideTap = function(e) {
+            if (window.innerWidth <= 992 && ($('body').hasClass('sidebar-open') || !$('body').hasClass('sidebar-collapse'))) {
+                if ($(e.target).closest('.main-sidebar, [data-widget="pushmenu"]').length === 0) {
+                    closeMobileSidebar();
+                }
+            }
+        };
+
+        document.addEventListener('touchstart', handleOutsideTap, true);
+        document.addEventListener('click', handleOutsideTap, true);
     });
 </script>
 

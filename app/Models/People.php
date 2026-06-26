@@ -63,4 +63,9 @@ class People extends Authenticatable
     {
         return $this->hasOne(People\FamilyInfo::class, 'user_id', 'user_id');
     }
+
+    public function religion()
+    {
+        return $this->belongsTo(Religion::class, 'religion_id', 'id');
+    }
 }
