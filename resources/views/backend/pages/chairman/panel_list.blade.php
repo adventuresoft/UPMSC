@@ -149,7 +149,7 @@
 .org-level {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 25px;
     flex-wrap: wrap;
 }
 /* Force exactly 3 cards per row */
@@ -165,10 +165,10 @@
 /* Combined Grid for perfectly aligned rows */
 .members-combined-grid {
     display: grid;
-    grid-template-columns: repeat(3, 140px) 40px 140px;
-    gap: 15px 15px;
+    grid-template-columns: repeat(3, 195px) 40px 195px;
+    gap: 20px 20px;
     justify-content: center;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 .grid-header-reg {
     grid-column: 1 / 4;
@@ -191,30 +191,30 @@
 }
 .grid-spacer-line {
     position: absolute;
-    top: -32px; /* Bridges the row gaps + divider */
+    top: -42px; /* Bridges 20px gap + 2px divider + 20px gap */
     bottom: 0;
     width: 2px;
     background: rgba(0, 106, 78, 0.4); /* Green color */
 }
 .line-first {
-    top: -15px; /* Only bridges the gap to the header */
-    background: linear-gradient(to bottom, transparent, rgba(0, 106, 78, 0.4) 30px, rgba(0, 106, 78, 0.4));
+    top: -24px; /* Bridges gap up to header text */
+    background: rgba(0, 106, 78, 0.4);
 }
 .line-last {
-    bottom: 10px;
-    background: linear-gradient(to top, transparent, rgba(0, 106, 78, 0.4) 30px, rgba(0, 106, 78, 0.4));
+    bottom: -22px; /* Bridges bottom gap + final divider */
+    background: rgba(0, 106, 78, 0.4);
 }
 .line-first-last {
-    top: -15px;
-    bottom: 10px;
-    background: linear-gradient(to bottom, transparent, rgba(0, 106, 78, 0.4) 30px, rgba(0, 106, 78, 0.4) calc(100% - 30px), transparent);
+    top: -24px;
+    bottom: -22px;
+    background: rgba(0, 106, 78, 0.4);
 }
 .member-card {
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 12px;
-    width: 140px;
+    padding: 14px 10px;
+    width: 195px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.04);
     transition: all 0.3s ease;
@@ -227,8 +227,8 @@
 }
 /* Passport size photo container (approx 4:5 ratio) */
 .photo-container {
-    width: 90px;
-    height: 112px;
+    width: 104px;
+    height: 130px;
     margin: 0 auto 10px auto;
     border: 2px solid #e2e8f0;
     border-radius: 4px;
@@ -242,12 +242,14 @@
     object-position: center top;
 }
 .member-name {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     color: #0f172a;
     margin: 0 0 5px 0;
     line-height: 1.3;
-    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .member-desig {
     font-size: 11px;
@@ -260,16 +262,20 @@
     border-radius: 4px;
     display: inline-block;
 }
-/* Specific tweaks for different roles */
+/* Chairman Card Styling */
 .chairman-card {
-    width: 160px;
+    width: 220px;
     border: 2px solid #006a4e;
-    box-shadow: 0 6px 12px rgba(0, 106, 78, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 106, 78, 0.15);
+    padding: 16px 12px;
 }
 .chairman-card .photo-container {
-    width: 100px;
-    height: 125px;
+    width: 120px;
+    height: 150px;
     border-color: #006a4e;
+}
+.chairman-card .member-name {
+    font-size: 14px;
 }
 .chairman-card .member-desig {
     background: #006a4e;
@@ -286,7 +292,7 @@
     color: #854d0e;
 }
 
-/* Print Styles for A4 Page */
+/* Print Styles for A4 Page (Fit on 1 Single Page) */
 @media print {
     @page {
         size: A4 portrait;
@@ -313,11 +319,11 @@
         background: #fff !important;
     }
     .certificate-frame {
-        margin: 25px !important;
+        margin: 0 !important;
+        padding: 10px !important;
         page-break-inside: avoid;
-        box-shadow: none !important; /* Printers strip box-shadow */
+        box-shadow: none !important;
     }
-    /* Recreate the multi-layer border using real borders for print */
     .certificate-frame::after {
         content: '';
         position: absolute;
@@ -331,18 +337,76 @@
         z-index: 10;
     }
     .certificate-inner {
-        padding: 20px 15px !important;
+        padding: 15px 10px !important;
     }
     .org-header {
-        margin-bottom: 15px !important;
-        padding-bottom: 10px !important;
+        margin-bottom: 10px !important;
+        padding-bottom: 5px !important;
     }
     .org-logo img {
-        height: 60px !important;
+        height: 45px !important;
     }
     .org-header-text h2 {
-        font-size: 20px !important;
+        font-size: 18px !important;
         margin: 0 0 2px 0 !important;
+    }
+    .org-header-text h3 {
+        font-size: 13px !important;
+    }
+    .org-section {
+        margin-bottom: 10px !important;
+    }
+    .chairman-card {
+        width: 140px !important;
+        padding: 8px 6px !important;
+    }
+    .chairman-card .photo-container {
+        width: 80px !important;
+        height: 100px !important;
+        margin-bottom: 4px !important;
+    }
+    .member-card {
+        width: 115px !important;
+        padding: 6px 4px !important;
+    }
+    .photo-container {
+        width: 68px !important;
+        height: 85px !important;
+        margin-bottom: 4px !important;
+    }
+    .member-name {
+        font-size: 10px !important;
+        margin-bottom: 2px !important;
+    }
+    .member-desig {
+        font-size: 8.5px !important;
+        padding: 2px 4px !important;
+    }
+    .members-combined-grid {
+        grid-template-columns: repeat(3, 115px) 15px 115px !important;
+        gap: 8px 8px !important;
+        margin-bottom: 10px !important;
+    }
+    .grid-spacer-line { top: -18px !important; }
+    .line-first { top: -12px !important; }
+    .line-last { bottom: -10px !important; }
+    .line-first-last { top: -12px !important; bottom: -10px !important; }
+    .org-section-title {
+        font-size: 11px !important;
+        margin-bottom: 6px !important;
+    }
+    .org-section-title::after {
+        margin: 3px auto 0 !important;
+    }
+    .org-level {
+        gap: 10px !important;
+    }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .org-header-text h2 {
+        font-size: 20px !important;
     }
     .org-header-text h3 {
         font-size: 16px !important;
@@ -351,14 +415,14 @@
         margin-bottom: 10px !important;
     }
     .members-combined-grid {
-        grid-template-columns: repeat(3, 120px) 20px 120px !important;
-        gap: 8px 8px !important;
-        margin-bottom: 10px !important;
+        grid-template-columns: repeat(3, 140px) 24px 140px !important;
+        gap: 14px 14px !important;
+        margin-bottom: 15px !important;
     }
-    .grid-spacer-line { top: -18px !important; }
-    .line-first { top: -8px !important; }
-    .line-last { bottom: 5px !important; }
-    .line-first-last { top: -8px !important; bottom: 5px !important; }
+    .grid-spacer-line { top: -30px !important; }
+    .line-first { top: -18px !important; }
+    .line-last { bottom: -16px !important; }
+    .line-first-last { top: -18px !important; bottom: -16px !important; }
     .org-section-title {
         font-size: 12px !important;
         margin-bottom: 8px !important;
@@ -367,15 +431,15 @@
         margin: 4px auto 0 !important;
     }
     .org-level {
-        gap: 8px !important;
+        gap: 14px !important;
     }
     .member-card {
         padding: 8px !important;
-        width: 120px !important;
+        width: 140px !important;
     }
     .photo-container {
-        width: 75px !important;
-        height: 94px !important;
+        width: 88px !important;
+        height: 110px !important;
         margin-bottom: 6px !important;
     }
     .member-name {
@@ -387,11 +451,12 @@
         padding: 2px 4px !important;
     }
     .chairman-card {
-        width: 135px !important;
+        width: 160px !important;
+        padding: 12px 8px !important;
     }
     .chairman-card .photo-container {
-        width: 85px !important;
-        height: 106px !important;
+        width: 100px !important;
+        height: 125px !important;
     }
 }
 </style>
@@ -555,7 +620,7 @@
                         <img src="{{ $chairman->user->image ? imageUrl($chairman->user->image) : $noImg }}"
                              alt="Chairman" onerror="this.onerror=null;this.src='{{ $noImg }}'">
                       </div>
-                      <p class="member-name">{{ $chairman->user->name ?? 'N/A' }}</p>
+                      <p class="member-name" title="{{ $chairman->user->name ?? '' }}">{{ $chairman->user->name ?? 'N/A' }}</p>
                       <p class="member-desig">Chairman / Mayor</p>
                     </div>
                     @endforeach
@@ -595,7 +660,7 @@
                                 <img src="{{ $rm->user->image ? imageUrl($rm->user->image) : $noImg }}"
                                      alt="Member" onerror="this.onerror=null;this.src='{{ $noImg }}'">
                               </div>
-                              <p class="member-name">{{ $rm->user->name ?? 'N/A' }}</p>
+                              <p class="member-name" title="{{ $rm->user->name ?? '' }}">{{ $rm->user->name ?? 'N/A' }}</p>
                               <p class="member-desig">{{ $rm->word_no_text ?: 'Member' }}</p>
                             </div>
                             @else
@@ -615,7 +680,7 @@
                             <img src="{{ $rwm->user->image ? imageUrl($rwm->user->image) : $noImg }}"
                                  alt="Reserve Member" onerror="this.onerror=null;this.src='{{ $noImg }}'">
                           </div>
-                          <p class="member-name">{{ $rwm->user->name ?? 'N/A' }}</p>
+                          <p class="member-name" title="{{ $rwm->user->name ?? '' }}">{{ $rwm->user->name ?? 'N/A' }}</p>
                           <p class="member-desig">{{ $rwm->word_no_text ?: 'Reserve Member' }}</p>
                         </div>
                         @else
@@ -623,9 +688,7 @@
                         @endif
 
                         <!-- Horizontal Divider Line -->
-                        @if(!$isLast)
-                            <div class="grid-horizontal-divider"></div>
-                        @endif
+                        <div class="grid-horizontal-divider"></div>
                     @endfor
                 </div>
                 @endif
@@ -641,7 +704,7 @@
                         <img src="{{ $panel_chairman->user->image ? imageUrl($panel_chairman->user->image) : $noImg }}"
                              alt="Panel Chairman" onerror="this.onerror=null;this.src='{{ $noImg }}'">
                       </div>
-                      <p class="member-name">{{ $panel_chairman->user->name ?? 'N/A' }}</p>
+                      <p class="member-name" title="{{ $panel_chairman->user->name ?? '' }}">{{ $panel_chairman->user->name ?? 'N/A' }}</p>
                       <p class="member-desig">Panel Chairman</p>
                     </div>
                     @endforeach

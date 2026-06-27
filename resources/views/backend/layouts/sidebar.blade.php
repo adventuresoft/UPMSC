@@ -101,7 +101,7 @@
   <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
     <!-- Sidebar Menu -->
-    <nav class="mt-2">
+    <nav class="mt-1">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         
         @if(Auth::guard('people')->check())
