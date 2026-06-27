@@ -6,7 +6,7 @@
     <title>CLMS | Gram Adalat Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}?v=1.4" />
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">

@@ -229,3 +229,44 @@ table.dataTable thead th {
   border-top-color: var(--upms-border);
   color: var(--upms-muted);
 }
+
+@media (min-width: 1024px) and (max-width: 1079px) {
+  html {
+    zoom: 0.711 !important;
+  }
+}
+@media (min-width: 1080px) and (max-width: 1139px) {
+  html {
+    zoom: 0.750 !important;
+  }
+}
+@media (min-width: 1140px) and (max-width: 1199px) {
+  html {
+    zoom: 0.792 !important;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1259px) {
+  html {
+    zoom: 0.833 !important;
+  }
+}
+@media (min-width: 1260px) and (max-width: 1319px) {
+  html {
+    zoom: 0.875 !important;
+  }
+}
+@media (min-width: 1320px) and (max-width: 1379px) {
+  html {
+    zoom: 0.917 !important;
+  }
+}
+@media (min-width: 1380px) and (max-width: 1439px) {
+  html {
+    zoom: 0.958 !important;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1440px) {
+  html {
+    overflow-x: hidden !important;
+  }
+}

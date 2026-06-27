@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('backend/css/adminlte.min.css')}}">
-  <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}?v=1.4">
   @stack('style')
 
 </head>

@@ -161,7 +161,7 @@
                     <div class="col-6 text-center" style="white-space: nowrap;">
                         <span class="badge  text-light px-4 py-2"
                               style="font-size: clamp(14px, 1.5vw, 22px); white-space: nowrap; border-radius:28px;; background-color: #2F318C;">
-                            ভোটার এলাকা পরিবর্তন সুপারিশ প্রত্যয়ন
+                            ভোটার এলাকা পরিবর্তনের প্রত্যয়ন
                         </span>
                     </div>
                     <div class="col-3 text-right" style="white-space: nowrap;">

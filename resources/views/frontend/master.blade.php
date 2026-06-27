@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{asset('frontend/css/jquery.mmenu.all.css')}}">
     <link rel="stylesheet" href="{{asset('frontend/css/style.css')}}">
     <link rel="stylesheet" href="{{asset('frontend/css/mstyle.css')}}">
-    <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}?v=1.4">
   <!-- Toastr -->
   <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     <!-- Select2 -->
