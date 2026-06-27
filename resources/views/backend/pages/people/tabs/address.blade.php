@@ -62,14 +62,24 @@
                                     <div class="col-sm-4">
                                         <label for="permanent_district_id">District</label>
                                         <select name="permanent_district_id" class="form-control select2 select2bs4" id="permanent_district_id">
-                                            <option value="{{$user->addressInfo->permanent_district_id ?? ''}}">{{$user->addressInfo?->permanentDistrict?->name ?? 'Select District'}}</option>
+                                            <option value="">Select District</option>
+                                            @if ($permanent_districts)
+                                                @foreach ($permanent_districts as $district)
+                                                    <option value="{{ $district->id }}" {{$user->addressInfo ? ($user->addressInfo->permanent_district_id == $district->id ? 'selected' : '') : ''}}>{{ $district->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         <small class="text-danger error permanent_district_id_error"></small>
                                     </div>
                                     <div class="col-sm-4">
                                         <label for="permanent_thana_id">Thana</label>
                                         <select name="permanent_thana_id" class="form-control select2 select2bs4" id="permanent_thana_id">
-                                            <option value="{{ $user->addressInfo->permanent_thana_id ?? '' }}">{{ $user->addressInfo?->permanentThana?->name ?? 'Select Thana' }}</option>
+                                            <option value="">Select Thana</option>
+                                            @if ($permanent_thanas)
+                                                @foreach ($permanent_thanas as $thana)
+                                                    <option value="{{ $thana->id }}" {{$user->addressInfo ? ($user->addressInfo->permanent_thana_id == $thana->id ? 'selected' : '') : ''}}>{{ $thana->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         <small class="text-danger error permanent_thana_id_error"></small>
                                     </div>
@@ -80,14 +90,24 @@
                                     <div class="col-sm-4">
                                         <label for="permanent_post_office_id">Post Office</label>
                                         <select name="permanent_post_office_id" class="form-control select2 select2bs4" id="permanent_post_office_id">
-                                            <option value="{{$user->addressInfo->permanent_post_office_id ?? ''}}">{{$user->addressInfo?->permanentPostOffice?->name ?? 'Select Post Office'}}</option>
+                                            <option value="">Select Post Office</option>
+                                            @if ($permanent_post_offices)
+                                                @foreach ($permanent_post_offices as $post_office)
+                                                    <option value="{{ $post_office->id }}" {{$user->addressInfo ? ($user->addressInfo->permanent_post_office_id == $post_office->id ? 'selected' : '') : ''}}>{{ $post_office->name }} {{$post_office->bn_name ? '- '.$post_office->bn_name : ''}}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         <small class="text-danger error permanent_post_office_id_error"></small>
                                     </div>
                                     <div class="col-sm-4">
                                         <label for="permanent_union_id">UP (Union Parishad)</label>
                                         <select name="permanent_union_id" class="form-control select2 select2bs4" id="permanent_union_id">
-                                            <option value="{{ $user->addressInfo->permanent_union_id ?? '' }}">{{ $user->addressInfo?->permanentUnion?->name ?? 'Select Union' }}</option>
+                                            <option value="">Select Union</option>
+                                            @if ($permanent_unions)
+                                                @foreach ($permanent_unions as $union)
+                                                    <option value="{{ $union->id }}" {{$user->addressInfo ? ($user->addressInfo->permanent_union_id == $union->id ? 'selected' : '') : ''}}>{{ $union->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         <small class="text-danger error permanent_union_id_error"></small>
                                     </div>
@@ -95,9 +115,9 @@
                                         <label for="permanent_village_id">Village</label>
                                         <select name="permanent_village_id" class="form-control select2 select2bs4" id="permanent_village_id">
                                             <option value="">Select Village</option>
-                                            @if ($villages)
-                                                @foreach ($villages as $village)
-                                                    <option value="{{$village->id}}" {{$user->addressInfo ? ($user->addressInfo->permanent_village_id == $village->id ? 'selected' : '' ) : ''}}>{{$village->en_name}}</option>
+                                            @if ($permanent_villages)
+                                                @foreach ($permanent_villages as $village)
+                                                    <option value="{{ $village->id }}" {{$user->addressInfo ? ($user->addressInfo->permanent_village_id == $village->id ? 'selected' : '') : ''}}>{{ $village->en_name }}</option>
                                                 @endforeach
                                             @endif
                                         </select>
@@ -170,14 +190,24 @@
                                     <div class="col-sm-4">
                                         <label for="present_district_id">District</label>
                                         <select name="present_district_id" class="form-control select2 select2bs4" id="present_district_id">
-                                            <option value="{{$user->addressInfo->present_district_id ?? ''}}">{{$user->addressInfo?->presentDistrict?->name ?? 'Select District'}}</option>
+                                            <option value="">Select District</option>
+                                            @if ($present_districts)
+                                                @foreach ($present_districts as $district)
+                                                    <option value="{{ $district->id }}" {{$user->addressInfo ? ($user->addressInfo->present_district_id == $district->id ? 'selected' : '') : ''}}>{{ $district->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         <small class="text-danger error present_district_id_error"></small>
                                     </div>
                                     <div class="col-sm-4">
                                         <label for="present_thana_id">Thana</label>
                                         <select name="present_thana_id" class="form-control select2 select2bs4" id="present_thana_id">
-                                            <option value="{{$user->addressInfo->present_thana_id ?? ''}}">{{$user->addressInfo?->presentThana?->name ?? 'Select Thana'}}</option>
+                                            <option value="">Select Thana</option>
+                                            @if ($present_thanas)
+                                                @foreach ($present_thanas as $thana)
+                                                    <option value="{{ $thana->id }}" {{$user->addressInfo ? ($user->addressInfo->present_thana_id == $thana->id ? 'selected' : '') : ''}}>{{ $thana->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         <small class="text-danger error present_thana_id_error"></small>
                                     </div>
@@ -189,9 +219,9 @@
                                         <label for="present_post_office_id">Post Office</label>
                                         <select name="present_post_office_id" class="form-control select2 select2bs4" id="present_post_office_id">
                                             <option value="">Select Post Office</option>
-                                            @if ($post_officeses)
-                                                @foreach ($post_officeses as $post_officese)
-                                                    <option value="{{$post_officese->id}}" {{$user->addressInfo ? ($user->addressInfo->present_post_office_id == $post_officese->id ? 'selected' : '' ) : ''}}>{{$post_officese->name}} {{$post_officese->bn_name ? '- '.$post_officese->bn_name : ''}}</option>
+                                            @if ($present_post_offices)
+                                                @foreach ($present_post_offices as $post_office)
+                                                    <option value="{{ $post_office->id }}" {{$user->addressInfo ? ($user->addressInfo->present_post_office_id == $post_office->id ? 'selected' : '') : ''}}>{{ $post_office->name }} {{$post_office->bn_name ? '- '.$post_office->bn_name : ''}}</option>
                                                 @endforeach
                                             @endif
                                         </select>
@@ -200,17 +230,23 @@
                                     <div class="col-sm-4">
                                         <label for="present_union_id">UP (Union Parishad)</label>
                                         <select name="present_union_id" class="form-control select2 select2bs4" id="present_union_id">
-                                            <option value="{{$user->addressInfo->present_union_id ?? ''}}">{{$user->addressInfo?->presentUnion?->name ?? 'Select Union'}}</option>
+                                            <option value="">Select Union</option>
+                                            @if ($present_unions)
+                                                @foreach ($present_unions as $union)
+                                                    <option value="{{ $union->id }}" {{$user->addressInfo ? ($user->addressInfo->present_union_id == $union->id ? 'selected' : '') : ''}}>{{ $union->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         <small class="text-danger error present_union_id_error"></small>
                                     </div>
                                     <div class="col-sm-4">
                                         <label for="present_village_id">Village</label>
                                         <select name="present_village_id" class="form-control select2 select2bs4" id="present_village_id">
-                                            @if($present_villages)
-                                            @foreach($present_villages as $village)
-                                            <option {{$user->addressInfo->present_village_id ==$village->id?'selected':''}} value="{{$village->id}}">{{$village->en_name ?? 'Select Village'}}</option>
-                                            @endforeach
+                                            <option value="">Select Village</option>
+                                            @if ($present_villages)
+                                                @foreach ($present_villages as $village)
+                                                    <option value="{{ $village->id }}" {{$user->addressInfo ? ($user->addressInfo->present_village_id == $village->id ? 'selected' : '') : ''}}>{{ $village->en_name }}</option>
+                                                @endforeach
                                             @endif
                                         </select>
                                         <small class="text-danger error present_village_id_error"></small>
