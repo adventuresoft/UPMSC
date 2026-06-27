@@ -19,7 +19,7 @@
     href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/themes/splide-default.min.css" />
 
   <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
-  <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}?v=1.4" />
+  <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}?v=1.6" />
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <style>

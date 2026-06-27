@@ -7,7 +7,7 @@
     <title>CLMS | নাগরিক লগইন</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}?v=1.4" />
+    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}?v=1.6" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   </head>
   <body class="bg-[#f3f4f6] font-inter min-h-screen flex flex-col">

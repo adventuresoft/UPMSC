@@ -6,7 +6,7 @@
     <title>CLMS | Success</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}?v=1.4" />
+    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}?v=1.6" />
   </head>
   <body class="bg-[#f3f4f6] font-inter min-h-screen flex flex-col">
     <!-- top bar -->

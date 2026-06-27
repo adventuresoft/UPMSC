@@ -231,42 +231,77 @@ table.dataTable thead th {
 }
 
 @media (min-width: 1024px) and (max-width: 1079px) {
-  html {
+  body.sidebar-mini:not(.sidebar-collapse) .content-wrapper,
+  body.sidebar-mini:not(.sidebar-collapse) .main-footer {
+    zoom: 0.711 !important;
+    margin-left: 351.6px !important;
+  }
+  body:not(.sidebar-mini) {
     zoom: 0.711 !important;
   }
 }
 @media (min-width: 1080px) and (max-width: 1139px) {
-  html {
+  body.sidebar-mini:not(.sidebar-collapse) .content-wrapper,
+  body.sidebar-mini:not(.sidebar-collapse) .main-footer {
+    zoom: 0.750 !important;
+    margin-left: 333.3px !important;
+  }
+  body:not(.sidebar-mini) {
     zoom: 0.750 !important;
   }
 }
 @media (min-width: 1140px) and (max-width: 1199px) {
-  html {
+  body.sidebar-mini:not(.sidebar-collapse) .content-wrapper,
+  body.sidebar-mini:not(.sidebar-collapse) .main-footer {
+    zoom: 0.792 !important;
+    margin-left: 315.6px !important;
+  }
+  body:not(.sidebar-mini) {
     zoom: 0.792 !important;
   }
 }
 @media (min-width: 1200px) and (max-width: 1259px) {
-  html {
+  body.sidebar-mini:not(.sidebar-collapse) .content-wrapper,
+  body.sidebar-mini:not(.sidebar-collapse) .main-footer {
+    zoom: 0.833 !important;
+    margin-left: 300.1px !important;
+  }
+  body:not(.sidebar-mini) {
     zoom: 0.833 !important;
   }
 }
 @media (min-width: 1260px) and (max-width: 1319px) {
-  html {
+  body.sidebar-mini:not(.sidebar-collapse) .content-wrapper,
+  body.sidebar-mini:not(.sidebar-collapse) .main-footer {
+    zoom: 0.875 !important;
+    margin-left: 285.7px !important;
+  }
+  body:not(.sidebar-mini) {
     zoom: 0.875 !important;
   }
 }
 @media (min-width: 1320px) and (max-width: 1379px) {
-  html {
+  body.sidebar-mini:not(.sidebar-collapse) .content-wrapper,
+  body.sidebar-mini:not(.sidebar-collapse) .main-footer {
+    zoom: 0.917 !important;
+    margin-left: 272.6px !important;
+  }
+  body:not(.sidebar-mini) {
     zoom: 0.917 !important;
   }
 }
 @media (min-width: 1380px) and (max-width: 1439px) {
-  html {
+  body.sidebar-mini:not(.sidebar-collapse) .content-wrapper,
+  body.sidebar-mini:not(.sidebar-collapse) .main-footer {
+    zoom: 0.958 !important;
+    margin-left: 260.9px !important;
+  }
+  body:not(.sidebar-mini) {
     zoom: 0.958 !important;
   }
 }
 @media (min-width: 1024px) and (max-width: 1440px) {
-  html {
+  html, body {
     overflow-x: hidden !important;
   }
 }
