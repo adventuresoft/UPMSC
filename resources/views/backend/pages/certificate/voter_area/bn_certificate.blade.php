@@ -1,4 +1,4 @@
-@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'VoterArea'])
+﻿@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'VoterArea'])
 @push('style')
 <style>
     .container {
@@ -198,7 +198,7 @@
                                     }
                                 }
                             @endphp
-                            তিনি ভোটার হিসেবে {{ $certificate->current_district }} জেলার {{ $certificate->current_upazila_thana }} উপজেলাধীন {{ $currentVoterAreaCore }} ইউনিয়ন পরিষদের {{ bnValue($currentVoterAreaNo) }} নং ওয়ার্ডে তালিকাভুক্ত আছেন। তিনি উক্ত এলাকা পরিবর্তন করে অত্র ইউনিয়নের {{ bnValue($certificate->transfer_ward_no) }} নং ওয়ার্ডের ভোটার হতে ইচ্ছুক।
+                            তিনি ভোটার হিসেবে {{ $certificate->current_district }} জেলাধীন {{ $certificate->current_village_road }} এ তালিকাভুক্ত আছেন। তিনি উক্ত এলাকা পরিবর্তন করে অত্র ইউনিয়নের {{ bnValue($certificate->transfer_ward_no) }} নং ওয়ার্ডের ভোটার হতে ইচ্ছুক।
                             এপ্রেক্ষিতে অত্র ইউনিয়নের {{ bnValue($certificate->transfer_ward_no) }} নং ওয়ার্ডের ভোটার তালিকায় তাকে অন্তর্ভুক্ত করার সুপারিশ করিতেছি।
                         </p>
                         <p style="margin-top: 15px; margin-left:40px;">
