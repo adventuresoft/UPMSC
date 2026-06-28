@@ -9,18 +9,25 @@
     }
 
     .form-container {
+        display: flex;
+        flex-direction: column;
         width: 210mm;
         min-height: 297mm;
-        padding: 15mm 10mm;
+        padding: 15mm 10mm 5mm 10mm;
         margin: 0 auto 20px auto;
         background: white;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
         font-family: "Times New Roman", Times, serif;
         color: #000;
         line-height: 1.75;
-        font-size: 15px;
+        font-size: 18px;
         position: relative;
         box-sizing: border-box;
+    }
+
+    .receipt-section {
+        margin-top: auto;
+        width: 100%;
     }
 
     .text-center { text-align: center !important; }
@@ -133,6 +140,20 @@
             left: 0 !important;
         }
 
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            box-shadow: none;
+            margin: 0 auto;
+            padding: 15mm 10mm 5mm 10mm;
+            width: 210mm;
+            height: 297mm;
+            page-break-after: always;
+            box-sizing: border-box;
+            border: none;
+        }
+        .form-container.last-page { page-break-after: auto; }
+
         .content-wrapper,
         .wrapper {
             background: #ffffff !important;
@@ -162,24 +183,24 @@
 <div class="certificate-canvas">
     <!-- PAGE 1 -->
     <div class="form-container">
-        <div class="text-center" style="margin-bottom: 30px;">
+        <div class="text-center" style="margin-bottom: 15px;">
             <div style="font-size: 18px; font-weight: bold;">Form-13</div>
             <div style="font-size: 15px;">[See Rule 26(7)]</div>
-            <div style="margin-top: 20px; font-size: 17px; font-weight: bold;">Application for Transfer of Voter from One Voter Area to Another Voter Area</div>
+            <div style="margin-top: 15px; font-size: 17px; font-weight: bold;">Application for Transfer of Voter from One Voter Area to Another Voter Area</div>
         </div>
 
-        <div style="margin-bottom: 30px;">
+        <div style="margin-bottom: 15px;">
             <div style="font-weight: bold; font-size: 17px; margin-bottom: 5px;">Receiver :</div>
             <div style="margin-left: 60px;">
                 Upazila/Thana Election Officer<br>
                 <div class="flex-row" style="width: 350px;">
-                    <span>Upazila/Thana</span>
+                    <span>Upazila/Thana: </span>
                     <div class="dot-line-container">
                         <span class="data-span">{{ $certificate->recipient_upazila_thana_name }}</span>
                     </div>
                 </div>
                 <div class="flex-row" style="width: 350px;">
-                    <span>District</span>
+                    <span>District: </span>
                     <div class="dot-line-container">
                         <span class="data-span">{{ $certificate->recipient_district }}</span>
                     </div>
@@ -202,7 +223,7 @@
                 <span class="data-span">{{ $certificate->applicant_nid }}</span>
             </div>
         </div>
-        <div class="text-center" style="font-size: 13px; margin-top: -5px; margin-bottom: 10px; padding-left: 100px;">
+        <div class="text-center" style="font-size: 13px; margin-top: -5px; margin-bottom: 5px; padding-left: 100px;">
             (Photocopy of National Identity Card must be attached)
         </div>
 
@@ -214,7 +235,7 @@
             </div>
         </div>
 
-        <div class="flex-row" style="margin-top: 10px;">
+        <div class="flex-row" style="margin-top: 5px;">
             <span style="width: 35px; font-weight: bold;">4.</span>
             <span style="font-weight: bold;">Information regarding current enrollment-</span>
         </div>
@@ -266,7 +287,7 @@
             </div>
         </div>
 
-        <div class="flex-row" style="margin-top: 15px;">
+        <div class="flex-row" style="margin-top: 8px;">
             <span style="width: 35px; font-weight: bold;">5.</span>
             <span style="font-weight: bold;">Area willing to transfer to-</span>
         </div>
@@ -288,7 +309,7 @@
                 </div>
                 <span style="margin-left: 15px;">Ward Number :</span>
                 <div class="dot-line-container" style="max-width: 100px;">
-                    <span class="data-span">{{ $certificate->transfer_ward_no }}</span>
+                    <span class="data-span">{{ bnValue($certificate->transfer_ward_no) }}</span>
                 </div>
             </div>
             <div class="flex-row">
@@ -298,7 +319,7 @@
                 </div>
                 <span style="margin-left: 15px;">Voter Area Number :</span>
                 <div class="dot-line-container" style="max-width: 150px;">
-                    <span class="data-span">{{ $certificate->transfer_voter_area_no }}</span>
+                    <span class="data-span">{{ bnValue($certificate->transfer_voter_area_no) }}</span>
                 </div>
             </div>
             <div class="flex-row">
@@ -308,13 +329,13 @@
                 </div>
                 <span style="margin-left: 15px;">House/Holding No. :</span>
                 <div class="dot-line-container" style="max-width: 150px;">
-                    <span class="data-span">{{ $certificate->transfer_house_holding }}</span>
+                    <span class="data-span">{{ bnValue($certificate->transfer_house_holding) }}</span>
                 </div>
             </div>
             <div class="flex-row">
                 <span>Telephone/Mobile Number :</span>
                 <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->transfer_phone_mobile }}</span>
+                    <span class="data-span">{{ bnValue($certificate->transfer_phone_mobile) }}</span>
                 </div>
             </div>
             <div class="flex-row">
@@ -332,7 +353,7 @@
             </div>
         </div>
 
-        <div class="flex-row" style="margin-top: 15px;">
+        <div class="flex-row" style="margin-top: 8px;">
             <span style="width: 35px; font-weight: bold;">6.</span>
             <span>Staying at address in serial no. 5 since :</span>
             <div class="dot-line-container">
@@ -399,38 +420,40 @@
             </div>
         </div>
 
-        <div style="text-align: right; margin-top: 60px; padding-right: 20px;">
+        <div style="text-align: right; margin-top: 15px; padding-right: 20px; margin-bottom: 185px;">
             <div style="display: inline-block; text-align: center;">
                 <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
                 <div style="font-weight: bold;">Upazila/Thana Election Officer</div>
             </div>
         </div>
 
-        <div style="margin-top: 60px; margin-bottom: 30px; border-top: 1px dashed #000; width: 100%;"></div>
+        <div class="receipt-section">
+            <div style="margin-bottom: 10px; border-top: 1px dashed #000; width: 100%;"></div>
 
-        <div style="text-align: center; margin-bottom: 25px; font-weight: bold; font-size: 19px;">
-            Acknowledgement Receipt
-        </div>
-
-        <div style="line-height: 2.2; font-size: 16px;">
-            <div class="flex-row">
-                Mr./Mrs.
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->applicant_name }}</span>
-                </div>
-                application form has been accepted.
+            <div style="text-align: center; margin-bottom: 12px; font-weight: bold; font-size: 19px;">
+                Acknowledgement Receipt
             </div>
-            <div class="flex-row">
-                Application Form Number
-                <div class="dot-line-container" style="max-width: 400px;">
+
+            <div style="line-height: 1.8; font-size: 16px;">
+                <div class="flex-row">
+                    Mr./Mrs. :
+                    <div class="dot-line-container">
+                        <span class="data-span">{{ $certificate->applicant_name }}</span>
+                    </div>
+                    application form has been accepted.
+                </div>
+                <div class="flex-row">
+                    Application Form Number
+                    <div class="dot-line-container" style="max-width: 400px;">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div style="text-align: right; margin-top: 60px; padding-right: 20px;">
-            <div style="display: inline-block; text-align: center;">
-                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
-                <div style="font-weight: bold;">Receiver's Signature</div>
+            <div style="text-align: right; margin-top: 35px; padding-right: 20px;">
+                <div style="display: inline-block; text-align: center;">
+                    <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
+                    <div style="font-weight: bold;">Receiver's Signature</div>
+                </div>
             </div>
         </div>
     </div>

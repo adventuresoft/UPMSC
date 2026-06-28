@@ -171,7 +171,7 @@
                                 {{ $certificate->user->institute->union->name ?? '' }}
                             </h3>
                         </div>
-                        <p class="mb-0" style="font-size:15px; ">
+                        <p class="mb-0" style="font-size:18px; ">
                             Thana: <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,
                             District: <span>{{ $certificate->user->institute->union->thana->district->name ?? '' }}</span>, Bangladesh.
                         </p>

@@ -1,4 +1,4 @@
-﻿@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'VoterArea'])
+@extends('backend.master', ['mainMenu' => 'Certificate', 'subMenu' =>'VoterArea'])
 @push('style')
 <style>
     .container {
@@ -141,7 +141,7 @@
                                 {{ $certificate->user->institute->union->name ?? '' }}
                             </h3>
                         </div>
-                        <p class="mb-0" style="font-size:15px; ">
+                        <p class="mb-0" style="font-size:18px; ">
                             উপজেলাঃ {{ $certificate->user->institute->union->thana->bn_name ?? '' }},
                             জেলাঃ {{ $certificate->user->institute->union->thana->district->bn_name ?? '' }},
                             বাংলাদেশ।

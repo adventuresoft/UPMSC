@@ -15,18 +15,25 @@
     }
 
     .form-container {
+        display: flex;
+        flex-direction: column;
         width: 210mm;
         min-height: 297mm;
-        padding: 15mm 10mm;
+        padding: 15mm 10mm 5mm 10mm;
         margin: 0 auto 20px auto;
         background: white;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
         font-family: 'Nikosh', 'Noto Serif Bengali', serif;
         color: #000;
         line-height: 1.75;
-        font-size: 15px;
+        font-size: 18px;
         position: relative;
         box-sizing: border-box;
+    }
+
+    .receipt-section {
+        margin-top: auto;
+        width: 100%;
     }
 
     .text-center { text-align: center !important; }
@@ -103,11 +110,13 @@
         body { background: none !important; margin: 0; padding: 0; }
         .certificate-canvas { padding: 0; background: none; }
         .form-container {
+            display: flex;
+            flex-direction: column;
             box-shadow: none;
             margin: 0 auto;
-            padding: 15mm 10mm;
+            padding: 15mm 10mm 5mm 10mm;
             width: 210mm;
-            min-height: auto;
+            height: 297mm;
             page-break-after: always;
             box-sizing: border-box;
             border: none;
@@ -124,24 +133,24 @@
 <div class="certificate-canvas">
     <!-- PAGE 1 -->
     <div class="form-container">
-        <div class="text-center" style="margin-bottom: 30px;">
+        <div class="text-center" style="margin-bottom: 15px;">
             <div style="font-size: 20px; font-weight: bold;">ফরম-১৩</div>
             <div style="font-size: 16px;">[বিধি ২৬(৭) দ্রষ্টব্য]</div>
-            <div style="margin-top: 20px; font-size: 18px; font-weight: bold;">এক ভোটার এলাকা হইতে অন্য ভোটার এলাকায় ভোটার স্থানান্তরের আবেদন</div>
+            <div style="margin-top: 15px; font-size: 18px; font-weight: bold;">এক ভোটার এলাকা হইতে অন্য ভোটার এলাকায় ভোটার স্থানান্তরের আবেদন</div>
         </div>
 
-        <div style="margin-bottom: 30px;">
+        <div style="margin-bottom: 15px;">
             <div style="font-weight: bold; font-size: 18px; margin-bottom: 5px;">প্রাপক :</div>
             <div style="margin-left: 60px;">
                 উপজেলা/থানা নির্বাচন অফিসার<br>
                 <div class="flex-row" style="width: 350px;">
-                    <span>উপজেলা/থানা</span>
+                    <span>উপজেলা/থানা: </span>
                     <div class="dot-line-container">
                         <span class="data-span">{{ $certificate->recipient_upazila_thana_name }}</span>
                     </div>
                 </div>
                 <div class="flex-row" style="width: 350px;">
-                    <span>জেলা</span>
+                    <span>জেলা: </span>
                     <div class="dot-line-container">
                         <span class="data-span">{{ $certificate->recipient_district }}</span>
                     </div>
@@ -164,7 +173,7 @@
                 <span class="data-span">{{ bnValue($certificate->applicant_nid) }}</span>
             </div>
         </div>
-        <div class="text-center" style="font-size: 14px; margin-top: -5px; margin-bottom: 10px; padding-left: 100px;">
+        <div class="text-center" style="font-size: 14px; margin-top: -5px; margin-bottom: 5px; padding-left: 100px;">
             (জাতীয় পরিচয়পত্রের ছায়ালিপি সংযুক্ত করিতে হইবে)
         </div>
 
@@ -176,7 +185,7 @@
             </div>
         </div>
 
-        <div class="flex-row" style="margin-top: 10px;">
+        <div class="flex-row" style="margin-top: 5px;">
             <span style="width: 35px; font-weight: bold;">৪।</span>
             <span style="font-weight: bold;">বর্তমান তালিকাভুক্তি সংক্রান্ত তথ্যাদি-</span>
         </div>
@@ -228,7 +237,7 @@
             </div>
         </div>
 
-        <div class="flex-row" style="margin-top: 15px;">
+        <div class="flex-row" style="margin-top: 8px;">
             <span style="width: 35px; font-weight: bold;">৫।</span>
             <span style="font-weight: bold;">যে এলাকায় স্থানান্তর হইতে ইচ্ছুক-</span>
         </div>
@@ -294,7 +303,7 @@
             </div>
         </div>
 
-        <div class="flex-row" style="margin-top: 15px;">
+        <div class="flex-row" style="margin-top: 8px;">
             <span style="width: 35px; font-weight: bold;">৬।</span>
             <span>৫ নম্বর ক্রমিকে বর্ণিত ঠিকানায় যে সময় হইতে অবস্থান করিতেছেন :</span>
             <div class="dot-line-container">
@@ -361,38 +370,40 @@
             </div>
         </div>
 
-        <div style="text-align: right; margin-top: 60px; padding-right: 20px;">
+        <div style="text-align: right; padding-right: 20px; margin-bottom: 185px;">
             <div style="display: inline-block; text-align: center;">
                 <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
                 <div style="font-weight: bold;">উপজেলা/থানা নির্বাচন কর্মকর্তা</div>
             </div>
         </div>
 
-        <div style="margin-top: 60px; margin-bottom: 30px; border-top: 1px dashed #000; width: 100%;"></div>
+        <div class="receipt-section">
+            <div style="margin-bottom: 10px; border-top: 1px dashed #000; width: 100%;"></div>
 
-        <div style="text-align: center; margin-bottom: 25px; font-weight: bold; font-size: 20px;">
-            প্রাপ্তিস্বীকার পত্র
-        </div>
-
-        <div style="line-height: 2.2; font-size: 17px;">
-            <div class="flex-row">
-                জনাব/বেগম
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->applicant_name }}</span>
-                </div>
-                এর আবেদন ফরম গৃহীত হইল।
+            <div style="text-align: center; margin-bottom: 12px; font-weight: bold; font-size: 20px;">
+                প্রাপ্তিস্বীকার পত্র
             </div>
-            <div class="flex-row">
-                আবেদন ফরম নম্বর
-                <div class="dot-line-container" style="max-width: 400px;">
+
+            <div style="line-height: 1.8; font-size: 17px;">
+                <div class="flex-row">
+                    জনাব/বেগম :
+                    <div class="dot-line-container">
+                        <span class="data-span">{{ $certificate->applicant_name }}</span>
+                    </div>
+                    এর আবেদন ফরম গৃহীত হইল।
+                </div>
+                <div class="flex-row">
+                    আবেদন ফরম নম্বর
+                    <div class="dot-line-container" style="max-width: 400px;">
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div style="text-align: right; margin-top: 60px; padding-right: 20px;">
-            <div style="display: inline-block; text-align: center;">
-                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
-                <div style="font-weight: bold;">গ্রহণকারীর স্বাক্ষর</div>
+            <div style="text-align: right; margin-top: 35px; padding-right: 20px;">
+                <div style="display: inline-block; text-align: center;">
+                    <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
+                    <div style="font-weight: bold;">গ্রহণকারীর স্বাক্ষর</div>
+                </div>
             </div>
         </div>
     </div>
