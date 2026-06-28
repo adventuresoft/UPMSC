@@ -41,6 +41,7 @@ class VoterAreaCertificateController extends Controller
     public function create()
     {
         $data['users'] = []; // Switched to AJAX search
+        $data['districts'] = \App\Models\District::orderBy('bn_name')->get();
         return view('backend.pages.certificate.voter_area.create', $data);
     }
 
@@ -52,6 +53,18 @@ class VoterAreaCertificateController extends Controller
      */
     public function store(Request $request)
     {
+        // Normalize Bangla vowels in inputs to prevent split vowel mismatch
+        $input = $request->all();
+        foreach ($input as $key => $value) {
+            if (is_string($value)) {
+                $input[$key] = normalizeBanglaVowels($value);
+            }
+        }
+        if (isset($input['current_voter_area_name'])) {
+            $input['current_voter_area_name'] = getCoreUnionName($input['current_voter_area_name']);
+        }
+        $request->replace($input);
+
         $validate = Validator::make($request->all(), [
             'user_id' => 'required',
             'applicant_name' => 'required|string|max:255',
@@ -97,6 +110,7 @@ class VoterAreaCertificateController extends Controller
                 $certificate->fill($request->all());
                 $certificate->created_by = Auth::id();
                 $certificate->status = 1; // Auto approved for admin submission
+
                 $certificate->save();
 
                 $data['status'] = true;
@@ -126,7 +140,7 @@ class VoterAreaCertificateController extends Controller
     {
         $data['certificate'] = VoterAreaCertificate::with(array('user' => function($q1){
             $q1->with('people', 'familyInfo' )->with(array('addressInfo'=>function($q2){
-                $q2->with('permanentVillage', 'presentWard', 'presentArea', 'permanentArea');
+                $q2->with('permanentVillage', 'presentWard', 'presentArea', 'permanentArea', 'permanentUnion');
             }))->with(array('institute' => function($q3){
                 $q3->with(array('union'=>function($q4){
                     $q4->with(array('thana'=>function($q5){
@@ -136,12 +150,15 @@ class VoterAreaCertificateController extends Controller
             }));
         }))->findOrFail($id);
 
+        if (request()->query('type') === 'form') {
+            return view('backend.pages.certificate.voter_area.form', $data);
+        }
         return view('backend.pages.certificate.voter_area.certificate', $data);
     }
     public function bn_certificate($id){
         $data['certificate'] = VoterAreaCertificate::with(array('user' => function($q1){
             $q1->with('people', 'familyInfo' )->with(array('addressInfo'=>function($q2){
-                $q2->with('permanentVillage', 'presentWard', 'presentArea', 'permanentArea');
+                $q2->with('permanentVillage', 'presentWard', 'presentArea', 'permanentArea', 'permanentUnion');
             }))->with(array('institute' => function($q3){
                 $q3->with(array('union'=>function($q4){
                     $q4->with(array('thana'=>function($q5){
@@ -151,6 +168,9 @@ class VoterAreaCertificateController extends Controller
             }));
         }))->findOrFail($id);
 
+        if (request()->query('type') === 'form') {
+            return view('backend.pages.certificate.voter_area.bn_form', $data);
+        }
         return view('backend.pages.certificate.voter_area.bn_certificate', $data);
     }
 
@@ -162,7 +182,112 @@ class VoterAreaCertificateController extends Controller
      */
     public function edit($id)
     {
-        $data['certificate'] = VoterAreaCertificate::findOrFail($id);
+        $certificate = VoterAreaCertificate::findOrFail($id);
+        
+        // Normalize Bangla vowels in certificate fields to prevent split vowel mismatch
+        $certificate->current_district = normalizeBanglaVowels($certificate->current_district);
+        $certificate->current_upazila_thana = normalizeBanglaVowels($certificate->current_upazila_thana);
+        $certificate->current_voter_area_name = normalizeBanglaVowels($certificate->current_voter_area_name);
+        $certificate->transfer_district = normalizeBanglaVowels($certificate->transfer_district);
+        $certificate->transfer_upazila_thana = normalizeBanglaVowels($certificate->transfer_upazila_thana);
+        $certificate->transfer_entity_name = normalizeBanglaVowels($certificate->transfer_entity_name);
+        $certificate->recipient_district = normalizeBanglaVowels($certificate->recipient_district);
+        $certificate->recipient_upazila_thana_name = normalizeBanglaVowels($certificate->recipient_upazila_thana_name);
+
+        $data['certificate'] = $certificate;
+        
+        $districts = \App\Models\District::orderBy('bn_name')->get();
+        foreach ($districts as $d) {
+            $d->bn_name = normalizeBanglaVowels($d->bn_name);
+        }
+        $data['districts'] = $districts;
+
+        // Fetch dependent data for edit form
+        $data['transferThanas'] = [];
+        $data['transferPostOffices'] = [];
+        $data['transferUnions'] = [];
+        $data['recipientThanas'] = [];
+        $data['currentAddressThanas'] = [];
+        
+        if ($certificate->transfer_district) {
+            $district = \App\Models\District::whereIn('bn_name', getBanglaVowelVariations($certificate->transfer_district))->first();
+            if ($district) {
+                $transferThanas = \App\Models\Thana::where('district_id', $district->id)->get();
+                foreach ($transferThanas as $t) {
+                    $t->bn_name = normalizeBanglaVowels($t->bn_name);
+                }
+                $data['transferThanas'] = $transferThanas;
+                
+                if ($certificate->transfer_upazila_thana) {
+                    $thana = \App\Models\Thana::whereIn('bn_name', getBanglaVowelVariations($certificate->transfer_upazila_thana))
+                                                ->where('district_id', $district->id)->first();
+                    if ($thana) {
+                        $transferPostOffices = \App\Models\PostOffice::where('thana_id', $thana->id)->get();
+                        foreach ($transferPostOffices as $p) {
+                            $p->bn_name = normalizeBanglaVowels($p->bn_name);
+                        }
+                        $data['transferPostOffices'] = $transferPostOffices;
+                        
+                        $transferUnions = \App\Models\Union::where('thana_id', $thana->id)->get();
+                        foreach ($transferUnions as $u) {
+                            $u->bn_name = normalizeBanglaVowels($u->bn_name);
+                        }
+                        $data['transferUnions'] = $transferUnions;
+                    }
+                }
+            }
+        }
+
+        if ($certificate->recipient_district) {
+            $district = \App\Models\District::whereIn('bn_name', getBanglaVowelVariations($certificate->recipient_district))->first();
+            if ($district) {
+                $recipientThanas = \App\Models\Thana::where('district_id', $district->id)->get();
+                foreach ($recipientThanas as $t) {
+                    $t->bn_name = normalizeBanglaVowels($t->bn_name);
+                }
+                $data['recipientThanas'] = $recipientThanas;
+            }
+        }
+
+        $data['currentAddressUnions'] = [];
+
+        if ($certificate->current_district) {
+            $district = \App\Models\District::whereIn('bn_name', getBanglaVowelVariations($certificate->current_district))->first();
+            if ($district) {
+                $currentThanas = \App\Models\Thana::where('district_id', $district->id)->get();
+                foreach ($currentThanas as $t) {
+                    $t->bn_name = normalizeBanglaVowels($t->bn_name);
+                }
+                $data['currentAddressThanas'] = $currentThanas;
+                
+                if ($certificate->current_upazila_thana) {
+                    $thana = \App\Models\Thana::whereIn('bn_name', getBanglaVowelVariations($certificate->current_upazila_thana))
+                                                ->where('district_id', $district->id)->first();
+                    if ($thana) {
+                        $currentUnions = \App\Models\Union::where('thana_id', $thana->id)->get();
+                        foreach ($currentUnions as $union) {
+                            $union->bn_name = normalizeBanglaVowels($union->bn_name);
+                        }
+                        $data['currentAddressUnions'] = $currentUnions;
+
+                        // Match union and extract ward number from current_voter_area_name if it is structured like "Union, X ward"
+                        foreach ($currentUnions as $union) {
+                            $coreUnionName = getCoreUnionName($union->bn_name);
+                            if (strpos($certificate->current_voter_area_name, $coreUnionName) !== false) {
+                                if (empty($certificate->current_voter_area_no)) {
+                                    if (preg_match('/(\d+|[০-৯]+)\s*নং\s*ওয়ার্ড/u', $certificate->current_voter_area_name, $matches)) {
+                                        $certificate->current_voter_area_no = $matches[1];
+                                    }
+                                }
+                                $certificate->current_voter_area_name = $union->bn_name;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         return view('backend.pages.certificate.voter_area.edit', $data);
     }
 
@@ -175,6 +300,18 @@ class VoterAreaCertificateController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Normalize Bangla vowels in inputs to prevent split vowel mismatch
+        $input = $request->all();
+        foreach ($input as $key => $value) {
+            if (is_string($value)) {
+                $input[$key] = normalizeBanglaVowels($value);
+            }
+        }
+        if (isset($input['current_voter_area_name'])) {
+            $input['current_voter_area_name'] = getCoreUnionName($input['current_voter_area_name']);
+        }
+        $request->replace($input);
+
         $validate = Validator::make($request->all(), [
             'applicant_name' => 'required|string|max:255',
             'applicant_nid' => 'required|string|max:20',
@@ -216,6 +353,7 @@ class VoterAreaCertificateController extends Controller
         try {
             $certificate = VoterAreaCertificate::findOrFail($id);
             $certificate->fill($request->all());
+
             $certificate->save();
 
             return response()->json([

@@ -38,19 +38,19 @@ class AddressInfoController extends Controller
      */
     public function create($id)
     {
-        $user = User::with( 'institute')
-        ->with(array('addressInfo' => function($address){
-        $address->with('presentUnion', 'permanentHouse', 'presentHouse', 'presentRoad', 'permanentRoad',
-                'presentVillage', 'presentDistrict', 'presentThana',
-                'permanentThana', 'permanentUnion');
-        }))
-        ->find($id);
+        $user = User::with('institute')
+            ->with(['addressInfo' => function($address) {
+                $address->with('presentUnion', 'permanentHouse', 'presentHouse', 'presentRoad', 'permanentRoad',
+                    'presentVillage', 'presentDistrict', 'presentThana',
+                    'permanentThana', 'permanentUnion', 'permanentDistrict', 'permanentPostOffice', 'presentPostoffice');
+            }])
+            ->find($id);
 
-        if (! $user) {
+        if (!$user) {
             return redirect()->route('people.index')->with('error', 'User not found.');
         }
 
-        if (! $user->addressInfo) {
+        if (!$user->addressInfo) {
             $user->setRelation('addressInfo', new AddressInfo());
         }
 
@@ -65,13 +65,55 @@ class AddressInfoController extends Controller
         $data['wards'] = [];
         $data['permanent_houses'] = [];
         $data['roads'] = [];
-        $data['post_officeses'] = [];
+
+        // Dynamic cascading dropdown pre-population lists
+        $data['permanent_districts'] = collect();
+        $data['permanent_thanas'] = collect();
+        $data['permanent_post_offices'] = collect();
+        $data['permanent_unions'] = collect();
+        $data['permanent_villages'] = collect();
+
+        $data['present_districts'] = collect();
+        $data['present_thanas'] = collect();
+        $data['present_post_offices'] = collect();
+        $data['present_unions'] = collect();
+        $data['present_villages'] = collect();
+
+        if ($user->addressInfo) {
+            $addr = $user->addressInfo;
+            if ($addr->permanent_division_id) {
+                $data['permanent_districts'] = District::where('division_id', $addr->permanent_division_id)->get();
+            }
+            if ($addr->permanent_district_id) {
+                $data['permanent_thanas'] = Thana::where('district_id', $addr->permanent_district_id)->get();
+            }
+            if ($addr->permanent_thana_id) {
+                $data['permanent_post_offices'] = PostOffice::where('thana_id', $addr->permanent_thana_id)->get();
+                $data['permanent_unions'] = Union::where('thana_id', $addr->permanent_thana_id)->get();
+            }
+            if ($addr->permanent_union_id) {
+                $data['permanent_villages'] = Village::where('union_id', $addr->permanent_union_id)->get();
+            }
+
+            if ($addr->present_division_id) {
+                $data['present_districts'] = District::where('division_id', $addr->present_division_id)->get();
+            }
+            if ($addr->present_district_id) {
+                $data['present_thanas'] = Thana::where('district_id', $addr->present_district_id)->get();
+            }
+            if ($addr->present_thana_id) {
+                $data['present_post_offices'] = PostOffice::where('thana_id', $addr->present_thana_id)->get();
+                $data['present_unions'] = Union::where('thana_id', $addr->present_thana_id)->get();
+            }
+            if ($addr->present_union_id) {
+                $data['present_villages'] = Village::where('union_id', $addr->present_union_id)->get();
+            }
+        }
 
         $data['wards'] = UnionWard::withoutGlobalScope(\App\Scopes\AreaMultitenancyScope::class)
             ->where('status', true)
             ->orderBy('en_ward_no')
             ->get();
-        $data['post_officeses'] = PostOffice::latest()->get();
 
         if ($institute) {
             $data['roads'] = Road::where('institute_id', $institute->id)->latest()->get();
@@ -81,10 +123,6 @@ class AddressInfoController extends Controller
         }
         $data['divisions'] = Division::where('status', true)->get();
         $data['districts'] = District::where('status', true)->orderBy('name')->get();
-
-        if (! empty($user->addressInfo->present_union_id)) {
-            $data['present_villages'] = Village::where('union_id', $user->addressInfo->present_union_id)->get();
-        }
         
         if($user->addressInfo){
             if($user->addressInfo->permanent_ward_id && $institute){

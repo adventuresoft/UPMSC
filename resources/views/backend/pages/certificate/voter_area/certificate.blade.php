@@ -2,135 +2,92 @@
 
 @push('style')
 <style>
-    .certificate-canvas {
-        background: #f4f6f9;
-        padding: 40px 0;
-        min-height: 100vh;
+    .container {
+        max-width: 100% !important;
     }
 
-    .form-container {
-        width: 210mm;
-        min-height: 297mm;
-        padding: 15mm 10mm;
-        margin: 0 auto 20px auto;
-        background: white;
-        box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        font-family: "Times New Roman", Times, serif;
-        color: #000;
-        line-height: 1.75;
-        font-size: 15px;
+    /* ===== Certificate Canvas ===== */
+    .certificate-card {
+        max-width: 100%;
+        margin: 0 auto;
+        background-image: url('{{ asset('images/bg-images.jpeg') }}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 297mm;
+        height: 210mm;
         position: relative;
+        overflow: hidden;
+    }
+
+    .certificate-body {
+        width: 100%;
+        height: 100%;
+        padding: 15mm;
         box-sizing: border-box;
     }
 
-    .text-center { text-align: center !important; }
-    .text-right { text-align: right !important; }
-    .font-weight-bold { font-weight: bold !important; }
-
-    .flex-row {
-        display: flex;
-        align-items: baseline;
-        width: 100%;
-        margin-bottom: 3px;
-        white-space: nowrap;
-    }
-
-    .flex-row > span {
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    .dot-line-container {
-        flex-grow: 1;
+    /* Inner Frame */
+    .inner-frame{
+        border: 1px solid #222;
+        height: 100%;
+        padding: 15mm;
         position: relative;
-        border-bottom: 1px dashed #000;
-        margin-left: 3px;
-        margin-right: 3px;
+    }
+
+    /* Footer */
+    .certificate-footer {
+        position: absolute;
+        bottom: 8px;
+        left: 15mm;
+        right: 15mm;
+        font-size: 11px;
+        text-align: left;
+        opacity: 0.9;
+    }
+
+    /* Signature Area */
+    .certificate-signature {
+        position: absolute;
+        bottom: 14mm;
+        left: 15mm;
+        right: 15mm;
         display: flex;
+        justify-content: space-between;
         align-items: flex-end;
     }
 
-    .data-span {
-        position: relative;
-        z-index: 1;
-        padding-right: 4px;
-        font-weight: normal;
-        background: white;
-        padding-bottom: 0px;
+    .certificate-signature .qr-code img{
+        height: 100px;
+        width: 100px;
     }
 
-    .post-code-box {
-        display: inline-flex;
-        border: 1px solid #000;
-        margin-left: 10px;
-        vertical-align: middle;
-    }
-
-    .post-code-box span {
-        width: 28px;
-        height: 28px;
-        border-right: 1px solid #000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 17px;
-    }
-
-    .post-code-box span:last-child {
-        border-right: none;
-    }
-
-    .print-controls {
-        background: #ffffff;
-        padding: 20px;
+    .certificate-signature .chairman {
         text-align: center;
-        margin-top: 30px;
-        border-top: 1px solid #e0e0e0;
+        font-weight: 600;
+        margin-right: 10mm;
     }
 
-                    @media print {
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                box-sizing: border-box !important;
-            }
+    /* Print Control */
+    @media print {
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            box-sizing: border-box !important;
+        }
 
         @page {
-            size: a4 portrait;
-            margin: 0mm !important;
+            size: A4 landscape;
+            margin: 0 !important;
         }
 
         html, body {
-            width: 100% !important;
-            height: 100% !important;
+            width: 297mm !important;
+            height: 210mm !important;
             margin: 0 !important;
             padding: 0 !important;
             overflow: hidden !important;
             background: #ffffff !important;
-        }
-
-        .container {
-            width: 100% !important;
-            max-width: 100% !important;
-            height: 100% !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            overflow: hidden !important;
-        }
-
-        .certificate-card {
-            width: 100% !important;
-            height: 100vh !important;
-            max-width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
-            background-size: 100% 100% !important;
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
         }
 
         .content-wrapper,
@@ -140,10 +97,32 @@
             margin: 0 !important;
         }
 
+        .container {
+            width: 297mm !important;
+            max-width: 297mm !important;
+            height: 210mm !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
+
+        .certificate-card,
+        .certificate-body,
+        .inner-frame {
+            page-break-inside: avoid !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+        }
+
+        .certificate-bg {
+            display: block !important;
+        }
+
         .main-header,
         .main-sidebar,
         .main-footer,
         .content-header,
+        .page-footer,
         .app-footer {
             display: none !important;
         }
@@ -153,284 +132,158 @@
         .btn {
             display: none !important;
         }
-        }</style>
+
+        .badge {
+            color: #ffffff !important;
+            background-color: #2F318C !important;
+        }
+
+        .text-light {
+            color: #ffffff !important;
+        }
+    }
+</style>
 @endpush
 
-@section('title', 'Voter Transfer Form-13')
+@section('title', 'Voter Area Change Certificate')
 
 @section('content')
-<div class="certificate-canvas">
-    <!-- PAGE 1 -->
-    <div class="form-container">
-        <div class="text-center" style="margin-bottom: 30px;">
-            <div style="font-size: 18px; font-weight: bold;">Form-13</div>
-            <div style="font-size: 15px;">[See Rule 26(7)]</div>
-            <div style="margin-top: 20px; font-size: 17px; font-weight: bold;">Application for Transfer of Voter from One Voter Area to Another Voter Area</div>
-        </div>
+<div class="container p-0">
+    <div class="certificate-card">
+        <div class="certificate-body">
+            <div class="inner-frame">
 
-        <div style="margin-bottom: 30px;">
-            <div style="font-weight: bold; font-size: 17px; margin-bottom: 5px;">Receiver :</div>
-            <div style="margin-left: 60px;">
-                Upazila/Thana Election Officer<br>
-                <div class="flex-row" style="width: 350px;">
-                    <span>Upazila/Thana</span>
-                    <div class="dot-line-container">
-                        <span class="data-span">{{ $certificate->recipient_upazila_thana_name }}</span>
+                <!-- Header -->
+                <div class="row align-items-center">
+                    <div class="col-2 text-center">
+                        <img height="90" width="90" src="{{ isset($certificate->user->institute->left_image) ? imageUrl($certificate->user->institute->left_image) : asset('images/dhaka.png') }}">
+                    </div>
+
+                    <div class="col-8 text-center">
+                        <h2 class="text- font-Nikosh-bold mb-0" style="font-size:18px; position: relative; top: -10px;">
+                            গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
+                        </h2>
+                        <div class="text-center">
+                            <h2 class="dynamic-bn-name text-success font-weight-bold mb-0" style="width: max-content; margin: 0 auto; font-family: 'Kalpurush-Bold', sans-serif; font-size:28px; white-space: nowrap;">
+                                {{ $certificate->user->institute->union->bn_name ?? '' }}
+                            </h2>
+                            <h3 class="dynamic-en-name font-weight-bold mb-0" style="width: max-content; margin: 0 auto; color:#2e3192; font-size:22px; line-height: 1.2; white-space: nowrap;">
+                                {{ $certificate->user->institute->union->name ?? '' }}
+                            </h3>
+                        </div>
+                        <p class="mb-0" style="font-size:15px; ">
+                            Thana: <span>{{ $certificate->user->institute->union->thana->name ?? '' }}</span>,
+                            District: <span>{{ $certificate->user->institute->union->thana->district->name ?? '' }}</span>, Bangladesh.
+                        </p>
+                    </div>
+
+                    <div class="col-2 text-center">
+                        <img height="90" width="90" src="{{ asset('images/govt-bd-logo.png') }}">
                     </div>
                 </div>
-                <div class="flex-row" style="width: 350px;">
-                    <span>District</span>
-                    <div class="dot-line-container">
-                        <span class="data-span">{{ $certificate->recipient_district }}</span>
+
+                <!-- Title Row -->
+                <div class="row mt-3 align-items-center">
+                    <div class="col-3 text-left" style="white-space: nowrap;">
+                        <strong>No:</strong> <span style="font-weight:bold;color:blue">{{ $certificate->system_id ?? '' }}</span>
+                    </div>
+                    <div class="col-6 text-center" style="white-space: nowrap;">
+                        <span class="badge text-light px-4 py-2" style="font-size: clamp(12px, 1.5vw, 20px); white-space: nowrap; border-radius:28px; background-color: #2F318C;">
+                            Voter Area Change Certificate
+                        </span>
+                    </div>
+                    <div class="col-3 text-right" style="white-space: nowrap;">
+                        Date: {{ date('d/m/Y', strtotime($certificate->created_at)) }} 
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="flex-row">
-            <span style="width: 35px; font-weight: bold;">1.</span>
-            <span>Applicant's Name :</span>
-            <div class="dot-line-container">
-                <span class="data-span">{{ $certificate->applicant_name }}</span>
-            </div>
-        </div>
+                <!-- Body -->
+                <div class="row mt-5">
+                    <div class="col-12" style="font-size:18px; line-height:1.9; text-align:justify;">
+                        <p>
+                            <span style="margin-left:40px;"></span>
+                            This is to certify that 
+                            {{ $certificate->user->people->gender == 1 ? 'Mr.' : 'Ms.' }}
+                            <strong>{{ $certificate->applicant_name ?? $certificate->user->name ?? '' }}</strong>,
+                            ID No: {{ $certificate->user->people->approved_id ?? '' }},
+                            @php 
+                                $nid = $certificate->applicant_nid ?? $certificate->user->nid ?? $certificate->user->people->nid ?? '';
+                            @endphp
+                            @if($nid && $nid != '1111111114')
+                                National ID No: <strong>{{ $nid }}</strong>,
+                            @endif
+                            Father/Husband: {{ $certificate->user->familyInfo->husband_name ?? $certificate->user->familyInfo->father_name ?? '' }},
+                            Village: {{ $certificate->user->addressInfo->permanentVillage->en_name ?? '' }},
+                            Post Office: {{ $certificate->user->addressInfo->permanentPostOffice->en_name ?? '' }},
+                            Upazila: {{ $certificate->user->addressInfo->permanentThana->en_name ?? '' }},
+                            District: {{ $certificate->user->addressInfo->permanentDistrict->en_name ?? '' }}.
+                        </p>
+                        @php
+                            $currentVoterAreaCore = getCoreUnionName($certificate->current_voter_area_name);
+                            $currentVoterAreaNo = $certificate->current_voter_area_no;
+                            if (empty($currentVoterAreaNo)) {
+                                if (preg_match('/(\d+|[০-৯]+)\s*নং\s*ওয়ার্ড/u', normalizeBanglaVowels($certificate->current_voter_area_name), $matches)) {
+                                    $currentVoterAreaNo = $matches[1];
+                                }
+                            }
+                        @endphp
+                        <p style="margin-top: 15px;">
+                            He/She is currently enlisted as a voter in Ward No. {{ $currentVoterAreaNo }} of {{ $currentVoterAreaCore }} Union Parishad, Upazila: {{ $certificate->current_upazila_thana }}, District: {{ $certificate->current_district }}. He/She wishes to change his/her voter area and intends to become a voter in Ward No. {{ $certificate->transfer_ward_no }} of this Union.
+                        </p>
+                        <p style="margin-top: 15px;">
+                            In this regard, I strongly recommend including him/her in the voter list of Ward No. {{ $certificate->transfer_ward_no }} of this Union.
+                        </p>
+                        <p style="margin-top: 15px; margin-left:40px;">
+                            I wish him/her all the best and every success in life.
+                        </p>
+                    </div>
+                </div>
 
-        <div class="flex-row">
-            <span style="width: 35px; font-weight: bold;">2.</span>
-            <span>National Identity Card Number (NID) :</span>
-            <div class="dot-line-container">
-                <span class="data-span">{{ $certificate->applicant_nid }}</span>
-            </div>
-        </div>
-        <div class="text-center" style="font-size: 13px; margin-top: -5px; margin-bottom: 10px; padding-left: 100px;">
-            (Photocopy of National Identity Card must be attached)
-        </div>
+                <!-- Signature Area -->
+                @include('backend.partials.chairman_signature', ['certificate' => $certificate])
 
-        <div class="flex-row">
-            <span style="width: 35px; font-weight: bold;">3.</span>
-            <span>Date of Birth :</span>
-            <div class="dot-line-container" style="max-width: 450px;">
-                <span class="data-span">{{ $certificate->applicant_dob ? date('d/m/Y', strtotime($certificate->applicant_dob)) : '' }}</span>
-            </div>
-        </div>
+                <!-- Footer -->
+                <div class="certificate-footer">
+                    This report generated by CLMS | Powered by <strong>Adventure Soft</strong>
+                </div>
 
-        <div class="flex-row" style="margin-top: 10px;">
-            <span style="width: 35px; font-weight: bold;">4.</span>
-            <span style="font-weight: bold;">Information regarding current enrollment-</span>
-        </div>
-        <div style="margin-left: 35px; padding-left: 60px;">
-            <div class="flex-row">
-                <span>Voter Number :</span>
-                <div class="dot-line-container" style="max-width: 450px;">
-                    <span class="data-span">{{ $certificate->current_voter_no }}</span>
-                </div>
-            </div>
-            <div class="flex-row">
-                <span>Voter Area Name :</span>
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->current_voter_area_name }}</span>
-                </div>
-                <span style="margin-left: 15px;">Voter Area Number :</span>
-                <div class="dot-line-container" style="max-width: 150px;">
-                    <span class="data-span">{{ $certificate->current_voter_area_no }}</span>
-                </div>
-            </div>
-            <div class="flex-row">
-                <span>Upazila/Thana :</span>
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->current_upazila_thana }}</span>
-                </div>
-                <span style="margin-left: 15px;">District :</span>
-                <div class="dot-line-container" style="max-width: 200px;">
-                    <span class="data-span">{{ $certificate->current_district }}</span>
-                </div>
-            </div>
-            <div class="flex-row">
-                <span>Village/Road Name & No. :</span>
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->current_village_road }}</span>
-                </div>
-                <span style="margin-left: 15px;">House/Holding No. :</span>
-                <div class="dot-line-container" style="max-width: 150px;">
-                    <span class="data-span">{{ $certificate->current_house_holding }}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex-row" style="margin-top: 15px;">
-            <span style="width: 35px; font-weight: bold;">5.</span>
-            <span style="font-weight: bold;">Area willing to transfer to-</span>
-        </div>
-        <div style="margin-left: 35px; padding-left: 60px;">
-            <div class="flex-row">
-                <span>District :</span>
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->transfer_district }}</span>
-                </div>
-                <span style="margin-left: 15px;">Upazila/Thana :</span>
-                <div class="dot-line-container" style="max-width: 250px;">
-                    <span class="data-span">{{ $certificate->transfer_upazila_thana }}</span>
-                </div>
-            </div>
-            <div class="flex-row">
-                <span>City Corp/Municipality/Union/Cantt: Board :</span>
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->transfer_entity_name }}</span>
-                </div>
-                <span style="margin-left: 15px;">Ward Number :</span>
-                <div class="dot-line-container" style="max-width: 100px;">
-                    <span class="data-span">{{ $certificate->transfer_ward_no }}</span>
-                </div>
-            </div>
-            <div class="flex-row">
-                <span>Voter Area Name :</span>
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->transfer_voter_area_name }}</span>
-                </div>
-                <span style="margin-left: 15px;">Voter Area Number :</span>
-                <div class="dot-line-container" style="max-width: 150px;">
-                    <span class="data-span">{{ $certificate->transfer_voter_area_no }}</span>
-                </div>
-            </div>
-            <div class="flex-row">
-                <span>Village/Road Name & No. :</span>
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->transfer_village_road }}</span>
-                </div>
-                <span style="margin-left: 15px;">House/Holding No. :</span>
-                <div class="dot-line-container" style="max-width: 150px;">
-                    <span class="data-span">{{ $certificate->transfer_house_holding }}</span>
-                </div>
-            </div>
-            <div class="flex-row">
-                <span>Telephone/Mobile Number :</span>
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->transfer_phone_mobile }}</span>
-                </div>
-            </div>
-            <div class="flex-row">
-                <span>Post Office :</span>
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->transfer_post_office }}</span>
-                </div>
-                <span style="margin-left: 15px;">Post Code :</span>
-                <div class="post-code-box">
-                    @php $pc = str_split($certificate->transfer_post_code ?? '    '); @endphp
-                    @foreach(array_pad($pc, 4, ' ') as $digit)
-                        <span>{{ $digit }}</span>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-        <div class="flex-row" style="margin-top: 15px;">
-            <span style="width: 35px; font-weight: bold;">6.</span>
-            <span>Staying at address in serial no. 5 since :</span>
-            <div class="dot-line-container">
-                <span class="data-span">{{ $certificate->staying_since }}</span>
-            </div>
-        </div>
-
-        <div class="flex-row">
-            <span style="width: 35px; font-weight: bold;">7.</span>
-            <span>Reason for transfer:</span>
-            <div class="dot-line-container">
-                <span class="data-span">{{ $certificate->transfer_reason }}</span>
             </div>
         </div>
     </div>
 
-    <!-- PAGE 2 -->
-    <div class="form-container last-page">
-        <div class="flex-row">
-            <span style="width: 35px; font-weight: bold;">8.</span>
-            <span style="font-weight: bold;">The following documents must be attached for serial no. 5 :</span>
-        </div>
-        <div style="margin-left: 45px; line-height: 2.0; margin-top: 10px;">
-            (a) Certificate from Class I Officer/ Cantonment Board Executive Officer/ Mayor of City Corp/Municipality /Ward Councilor/Union Parishad Chairman.<br>
-            (b) Copy of Utility Bill (if any)<br>
-            (c) House Rent Receipt/Chowkidar Tax Receipt/Municipal Tax Receipt/Others
-        </div>
+    <!-- Action Buttons -->
+    <div class="text-center mt-2 mb-4 d-print-none">
+        <button id="cancelPageButton" class="btn btn-danger btn-sm px-4"
+                onclick="window.location.href='{{ route('voter-area.index') }}'">
+            Cancel
+        </button>
 
-        <div style="margin-top: 80px; text-align: right; padding-right: 20px;">
-            <div style="display: inline-block; text-align: center;">
-                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
-                <div style="font-weight: bold;">Applicant's Signature or Thumb Impression</div>
-            </div>
-        </div>
-
-        <div style="margin-top: 50px;">
-            <div class="flex-row">
-                <span style="font-weight: bold;">Identifier's Signature :</span>
-                <div class="dot-line-container"></div>
-            </div>
-            <div style="margin-left: 150px; margin-top: 10px;">
-                <div class="flex-row">Name :<div class="dot-line-container"><span class="data-span">{{ $certificate->identifier_name }}</span></div></div>
-                <div class="flex-row">National Identity Card Number :<div class="dot-line-container"><span class="data-span">{{ $certificate->identifier_nid }}</span></div></div>
-                <div class="flex-row">Address :<div class="dot-line-container"><span class="data-span">{{ $certificate->identifier_address }}</span></div></div>
-            </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 60px; margin-bottom: 30px; font-weight: bold; font-size: 17px;">
-            [For Office Use Only]
-        </div>
-
-        <div style="line-height: 2.5; text-align: justify; font-size: 16px; margin-bottom: 40px;">
-            <div class="flex-row">
-                After examining submitted documents
-                <div class="dot-line-container" style="min-width: 250px;">
-                </div>
-                voter list name was deleted
-            </div>
-            <div class="flex-row">
-                from and
-                <div class="dot-line-container" style="max-width: 350px;">
-                </div>
-                voter area name was included.
-            </div>
-        </div>
-
-        <div style="text-align: right; margin-top: 60px; padding-right: 20px;">
-            <div style="display: inline-block; text-align: center;">
-                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
-                <div style="font-weight: bold;">Upazila/Thana Election Officer</div>
-            </div>
-        </div>
-
-        <div style="margin-top: 60px; margin-bottom: 30px; border-top: 1px dashed #000; width: 100%;"></div>
-
-        <div style="text-align: center; margin-bottom: 25px; font-weight: bold; font-size: 19px;">
-            Acknowledgement Receipt
-        </div>
-
-        <div style="line-height: 2.2; font-size: 16px;">
-            <div class="flex-row">
-                Mr./Mrs.
-                <div class="dot-line-container">
-                    <span class="data-span">{{ $certificate->applicant_name }}</span>
-                </div>
-                application form has been accepted.
-            </div>
-            <div class="flex-row">
-                Application Form Number
-                <div class="dot-line-container" style="max-width: 400px;">
-                </div>
-            </div>
-        </div>
-
-        <div style="text-align: right; margin-top: 60px; padding-right: 20px;">
-            <div style="display: inline-block; text-align: center;">
-                <div style="color: #000; font-weight: bold; letter-spacing: 2px; margin-bottom: 5px;">................................................</div>
-                <div style="font-weight: bold;">Receiver's Signature</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="print-controls">
-        <button class="btn btn-danger btn-lg px-5" style="font-size: 18px;" onclick="window.location.href='{{ route('voter-area.index') }}'"><i class="fas fa-times me-2"></i> Cancel</button>
-        <button class="btn btn-primary btn-lg px-5 ms-4" style="font-size: 18px;" onclick="window.print();"><i class="fas fa-print me-2"></i> Print Certificate</button>
+        <button id="printPageButton" class="btn btn-success btn-sm px-4 ms-2"
+                onclick="window.print();">
+            Print
+        </button>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.fonts.ready.then(function() {
+            const bnNames = document.querySelectorAll('.dynamic-bn-name');
+            const enNames = document.querySelectorAll('.dynamic-en-name');
+            for(let i = 0; i < bnNames.length; i++) {
+                let bnName = bnNames[i];
+                let enName = enNames[i];
+                if(bnName && enName) {
+                    let bnWidth = bnName.getBoundingClientRect().width;
+                    let enWidth = enName.getBoundingClientRect().width;
+                    let currentFontSize = parseFloat(window.getComputedStyle(enName).fontSize);
+                    if(enWidth > 0 && bnWidth > 0 && enWidth !== bnWidth) {
+                        let newFontSize = currentFontSize * (bnWidth / enWidth);
+                        enName.style.fontSize = newFontSize + 'px';
+                    }
+                }
+            }
+        });
+    });
+</script>
 @endsection
-
-

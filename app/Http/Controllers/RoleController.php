@@ -48,7 +48,7 @@ class RoleController extends Controller
             'Access Management' => ['role', 'permission', 'user'],
             'Institute Settings' => ['institute', 'institute_category', 'institute_type'],
             'Institutional Admins' => ['institutional-admin', 'institutional_admin'],
-            'People Info' => ['people'],
+            'People Info' => ['people', 'applicant_list', 'reg_people_list', 'search_people'],
             'Certificate' => [
                 'certificate',
                 'age_certificate', 'character_certificate', 'childless_certificate', 'citizen_certificate',
@@ -73,17 +73,17 @@ class RoleController extends Controller
                 'infrastructure_construction_permission', 'infrastructure-construction-permission',
                 'power_of_attorney', 'power-of-attorney', 'ethnic_minority', 'ethnic-minority', 'tribal', 'indigenous'
             ],
-            'Organization' => ['organization', 'trade_license'],
-            'Tax' => ['tax', 'taxes'],
+            'Organization' => ['organization', 'trade_license', 'applicant_org_list', 'approved_org_list', 'org_fees', 'org_generate_invoice'],
+            'Tax' => ['tax', 'taxes', 'tax_generate', 'tax_list', 'tax_received'],
             'Relief Card' => ['relief_card', 'relief-card'],
             'House Info' => ['house'],
             'Land Info' => ['land'],
-            'Vehicle Info' => ['vehicle'],
+            'Vehicle Info' => ['vehicle', 'vehicle_application_list', 'vehicle_fees_new', 'vehicle_fees_list'],
             'Local Govt. Judiciary' => ['village_court', 'village-court'],
             'Road Info' => ['road', 'bridge'],
             'Market Info' => ['market_info'],
             'Marriage & Divorce' => ['marriage', 'divorce'],
-            'Chairman & Members Info' => ['chairman', 'councilor', 'member', 'reserve_member', 'panel'],
+            'Chairman & Members Info' => ['chairman', 'councilor', 'member', 'reserve_member', 'panel', 'chairman_list', 'member_list', 'reserve_member_list', 'panel_list'],
         ];
 
         $grouped = [];

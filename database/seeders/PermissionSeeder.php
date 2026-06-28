@@ -32,25 +32,58 @@ class PermissionSeeder extends Seeder
             // People
             'people',
             'people_credentials',
+            'applicant_list',
+            'reg_people_list',
+            'search_people',
 
             // Certificate (all types share this module)
             'certificate',
+            'age_certificate', 'character_certificate', 'childless_certificate', 'citizen_certificate',
+            'disability_certificate', 'financial_instability_certificate', 'guardian_certificate',
+            'landless_certificate', 'married_certificate', 'name_certificate', 'nid_correction_certificate',
+            'orphan_certificate', 'permanent_citizen_certificate', 'remarried_certificate',
+            'residential_certificate', 'unmarried_certificate', 'voter_area_certificate',
+            'voter_list_certificate', 'yearly_income_certificate',
+            'citizen', 'character', 'death', 'succession', 'unmarried', 'married', 'remarried', 'landless',
+            'name', 'income', 'disability-certificate', 'voter_area', 'voter-area',
+            'voter_list', 'voter-list', 'nid_correction', 'nid-correction', 'childless', 'orphan',
+            'financial_instability', 'financial-instability', 'age',
+            'permanent_citizen', 'permanent-citizen', 'residential', 'guardian_income', 'guardian-income',
+            'guardian_acceptance', 'guardian-acceptance', 'inheritance', 'birth_registration_correction',
+            'birth-registration-correction', 'new_voter_recommendation', 'new-voter-recommendation',
+            'voter_registration_agreement', 'voter-registration-agreement', 'not_rohingya', 'not-rohingya',
+            'passport_related', 'passport-related', 'family', 'alive', 'missing_person', 'missing-person',
+            'abandoned_by_husband', 'abandoned-by-husband', 'widow', 'dependency', 'dowryless',
+            'unemployment', 'helplessness', 'illiteracy', 'agriculture', 'fisherman', 'professional',
+            'farmer_fuel_oil_card', 'farmer-fuel-oil-card', 'no_objection', 'no-objection', 'general',
+            'infrastructure_construction_permission', 'infrastructure-construction-permission',
+            'power_of_attorney', 'power-of-attorney', 'ethnic_minority', 'ethnic-minority', 'tribal', 'indigenous',
 
             // Organization & Trade
             'organization',
             'organization_transfer',
             'trade_license',
+            'applicant_org_list',
+            'approved_org_list',
+            'org_fees',
+            'org_generate_invoice',
 
             // Physical assets
             'house',
             'land',
             'vehicle',
+            'vehicle_application_list',
+            'vehicle_fees_new',
+            'vehicle_fees_list',
             'road',
             'market',
             'bridge',
 
             // Tax
             'tax',
+            'tax_generate',
+            'tax_list',
+            'tax_received',
 
             // Civil registry
             'marriage',
@@ -58,6 +91,10 @@ class PermissionSeeder extends Seeder
 
             // Local governance
             'chairman',
+            'chairman_list',
+            'member_list',
+            'reserve_member_list',
+            'panel_list',
             'councilor',
             'village_court',
             'relief_card',

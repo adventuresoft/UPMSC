@@ -128,6 +128,14 @@ if (! function_exists('view_permission')) {
 
         $user = Auth::user();
         if ($module) {
+            if (is_array($module)) {
+                foreach ($module as $m) {
+                    try {
+                        if ($user->hasPermissionTo($m . '.read')) return true;
+                    } catch (\Exception $e) {}
+                }
+                return false;
+            }
             try {
                 return $user->hasPermissionTo($module . '.read');
             } catch (\Exception $e) {

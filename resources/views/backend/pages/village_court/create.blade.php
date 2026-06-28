@@ -162,13 +162,13 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Case Date (মামলার তারিখ) <span class="text-danger">*</span></label>
+                                            <label>Case Date (ঘটনা সংঘটনের তারিখ) <span class="text-danger">*</span></label>
                                             <input type="date" name="case_date" class="form-control" required value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d', strtotime('-30 days')) }}" max="{{ date('Y-m-d') }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Case Time (মামলার সময়) <span class="text-danger">*</span></label>
+                                            <label>Case Time (ঘটনা সংঘটনের সময়) <span class="text-danger">*</span></label>
                                             <input type="time" name="case_time" class="form-control" required value="{{ now()->timezone('Asia/Dhaka')->format('H:i') }}">
                                         </div>
                                     </div>
@@ -279,7 +279,7 @@
                 // If current selected date is before new min date, reset it
                 if (dateInput.val() && dateInput.val() < minDate) {
                     dateInput.val('');
-                    alert('নির্বাচিত মামলার ধরনের জন্য মামলার তারিখ ' + minDate + ' এর পূর্বে হতে পারবে না।');
+                    alert('নির্বাচিত মামলার ধরনের জন্য ঘটনা সংঘটনের তারিখ ' + minDate + ' এর পূর্বে হতে পারবে না।');
                 }
             }
 

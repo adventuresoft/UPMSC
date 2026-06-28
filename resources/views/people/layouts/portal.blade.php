@@ -215,7 +215,7 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}?v=1.6">
     @stack('css')
 </head>
 <body>

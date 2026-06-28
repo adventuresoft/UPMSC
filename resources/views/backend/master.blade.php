@@ -28,7 +28,7 @@
    <!-- Toastr -->
    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{{ asset('plugins')}}/overlayScrollbars/css/OverlayScrollbars.min.css">
+  {{-- <link rel="stylesheet" href="{{ asset('plugins')}}/overlayScrollbars/css/OverlayScrollbars.min.css"> --}}
   <!-- Daterange picker -->
   <link rel="stylesheet" href="{{ asset('plugins')}}/daterangepicker/daterangepicker.css">
   <!-- summernote -->
@@ -37,7 +37,7 @@
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ asset('plugins')}}/select2/css/select2.min.css">
   <link rel="stylesheet" href="{{ asset('plugins')}}/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-  <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/style/upms-theme.css') }}?v=1.6">
   <style>
     :root {
         --upms-green: #10d915;
@@ -72,9 +72,17 @@
     }
 
     .main-sidebar {
-        background: linear-gradient(to bottom, #d6e0df, #eaf0f0) !important;
+        background: #d6e0df !important;
         border-right: 0 !important;
         box-shadow: none !important;
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        height: 100vh !important;
+    }
+
+    .wrapper {
+        background: #d6e0df !important;
     }
 
     .brand-link {
@@ -393,7 +401,7 @@ width:100%!important;
 <!-- Select2 -->
 <script src="{{ asset('plugins')}}/select2/js/select2.full.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="{{ asset('plugins')}}/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+{{-- <script src="{{ asset('plugins')}}/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script> --}}
 <!-- AdminLTE App -->
 <script src="{{ asset('backend')}}/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->

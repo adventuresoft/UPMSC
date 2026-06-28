@@ -51,13 +51,22 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">উপজেলা/থানা নির্বাচন অফিসার</label>
+                                    <label class="col-sm-3 col-form-label text-right">জেলা</label>
                                     <div class="col-sm-4">
-                                        <input type="text" name="recipient_upazila_thana_name" class="form-control" placeholder="উপজেলা/থানা">
+                                        <select id="recipient_district_id" class="form-control select2">
+                                            <option value="">জেলা নির্বাচন করুন</option>
+                                            @foreach($districts as $district)
+                                                <option value="{{ $district->id }}" data-name="{{ $district->bn_name }}">{{ $district->bn_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" name="recipient_district" id="recipient_district_name">
                                     </div>
-                                    <label class="col-sm-1 col-form-label text-right">জেলা</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" name="recipient_district" class="form-control" placeholder="জেলা">
+                                    <label class="col-sm-2 col-form-label text-right">উপজেলা/থানা নির্বাচন অফিসার</label>
+                                    <div class="col-sm-3">
+                                        <select id="recipient_upazila_id" class="form-control select2">
+                                            <option value="">উপজেলা/থানা নির্বাচন করুন</option>
+                                        </select>
+                                        <input type="hidden" name="recipient_upazila_thana_name" id="recipient_upazila_thana_name">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -87,23 +96,35 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">ভোটার এলাকার নাম</label>
+                                    <label class="col-sm-3 col-form-label text-right">জেলা</label>
                                     <div class="col-sm-4">
-                                        <input type="text" name="current_voter_area_name" id="current_voter_area_name" class="form-control">
+                                        <select id="current_district_id" class="form-control select2">
+                                            <option value="">জেলা নির্বাচন করুন</option>
+                                            @foreach($districts as $district)
+                                                <option value="{{ $district->id }}" data-name="{{ $district->bn_name }}">{{ $district->bn_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" name="current_district" id="current_district_name">
                                     </div>
-                                    <label class="col-sm-2 col-form-label text-right">ভোটার এলাকার নম্বর</label>
+                                    <label class="col-sm-2 col-form-label text-right">উপজেলা/থানা</label>
                                     <div class="col-sm-3">
-                                        <input type="text" name="current_voter_area_no" id="current_voter_area_no" class="form-control">
+                                        <select id="current_upazila_id" class="form-control select2">
+                                            <option value="">উপজেলা/থানা নির্বাচন করুন</option>
+                                        </select>
+                                        <input type="hidden" name="current_upazila_thana" id="current_upazila_thana_name">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">উপজেলা/থানা</label>
+                                    <label class="col-sm-3 col-form-label text-right">ভোটার এলাকার নাম</label>
                                     <div class="col-sm-4">
-                                        <input type="text" name="current_upazila_thana" id="current_upazila_thana" class="form-control">
+                                        <select id="current_union_id" class="form-control select2">
+                                            <option value="">ইউনিয়ন নির্বাচন করুন</option>
+                                        </select>
+                                        <input type="hidden" name="current_voter_area_name" id="current_voter_area_name">
                                     </div>
-                                    <label class="col-sm-2 col-form-label text-right">জেলা</label>
+                                    <label class="col-sm-2 col-form-label text-right">ওয়ার্ড নং</label>
                                     <div class="col-sm-3">
-                                        <input type="text" name="current_district" id="current_district" class="form-control">
+                                        <input type="text" name="current_voter_area_no" id="current_voter_area_no" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -123,27 +144,54 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label text-right">জেলা</label>
                                     <div class="col-sm-4">
-                                        <input type="text" name="transfer_district" class="form-control">
+                                        <select id="transfer_district_id" class="form-control select2">
+                                            <option value="">জেলা নির্বাচন করুন</option>
+                                            @foreach($districts as $district)
+                                                <option value="{{ $district->id }}" data-name="{{ $district->bn_name }}">{{ $district->bn_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" name="transfer_district" id="transfer_district_name">
                                     </div>
                                     <label class="col-sm-2 col-form-label text-right">উপজেলা/থানা</label>
                                     <div class="col-sm-3">
-                                        <input type="text" name="transfer_upazila_thana" class="form-control">
+                                        <select id="transfer_upazila_id" class="form-control select2">
+                                            <option value="">উপজেলা/থানা নির্বাচন করুন</option>
+                                        </select>
+                                        <input type="hidden" name="transfer_upazila_thana" id="transfer_upazila_thana_name">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">ধরন ও নাম</label>
-                                    <div class="col-sm-4">
-                                        <select name="transfer_entity_type" class="form-control">
-                                            <option value="সিটি কর্পোরেশন">সিটি কর্পোরেশন</option>
-                                            <option value="পৌরসভা">পৌরসভা</option>
-                                            <option value="ইউনিয়ন">ইউনিয়ন</option>
-                                            <option value="ক্যান্টনমেন্ট বোর্ড">ক্যান্টনমেন্ট বোর্ড</option>
+                                    <label class="col-sm-3 col-form-label text-right">ইউনিয়ন</label>
+                                    <div class="col-sm-9">
+                                        <select id="transfer_union_id" class="form-control select2">
+                                            <option value="">ইউনিয়ন নির্বাচন করুন</option>
                                         </select>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <input type="text" name="transfer_entity_name" class="form-control" placeholder="নাম">
+                                        <input type="hidden" name="transfer_entity_type" value="ইউনিয়ন">
+                                        <input type="hidden" name="transfer_entity_name" id="transfer_entity_name">
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label text-right">ডাকঘর ও পোস্ট কোড</label>
+                                    <div class="col-sm-4">
+                                        <select id="transfer_post_office_id" class="form-control select2">
+                                            <option value="">ডাকঘর নির্বাচন করুন</option>
+                                        </select>
+                                        <input type="hidden" name="transfer_post_office" id="transfer_post_office_name">
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <input type="text" name="transfer_post_code" id="transfer_post_code_input" class="form-control" placeholder="পোস্ট কোড">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                     <label class="col-sm-3 col-form-label text-right">গ্রাম/রাস্তা/বাসা/হোল্ডিং</label>
+                                     <div class="col-sm-5">
+                                         <input type="text" name="transfer_village_road" class="form-control" placeholder="গ্রাম/রাস্তা/বাসা">
+                                     </div>
+                                     <label class="col-sm-1 col-form-label text-right">হোল্ডিং</label>
+                                     <div class="col-sm-3">
+                                         <input type="text" name="transfer_house_holding" class="form-control" placeholder="হোল্ডিং নম্বর">
+                                     </div>
+                                 </div>
                                 <div class="form-group row">
                                      <label class="col-sm-3 col-form-label text-right">ওয়ার্ড নং ও ভোটার এলাকা</label>
                                      <div class="col-sm-2">
@@ -156,25 +204,6 @@
                                          <input type="text" name="transfer_voter_area_no" class="form-control" placeholder="ভোটার এলাকা নম্বর">
                                      </div>
                                  </div>
-                                <div class="form-group row">
-                                     <label class="col-sm-3 col-form-label text-right">গ্রাম/রাস্তা/বাসা/হোল্ডিং</label>
-                                     <div class="col-sm-5">
-                                         <input type="text" name="transfer_village_road" class="form-control" placeholder="গ্রাম/রাস্তা/বাসা">
-                                     </div>
-                                     <label class="col-sm-1 col-form-label text-right">হোল্ডিং</label>
-                                     <div class="col-sm-3">
-                                         <input type="text" name="transfer_house_holding" class="form-control" placeholder="হোল্ডিং নম্বর">
-                                     </div>
-                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label text-right">ডাকঘর ও পোস্ট কোড</label>
-                                    <div class="col-sm-4">
-                                        <input type="text" name="transfer_post_office" class="form-control">
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <input type="text" name="transfer_post_code" class="form-control" placeholder="পোস্ট কোড">
-                                    </div>
-                                </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label text-right">ফোন/মোবাইল</label>
                                     <div class="col-sm-9">
@@ -237,13 +266,188 @@
             <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
-
 @endsection
 @push('script')
-
     <script>
+        $(document).ready(function() {
+            $('.select2').select2();
 
+            // Transfer District Change
+            $('#transfer_district_id').on('change', function() {
+                var district_id = $(this).val();
+                var district_name = $(this).find(':selected').data('name');
+                
+                $('#transfer_district_name').val(district_name);
+                $('#transfer_upazila_id').empty().append('<option value="">উপজেলা/থানা নির্বাচন করুন</option>').trigger('change');
+                $('#transfer_post_office_id').empty().append('<option value="">ডাকঘর নির্বাচন করুন</option>').trigger('change');
+                $('#transfer_upazila_thana_name').val('');
+                $('#transfer_post_office_name').val('');
+                $('#transfer_post_code_input').val('');
+
+                if (district_id) {
+                    $.ajax({
+                        url: "{{ url('/get-thanas-by-district') }}/" + district_id,
+                        type: "GET",
+                        dataType: "html",
+                        success: function(data) {
+                            $('#transfer_upazila_id').html(data).trigger('change');
+                            // We need to fetch texts manually since options just have values
+                            $('#transfer_upazila_id option').each(function() {
+                                $(this).attr('data-name', $(this).text());
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Transfer Upazila/Thana Change
+            $('#transfer_upazila_id').on('change', function() {
+                var upazila_id = $(this).val();
+                var upazila_name = $(this).find(':selected').data('name');
+                if(!upazila_name) upazila_name = $(this).find(':selected').text();
+                
+                $('#transfer_upazila_thana_name').val(upazila_name);
+                $('#transfer_post_office_id').empty().append('<option value="">ডাকঘর নির্বাচন করুন</option>').trigger('change');
+                $('#transfer_union_id').empty().append('<option value="">ইউনিয়ন নির্বাচন করুন</option>').trigger('change');
+                $('#transfer_post_office_name').val('');
+                $('#transfer_entity_name').val('');
+                $('#transfer_post_code_input').val('');
+
+                if (upazila_id) {
+                    $.ajax({
+                        url: "{{ url('/get-post-offices-by-thana') }}/" + upazila_id,
+                        type: "GET",
+                        dataType: "html",
+                        success: function(data) {
+                            $('#transfer_post_office_id').html(data).trigger('change');
+                            $('#transfer_post_office_id option').each(function() {
+                                $(this).attr('data-name', $(this).text());
+                            });
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ url('/get-unions-by-thana') }}/" + upazila_id,
+                        type: "GET",
+                        dataType: "html",
+                        success: function(data) {
+                            $('#transfer_union_id').html(data).trigger('change');
+                            $('#transfer_union_id option').each(function() {
+                                $(this).attr('data-name', $(this).text());
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Transfer Post Office Change
+            $('#transfer_post_office_id').on('change', function() {
+                var post_office_name = $(this).find(':selected').data('name');
+                if(!post_office_name) post_office_name = $(this).find(':selected').text();
+                
+                $('#transfer_post_office_name').val(post_office_name);
+            });
+
+            // Transfer Union Change
+            $('#transfer_union_id').on('change', function() {
+                var union_name = $(this).find(':selected').data('name');
+                if(!union_name) union_name = $(this).find(':selected').text();
+                
+                $('#transfer_entity_name').val(union_name);
+            });
+
+            // Recipient District Change
+            $('#recipient_district_id').on('change', function() {
+                var district_id = $(this).val();
+                var district_name = $(this).find(':selected').data('name');
+                
+                $('#recipient_district_name').val(district_name);
+                $('#recipient_upazila_id').empty().append('<option value="">উপজেলা/থানা নির্বাচন করুন</option>').trigger('change');
+                $('#recipient_upazila_thana_name').val('');
+
+                if (district_id) {
+                    $.ajax({
+                        url: "{{ url('/get-thanas-by-district') }}/" + district_id,
+                        type: "GET",
+                        dataType: "html",
+                        success: function(data) {
+                            $('#recipient_upazila_id').html(data).trigger('change');
+                            $('#recipient_upazila_id option').each(function() {
+                                $(this).attr('data-name', $(this).text());
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Recipient Upazila Change
+            $('#recipient_upazila_id').on('change', function() {
+                var upazila_name = $(this).find(':selected').data('name');
+                if(!upazila_name) upazila_name = $(this).find(':selected').text();
+                $('#recipient_upazila_thana_name').val(upazila_name);
+            });
+
+            // Current District Change
+            $('#current_district_id').on('change', function() {
+                var district_id = $(this).val();
+                var district_name = $(this).find(':selected').data('name');
+                
+                $('#current_district_name').val(district_name);
+                $('#current_upazila_id').empty().append('<option value="">উপজেলা/থানা নির্বাচন করুন</option>').trigger('change');
+                $('#current_union_id').empty().append('<option value="">ইউনিয়ন নির্বাচন করুন</option>').trigger('change');
+                $('#current_upazila_thana_name').val('');
+                $('#current_voter_area_name').val('');
+
+                if (district_id) {
+                    $.ajax({
+                        url: "{{ url('/get-thanas-by-district') }}/" + district_id,
+                        type: "GET",
+                        dataType: "html",
+                        success: function(data) {
+                            $('#current_upazila_id').html(data).trigger('change');
+                            $('#current_upazila_id option').each(function() {
+                                $(this).attr('data-name', $(this).text());
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Current Upazila Change
+            $('#current_upazila_id').on('change', function() {
+                var upazila_id = $(this).val();
+                var upazila_name = $(this).find(':selected').data('name');
+                if(!upazila_name) upazila_name = $(this).find(':selected').text();
+                
+                $('#current_upazila_thana_name').val(upazila_name);
+                $('#current_union_id').empty().append('<option value="">ইউনিয়ন নির্বাচন করুন</option>').trigger('change');
+                $('#current_voter_area_name').val('');
+
+                if (upazila_id) {
+                    $.ajax({
+                        url: "{{ url('/get-unions-by-thana') }}/" + upazila_id,
+                        type: "GET",
+                        dataType: "html",
+                        success: function(data) {
+                            $('#current_union_id').html(data).trigger('change');
+                            $('#current_union_id option').each(function() {
+                                $(this).attr('data-name', $(this).text());
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Current Union Change
+            $('#current_union_id').on('change', function() {
+                var union_name = $(this).find(':selected').data('name');
+                if(!union_name) union_name = $(this).find(':selected').text();
+                
+                $('#current_voter_area_name').val(union_name);
+            });
+        });
+    </script>
+    <script>
           $(document).ready(function() {
              
              $("#user_id_select").select2({
@@ -278,10 +482,66 @@
                 }
                 
                 // Fill address fields
-                $('#current_voter_area_name').val(data.voter_area);
-                $('#current_upazila_thana').val(data.thana);
-                $('#current_district').val(data.district);
                 $('#current_village_road').val(data.address);
+                $('#current_voter_area_no').val(data.ward_no);
+
+                // Auto-select Current District, Thana and Union
+                if (data.district) {
+                    let districtOpt = $('#current_district_id option').filter(function() {
+                        return $(this).data('name') === data.district;
+                    });
+                    if (districtOpt.length > 0) {
+                        let district_id = districtOpt.val();
+                        $('#current_district_id').val(district_id).trigger('change.select2');
+                        $('#current_district_name').val(data.district);
+
+                        $.ajax({
+                            url: "{{ url('/get-thanas-by-district') }}/" + district_id,
+                            type: "GET",
+                            dataType: "html",
+                            success: function(responseHtml) {
+                                $('#current_upazila_id').html(responseHtml);
+                                $('#current_upazila_id option').each(function() {
+                                    $(this).attr('data-name', $(this).text());
+                                });
+                                
+                                if (data.thana) {
+                                    let thanaOpt = $('#current_upazila_id option').filter(function() {
+                                        return $(this).text() === data.thana;
+                                    });
+                                    if (thanaOpt.length > 0) {
+                                        let thana_id = thanaOpt.val();
+                                        $('#current_upazila_id').val(thana_id).trigger('change.select2');
+                                        $('#current_upazila_thana_name').val(data.thana);
+
+                                        // Fetch and select Union
+                                        $.ajax({
+                                            url: "{{ url('/get-unions-by-thana') }}/" + thana_id,
+                                            type: "GET",
+                                            dataType: "html",
+                                            success: function(unionHtml) {
+                                                $('#current_union_id').html(unionHtml);
+                                                $('#current_union_id option').each(function() {
+                                                    $(this).attr('data-name', $(this).text());
+                                                });
+
+                                                if (data.union) {
+                                                    let unionOpt = $('#current_union_id option').filter(function() {
+                                                        return $(this).text() === data.union;
+                                                    });
+                                                    if (unionOpt.length > 0) {
+                                                        $('#current_union_id').val(unionOpt.val()).trigger('change.select2');
+                                                        $('#current_voter_area_name').val(data.union);
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
             });
 
             $("#certificateForm").on('submit', function(e) {
