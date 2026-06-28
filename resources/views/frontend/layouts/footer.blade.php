@@ -9,12 +9,12 @@
             <img src="{{ asset('images/govt-bd-logo.png') }}" alt="BD Govt Logo" class="w-full h-full object-contain" />
           </div>
           <div>
-            <h3 class="text-base font-bold leading-snug tracking-wide text-white">স্থানীয় সরকার বিভাগ</h3>
+            <h3 class="text-base font-bold leading-snug tracking-wide text-white">সার্টিফিকেট ও লাইসেন্স ম্যানেজমেন্ট সলিউশন</h3>
             <p class="text-xs text-emerald-200">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</p>
           </div>
         </div>
         <p class="text-xs sm:text-[13px] text-emerald-100/90 leading-relaxed pt-1">
-          পৌরসভা ও সিটি কর্পোরেশন সমূহের নাগরিক সেবা প্রদান ও ডিজিটাল সনদায়ন ব্যবস্থাপনা সিস্টেম। সহজে, দ্রুত ও স্বচ্ছতার সাথে ঘরে বসেই সকল নাগরিক সেবা।
+          ইউনিয়ন পরিষদ ও সিটি কর্পোরেশন সমূহের নাগরিক সেবা প্রদান ও ডিজিটাল সনদায়ন ব্যবস্থাপনা সিস্টেম। সহজে, দ্রুত ও স্বচ্ছতার সাথে ঘরে বসেই সকল নাগরিক সেবা।
         </p>
       </div>
 
@@ -56,15 +56,15 @@
         <ul class="space-y-3 text-xs sm:text-[13px] text-emerald-100">
           <li class="flex items-start gap-3">
             <svg class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            <span>স্থানীয় সরকার বিভাগ, বাংলাদেশ সচিবালয়, ঢাকা-১০০০</span>
+            <span>সার্টিফিকেট ও লাইসেন্স ম্যানেজমেন্ট সলিউশন</span>
           </li>
           <li class="flex items-center gap-3">
             <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            <span>support@lged.gov.bd</span>
+            <span>clms.com.bd</span>
           </li>
           <li class="flex items-center gap-3">
             <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-            <span>+৮৮০ ২ ৯৫১৪৪৫৫</span>
+            <span>01552302124</span>
           </li>
         </ul>
       </div>
@@ -96,7 +96,7 @@
   <div class="bg-[#02281e] border-t border-emerald-800/60 py-4 px-4 text-xs sm:text-[13px] text-emerald-200">
     <div class="container mx-auto max-w-screen-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
       <div>
-        &copy; {{ date('Y') }} <strong>স্থানীয় সরকার বিভাগ</strong>। সর্বস্বত্ব সংরক্ষিত।
+        &copy; {{ date('Y') }} <strong>CLMS</strong>
       </div>
       <div>
         কারিগরি সহযোগিতায়: <a href="https://www.adventuresoft.com.bd" target="_blank" class="font-bold text-white hover:text-emerald-300 underline underline-offset-4 transition-colors">Adventure Soft</a>
