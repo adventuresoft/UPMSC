@@ -41,12 +41,15 @@
     document.addEventListener("click", handleFrontendOutsideTap, true);
   }
 
-  dropdownBtn.addEventListener("click", () => {
-    dropdownMenu.classList.toggle("hidden");
-    dropdownBtn.querySelector("svg").classList.toggle("rotate-180");
-  });
+  if (dropdownBtn && dropdownMenu) {
+    dropdownBtn.addEventListener("click", () => {
+      dropdownMenu.classList.toggle("hidden");
+      const svg = dropdownBtn.querySelector("svg");
+      if (svg) svg.classList.toggle("rotate-180");
+    });
+  }
 
- let active = 'food';
+  let active = 'food';
   function setActive(cat) {
     active = cat;
     document.querySelectorAll('[data-panel]').forEach(p => {
@@ -64,3 +67,61 @@
   }
   // initialize once on load
   setActive(active);
+
+  // ── Sticky Header & Navbar on Scroll (30% less size) ──
+  const setupStickyNavigation = () => {
+    const header = document.querySelector(".gov-main-header");
+    let desktopNav = null;
+    document.querySelectorAll("nav").forEach(nav => {
+      if (nav.querySelector(".nav-links")) {
+        desktopNav = nav;
+        nav.classList.add("main-sticky-navbar");
+      }
+    });
+
+    const mobileHeader = document.querySelector(".md\\:hidden.sticky.top-0, .md\\:hidden.bg-\\[\\#046307\\]");
+    if (mobileHeader) {
+      mobileHeader.classList.add("mobile-sticky-header");
+    }
+
+    if (!header) return;
+
+    let spacer = document.getElementById("sticky-header-spacer");
+    if (!spacer) {
+      spacer = document.createElement("div");
+      spacer.id = "sticky-header-spacer";
+      spacer.style.display = "none";
+      header.parentNode.insertBefore(spacer, header);
+    }
+
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        if (!document.body.classList.contains("is-scrolled")) {
+          // Only count header height (top-bar hides when scrolled)
+          let totalHeight = header.offsetHeight;
+          if (desktopNav && window.getComputedStyle(desktopNav).display !== "none") {
+            totalHeight += desktopNav.offsetHeight;
+          } else if (mobileHeader && window.getComputedStyle(mobileHeader).display !== "none") {
+            totalHeight += mobileHeader.offsetHeight;
+          }
+          spacer.style.height = totalHeight + "px";
+          spacer.style.display = "block";
+          document.body.classList.add("is-scrolled");
+        }
+      } else {
+        if (document.body.classList.contains("is-scrolled")) {
+          spacer.style.display = "none";
+          document.body.classList.remove("is-scrolled");
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupStickyNavigation);
+  } else {
+    setupStickyNavigation();
+  }

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CLMS | Nagorik Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/style/global.css')}}?v={{ time() }}" />
+    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}?v={{ time() }}" />
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
@@ -53,7 +53,7 @@
     
     <!-- Navigation -->
     <nav class="md:block hidden bg-[#046307]">
-      <div class="container mx-auto md:px-32 px-4 max-w-[1200px]">
+      <div class="container mx-auto px-5 max-w-[1200px]">
         <!-- Navigation Links -->
         <ul class="nav-links flex items-center md:justify-start justify-center gap-10 py-1.5 leading-none text-xs font-bold uppercase tracking-wider">
           <li class="flex items-center">
@@ -955,7 +955,7 @@
             });
         });
     </script>
-    <script src="{{asset('assets/js/navbar.js')}}"></script>
+    <script src="{{asset('assets/js/navbar.js')}}?v={{ time() }}"></script>
     @stack('script')
   </body>
 </html>

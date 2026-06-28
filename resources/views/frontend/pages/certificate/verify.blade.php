@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CLMS | সনদ যাচাই</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{asset('assets/style/global.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/style/global.css')}}?v={{ time() }}" />
+    <link rel="stylesheet" href="{{asset('assets/style/upms-theme.css')}}?v={{ time() }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style type="text/tailwindcss">
         @layer utilities {
@@ -25,7 +25,7 @@
     
     <!-- Navigation -->
     <nav class="md:block hidden bg-[#046307]">
-      <div class="container mx-auto md:px-32 px-4 max-w-[1200px]">
+      <div class="container mx-auto px-5 max-w-[1200px]">
         <!-- Navigation Links -->
         <ul class="nav-links flex items-center md:justify-start justify-center gap-10 py-1.5 leading-none text-xs font-bold uppercase tracking-wider">
           <li class="flex items-center">
@@ -358,7 +358,7 @@
         <p>Design & Maintained by <a href="https://adventuresoft.com.bd" class="hover:text-white transition-colors underline decoration-gray-700 underline-offset-4">Adventure Soft</a></p>
       </div>
     </footer>
-    <script src="{{asset('assets/js/navbar.js')}}"></script>
+    <script src="{{asset('assets/js/navbar.js')}}?v={{ time() }}"></script>
     @stack('script')
   </body>
 </html>
