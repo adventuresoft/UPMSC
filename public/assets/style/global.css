@@ -206,6 +206,32 @@ body.is-scrolled .gov-subtitle {
   display: none !important;
 }
 
+/* গ্রাম আদালত মামলা button — 30% smaller when scrolled */
+.gov-village-court-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+body.is-scrolled .gov-village-court-btn {
+  padding: 2px 8px !important;
+  border-radius: 6px !important;
+}
+
+body.is-scrolled .gov-village-court-btn .fas.fa-balance-scale {
+  font-size: 14px !important;
+  margin-bottom: 0 !important;
+}
+
+body.is-scrolled .gov-village-court-btn span:first-of-type {
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+}
+
+body.is-scrolled .gov-village-court-btn span:last-of-type {
+  font-size: 8px !important;
+  margin-top: 0 !important;
+}
+
+
 /* Scrolled state for Desktop Navbar */
 body.is-scrolled .main-sticky-navbar {
   position: fixed !important;
