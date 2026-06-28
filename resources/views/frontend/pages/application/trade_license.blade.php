@@ -11,11 +11,12 @@
     }
   }
 </script>
+<link rel="stylesheet" href="{{asset('assets/style/global.css')}}?v={{ time() }}" />
 @endpush
 
   <!-- Navigation -->
   <nav class="md:block hidden bg-[#046307]">
-    <div class="container mx-auto md:px-32 px-4 max-w-screen-xl">
+    <div class="container mx-auto px-5 max-w-[1200px]">
       <!-- Navigation Links -->
       <ul class="nav-links list-none flex items-center md:justify-start justify-center gap-10 py-1.5 leading-none text-xs font-bold uppercase tracking-wider">
         <li class="flex items-center">
@@ -277,7 +278,7 @@
 </div>
 @endsection
 @push('script')
-    <script src="{{asset('assets/js/navbar.js')}}"></script>
+    <script src="{{asset('assets/js/navbar.js')}}?v={{ time() }}"></script>
     <script>
         $(document).ready(function() {
              $(".select2").select2();
