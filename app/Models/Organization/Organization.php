@@ -80,6 +80,7 @@ class Organization extends Model
     'office_division_id',
     'office_district_id',
     'office_thana_id',
+    'office_union_id',
     'office_post_office_id',
     'office_village_id',
     'office_ward_id',
@@ -161,6 +162,11 @@ class Organization extends Model
     public function officeThana()
     {
         return $this->belongsTo(Thana::class, 'office_thana_id', 'id');
+    }
+
+    public function officeUnion()
+    {
+        return $this->belongsTo(Union::class, 'office_union_id', 'id');
     }
 
     public function officePostOffice()

@@ -52,7 +52,7 @@
 
     {{-- Organization Type, RJSC Reg., Capital, Established Year, Application Type --}}
     <div class="form-group row">
-        <div class="col-sm-4">
+        <div class="col-sm-4 rjsc_reg_no_wrapper d-none">
             <label for="rjsc_reg_no">RJSC Reg.</label>
             <input type="text" name="rjsc_reg_no" value="{{ $organization->rjsc_reg_no ?? '' }}"
                 placeholder="RJSC Reg. No." class="form-control" id="rjsc_reg_no">
@@ -290,8 +290,12 @@
     </div>
 
     <div class="form-group row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 d-flex justify-content-between align-items-center">
             <h5 class="text-secondary mb-2">Corporate Office/Factory Address</h5>
+            <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" id="same_as_registered_address" value="1">
+                <label class="form-check-label font-weight-bold text-info" style="cursor: pointer;" for="same_as_registered_address">Same as Registered Address</label>
+            </div>
         </div>
     </div>
 
@@ -343,6 +347,26 @@
 
     <div class="form-group row">
         <div class="col-sm-4">
+            <label for="office_union_id">Union <span class="text-danger">*</span></label>
+            <select name="office_union_id" class="form-control select2 select2bs4" id="office_union_id">
+                <option value="">Select Union</option>
+                @if (isset($office_unions) && count($office_unions) > 0)
+                    @foreach ($office_unions as $union)
+                        <option value="{{ $union->id }}"
+                            {{ isset($organization->office_union_id) && $organization->office_union_id == $union->id ? 'selected' : '' }}>
+                            {{ $union->bn_name ?? $union->name ?? 'Select Union' }}</option>
+                    @endforeach
+                @elseif (isset($unions))
+                    @foreach ($unions as $union)
+                        <option value="{{ $union->id }}"
+                            {{ isset($organization->office_union_id) && $organization->office_union_id == $union->id ? 'selected' : '' }}>
+                            {{ $union->bn_name ?? $union->name ?? 'Select Union' }}</option>
+                    @endforeach
+                @endif
+            </select>
+            <small class="text-danger error office_union_id_error"></small>
+        </div>
+        <div class="col-sm-4">
             <label for="office_post_office_id">Post Office</label>
             <select name="office_post_office_id" class="form-control select2 select2bs4" id="office_post_office_id">
                 <option value="">Select Post Office</option>
@@ -359,7 +383,13 @@
         <div class="col-sm-4">
             <label for="office_village_id">Village</label>
             <select name="office_village_id" class="form-control select2 select2bs4" id="office_village_id">
-                @if ($villages)
+                @if (isset($office_villages) && count($office_villages) > 0)
+                    @foreach ($office_villages as $village)
+                        <option value="{{ $village->id }}"
+                            {{ isset($organization->office_village_id) && $organization->office_village_id == $village->id ? 'selected' : '' }}>
+                            {{ $village->bn_name ?? 'Select Village' }}</option>
+                    @endforeach
+                @elseif ($villages)
                     @foreach ($villages as $village)
                         <option value="{{ $village->id }}"
                             {{ isset($organization->office_village_id) && $organization->office_village_id == $village->id ? 'selected' : '' }}>
@@ -584,7 +614,47 @@
 
     $(function(){
         $('input[name="premises_ownership"]:checked').trigger('change');
+        toggleRjscReg();
     })
+
+    function toggleRjscReg() {
+        let selectedText = $("#organization_type_id option:selected").text().trim().toLowerCase();
+        if (selectedText.includes('limited') || selectedText.includes('লিমিটেড')) {
+            $('.rjsc_reg_no_wrapper').removeClass('d-none');
+        } else {
+            $('.rjsc_reg_no_wrapper').addClass('d-none');
+        }
+    }
+
+    $(document).on('change', '#organization_type_id', function(){
+        toggleRjscReg();
+    })
+
+    function copyRegisteredToOffice() {
+        if ($('#same_as_registered_address').is(':checked')) {
+            $('#office_division_id').html($('#division_id').html()).val($('#division_id').val());
+            $('#office_district_id').html($('#district_id').html()).val($('#district_id').val());
+            $('#office_thana_id').html($('#thana_id').html()).val($('#thana_id').val());
+            $('#office_union_id').html($('#union_id').html()).val($('#union_id').val());
+            $('#office_post_office_id').html($('#post_office_id').html()).val($('#post_office_id').val());
+            $('#office_village_id').html($('#village_id').html()).val($('#village_id').val());
+            $('#office_ward_id').html($('#ward_id').html()).val($('#ward_id').val());
+
+            $('#office_division_id, #office_district_id, #office_thana_id, #office_union_id, #office_post_office_id, #office_village_id, #office_ward_id').trigger('change.select2');
+
+            $('#office_road').val($('#road').val());
+            $('#office_house').val($('#house').val());
+            $('#office_house_bn').val($('#house_bn').val());
+        }
+    }
+
+    $(document).on('change', '#same_as_registered_address', function() {
+        copyRegisteredToOffice();
+    });
+
+    $(document).on('change keyup', '#division_id, #district_id, #thana_id, #union_id, #post_office_id, #village_id, #ward_id, #road, #house, #house_bn', function() {
+        copyRegisteredToOffice();
+    });
 
     $(document).on('click', '.add-doc-row', function(){
         let target = $(this).data('target');
@@ -644,6 +714,7 @@
             success: function(response) {
                 $('#organization_type_id').html(response)
                 $('#organization_type_id').prop("disabled", false);
+                $('#organization_type_id').trigger('change');
             },
             error: function(xhr, status, error) {
                 $('#organization_type_id').prop("disabled", false);
@@ -844,9 +915,28 @@
         $(document).on('change', '#office_thana_id', function(e){
             e.preventDefault();
             let thana_id = $(this).val();
+            let union_id = $('#office_union_id');
             let post_office_id = $('#office_post_office_id');
             
             if (thana_id) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-unions-by-thana') }}/"+thana_id,
+                    beforeSend: function() {
+                        union_id.prop("disabled", true);
+                        console.log("Searcing Unions");
+                    },
+                    success: function(response) {
+                        union_id.html(response)
+                        union_id.prop("disabled", false);
+                    },
+                    error: function(xhr, status, error) {
+                        union_id.prop("disabled", true);
+                        var responseText = jQuery.parseJSON(xhr.responseText);
+                        toastr.error(responseText.message);
+                    }
+                });
+
                 $.ajax({
                     type: "GET",
                     url: "{{ url('/get-post-offices-by-thana') }}/"+thana_id,
@@ -865,7 +955,35 @@
                     }
                 });
             } else {
+                union_id.prop("disabled", true);
                 post_office_id.prop("disabled", true);
+            }
+        })
+
+        $(document).on('change', '#office_union_id', function(e){
+            e.preventDefault();
+            let union_id = $(this).val();
+            let village_id = $('#office_village_id');
+            if (union_id) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/get-villages-by-union') }}/"+union_id,
+                    beforeSend: function() {
+                        village_id.prop("disabled", true);
+                        console.log("Searcing Villege");
+                    },
+                    success: function(response) {
+                        village_id.html(response.villageOptions)
+                        village_id.prop("disabled", false);
+                    },
+                    error: function(xhr, status, error) {
+                        village_id.prop("disabled", true);
+                        var responseText = jQuery.parseJSON(xhr.responseText);
+                        toastr.error(responseText.message);
+                    }
+                });
+            } else {
+                village_id.prop("disabled", true);
             }
         })
 
