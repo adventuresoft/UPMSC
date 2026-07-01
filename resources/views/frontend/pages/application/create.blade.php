@@ -40,11 +40,24 @@
         }
     </style>
     <style>
+        body {
+            padding-bottom: 400px !important;
+        }
         .select2-hidden-accessible {
             display: none !important;
         }
         .select2-container {
             width: 100% !important;
+        }
+        .select2-dropdown {
+            z-index: 99999 !important;
+        }
+        /* Address selects use native browser dropdowns - bypasses all Select2 bugs */
+        select.native-select {
+            appearance: auto !important;
+            -webkit-appearance: auto !important;
+            background-image: none !important;
+            cursor: pointer;
         }
     </style>
   </head>
@@ -461,7 +474,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="form-label" for="permanent_division">বিভাগ</label>
-                    <select name="permanent_division" id="permanent_division" class="form-input select2">
+                    <select name="permanent_division" id="permanent_division" class="form-input native-select">
                         <option value="">বিভাগ নির্বাচন করুন</option>
                         @foreach ($divisions as $division)
                             <option value="{{ $division->id }}">{{ $division->name }}</option>
@@ -470,25 +483,25 @@
                 </div>
                 <div>
                     <label class="form-label" for="permanent_district">জেলা</label>
-                    <select name="permanent_district" id="permanent_district" class="form-input select2">
+                    <select name="permanent_district" id="permanent_district" class="form-input native-select">
                         <option value="">জেলা নির্বাচন করুন</option>
                     </select>
                 </div>
                 <div>
                     <label class="form-label" for="permanent_thana">উপজেলা</label>
-                    <select name="permanent_thana" id="permanent_thana" class="form-input select2">
+                    <select name="permanent_thana" id="permanent_thana" class="form-input native-select">
                         <option value="">উপজেলা নির্বাচন করুন</option>
                     </select>
                 </div>
                 <div>
                     <label class="form-label" for="permanent_union">ইউনিয়ন</label>
-                    <select name="permanent_union" id="permanent_union" class="form-input select2">
+                    <select name="permanent_union" id="permanent_union" class="form-input native-select">
                         <option value="">ইউনিয়ন নির্বাচন করুন</option>
                     </select>
                 </div>
                 <div>
                     <label class="form-label" for="permanent_post_office_id">ডাকঘর</label>
-                    <select name="permanent_post_office_id" id="permanent_post_office_id" class="form-input select2">
+                    <select name="permanent_post_office_id" id="permanent_post_office_id" class="form-input native-select">
                         <option value="">ডাকঘর নির্বাচন করুন</option>
                         @foreach ($permanent_post_offices as $post_office)
                             <option value="{{$post_office->id}}">{{ $post_office->bn_name ?: $post_office->name }}</option>
@@ -497,7 +510,7 @@
                 </div>
                 <div>
                     <label class="form-label" for="permanent_ward">ওয়ার্ড নম্বর</label>
-                    <select name="permanent_ward" id="permanent_ward" class="form-input select2">
+                    <select name="permanent_ward" id="permanent_ward" class="form-input native-select">
                         <option value="">ওয়ার্ড নির্বাচন করুন</option>
                         @foreach ($wards as $ward)
                             <option value="{{ $ward->id }}">{{ $ward->bn_ward_no ?? $ward->en_ward_no }}</option>
@@ -506,7 +519,7 @@
                 </div>
                 <div>
                     <label class="form-label" for="permanent_village">গ্রাম</label>
-                    <select id="permanent_village" name="permanent_village" class="form-input select2">
+                    <select id="permanent_village" name="permanent_village" class="form-input native-select">
                         <option value="">গ্রাম নির্বাচন করুন</option>
                         @foreach ($permanent_villages as $village)
                             <option value="{{ $village->id }}">{{ $village->bn_name }}</option>
@@ -545,7 +558,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="form-label" for="present_division">বিভাগ</label>
-                        <select name="present_division" id="present_division" class="form-input select2">
+                        <select name="present_division" id="present_division" class="form-input native-select">
                             <option value="">বিভাগ নির্বাচন করুন</option>
                             @foreach ($divisions as $division)
                                 <option value="{{ $division->id }}">{{ $division->name }}</option>
@@ -554,25 +567,25 @@
                     </div>
                     <div>
                         <label class="form-label" for="present_district">জেলা</label>
-                        <select name="present_district" id="present_district" class="form-input select2">
+                        <select name="present_district" id="present_district" class="form-input native-select">
                             <option value="">জেলা নির্বাচন করুন</option>
                         </select>
                     </div>
                     <div>
                         <label class="form-label" for="present_thana">উপজেলা</label>
-                        <select name="present_thana" id="present_thana" class="form-input select2">
+                        <select name="present_thana" id="present_thana" class="form-input native-select">
                             <option value="">উপজেলা নির্বাচন করুন</option>
                         </select>
                     </div>
                     <div>
                         <label class="form-label" for="present_union_name">ইউনিয়ন</label>
-                        <select name="present_union_name" id="present_union" class="form-input select2">
+                        <select name="present_union_name" id="present_union" class="form-input native-select">
                             <option value="">ইউনিয়ন নির্বাচন করুন</option>
                         </select>
                     </div>
                     <div>
                         <label class="form-label" for="present_post_office_id">ডাকঘর</label>
-                        <select name="present_post_office_id" id="present_post_office_id" class="form-input select2">
+                        <select name="present_post_office_id" id="present_post_office_id" class="form-input native-select">
                             <option value="">ডাকঘর নির্বাচন করুন</option>
                             @foreach ($permanent_post_offices as $post_office)
                                 <option value="{{$post_office->id}}">{{ $post_office->bn_name ?: $post_office->name }}</option>
@@ -581,7 +594,7 @@
                     </div>
                     <div>
                         <label class="form-label" for="present_ward">ওয়ার্ড নম্বর</label>
-                        <select name="present_ward" id="present_ward" class="form-input select2">
+                        <select name="present_ward" id="present_ward" class="form-input native-select">
                             <option value="">ওয়ার্ড নির্বাচন করুন</option>
                             @foreach ($wards as $ward)
                                 <option value="{{ $ward->id }}">{{ $ward->bn_ward_no ?? $ward->en_ward_no }}</option>
@@ -590,7 +603,7 @@
                     </div>
                     <div>
                         <label class="form-label" for="present_village">গ্রাম</label>
-                        <select id="present_village" name="present_village" class="form-input select2">
+                        <select id="present_village" name="present_village" class="form-input native-select">
                             <option value="">গ্রাম নির্বাচন করুন</option>
                             @foreach ($permanent_villages as $village)
                                 <option value="{{ $village->id }}">{{ $village->bn_name }}</option>
@@ -839,13 +852,14 @@
             });
 
             function refreshSelect2(selector) {
-                console.log('Refreshing select2 for:', selector);
                 var $el = $(selector);
+                // Skip native selects — they don't use Select2
+                if ($el.hasClass('native-select')) {
+                    return;
+                }
                 if ($el.hasClass('select2-hidden-accessible')) {
-                    console.log('Destroying existing select2');
                     $el.select2('destroy');
                 }
-                console.log('Initializing new select2');
                 $el.select2({ width: '100%' });
             }
 

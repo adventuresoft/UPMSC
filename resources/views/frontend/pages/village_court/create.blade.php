@@ -40,11 +40,30 @@
         }
     </style>
     <style>
+        body {
+            zoom: 1 !important;
+            padding-bottom: 400px !important;
+        }
         .select2-hidden-accessible {
-            display: none !important;
+            border: 0 !important;
+            clip: rect(0 0 0 0) !important;
+            -webkit-clip-path: inset(50%) !important;
+            clip-path: inset(50%) !important;
+            height: 1px !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+            position: absolute !important;
+            width: 1px !important;
+            white-space: nowrap !important;
         }
         .select2-container {
             width: 100% !important;
+        }
+        .select2-dropdown {
+            z-index: 99999 !important;
+        }
+        .select2-container--above .select2-selection {
+            pointer-events: none;
         }
     </style>
   </head>
@@ -232,7 +251,29 @@
 
     <script>
         $(function () {
-            $('.select2').select2({ width: '100%' });
+            // ── FIX: Ensure Select2 dropdowns always open BELOW the select box ──
+            // body padding-bottom (CSS above) gives Select2 enough space below so
+            // it opens downward. This event listener is a fallback that catches any
+            // remaining above-cases and repositions using the Select2 instance data.
+            $(document).on('select2:open', function(e) {
+                var $s2 = $(e.target).data('select2');
+                if (!$s2) return;
+                setTimeout(function() {
+                    var $container = $s2.$container;
+                    if ($container.hasClass('select2-container--above')) {
+                        var top     = $container.offset().top + $container.outerHeight(false);
+                        var $holder = $s2.$dropdown.parent();
+                        $container.removeClass('select2-container--above').addClass('select2-container--below');
+                        $s2.$dropdown.removeClass('select2-dropdown--above').addClass('select2-dropdown--below');
+                        $holder.css('top', top + 'px');
+                    }
+                }, 0);
+            });
+
+            // Initialize select2 elements
+            $('.select2').each(function() {
+                $(this).select2({ width: '100%' });
+            });
 
             // Close dropdowns when clicking outside
             document.addEventListener('click', function (e) {
